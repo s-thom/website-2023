@@ -1,0 +1,32 @@
+{
+  "root": true,
+  "extends": [
+    "airbnb/base",
+    "airbnb-typescript/base",
+    "plugin:prettier/recommended",
+    "plugin:astro/recommended"
+  ],
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "rules": {
+    "import/prefer-default-export": "off",
+    "no-plusplus": "off",
+    "prettier/prettier": "warn"
+  },
+  "overrides": [
+    {
+      "files": ["*.astro"],
+      "parser": "astro-eslint-parser",
+      "parserOptions": {
+        "parser": "@typescript-eslint/parser",
+        "extraFileExtensions": [".astro"]
+      },
+      "rules": {
+        // override/add rules settings here, such as:
+        // "astro/no-set-html-directive": "error"
+      }
+    }
+    // ...
+  ]
+}
