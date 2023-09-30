@@ -9,6 +9,7 @@
     "preview": "astro preview",
     "format": "prettier --write .",
     "lint": "eslint --ext .ts,.js,.astro src",
+    "typecheck": "tsc --noEmit",
     "astro": "astro"
   },
   "dependencies": {

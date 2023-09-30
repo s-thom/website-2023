@@ -1,11 +1,17 @@
 ---
-import type { BlockObjectResponse } from '@notionhq/client/build/src/api-endpoints';
+import type { BlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 
 export interface Props {
-  block:BlockObjectResponse
+  block: BlockObjectResponse;
 }
 
 const { block } = Astro.props;
 ---
 
-{import.meta.env.DEV && <div>block {block.id} has type {block.type}</div>}
+{
+  import.meta.env.DEV && (
+    <div>
+      block {block.id} has type {block.type}
+    </div>
+  )
+}
