@@ -1,0 +1,42 @@
+---
+import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import DefaultProperty from "./DefaultProperty.astro";
+import RichTextProperty from "./RichTextProperty.astro";
+
+export interface Props {
+  property: DatabaseObjectResponse["properties"][""];
+}
+
+const { property } = Astro.props;
+
+let Component: any;
+switch (property.type) {
+  case "rich_text":
+    Component = RichTextProperty;
+    break;
+  case "number":
+  case "url":
+  case "formula":
+  case "select":
+  case "multi_select":
+  case "status":
+  case "relation":
+  case "rollup":
+  case "unique_id":
+  case "title":
+  case "people":
+  case "files":
+  case "email":
+  case "phone_number":
+  case "date":
+  case "checkbox":
+  case "created_by":
+  case "created_time":
+  case "last_edited_by":
+  case "last_edited_time":
+  default:
+    Component = DefaultProperty;
+}
+---
+
+<Component property={property} />

@@ -1,10 +1,10 @@
 ---
 import type { BlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
-import Default from "./notion/Default.astro";
-import Heading1 from "./notion/Heading1.astro";
-import Heading2 from "./notion/Heading2.astro";
-import Heading3 from "./notion/Heading3.astro";
-import Paragraph from "./notion/Paragraph.astro";
+import Default from "./Default.astro";
+import Heading1 from "./Heading1.astro";
+import Heading2 from "./Heading2.astro";
+import Heading3 from "./Heading3.astro";
+import Paragraph from "./Paragraph.astro";
 
 export interface Props {
   block: BlockObjectResponse;
@@ -61,5 +61,3 @@ switch (block.type) {
 ---
 
 <Component block={block} />
-
-<style></style>

@@ -1,0 +1,27 @@
+---
+import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import NotionProperty from "./notion/properties/NotionProperty.astro";
+
+export interface Props {
+  page: DatabaseObjectResponse;
+}
+
+const { page } = Astro.props;
+---
+
+<div>
+  <div>
+    <div>Written by Stuart Thomson</div>
+    <div>
+      <a href="/blog">Back to posts</a>
+    </div>
+  </div>
+  <div>
+    <div>
+      <NotionProperty property={page.properties.Published} />
+    </div>
+    <div>
+      <NotionProperty property={page.properties.Tags} />
+    </div>
+  </div>
+</div>

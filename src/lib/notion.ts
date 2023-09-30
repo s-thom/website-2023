@@ -28,6 +28,22 @@ export async function getFilteredPageCollectionItems(collectionId: string) {
   return queryResponse as unknown as DatabaseObjectResponse[];
 }
 
+export async function getBlock(id: string) {
+  const client = getClient();
+
+  const block = await client.blocks.retrieve({ block_id: id });
+
+  return block;
+}
+
+export async function getPage(id: string) {
+  const client = getClient();
+
+  const page = await client.pages.retrieve({ page_id: id });
+
+  return page;
+}
+
 export async function getPageBlocks(
   id: string,
 ): Promise<BlockObjectResponse[]> {
@@ -40,7 +56,19 @@ export async function getPageBlocks(
   return blocks as BlockObjectResponse[];
 }
 
+export async function getPageIdFromSlug(slug: string) {
+  if (!slug) {
+    throw new Error("Slug must be truthy");
+  }
+
+  // TODO: Use page title in URLs instead of IDs
+
+  return slug;
+}
+
 export function getUrlSlugForPage(page: DatabaseObjectResponse) {
+  // TODO: Use page title in URLs instead of IDs
+
   return page.id;
 }
 

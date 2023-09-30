@@ -1,14 +1,17 @@
 ---
-import NotionBlock from "../../components/NotionBlock.astro";
+import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import BlogPageHeader from "../../components/BlogPageHeader.astro";
+import BlogPageFooter from "../../components/BlogPageFooter.astro";
+import NotionBlock from "../../components/notion/blocks/NotionBlock.astro";
 import MinimalLayout from "../../layouts/MinimalLayout.astro";
 import { BLOG_COLLECTION_ID } from "../../lib/constants";
 import {
   getFilteredPageCollectionItems,
+  getPage,
   getPageBlocks,
+  getPageIdFromSlug,
   getUrlSlugForPage,
 } from "../../lib/notion";
-
-const { id } = Astro.params;
 
 export async function getStaticPaths() {
   const pages = await getFilteredPageCollectionItems(BLOG_COLLECTION_ID);
@@ -16,13 +19,19 @@ export async function getStaticPaths() {
   return pages.map((page) => ({ params: { id: getUrlSlugForPage(page) } }));
 }
 
-const blocks = await getPageBlocks(id!);
+const { id: slug } = Astro.params;
+
+const id = await getPageIdFromSlug(slug!);
+
+const [page, blocks] = await Promise.all([getPage(id), getPageBlocks(id)]);
 ---
 
 <MinimalLayout>
+  <BlogPageHeader page={page as unknown as DatabaseObjectResponse} />
   <div>
     {blocks.map((block) => <NotionBlock block={block} />)}
   </div>
+  <BlogPageFooter page={page as unknown as DatabaseObjectResponse} />
 </MinimalLayout>
 
 <style></style>
