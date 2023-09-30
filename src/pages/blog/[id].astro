@@ -1,0 +1,28 @@
+---
+import NotionBlock from "../../components/NotionBlock.astro";
+import MinimalLayout from "../../layouts/MinimalLayout.astro";
+import {
+  getFilteredPageCollectionItems,
+  getPageBlocks,
+} from "../../lib/notion";
+
+const { id } = Astro.params;
+
+export async function getStaticPaths() {
+  const pages = await getFilteredPageCollectionItems(
+    import.meta.env.NOTION_BLOG_COLLECTION,
+  );
+
+  return pages.map((page) => ({ params: { id: page.id } }));
+}
+
+const blocks = await getPageBlocks(id!);
+---
+
+<MinimalLayout>
+  <div>
+    {blocks.map((block) => <NotionBlock block={block} />)}
+  </div>
+</MinimalLayout>
+
+<style></style>

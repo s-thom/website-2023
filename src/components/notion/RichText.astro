@@ -1,0 +1,65 @@
+---
+import type { RichTextItemResponse } from "@notionhq/client/build/src/api-endpoints";
+
+export interface Props {
+  components: RichTextItemResponse[];
+}
+
+const { components } = Astro.props;
+---
+
+{
+  components.map((component) => {
+    const classes: string[] = [];
+
+    if (component.annotations.bold) {
+      classes.push("text-bold");
+    }
+    if (component.annotations.italic) {
+      classes.push("text-italic");
+    }
+    if (component.annotations.strikethrough) {
+      classes.push("text-strikethrough");
+    }
+    if (component.annotations.underline) {
+      classes.push("text-underline");
+    }
+    if (component.annotations.code) {
+      classes.push("text-code");
+    }
+    if (
+      component.annotations.color &&
+      component.annotations.color !== "default"
+    ) {
+      classes.push(`text-color-${component.annotations.color}`);
+    }
+
+    switch (component.type) {
+      case "text":
+        if (component.text.link) {
+          return (
+            <a href={component.text.link.url} class:list={classes}>
+              {component.text.content}
+            </a>
+          );
+        }
+        return <span class:list={classes}>{component.text.content}</span>;
+      case "mention":
+        // TODO: Different types of mention
+        return <span class:list={classes}>{component.plain_text}</span>;
+      case "equation":
+        // TODO: Render maths
+        return (
+          <span class:list={classes}>{component.equation.expression}</span>
+        );
+      default:
+        return (
+          <span class:list={classes}>
+            {(component as RichTextItemResponse).plain_text}
+          </span>
+        );
+    }
+  })
+}
+
+<style></style>

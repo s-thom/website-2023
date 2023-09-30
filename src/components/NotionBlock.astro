@@ -1,0 +1,65 @@
+---
+import type { BlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import Default from "./notion/Default.astro";
+import Heading1 from "./notion/Heading1.astro";
+import Heading2 from "./notion/Heading2.astro";
+import Heading3 from "./notion/Heading3.astro";
+import Paragraph from "./notion/Paragraph.astro";
+
+export interface Props {
+  block: BlockObjectResponse;
+}
+
+const { block } = Astro.props;
+
+let Component: any;
+switch (block.type) {
+  case "paragraph":
+    Component = Paragraph;
+    break;
+  case "heading_1":
+    Component = Heading1;
+    break;
+  case "heading_2":
+    Component = Heading2;
+    break;
+  case "heading_3":
+    Component = Heading3;
+    break;
+  case "bulleted_list_item":
+  case "numbered_list_item":
+  case "quote":
+  case "to_do":
+  case "toggle":
+  case "template":
+  case "synced_block":
+  case "child_page":
+  case "child_database":
+  case "equation":
+  case "code":
+  case "callout":
+  case "divider":
+  case "breadcrumb":
+  case "table_of_contents":
+  case "column_list":
+  case "column":
+  case "link_to_page":
+  case "table":
+  case "table_row":
+  case "embed":
+  case "bookmark":
+  case "image":
+  case "video":
+  case "pdf":
+  case "file":
+  case "audio":
+  case "link_preview":
+  case "unsupported":
+  default:
+    Component = Default;
+}
+---
+
+<Component block={block} />
+
+<style></style>
