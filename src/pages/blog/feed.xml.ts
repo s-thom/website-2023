@@ -1,5 +1,6 @@
 import rss from "@astrojs/rss";
 import type { APIContext } from "astro";
+import { BLOG_COLLECTION_ID } from "../../lib/constants";
 import {
   getFilteredPageCollectionItems,
   getUrlSlugForPage,
@@ -7,9 +8,7 @@ import {
 } from "../../lib/notion";
 
 export async function GET(context: APIContext) {
-  const pages = await getFilteredPageCollectionItems(
-    import.meta.env.NOTION_BLOG_COLLECTION,
-  );
+  const pages = await getFilteredPageCollectionItems(BLOG_COLLECTION_ID);
 
   return rss({
     title: "Stuart Thomson’s Blog",
