@@ -1,5 +1,9 @@
 import { collectPaginatedAPI } from "@notionhq/client";
-import type { BlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import type {
+  BlockObjectResponse,
+  DatabaseObjectResponse,
+  RichTextItemResponse,
+} from "@notionhq/client/build/src/api-endpoints";
 import { getClient } from "./notionClient";
 
 export async function getFilteredPageCollectionItems(collectionId: string) {
@@ -21,7 +25,7 @@ export async function getFilteredPageCollectionItems(collectionId: string) {
     },
   });
 
-  return queryResponse;
+  return queryResponse as unknown as DatabaseObjectResponse[];
 }
 
 export async function getPageBlocks(
@@ -34,4 +38,14 @@ export async function getPageBlocks(
   });
 
   return blocks as BlockObjectResponse[];
+}
+
+export function getUrlSlugForPage(page: DatabaseObjectResponse) {
+  return page.id;
+}
+
+export function richTextToUnformattedString(
+  components: RichTextItemResponse[],
+): string {
+  return components.map((component) => component.plain_text).join("");
 }

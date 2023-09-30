@@ -4,6 +4,7 @@ import MinimalLayout from "../../layouts/MinimalLayout.astro";
 import {
   getFilteredPageCollectionItems,
   getPageBlocks,
+  getUrlSlugForPage,
 } from "../../lib/notion";
 
 const { id } = Astro.params;
@@ -13,7 +14,7 @@ export async function getStaticPaths() {
     import.meta.env.NOTION_BLOG_COLLECTION,
   );
 
-  return pages.map((page) => ({ params: { id: page.id } }));
+  return pages.map((page) => ({ params: { id: getUrlSlugForPage(page) } }));
 }
 
 const blocks = await getPageBlocks(id!);
