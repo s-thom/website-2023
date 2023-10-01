@@ -1,0 +1,19 @@
+---
+import type { NumberedListItemBlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import { getPageBlocks } from "../../../lib/notion";
+import RichText from "../common/RichText.astro";
+import NotionRenderer from "./NotionRenderer.astro";
+
+export interface Props {
+  block: NumberedListItemBlockObjectResponse;
+}
+
+const { block } = Astro.props;
+
+const children = block.has_children ? await getPageBlocks(block.id) : [];
+---
+
+<li>
+  <RichText components={block.numbered_list_item.rich_text} />
+</li>
+{children.length > 0 ? <NotionRenderer blocks={children} /> : undefined}

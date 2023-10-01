@@ -1,0 +1,21 @@
+---
+import type { ToggleBlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import { getPageBlocks } from "../../../lib/notion";
+import RichText from "../common/RichText.astro";
+import NotionRenderer from "./NotionRenderer.astro";
+
+export interface Props {
+  block: ToggleBlockObjectResponse;
+}
+
+const { block } = Astro.props;
+
+const children = block.has_children ? await getPageBlocks(block.id) : [];
+---
+
+<details>
+  <summary>
+    <RichText components={block.toggle.rich_text} />
+  </summary>
+  {children.length > 0 ? <NotionRenderer blocks={children} /> : undefined}
+</details>

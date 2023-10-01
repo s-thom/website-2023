@@ -1,0 +1,77 @@
+---
+import type { BlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import BulletedListItemGroup from "./BulletedListItemGroup.astro";
+import NotionBlock from "./NotionBlock.astro";
+import NumberedListItemGroup from "./NumberedListItemGroup.astro";
+import NotionBlockGroup, {
+  BLOCK_GROUP_TYPE,
+  type BlockGroup,
+} from "./NotionBlockGroup.astro";
+
+export interface Props {
+  blocks: BlockObjectResponse[];
+}
+
+const { blocks } = Astro.props;
+
+// There's a bit of an annoying problem with some elements, like lists, where
+// they need to be inside a wrapping element. This is especially important for
+// numbered lists to have the correct numbers.
+// As such, this component deals with "block groups", which are essentially
+// consecutive blocks of the same type. This extra work only needs to be done
+// for certain block types, though.
+const items: (BlockObjectResponse | BlockGroup)[] = [];
+let currentGroup: BlockGroup | undefined;
+
+// eslint-disable-next-line no-restricted-syntax
+for (const block of blocks) {
+  if (currentGroup) {
+    // Add to existing group if types are the same
+    if (currentGroup.blockType === block.type) {
+      currentGroup.items.push(block);
+      // eslint-disable-next-line no-continue
+      continue;
+    }
+
+    // Append new group when the type differs
+    items.push(currentGroup);
+    currentGroup = undefined;
+  }
+
+  // Possibly create new group when
+  switch (block.type) {
+    case "bulleted_list_item":
+      currentGroup = {
+        type: BLOCK_GROUP_TYPE,
+        blockType: block.type,
+        wrapper: BulletedListItemGroup,
+        items: [block],
+      };
+      break;
+    case "numbered_list_item":
+      currentGroup = {
+        type: BLOCK_GROUP_TYPE,
+        blockType: block.type,
+        wrapper: NumberedListItemGroup,
+        items: [block],
+      };
+      break;
+    default:
+      items.push(block);
+  }
+}
+// Pick up any stragglers
+if (currentGroup) {
+  items.push(currentGroup);
+  currentGroup = undefined;
+}
+---
+
+{
+  items.map((blockOrGroup) => {
+    if (blockOrGroup.type === BLOCK_GROUP_TYPE) {
+      return <NotionBlockGroup group={blockOrGroup} />;
+    }
+    return <NotionBlock block={blockOrGroup} />;
+  })
+}

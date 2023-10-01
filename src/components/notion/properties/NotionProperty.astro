@@ -1,6 +1,8 @@
 ---
 import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import DateProperty from "./DateProperty.astro";
 import DefaultProperty from "./DefaultProperty.astro";
+import MultiSelectProperty from "./MultiSelectProperty.astro";
 import RichTextProperty from "./RichTextProperty.astro";
 
 export interface Props {
@@ -14,11 +16,16 @@ switch (property.type) {
   case "rich_text":
     Component = RichTextProperty;
     break;
+  case "multi_select":
+    Component = MultiSelectProperty;
+    break;
+  case "date":
+    Component = DateProperty;
+    break;
   case "number":
   case "url":
   case "formula":
   case "select":
-  case "multi_select":
   case "status":
   case "relation":
   case "rollup":
@@ -28,7 +35,6 @@ switch (property.type) {
   case "files":
   case "email":
   case "phone_number":
-  case "date":
   case "checkbox":
   case "created_by":
   case "created_time":

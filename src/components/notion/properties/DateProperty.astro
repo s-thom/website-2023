@@ -1,0 +1,24 @@
+---
+import type { DatePropertyItemObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+
+export interface Props {
+  property: DatePropertyItemObjectResponse;
+}
+
+const { property } = Astro.props;
+
+const start = property.date?.start ? new Date(property.date?.start) : undefined;
+// TODO: range types
+// const end = property.date?.end ? new Date(property.date?.end) : undefined;
+---
+
+<span>
+  {
+    start?.toLocaleString("en-NZ", {
+      timeZone: "Pacific/Auckland",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    })
+  }
+</span>

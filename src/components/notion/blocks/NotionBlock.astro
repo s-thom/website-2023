@@ -1,10 +1,16 @@
 ---
 import type { BlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
-import Default from "./Default.astro";
-import Heading1 from "./Heading1.astro";
-import Heading2 from "./Heading2.astro";
-import Heading3 from "./Heading3.astro";
-import Paragraph from "./Paragraph.astro";
+import BulletedListItemBlock from "./BulletedListItemBlock.astro";
+import CalloutBlock from "./CalloutBlock.astro";
+import CodeBlock from "./CodeBlock.astro";
+import DefaultBlock from "./DefaultBlock.astro";
+import Heading1Block from "./Heading1Block.astro";
+import Heading2Block from "./Heading2Block.astro";
+import Heading3Block from "./Heading3Block.astro";
+import NumberedListeItemBlock from "./NumberedListeItemBlock.astro";
+import NumberedListItemBlock from "./NumberedListItemBlock.astro";
+import ParagraphBlock from "./ParagraphBlock.astro";
+import ToggleBlock from "./ToggleBlock.astro";
 
 export interface Props {
   block: BlockObjectResponse;
@@ -15,29 +21,39 @@ const { block } = Astro.props;
 let Component: any;
 switch (block.type) {
   case "paragraph":
-    Component = Paragraph;
+    Component = ParagraphBlock;
     break;
   case "heading_1":
-    Component = Heading1;
+    Component = Heading1Block;
     break;
   case "heading_2":
-    Component = Heading2;
+    Component = Heading2Block;
     break;
   case "heading_3":
-    Component = Heading3;
+    Component = Heading3Block;
+    break;
+  case "callout":
+    Component = CalloutBlock;
+    break;
+  case "code":
+    Component = CodeBlock;
+    break;
+  case "toggle":
+    Component = ToggleBlock;
     break;
   case "bulleted_list_item":
+    Component = BulletedListItemBlock;
+    break;
   case "numbered_list_item":
+    Component = NumberedListItemBlock;
+    break;
   case "quote":
   case "to_do":
-  case "toggle":
   case "template":
   case "synced_block":
   case "child_page":
   case "child_database":
   case "equation":
-  case "code":
-  case "callout":
   case "divider":
   case "breadcrumb":
   case "table_of_contents":
@@ -56,7 +72,7 @@ switch (block.type) {
   case "link_preview":
   case "unsupported":
   default:
-    Component = Default;
+    Component = DefaultBlock;
 }
 ---
 
