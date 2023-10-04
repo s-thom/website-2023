@@ -7,7 +7,7 @@ import DefaultBlock from "./DefaultBlock.astro";
 import Heading1Block from "./Heading1Block.astro";
 import Heading2Block from "./Heading2Block.astro";
 import Heading3Block from "./Heading3Block.astro";
-import NumberedListeItemBlock from "./NumberedListeItemBlock.astro";
+import ImageBlock from "./ImageBlock.astro";
 import NumberedListItemBlock from "./NumberedListItemBlock.astro";
 import ParagraphBlock from "./ParagraphBlock.astro";
 import ToggleBlock from "./ToggleBlock.astro";
@@ -47,6 +47,9 @@ switch (block.type) {
   case "numbered_list_item":
     Component = NumberedListItemBlock;
     break;
+  case "image":
+    Component = ImageBlock;
+    break;
   case "quote":
   case "to_do":
   case "template":
@@ -64,7 +67,6 @@ switch (block.type) {
   case "table_row":
   case "embed":
   case "bookmark":
-  case "image":
   case "video":
   case "pdf":
   case "file":

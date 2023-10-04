@@ -17,10 +17,13 @@
     "@notionhq/client": "^2.2.13",
     "astro": "^3.2.0",
     "fenceparser": "^2.2.0",
+    "mime-types": "^2.1.35",
     "react": "^18.2.0",
+    "sharp": "^0.32.6",
     "shiki-twoslash": "^3.1.2"
   },
   "devDependencies": {
+    "@types/mime-types": "^2.1.2",
     "@types/react": "^18.2.23",
     "@typescript-eslint/eslint-plugin": "^6.7.3",
     "@typescript-eslint/parser": "^6.7.3",

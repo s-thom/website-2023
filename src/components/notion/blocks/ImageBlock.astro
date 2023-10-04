@@ -1,0 +1,39 @@
+---
+import type { ImageBlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import { richTextToUnformattedString } from "../../../lib/notion";
+import ExternalImage from "../../ExternalImage/ExternalImage.astro";
+import RichText from "../common/RichText.astro";
+
+export interface Props {
+  block: ImageBlockObjectResponse;
+}
+
+const { block } = Astro.props;
+
+let url: string | undefined;
+switch (block.image.type) {
+  case "external":
+    url = block.image.external.url;
+    break;
+  case "file":
+    url = block.image.file.url;
+    break;
+  default:
+    url = undefined;
+}
+
+const captionPlain = richTextToUnformattedString(block.image.caption);
+---
+
+{
+  url && (
+    <figure>
+      <picture>
+        <ExternalImage src={url} alt={captionPlain} id={block.id} />
+      </picture>
+      <figcaption>
+        <RichText components={block.image.caption} />
+      </figcaption>
+    </figure>
+  )
+}

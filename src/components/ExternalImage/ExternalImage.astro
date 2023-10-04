@@ -1,0 +1,26 @@
+---
+import { getImageInfo } from "./image";
+
+export interface Props {
+  id: string;
+  src: string;
+  alt: string;
+  ["class"]?: string;
+  imgClass?: string;
+}
+
+const { id, src, alt, class: className, imgClass } = Astro.props;
+
+const imageInfo = await getImageInfo(id, src);
+const variants = imageInfo.variants.slice();
+const finalVariant = variants.pop()!;
+---
+
+<picture class={className}>
+  {
+    variants.map((variant) => (
+      <source srcset={variant.path} type={variant.type} width={variant.width} />
+    ))
+  }
+  <img class={imgClass} src={finalVariant.path} alt={alt} />
+</picture>
