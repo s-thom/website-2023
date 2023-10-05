@@ -11,6 +11,8 @@ import ImageBlock from "./ImageBlock.astro";
 import NumberedListItemBlock from "./NumberedListItemBlock.astro";
 import ParagraphBlock from "./ParagraphBlock.astro";
 import ToggleBlock from "./ToggleBlock.astro";
+import DividerBlock from "./DividerBlock.astro";
+import QuoteBlock from "./QuoteBlock.astro";
 
 export interface Props {
   block: BlockObjectResponse;
@@ -51,13 +53,17 @@ switch (block.type) {
     Component = ImageBlock;
     break;
   case "quote":
+    Component = QuoteBlock;
+    break;
+  case "divider":
+    Component = DividerBlock;
+    break;
   case "to_do":
   case "template":
   case "synced_block":
   case "child_page":
   case "child_database":
   case "equation":
-  case "divider":
   case "breadcrumb":
   case "table_of_contents":
   case "column_list":
