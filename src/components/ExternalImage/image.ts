@@ -1,6 +1,8 @@
 import { extension } from "mime-types";
 import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
+import pMemo from "p-memoize";
+import PQueue from "p-queue";
 import sharp, { type Sharp } from "sharp";
 import {
   DEV_IMAGE_DIR,
@@ -10,26 +12,34 @@ import {
 } from "./constants";
 import { addToManifest, getFromManifest } from "./manifest";
 
-type BF = () => Promise<ImageVariant>;
+const convertQueue = new PQueue({ concurrency: 3, throwOnTimeout: true });
+const writeQueue = new PQueue({ concurrency: 3, throwOnTimeout: true });
 
-function getConvertFunctionFactory(id: string, buffer: ArrayBuffer) {
+function getConvertFunctionFactory(
+  id: string,
+  buffer: ArrayBuffer,
+  widths: number[],
+) {
   let rootSharp: Sharp;
+  const getIntrinsicWidth = pMemo(
+    async () => (await rootSharp.metadata()).width!,
+  );
 
-  return (mimeType: string, width: number): (() => Promise<ImageVariant>) => {
+  return (mimeType: string): (() => Promise<ImageVariant[]>) => {
     const ext = extension(mimeType);
 
-    const filename = `${id}_${width}.${ext}`;
-    const path = join(IMAGE_DIR, filename);
-    const filePath = join(DEV_IMAGE_DIR, filename);
-
-    return async (): Promise<ImageVariant> => {
+    return async (): Promise<ImageVariant[]> => {
       if (!rootSharp) {
         rootSharp = sharp(buffer);
       }
 
-      let clone = rootSharp.clone();
+      const intrinsicWidth = await getIntrinsicWidth();
+      const widthsToGenerate = widths
+        .filter((width) => width < intrinsicWidth)
+        .sort();
+      widthsToGenerate.unshift(intrinsicWidth);
 
-      clone = clone.resize({ width });
+      let clone = rootSharp.clone();
 
       switch (mimeType) {
         case "image/png":
@@ -48,17 +58,48 @@ function getConvertFunctionFactory(id: string, buffer: ArrayBuffer) {
           throw new Error(`Unable to convert to MIME type ${mimeType}`);
       }
 
-      const nodeBuffer = await clone.toBuffer();
-      await writeFile(filePath, nodeBuffer);
+      const generationPromises = widthsToGenerate.map(
+        async (width): Promise<ImageVariant> => {
+          const widthClone = clone.clone().resize({ width });
 
-      return { path, type: mimeType, width };
+          const filename = `${id}_${width}.${ext}`;
+          const path = join(IMAGE_DIR, filename);
+          const filePath = join(DEV_IMAGE_DIR, filename);
+
+          const nodeBuffer = await convertQueue.add(() =>
+            widthClone.toBuffer(),
+          );
+          if (!nodeBuffer) {
+            throw new Error("Conversion exceeded timeout");
+          }
+          await writeQueue.add(() => writeFile(filePath, nodeBuffer));
+
+          return { path, type: mimeType, width };
+        },
+      );
+
+      const variants = await Promise.all(generationPromises);
+      return variants;
     };
   };
 }
 
+/**
+ * @param id An ID for this image. MUST be unique across the entire application for this image
+ * @param url The URL of the image
+ * @param widths Widths to generate. A version for the images intrinsic width is always generated, as well as any given widths smaller
+ *
+ * @example
+ * const info = await getImageInfo(
+ *   'my-image',
+ *   'https://example.com/image.png',
+ *   [1920, 720, 360]
+ * );
+ */
 export async function getImageInfo(
   id: string,
   url: string,
+  widths: number[],
 ): Promise<ImageInfo> {
   // This function assumes that the app is running in a single-threaded
   // environment, which is at least true for local dev and static builds.
@@ -77,27 +118,29 @@ export async function getImageInfo(
     throw new Error(`URL ${url} did not have a content type`);
   }
 
-  const factory = getConvertFunctionFactory(id, buffer);
+  const convertForType = getConvertFunctionFactory(id, buffer, widths);
 
-  const outputs: BF[] = [];
+  const outputs: ReturnType<ReturnType<typeof getConvertFunctionFactory>>[] =
+    [];
   switch (mimeType) {
     case "image/png":
-      outputs.push(factory("image/png", 900));
+      outputs.push(convertForType("image/png"));
       break;
     case "image/jpeg":
     case "image/avif":
     case "image/webp":
       outputs.push(
-        factory("image/webp", 900),
-        factory("image/avif", 900),
-        factory("image/jpeg", 900),
+        convertForType("image/webp"),
+        convertForType("image/avif"),
+        convertForType("image/jpeg"),
       );
       break;
     default:
       throw new Error(`Unsupported MIME type ${mimeType}`);
   }
 
-  const variants = await Promise.all(outputs.map(async (fn) => fn()));
+  const variantsForFormats = await Promise.all(outputs.map(async (fn) => fn()));
+  const variants = variantsForFormats.flat();
 
   const info: ImageInfo = { id, variants };
   addToManifest(id, info);

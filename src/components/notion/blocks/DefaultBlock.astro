@@ -1,5 +1,6 @@
 ---
 import type { BlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import DevOnly from "../../DevOnly.astro";
 
 export interface Props {
   block: BlockObjectResponse;
@@ -8,10 +9,6 @@ export interface Props {
 const { block } = Astro.props;
 ---
 
-{
-  import.meta.env.DEV && (
-    <div>
-      block {block.id} has type {block.type}
-    </div>
-  )
-}
+<DevOnly>
+  block {block.id} has type {block.type}
+</DevOnly>

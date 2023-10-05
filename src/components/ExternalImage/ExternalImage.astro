@@ -7,11 +7,12 @@ export interface Props {
   alt: string;
   ["class"]?: string;
   imgClass?: string;
+  widths?: number[];
 }
 
-const { id, src, alt, class: className, imgClass } = Astro.props;
+const { id, src, alt, class: className, imgClass, widths } = Astro.props;
 
-const imageInfo = await getImageInfo(id, src);
+const imageInfo = await getImageInfo(id, src, widths ?? []);
 const variants = imageInfo.variants.slice();
 const finalVariant = variants.pop()!;
 ---

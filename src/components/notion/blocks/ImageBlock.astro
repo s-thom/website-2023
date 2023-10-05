@@ -3,12 +3,15 @@ import type { ImageBlockObjectResponse } from "@notionhq/client/build/src/api-en
 import { richTextToUnformattedString } from "../../../lib/notion";
 import ExternalImage from "../../ExternalImage/ExternalImage.astro";
 import RichText from "../common/RichText.astro";
+import DevOnly from "../../DevOnly.astro";
 
 export interface Props {
   block: ImageBlockObjectResponse;
 }
 
 const { block } = Astro.props;
+
+const GENERATE_IMAGE_WIDTHS = [1920, 720, 360];
 
 let url: string | undefined;
 switch (block.image.type) {
@@ -26,14 +29,23 @@ const captionPlain = richTextToUnformattedString(block.image.caption);
 ---
 
 {
-  url && (
+  url ? (
     <figure>
       <picture>
-        <ExternalImage src={url} alt={captionPlain} id={block.id} />
+        <ExternalImage
+          src={url}
+          alt={captionPlain}
+          id={block.id}
+          widths={GENERATE_IMAGE_WIDTHS}
+        />
       </picture>
       <figcaption>
         <RichText components={block.image.caption} />
       </figcaption>
     </figure>
+  ) : (
+    <DevOnly>
+      image block {block.id} has image type {block.image.type}
+    </DevOnly>
   )
 }

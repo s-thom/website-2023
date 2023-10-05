@@ -1,5 +1,6 @@
 ---
 import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import DevOnly from "../../DevOnly.astro";
 
 export interface Props {
   property: DatabaseObjectResponse["properties"][""];
@@ -8,10 +9,6 @@ export interface Props {
 const { property } = Astro.props;
 ---
 
-{
-  import.meta.env.DEV && (
-    <div>
-      property {property.id} has type {property.type}
-    </div>
-  )
-}
+<DevOnly>
+  property {property.id} has type {property.type}
+</DevOnly>
