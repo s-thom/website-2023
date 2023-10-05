@@ -12,7 +12,11 @@ const { block } = Astro.props;
 
 <div class={`block-callout block-callout-${block.callout.color}`}>
   <div>
-    {block.callout.icon && <Icon icon={block.callout.icon} />}
+    {
+      block.callout.icon && (
+        <Icon id={`${block.id}_icon`} icon={block.callout.icon} />
+      )
+    }
   </div>
   <div>
     <RichText components={block.callout.rich_text} />
