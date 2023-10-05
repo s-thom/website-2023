@@ -1,14 +1,15 @@
 import { extension } from "mime-types";
 import { writeFile } from "node:fs/promises";
-import { join } from "node:path";
+import { join, posix, sep } from "node:path";
 import pMemo from "p-memoize";
 import PQueue from "p-queue";
 import sharp, { type Sharp } from "sharp";
 import {
   DEV_IMAGE_DIR,
   IMAGE_DIR,
+  type ImageFormatInfo,
   type ImageInfo,
-  type ImageVariant,
+  type ImageSizeInfo,
 } from "./constants";
 import { addToManifest, getFromManifest } from "./manifest";
 
@@ -25,10 +26,10 @@ function getConvertFunctionFactory(
     async () => (await rootSharp.metadata()).width!,
   );
 
-  return (mimeType: string): (() => Promise<ImageVariant[]>) => {
+  return (mimeType: string): (() => Promise<ImageFormatInfo>) => {
     const ext = extension(mimeType);
 
-    return async (): Promise<ImageVariant[]> => {
+    return async (): Promise<ImageFormatInfo> => {
       if (!rootSharp) {
         rootSharp = sharp(buffer);
       }
@@ -59,12 +60,13 @@ function getConvertFunctionFactory(
       }
 
       const generationPromises = widthsToGenerate.map(
-        async (width): Promise<ImageVariant> => {
+        async (width): Promise<ImageSizeInfo> => {
           const widthClone = clone.clone().resize({ width });
 
           const filename = `${id}_${width}.${ext}`;
-          const path = join(IMAGE_DIR, filename);
           const filePath = join(DEV_IMAGE_DIR, filename);
+          const path = join(IMAGE_DIR, filename);
+          const pathForBrowser = `/${path.split(sep).join(posix.sep)}`;
 
           const nodeBuffer = await convertQueue.add(() =>
             widthClone.toBuffer(),
@@ -74,12 +76,12 @@ function getConvertFunctionFactory(
           }
           await writeQueue.add(() => writeFile(filePath, nodeBuffer));
 
-          return { path, type: mimeType, width };
+          return { path: pathForBrowser, width };
         },
       );
 
-      const variants = await Promise.all(generationPromises);
-      return variants;
+      const sizes = await Promise.all(generationPromises);
+      return { type: mimeType, sizes };
     };
   };
 }
@@ -139,10 +141,9 @@ export async function getImageInfo(
       throw new Error(`Unsupported MIME type ${mimeType}`);
   }
 
-  const variantsForFormats = await Promise.all(outputs.map(async (fn) => fn()));
-  const variants = variantsForFormats.flat();
+  const formats = await Promise.all(outputs.map(async (fn) => fn()));
 
-  const info: ImageInfo = { id, variants };
+  const info: ImageInfo = { id, formats };
   addToManifest(id, info);
   // // eslint-disable-next-line no-console
   // console.log(`Saved image ${id}`);

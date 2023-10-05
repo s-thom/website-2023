@@ -31,14 +31,12 @@ const captionPlain = richTextToUnformattedString(block.image.caption);
 {
   url ? (
     <figure>
-      <picture>
-        <ExternalImage
-          src={url}
-          alt={captionPlain}
-          id={block.id}
-          widths={GENERATE_IMAGE_WIDTHS}
-        />
-      </picture>
+      <ExternalImage
+        src={url}
+        alt={captionPlain}
+        id={block.id}
+        widths={GENERATE_IMAGE_WIDTHS}
+      />
       <figcaption>
         <RichText components={block.image.caption} />
       </figcaption>

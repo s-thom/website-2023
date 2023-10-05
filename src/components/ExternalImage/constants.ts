@@ -1,14 +1,17 @@
 import { join } from "node:path";
 
-export interface ImageVariant {
+export interface ImageSizeInfo {
   path: string;
-  type: string;
   width: number;
 }
 
+export interface ImageFormatInfo {
+  type: string;
+  sizes: ImageSizeInfo[];
+}
 export interface ImageInfo {
   id: string;
-  variants: ImageVariant[];
+  formats: ImageFormatInfo[];
 }
 
 export const IMAGE_MANIFEST_FILENAME = "images.json";

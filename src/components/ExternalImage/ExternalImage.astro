@@ -13,15 +13,19 @@ export interface Props {
 const { id, src, alt, class: className, imgClass, widths } = Astro.props;
 
 const imageInfo = await getImageInfo(id, src, widths ?? []);
-const variants = imageInfo.variants.slice();
-const finalVariant = variants.pop()!;
+const formats = imageInfo.formats.slice();
+const finalFormat = formats.at(-1)!.sizes[0];
 ---
 
 <picture class={className}>
   {
-    variants.map((variant) => (
-      <source srcset={variant.path} type={variant.type} width={variant.width} />
-    ))
+    formats.map((format) => {
+      const srcset = format.sizes
+        .map((size) => `${size.path} ${size.width}w`)
+        .join(", ");
+
+      return <source srcset={srcset} type={format.type} />;
+    })
   }
-  <img class={imgClass} src={finalVariant.path} alt={alt} />
+  <img class={imgClass} src={finalFormat.path} alt={alt} />
 </picture>
