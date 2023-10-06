@@ -4,7 +4,8 @@
     "airbnb/base",
     "airbnb-typescript/base",
     "plugin:prettier/recommended",
-    "plugin:astro/recommended"
+    "plugin:astro/recommended",
+    "plugin:astro/jsx-a11y-recommended"
   ],
   "parserOptions": {
     "project": "./tsconfig.json"
@@ -25,6 +26,12 @@
       "rules": {
         // override/add rules settings here, such as:
         // "astro/no-set-html-directive": "error"
+        "import/no-unresolved": [
+          "error",
+          {
+            "ignore": ["astro:*"]
+          }
+        ]
       }
     }
     // ...

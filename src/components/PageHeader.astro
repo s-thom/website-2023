@@ -1,0 +1,47 @@
+---
+import { Image } from "astro:assets";
+import portrait2020 from "../resources/portrait-2020.jpg";
+
+interface LinkInfo {
+  url: string;
+  name: string;
+}
+
+export interface Props {
+  navItems?: LinkInfo[];
+  breadcrumbs?: LinkInfo[];
+}
+
+const { navItems, breadcrumbs } = Astro.props;
+---
+
+<header>
+  <Image src={portrait2020} alt="Portrait of Stuart Thomson in a local park" />
+  <h1>Stuart Thomson</h1>
+</header>
+{
+  navItems && (
+    <nav aria-label="Breadcrumbs">
+      <ul>
+        {navItems.map((navItem) => (
+          <li>
+            <a href={navItem.url}>{navItem.name}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+{
+  breadcrumbs && (
+    <nav aria-label="Breadcrumbs">
+      <ol>
+        {breadcrumbs.map((breadcrumb) => (
+          <li>
+            <a href={breadcrumb.url}>{breadcrumb.name}</a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  )
+}

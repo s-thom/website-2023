@@ -1,9 +1,7 @@
 ---
 import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
-import BlogPageFooter from "../../components/notion/BlogPageFooter.astro";
-import BlogPageHeader from "../../components/notion/BlogPageHeader.astro";
 import NotionRenderer from "../../components/notion/blocks/NotionRenderer.astro";
-import MinimalLayout from "../../layouts/MinimalLayout.astro";
+import NotionBlogLayout from "../../layouts/NotionBlogLayout.astro";
 import { BLOG_COLLECTION_ID } from "../../lib/constants";
 import {
   getFilteredPageCollectionItems,
@@ -26,12 +24,8 @@ const id = await getPageIdFromSlug(slug!);
 const [page, blocks] = await Promise.all([getPage(id), getPageBlocks(id)]);
 ---
 
-<MinimalLayout>
-  <BlogPageHeader page={page as unknown as DatabaseObjectResponse} />
-  <div>
-    <NotionRenderer blocks={blocks} />
-  </div>
-  <BlogPageFooter page={page as unknown as DatabaseObjectResponse} />
-</MinimalLayout>
+<NotionBlogLayout page={page as unknown as DatabaseObjectResponse}>
+  <NotionRenderer blocks={blocks} />
+</NotionBlogLayout>
 
 <style></style>
