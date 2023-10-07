@@ -2,7 +2,7 @@
 import { Image } from "astro:assets";
 import portrait2020 from "../resources/portrait-2020.jpg";
 
-interface LinkInfo {
+export interface LinkInfo {
   url: string;
   name: string;
 }
@@ -21,7 +21,7 @@ const { navItems, breadcrumbs } = Astro.props;
 </header>
 {
   navItems && (
-    <nav aria-label="Breadcrumbs">
+    <nav aria-label="Main">
       <ul>
         {navItems.map((navItem) => (
           <li>

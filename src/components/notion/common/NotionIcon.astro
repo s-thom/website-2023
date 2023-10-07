@@ -1,0 +1,40 @@
+---
+import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import ExternalImage from "../../ExternalImage/ExternalImage.astro";
+
+export interface Props {
+  id: string;
+  icon: NonNullable<DatabaseObjectResponse["icon"]>;
+  class?: string;
+}
+
+const { id, class: className, icon } = Astro.props;
+
+const GENERATE_ICON_WIDTHS = [256, 128, 96, 64, 32];
+
+let url: string | undefined;
+switch (icon.type) {
+  case "external":
+    url = icon.external.url;
+    break;
+  case "file":
+    url = icon.file.url;
+    break;
+  default:
+    url = undefined;
+}
+---
+
+{
+  url ? (
+    <ExternalImage
+      id={id}
+      src={url}
+      alt=""
+      widths={GENERATE_ICON_WIDTHS}
+      class={className}
+    />
+  ) : (
+    <span>{(icon as any).emoji}</span>
+  )
+}

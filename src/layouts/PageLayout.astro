@@ -1,0 +1,40 @@
+---
+import PageMeta, { type PageMetaType } from "../components/PageMeta.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import SiteHeader, { type LinkInfo } from "../components/SiteHeader.astro";
+import MinimalLayout from "./MinimalLayout.astro";
+
+export interface Props {
+  meta: PageMetaType;
+  breadcrumbs?: LinkInfo[];
+}
+
+const { meta, breadcrumbs } = Astro.props;
+---
+
+<MinimalLayout>
+  <Fragment slot="head">
+    <PageMeta meta={meta} />
+    <slot name="head" />
+  </Fragment>
+
+  <slot name="site-header">
+    <SiteHeader
+      navItems={[
+        { name: "Blog", url: "/blog" },
+        { name: "Projects", url: "/projects" },
+      ]}
+      breadcrumbs={breadcrumbs}
+    />
+  </slot>
+  <slot name="page-header" />
+
+  <main>
+    <slot />
+  </main>
+
+  <slot name="page-footer" />
+  <slot name="site-footer">
+    <SiteFooter />
+  </slot>
+</MinimalLayout>

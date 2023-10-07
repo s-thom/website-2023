@@ -1,0 +1,32 @@
+---
+import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import { getUrlSlugForPage } from "../../../lib/notion";
+import NotionIcon from "../common/NotionIcon.astro";
+import NotionImage from "../common/NotionImage.astro";
+import RichText from "../common/RichText.astro";
+import NotionProperty from "../properties/NotionProperty.astro";
+
+export interface Props {
+  page: DatabaseObjectResponse;
+}
+
+const { page } = Astro.props;
+
+const slug = getUrlSlugForPage(page);
+const pageUrl = `/blog/${slug}`;
+---
+
+<a href={pageUrl}>
+  {
+    page.cover && (
+      <NotionImage id={`${page.id}-cover`} image={page.cover} alt="" />
+    )
+  }
+  {page.icon && <NotionIcon id={`${page.id}-icon`} icon={page.icon} />}
+  <h3>
+    <RichText components={(page.properties.Name as any).title} />
+  </h3>
+  <div>
+    <NotionProperty property={page.properties.Tags} />
+  </div>
+</a>

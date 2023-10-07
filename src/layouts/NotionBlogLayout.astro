@@ -1,11 +1,9 @@
 ---
 import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
-import PageFooter from "../components/PageFooter.astro";
-import PageHeader from "../components/PageHeader.astro";
-import BlogPageFooter from "../components/notion/BlogPageFooter.astro";
-import BlogPageHeader from "../components/notion/BlogPageHeader.astro";
-import MinimalLayout from "./MinimalLayout.astro";
+import BlogPageFooter from "../components/notion/blog/BlogPageFooter.astro";
+import BlogPageHeader from "../components/notion/blog/BlogPageHeader.astro";
 import { getUrlSlugForPage, richTextToUnformattedString } from "../lib/notion";
+import PageLayout from "./PageLayout.astro";
 
 export interface Props {
   page: DatabaseObjectResponse;
@@ -17,24 +15,20 @@ const pageSlug = getUrlSlugForPage(page);
 const pageTitle = richTextToUnformattedString(
   (page.properties.Name as any).title,
 );
+const pageUrl = `/blog/${pageSlug}`;
 ---
 
-<MinimalLayout>
-  <PageHeader
-    navItems={[
-      { name: "Blog", url: "/blog" },
-      { name: "Projects", url: "/projects" },
-    ]}
-    breadcrumbs={[
-      { name: "Home", url: "/" },
-      { name: "Blog", url: "/blog" },
-      { name: pageTitle, url: `/blog/${pageSlug}` },
-    ]}
-  />
-  <BlogPageHeader page={page} />
-  <main>
-    <slot />
-  </main>
-  <BlogPageFooter page={page} />
-  <PageFooter />
-</MinimalLayout>
+<PageLayout
+  meta={{ title: pageTitle, url: pageUrl, rssUrl: "/blog/feed.xml" }}
+  breadcrumbs={[
+    { name: "Home", url: "/" },
+    { name: "Blog", url: "/blog" },
+    { name: pageTitle, url: pageUrl },
+  ]}
+>
+  <BlogPageHeader page={page} slot="page-header" />
+
+  <slot />
+
+  <BlogPageFooter page={page} slot="page-footer" />
+</PageLayout>

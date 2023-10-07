@@ -1,0 +1,28 @@
+---
+import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import NotionImage from "../common/NotionImage.astro";
+import RichText from "../common/RichText.astro";
+import NotionProperty from "../properties/NotionProperty.astro";
+import NotionIcon from "../common/NotionIcon.astro";
+
+export interface Props {
+  page: DatabaseObjectResponse;
+}
+
+const { page } = Astro.props;
+---
+
+{
+  page.cover && (
+    <NotionImage id={`${page.id}-cover`} image={page.cover} alt="" />
+  )
+}
+{page.icon && <NotionIcon id={`${page.id}-icon`} icon={page.icon} />}
+<h1>
+  <RichText components={(page.properties.Name as any).title} />
+</h1>
+<div>
+  <p>
+    Cover Source: <NotionProperty property={page.properties["Cover Source"]} />
+  </p>
+</div>

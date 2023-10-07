@@ -1,0 +1,26 @@
+---
+import BlogListPageItem from "../../components/notion/blog/BlogListPageItem.astro";
+import PageLayout from "../../layouts/PageLayout.astro";
+import { BLOG_COLLECTION_ID } from "../../lib/constants";
+import { getFilteredPageCollectionItems } from "../../lib/notion";
+
+const pages = await getFilteredPageCollectionItems(BLOG_COLLECTION_ID);
+---
+
+<PageLayout
+  meta={{ title: "Blog", url: "/blog", rssUrl: "/blog/feed.xml" }}
+  breadcrumbs={[
+    { name: "Home", url: "/" },
+    { name: "Blog", url: "/blog" },
+  ]}
+>
+  <ul>
+    {
+      pages.map((page) => (
+        <li>
+          <BlogListPageItem page={page} />
+        </li>
+      ))
+    }
+  </ul>
+</PageLayout>
