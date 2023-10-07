@@ -20,9 +20,9 @@ const canonicalURL = new URL(url, Astro.site);
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Stuart Thomson" />
 
+<title>{title}</title>
 <meta property="og:title" content={title} />
 <meta name="twitter:title" content={title} />
-<title>{title}</title>
 
 <link rel="canonical" href={canonicalURL} />
 <meta property="og:url" content={canonicalURL} />
@@ -60,3 +60,25 @@ const canonicalURL = new URL(url, Astro.site);
     />
   )
 }
+
+<link rel="manifest" href="/manifest.json" />
+
+<link rel="shortcut icon" href="/favicon.ico" />
+<link
+  rel="apple-touch-icon"
+  sizes="180x180"
+  href="/static/icons/apple-icon.png"
+/>
+<link
+  rel="icon"
+  type="image/png"
+  sizes="96x96"
+  href="/static/icons/favicon-96x96.png"
+/>
+<link
+  rel="icon"
+  type="image/png"
+  sizes="32x32"
+  href="/static/icons/favicon-32x32.png"
+/>
+<link type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
