@@ -31,5 +31,7 @@ jobs:
           npm run typecheck
 
       - name: Build
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
         run: |
           npm run build
