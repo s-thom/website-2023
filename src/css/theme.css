@@ -1,0 +1,31 @@
+@layer theme {
+  :root {
+    --color-text: #000000;
+    --color-background: #ffffff;
+    --color-alt-background: rgba(0 0 0 / 0.1);
+    --color-primary: #1a8fe3;
+
+    --border-radius: 4px;
+  }
+
+  body {
+    background: var(--color-background);
+    color: var(--color-text);
+  }
+
+  a {
+    color: currentColor;
+    text-decoration-color: var(--color-primary);
+    text-decoration-thickness: 0.3ex;
+    text-underline-offset: 0.3ex;
+  }
+
+  .lede {
+    font-style: italic;
+    max-width: 50ch;
+  }
+
+  .lede + * {
+    --flow-space: 2em;
+  }
+}

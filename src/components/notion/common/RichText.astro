@@ -62,4 +62,26 @@ const { components } = Astro.props;
   })
 }
 
-<style></style>
+<style>
+  .text-bold {
+    font-weight: bold;
+  }
+
+  .text-italic {
+    font-style: italic;
+  }
+
+  .text-strikethrough {
+    text-decoration: line-through;
+  }
+
+  .text-underline {
+    text-decoration: underline;
+  }
+
+  .text-code {
+    padding: 0.1em;
+    background-color: var(--color-alt-background);
+    border-radius: var(--border-radius);
+  }
+</style>

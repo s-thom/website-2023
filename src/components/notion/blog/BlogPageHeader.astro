@@ -14,7 +14,12 @@ const { page } = Astro.props;
 
 {
   page.cover && (
-    <NotionImage id={`${page.id}-cover`} image={page.cover} alt="" />
+    <NotionImage
+      id={`${page.id}-cover`}
+      image={page.cover}
+      alt=""
+      class="full-bleed"
+    />
   )
 }
 {page.icon && <NotionIcon id={`${page.id}-icon`} icon={page.icon} />}

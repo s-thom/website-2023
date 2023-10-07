@@ -1,0 +1,75 @@
+@layer layout {
+  :root {
+    --area-full-bleed: l-edge / r-edge;
+    --area-wide-bleed: l-wide-bleed / r-wide-bleed;
+    --area-small-bleed: l-small-bleed / r-small-bleed;
+  }
+
+  body {
+    display: grid;
+    grid-template-columns:
+      [l-edge] 2em /* Gutter */
+      [l-wide-bleed] 1fr /* Centring  */
+      [l-small-bleed] minmax(auto, 15ch) /* Small bleed for special elements */
+      [content-column] min(65ch, calc(100% - (2 * 2em))) /* Content */
+      minmax(auto, 15ch) [r-small-bleed] /* Small bleed for special elements */
+      1fr [r-wide-bleed] /* Centring */
+      2em [r-edge]; /* Gutter */
+
+    & > * {
+      grid-column: content-column;
+    }
+  }
+
+  body main {
+    display: contents;
+
+    & > * {
+      grid-column: content-column;
+    }
+
+    & > article {
+      display: contents;
+
+      & > * {
+        grid-column: content-column;
+      }
+    }
+  }
+
+  .full-bleed {
+    grid-column: var(--area-full-bleed);
+  }
+
+  ul,
+  ol {
+    padding-inline-start: 1em;
+  }
+
+  blockquote {
+    max-width: 50ch;
+    padding-inline-start: 1em;
+    border-inline-start: 0.3em solid;
+  }
+
+  .flow > * + * {
+    margin-block-start: var(--flow-space, 1em);
+  }
+
+  :is(h1, h2, h3, blockquote) {
+    --flow-space: 1.5em;
+  }
+
+  :is(h1, h2, h3) + * {
+    --flow-space: 0.5em;
+  }
+
+  .lede {
+    font-size: var(--size-step-1);
+    max-width: 50ch;
+  }
+
+  .lede + * {
+    --flow-space: 2em;
+  }
+}

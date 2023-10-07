@@ -28,7 +28,9 @@ const pageUrl = `/blog/${pageSlug}`;
 >
   <BlogPageHeader page={page} slot="page-header" />
 
-  <slot />
+  <article class="flow">
+    <slot />
+  </article>
 
   <BlogPageFooter page={page} slot="page-footer" />
 </PageLayout>

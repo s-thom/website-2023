@@ -5,8 +5,14 @@ export interface Props {
   block: DividerBlockObjectResponse;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const { block } = Astro.props;
 ---
 
-<hr />
+<hr data-block={block.id} />
+
+<style>
+  hr {
+    grid-column: var(--area-small-bleed) !important;
+    width: 100%;
+  }
+</style>

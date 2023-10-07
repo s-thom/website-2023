@@ -13,9 +13,23 @@ const { block } = Astro.props;
 const captionPlain = richTextToUnformattedString(block.image.caption);
 ---
 
-<figure>
+<figure data-block={block.id} class="block-image">
   <NotionImage id={block.id} image={block.image} alt={captionPlain} />
-  <figcaption>
+  <figcaption class="block-image-caption">
     <RichText components={block.image.caption} />
   </figcaption>
 </figure>
+
+<style>
+  .block-image {
+    grid-column: var(--area-small-bleed) !important;
+    padding: 0.5em;
+    background-color: var(--color-alt-background);
+    border-radius: var(--border-radius);
+  }
+
+  .block-image-caption {
+    text-align: center;
+    font-style: italic;
+  }
+</style>

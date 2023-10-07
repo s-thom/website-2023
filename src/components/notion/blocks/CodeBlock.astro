@@ -11,10 +11,21 @@ const { block } = Astro.props;
 const html = await highlightCode(block);
 ---
 
-{
-  html && (
-    <code>
-      <pre set:html={html} />
-    </code>
-  )
-}
+{html && <code data-block={block.id} class="block-code" set:html={html} />}
+
+<style>
+  .block-code {
+    display: block;
+  }
+
+  .block-code > :global(pre) {
+    padding: 1em;
+    border-radius: var(--border-radius);
+    overflow-x: auto;
+  }
+
+  .block-code :global(.language-id) {
+    /* TODO: Figure out what to do with the language indicator */
+    display: none;
+  }
+</style>
