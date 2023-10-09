@@ -1,0 +1,49 @@
+.sticker {
+  position: relative;
+  width: 5em;
+  height: 5em;
+  background-color: rebeccapurple;
+  cursor: grab;
+  pointer-events: all;
+}
+
+.stickerDrag {
+  opacity: 0.5;
+  width: 10em;
+  height: 10em;
+}
+
+.pageFloatZone {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.pageFloatZone .sticker {
+  position: absolute;
+  width: 10em;
+  height: 10em;
+}
+
+.pageDropZone {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255 255 255 / 0);
+  pointer-events: none;
+  transition: background-color 0.2s linear;
+}
+
+.pageDropZoneOver {
+  background-color: rgba(255 255 255 / 0.1);
+}
+
+.panelZone {
+  position: fixed;
+  bottom: 1em;
+  right: 1em;
+  padding: 1em;
+  background-color: var(--color-alt-background);
+}

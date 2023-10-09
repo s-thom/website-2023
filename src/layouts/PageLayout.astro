@@ -3,6 +3,7 @@ import PageMeta, { type PageMetaType } from "../components/PageMeta.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import SiteHeader, { type LinkInfo } from "../components/SiteHeader.astro";
 import MinimalLayout from "./MinimalLayout.astro";
+import { StickerApp } from "../components/react/StickerBook";
 import "../css/index.css";
 
 export interface Props {
@@ -29,6 +30,7 @@ const { meta, breadcrumbs } = Astro.props;
     />
   </slot>
   <slot name="page-header" />
+  <StickerApp id="temp" client:idle />
 
   <main>
     <slot />
