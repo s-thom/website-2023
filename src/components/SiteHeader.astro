@@ -1,6 +1,8 @@
 ---
 import { Image } from "astro:assets";
 import portrait2020 from "../resources/portrait-2020.jpg";
+import DefaultPageHeader from "./site/DefaultPageHeader.astro";
+import DefaultPageBackdrop from "./site/DefaultPageBackdrop.astro";
 
 export interface LinkInfo {
   url: string;
@@ -15,33 +17,146 @@ export interface Props {
 const { navItems, breadcrumbs } = Astro.props;
 ---
 
-<header>
-  <Image src={portrait2020} alt="Portrait of Stuart Thomson in a local park" />
-  <h1>Stuart Thomson</h1>
-</header>
-{
-  navItems && (
-    <nav aria-label="Main">
-      <ul>
-        {navItems.map((navItem) => (
-          <li>
-            <a href={navItem.url}>{navItem.name}</a>
-          </li>
-        ))}
-      </ul>
-    </nav>
-  )
-}
-{
-  breadcrumbs && (
-    <nav aria-label="Breadcrumbs">
-      <ol>
-        {breadcrumbs.map((breadcrumb) => (
-          <li>
-            <a href={breadcrumb.url}>{breadcrumb.name}</a>
-          </li>
-        ))}
-      </ol>
-    </nav>
-  )
-}
+<div class="header-area">
+  <div class="site-header-container">
+    <header class="site-header">
+      <a href="/" class="site-name">
+        <Image
+          src={portrait2020}
+          alt="Portrait of Stuart Thomson in a local park"
+          class="profile-photo"
+        />
+        <h1>Stuart Thomson</h1>
+      </a>
+
+      {
+        navItems && (
+          <nav aria-label="Main">
+            <ul class="nav-list">
+              {navItems.map((navItem) => (
+                <li class="nav-item">
+                  <a href={navItem.url}>{navItem.name}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )
+      }
+    </header>
+
+    <div class="page-header-container">
+      <slot name="page-header">
+        <DefaultPageHeader />
+      </slot>
+    </div>
+
+    <slot name="page-backdrop">
+      <DefaultPageBackdrop />
+    </slot>
+  </div>
+
+  {
+    breadcrumbs && (
+      <nav aria-label="Breadcrumbs">
+        <ol class="breadcrumb-list">
+          {breadcrumbs.map((breadcrumb) => (
+            <li class="breadcrumb">
+              <a href={breadcrumb.url}>{breadcrumb.name}</a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+    )
+  }
+</div>
+
+<style>
+  .header-area {
+    margin-bottom: 1em;
+    grid-column: var(--area-full-bleed) !important;
+  }
+
+  .site-header-container {
+    color: #ffffff;
+    position: relative;
+    display: grid;
+    /* Remember to duplicate to src/css/layout.css */
+    grid-template-columns:
+      [l-edge] 2em /* Gutter */
+      [l-wide-bleed] 1fr /* Centring  */
+      [l-small-bleed] minmax(auto, 15ch)
+      /* Small bleed for special elements */
+      [content-column] min(65ch, calc(100% - (2 * 2em))) /* Content */
+      minmax(auto, 15ch)
+      [r-small-bleed] /* Small bleed for special elements */
+      1fr [r-wide-bleed] /* Centring */
+      2em [r-edge]; /* Gutter */
+  }
+
+  .page-header-container {
+    grid-column: content-column;
+  }
+
+  .site-header-container :global(.header-backdrop) {
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    grid-column: var(--area-full-bleed) !important;
+    grid-row: 1 !important;
+    overflow: hidden;
+  }
+
+  .site-header {
+    grid-column: var(--area-header) !important;
+    grid-row: 1 !important;
+    padding: 1em;
+  }
+
+  .site-name {
+    display: flex;
+    gap: 1em;
+    align-items: center;
+  }
+
+  .site-name,
+  .nav-list {
+    justify-content: center;
+  }
+
+  @media (min-width: 900px) {
+    .site-name,
+    .nav-list {
+      justify-content: start;
+    }
+  }
+
+  .profile-photo {
+    width: 3em;
+    height: 3em;
+    border-radius: 50%;
+  }
+
+  .nav-list {
+    display: flex;
+    list-style: none;
+    gap: 1em;
+    padding-left: 0 !important;
+  }
+
+  .breadcrumb-list {
+    display: flex;
+    list-style: none;
+    gap: 0.5em;
+    justify-content: center;
+    font-style: italic;
+    font-size: var(--size-step-min1);
+  }
+
+  .breadcrumb:not(:first-child)::before {
+    content: "»";
+    padding-inline-end: 0.5em;
+  }
+</style>

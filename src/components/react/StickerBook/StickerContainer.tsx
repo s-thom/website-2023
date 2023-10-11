@@ -12,7 +12,7 @@ import styles from "./StickerBook.module.css";
 import { StickerPanel } from "./StickerPanel.tsx";
 import type { StickerInfo } from "./types";
 
-export interface StickerAppProps {
+export interface StickerContainerProps {
   id: string;
 }
 

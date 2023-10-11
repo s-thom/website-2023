@@ -3,10 +3,18 @@
     --area-full-bleed: l-edge / r-edge;
     --area-wide-bleed: l-wide-bleed / r-wide-bleed;
     --area-small-bleed: l-small-bleed / r-small-bleed;
+    --area-header: var(--area-small-bleed);
+  }
+
+  @media (min-width: 1500px) {
+    :root {
+      --area-header: l-wide-bleed / content-column;
+    }
   }
 
   body {
     display: grid;
+    /* Remember to duplicate to src/components/SiteHeader.astro */
     grid-template-columns:
       [l-edge] 2em /* Gutter */
       [l-wide-bleed] 1fr /* Centring  */
@@ -41,6 +49,10 @@
     grid-column: var(--area-full-bleed);
   }
 
+  .small-bleed {
+    grid-column: var(--area-small-bleed);
+  }
+
   ul,
   ol {
     padding-inline-start: 1em;
@@ -71,5 +83,15 @@
 
   .lede + * {
     --flow-space: 2em;
+  }
+
+  .visually-hiden {
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
   }
 }

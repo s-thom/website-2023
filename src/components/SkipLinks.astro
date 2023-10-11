@@ -1,0 +1,45 @@
+---
+export interface Props {
+  links: { name: string; url: string }[];
+}
+
+const { links } = Astro.props;
+---
+
+<div class="skip-links">
+  <p>Skip to:</p>
+  <ul>
+    {
+      links.map((link) => (
+        <li>
+          <a href={link.url}>{link.name}</a>
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<style>
+  .skip-links {
+    text-align: center;
+    padding: 1em 2em;
+    grid-column: var(--area-full-bleed) !important;
+    background-color: var(--color-primary);
+    color: var(--color-background);
+  }
+
+  .skip-links:not(:focus-within) {
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+  }
+
+  .skip-links :global(ul) {
+    list-style: none;
+    padding-left: 0 !important;
+  }
+</style>

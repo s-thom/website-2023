@@ -18,6 +18,13 @@ const { page } = Astro.props;
   </div>
   <div>
     <div>
+      <p>
+        Cover Source: <NotionProperty
+          property={page.properties["Cover Source"]}
+        />
+      </p>
+    </div>
+    <div>
       <NotionProperty property={page.properties.Published} />
     </div>
     <div>

@@ -11,6 +11,7 @@
   opacity: 0.5;
   width: 10em;
   height: 10em;
+  cursor: move;
 }
 
 .pageFloatZone {
@@ -37,7 +38,7 @@
 }
 
 .pageDropZoneOver {
-  background-color: rgba(255 255 255 / 0.1);
+  background-color: rgba(255 255 255 / 0.25);
 }
 
 .panelZone {

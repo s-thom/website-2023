@@ -1,0 +1,38 @@
+---
+import type { PageMetaType } from "../components/PageMeta.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import type { LinkInfo } from "../components/SiteHeader.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import PageLayout from "./PageLayout.astro";
+
+export interface Props {
+  enableExperiments?: boolean;
+  meta: PageMetaType;
+  breadcrumbs?: LinkInfo[];
+}
+
+const { enableExperiments = false, meta, breadcrumbs } = Astro.props;
+---
+
+<PageLayout enableExperiments={enableExperiments} meta={meta}>
+  <slot name="head" slot="head" />
+  <slot name="skip-links" slot="skip-links" />
+
+  <SiteHeader
+    slot="site-header"
+    navItems={[
+      { name: "Blog", url: "/blog" },
+      { name: "Projects", url: "/projects" },
+    ]}
+    breadcrumbs={breadcrumbs}
+  >
+    <slot name="page-header" slot="page-header" />
+    <slot name="page-backdrop" slot="page-backdrop" />
+  </SiteHeader>
+
+  <slot />
+
+  <SiteFooter slot="site-footer" />
+</PageLayout>
+
+<style></style>

@@ -8,7 +8,7 @@ export interface Props {
   class?: string;
 }
 
-const { id, class: className, icon } = Astro.props;
+const { id, class: className, icon, ...rest } = Astro.props;
 
 const GENERATE_ICON_WIDTHS = [256, 128, 96, 64, 32];
 
@@ -28,6 +28,7 @@ switch (icon.type) {
 {
   url ? (
     <ExternalImage
+      {...rest}
       id={id}
       src={url}
       alt=""
