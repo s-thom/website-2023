@@ -26,6 +26,7 @@
     "astro": "^3.2.0",
     "clsx": "^2.0.0",
     "fenceparser": "^2.2.0",
+    "lottie-web": "^5.12.2",
     "mime-types": "^2.1.35",
     "p-memoize": "^7.1.1",
     "p-queue": "^7.4.1",

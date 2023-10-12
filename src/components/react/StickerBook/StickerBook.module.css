@@ -2,15 +2,28 @@
   position: relative;
   width: 5em;
   height: 5em;
-  background-color: rebeccapurple;
+}
+
+.stickerCanActivate {
+  cursor: pointer;
+}
+
+.stickerMovable {
   cursor: grab;
-  pointer-events: all;
+}
+
+.stickerMovableWrapper {
+  position: relative;
+  background-color: transparent;
+  border: none;
+}
+
+.pageStickerWrapper {
+  position: absolute;
 }
 
 .stickerDrag {
   opacity: 0.5;
-  width: 10em;
-  height: 10em;
   cursor: move;
 }
 
@@ -18,12 +31,6 @@
   position: absolute;
   top: 0;
   left: 0;
-}
-
-.pageFloatZone .sticker {
-  position: absolute;
-  width: 10em;
-  height: 10em;
 }
 
 .pageDropZone {

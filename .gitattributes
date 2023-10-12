@@ -1,4 +1,5 @@
 # Hide files from GitHub's language statistics
 public/static/pretty-feed-v3.xsl linguist-vendored
+public/static/lottie/* linguist-vendored
 src/lib/shiki/theme.ts linguist-vendored
 src/lib/shiki/shiki.css linguist-vendored

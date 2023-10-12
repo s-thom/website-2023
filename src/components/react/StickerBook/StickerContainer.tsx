@@ -5,11 +5,12 @@ import {
   type DragEndEvent,
 } from "@dnd-kit/core";
 import { useState } from "react";
-import { MovableSticker } from "./MovableSticker.tsx";
 import { PageZone } from "./PageZone.tsx";
-import { Sticker } from "./Sticker.tsx";
 import styles from "./StickerBook.module.css";
 import { StickerPanel } from "./StickerPanel.tsx";
+import { STICKER_TYPE_MAP } from "./data";
+import { MovableStickerWrapper } from "./stickers/MovableStickerWrapper.tsx";
+import { Sticker } from "./stickers/Sticker.tsx";
 import type { StickerInfo } from "./types";
 
 export interface StickerContainerProps {
@@ -20,26 +21,14 @@ export function StickerContainer({ id }: StickerContainerProps) {
   // eslint-disable-next-line @typescript-eslint/no-unused-expressions
   id;
 
-  const [stickers, setStickers] = useState<StickerInfo[]>([
-    {
-      id: "1",
-      zone: "panel",
-      type: "rebeccapurple",
+  const [stickers, setStickers] = useState<StickerInfo[]>(() =>
+    Object.keys(STICKER_TYPE_MAP).map((type, i) => ({
+      id: i.toString(),
       coordinates: { x: 0, y: 0 },
-    },
-    {
-      id: "2",
+      type: type as any,
       zone: "panel",
-      type: "rebeccapurple",
-      coordinates: { x: 0, y: 0 },
-    },
-    {
-      id: "3",
-      zone: "panel",
-      type: "rebeccapurple",
-      coordinates: { x: 0, y: 0 },
-    },
-  ]);
+    })),
+  );
   const [dragId, setDragId] = useState<string>();
 
   const draggingSticker =
@@ -91,10 +80,54 @@ export function StickerContainer({ id }: StickerContainerProps) {
       onDragStart={handleDragStart}
       onDragCancel={handleDragCancel}
       onDragEnd={handleDragEnd}
+      accessibility={{
+        announcements: {
+          onDragStart({ active }) {
+            const activeSticker = stickers.find(
+              (sticker) => sticker.id === active.id,
+            );
+            if (activeSticker) {
+              const stickerData = STICKER_TYPE_MAP[activeSticker.type];
+              return `Picked up ${stickerData.name} sticker`;
+            }
+            return undefined;
+          },
+          onDragOver({ active, over }) {
+            const activeSticker = stickers.find(
+              (sticker) => sticker.id === active.id,
+            );
+            if (activeSticker && over) {
+              const stickerData = STICKER_TYPE_MAP[activeSticker.type];
+              return `Sticker ${stickerData.name} is over ${over.id}`;
+            }
+            return undefined;
+          },
+          onDragEnd({ active, over }) {
+            const activeSticker = stickers.find(
+              (sticker) => sticker.id === active.id,
+            );
+            if (activeSticker && over) {
+              const stickerData = STICKER_TYPE_MAP[activeSticker.type];
+              return `Sticker ${stickerData.name} was placed on ${over.id}`;
+            }
+            return undefined;
+          },
+          onDragCancel() {
+            return `Sticker placement cancelled`;
+          },
+        },
+        screenReaderInstructions: {
+          draggable: `To pick up a sticker, press space or enter. Use the arrow keys to move the sticker to any position on the page. Press space or enter again to place the sticker, or press escape to cancel`,
+        },
+      }}
     >
       <PageZone>
         {pageStickers.map((sticker) => (
-          <MovableSticker key={sticker.id} sticker={sticker} />
+          <MovableStickerWrapper
+            key={sticker.id}
+            sticker={sticker}
+            className={styles.pageStickerWrapper}
+          />
         ))}
       </PageZone>
 
@@ -106,7 +139,7 @@ export function StickerContainer({ id }: StickerContainerProps) {
 
       <StickerPanel>
         {panelStickers.map((sticker) => (
-          <MovableSticker key={sticker.id} sticker={sticker} />
+          <MovableStickerWrapper key={sticker.id} sticker={sticker} />
         ))}
       </StickerPanel>
     </DndContext>
