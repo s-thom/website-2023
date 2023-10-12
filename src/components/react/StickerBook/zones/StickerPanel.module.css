@@ -1,0 +1,35 @@
+.zone {
+  position: fixed;
+  bottom: 1em;
+  right: 1em;
+  padding: 1em;
+  background-color: var(--color-background);
+  border: 1.5px solid var(--color-border);
+  box-shadow: 0px 2px 4px 3px rgba(0 0 0 / 0.1);
+  border-radius: var(--border-radius);
+}
+
+.header {
+  display: grid;
+  grid-template-columns: 1fr 3em;
+  gap: 1em;
+  margin-bottom: 1em;
+}
+
+.close {
+  background-color: transparent;
+  border: none;
+  justify-self: end;
+  grid-column: 2;
+  line-height: 1em;
+  padding: 0;
+  top: 0;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+}

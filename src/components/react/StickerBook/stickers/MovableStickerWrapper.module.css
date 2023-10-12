@@ -1,0 +1,9 @@
+.stickerMovable {
+  cursor: grab;
+}
+
+.stickerMovableWrapper {
+  position: relative;
+  background-color: transparent;
+  border: none;
+}

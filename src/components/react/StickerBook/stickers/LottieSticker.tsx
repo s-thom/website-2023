@@ -1,6 +1,7 @@
 import lottie, { type AnimationItem } from "lottie-web";
 import { useEffect, useRef, useState } from "react";
 import type { LottieStickerData, StickerInfo } from "../types";
+import styles from "./LottieSticker.module.css";
 
 async function requestLottieFile(url: string) {
   const response = await fetch(url);
@@ -48,7 +49,9 @@ export function LottieSticker({ data }: LottieStickerProps) {
         loop: true,
         autoplay: true,
         name: data.name,
+        rendererSettings: { className: styles.animation },
       });
+      anim.goToAndStop(data.initialFrame, true);
       setAnimation(anim);
     }
 
@@ -60,7 +63,7 @@ export function LottieSticker({ data }: LottieStickerProps) {
         anim.destroy();
       }
     };
-  }, []);
+  }, [data]);
 
   return <div ref={ref} />;
 }

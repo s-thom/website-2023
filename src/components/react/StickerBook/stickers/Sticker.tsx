@@ -1,9 +1,9 @@
 import clsx from "clsx";
 import { type ReactNode } from "react";
-import styles from "../StickerBook.module.css";
 import { STICKER_TYPE_MAP } from "../data";
 import type { StickerInfo } from "../types";
 import { LottieSticker } from "./LottieSticker.tsx";
+import styles from "./Sticker.module.css";
 
 export interface StickerProps {
   sticker: StickerInfo;

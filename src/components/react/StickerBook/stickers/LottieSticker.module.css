@@ -1,0 +1,4 @@
+.animation {
+  width: var(--sticker-size) !important;
+  height: var(--sticker-size) !important;
+}

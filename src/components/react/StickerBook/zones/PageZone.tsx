@@ -1,7 +1,7 @@
 import { useDroppable } from "@dnd-kit/core";
 import clsx from "clsx";
 import type { PropsWithChildren } from "react";
-import styles from "./StickerBook.module.css";
+import styles from "./PageZone.module.css";
 
 export interface PageZoneProps extends PropsWithChildren {}
 

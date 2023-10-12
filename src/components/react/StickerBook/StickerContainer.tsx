@@ -5,13 +5,13 @@ import {
   type DragEndEvent,
 } from "@dnd-kit/core";
 import { useState } from "react";
-import { PageZone } from "./PageZone.tsx";
 import styles from "./StickerBook.module.css";
-import { StickerPanel } from "./StickerPanel.tsx";
 import { STICKER_TYPE_MAP } from "./data";
 import { MovableStickerWrapper } from "./stickers/MovableStickerWrapper.tsx";
 import { Sticker } from "./stickers/Sticker.tsx";
 import type { StickerInfo } from "./types";
+import { PageZone } from "./zones/PageZone.tsx";
+import { StickerPanel } from "./zones/StickerPanel.tsx";
 
 export interface StickerContainerProps {
   id: string;

@@ -11,7 +11,7 @@ export const STICKER_TYPE_MAP: Record<StickerTypes, StickerData> = {
     type: "lottie",
     name: "Dragon",
     url: "/static/lottie/dragon.json",
-    initialFrame: 0,
+    initialFrame: 60,
   },
   fire: {
     type: "lottie",
@@ -23,7 +23,7 @@ export const STICKER_TYPE_MAP: Record<StickerTypes, StickerData> = {
     type: "lottie",
     name: "Light bulb",
     url: "/static/lottie/light-bulb.json",
-    initialFrame: 0,
+    initialFrame: 50,
   },
   lizard: {
     type: "lottie",
@@ -35,19 +35,19 @@ export const STICKER_TYPE_MAP: Record<StickerTypes, StickerData> = {
     type: "lottie",
     name: "Party popper",
     url: "/static/lottie/party-popper.json",
-    initialFrame: 0,
+    initialFrame: 25,
   },
   rainbow: {
     type: "lottie",
     name: "Rainbow",
     url: "/static/lottie/rainbow.json",
-    initialFrame: 0,
+    initialFrame: 50,
   },
   smile: {
     type: "lottie",
     name: "Smile",
     url: "/static/lottie/smile.json",
-    initialFrame: 0,
+    initialFrame: 40,
   },
   "thumbs-up": {
     type: "lottie",

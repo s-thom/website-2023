@@ -5,7 +5,7 @@ interface BaseStickerData {
 export interface LottieStickerData extends BaseStickerData {
   type: "lottie";
   url: string;
-  initialFrame: 0;
+  initialFrame: number;
 }
 
 export type StickerData = LottieStickerData;

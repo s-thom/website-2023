@@ -1,57 +1,27 @@
-.sticker {
-  position: relative;
-  width: 5em;
-  height: 5em;
+:root {
+  --sticker-size: 3em;
 }
 
+@media (min-width: 900px) {
+  :root {
+    --sticker-size: 4em;
+  }
+}
+
+@media (min-width: 1200px) {
+  :root {
+    --sticker-size: 5em;
+  }
+}
 .stickerCanActivate {
   cursor: pointer;
 }
 
-.stickerMovable {
-  cursor: grab;
-}
-
-.stickerMovableWrapper {
-  position: relative;
-  background-color: transparent;
-  border: none;
-}
-
 .pageStickerWrapper {
-  position: absolute;
+  position: absolute !important;
 }
 
 .stickerDrag {
   opacity: 0.5;
   cursor: move;
-}
-
-.pageFloatZone {
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-.pageDropZone {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(255 255 255 / 0);
-  pointer-events: none;
-  transition: background-color 0.2s linear;
-}
-
-.pageDropZoneOver {
-  background-color: rgba(255 255 255 / 0.25);
-}
-
-.panelZone {
-  position: fixed;
-  bottom: 1em;
-  right: 1em;
-  padding: 1em;
-  background-color: var(--color-alt-background);
 }
