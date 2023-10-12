@@ -12,9 +12,13 @@
   height: 100%;
   background-color: rgba(255 255 255 / 0);
   pointer-events: none;
-  transition: background-color 0.2s linear;
+  transition: background-color var(--transition-duration) linear;
 }
 
 .pageDropZoneOver {
-  background-color: rgba(255 255 255 / 0.25);
+  background-color: rgba(255 255 255 / 0.5);
+}
+
+.pageStickerWrapper {
+  position: absolute !important;
 }

@@ -1,16 +1,27 @@
 import { useDroppable } from "@dnd-kit/core";
 import clsx from "clsx";
-import type { PropsWithChildren } from "react";
+import { MovableStickerWrapper } from "../stickers/MovableStickerWrapper.tsx";
+import type { StickerInfo } from "../types";
 import styles from "./PageZone.module.css";
 
-export interface PageZoneProps extends PropsWithChildren {}
+export interface PageZoneProps {
+  stickers: StickerInfo[];
+}
 
-export function PageZone({ children }: PageZoneProps) {
+export function PageZone({ stickers }: PageZoneProps) {
   const { setNodeRef, isOver } = useDroppable({ id: "page" });
 
   return (
     <>
-      <div className={styles.pageFloatZone}>{children}</div>
+      <div className={styles.pageFloatZone}>
+        {stickers.map((sticker) => (
+          <MovableStickerWrapper
+            key={sticker.id}
+            sticker={sticker}
+            className={styles.pageStickerWrapper}
+          />
+        ))}
+      </div>
       <div
         ref={setNodeRef}
         className={clsx(styles.pageDropZone, isOver && styles.pageDropZoneOver)}

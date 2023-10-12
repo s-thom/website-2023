@@ -1,12 +1,26 @@
+.closed {
+  /* Quick hack to make a square button */
+  line-height: 1em;
+}
+
 .zone {
   position: fixed;
   bottom: 1em;
   right: 1em;
-  padding: 1em;
+  padding: 0.5em;
   background-color: var(--color-background);
+  transition: background-color var(--transition-duration) ease-in-out;
   border: 1.5px solid var(--color-border);
   box-shadow: 0px 2px 4px 3px rgba(0 0 0 / 0.1);
   border-radius: var(--border-radius);
+}
+
+.zoneOver {
+  background-color: color-mix(
+    in srgb,
+    var(--color-background) 90%,
+    rgb(255 0 0) 10%
+  );
 }
 
 .header {
@@ -16,15 +30,34 @@
   margin-bottom: 1em;
 }
 
-.close {
+.what {
+  font-size: var(--size-step-min1);
+}
+
+.infoIcon {
+  height: 1.2em;
+  width: 1.2em;
+  vertical-align: text-bottom;
+  margin-inline-end: 0.25em;
+}
+
+.iconButton {
   background-color: transparent;
+  color: var(--color-border);
+  transition: color var(--transition-duration) ease-in-out;
   border: none;
   justify-self: end;
   grid-column: 2;
   line-height: 1em;
   padding: 0;
-  top: 0;
   cursor: pointer;
+}
+
+.iconButton:hover {
+  color: var(--color-text);
+}
+
+.close {
   align-self: flex-start;
 }
 

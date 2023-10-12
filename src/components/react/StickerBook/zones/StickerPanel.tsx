@@ -1,39 +1,81 @@
 import { useDroppable } from "@dnd-kit/core";
 import clsx from "clsx";
-import { InfoIcon, XIcon } from "lucide-react";
-import type { PropsWithChildren } from "react";
+import { InfoIcon, SmilePlusIcon, Trash2Icon, XIcon } from "lucide-react";
+import { useState, type ReactNode } from "react";
+import { MovableStickerWrapper } from "../stickers/MovableStickerWrapper.tsx";
+import type { StickerInfo } from "../types";
 import styles from "./StickerPanel.module.css";
 
-export interface StickerPanelProps extends PropsWithChildren {}
+export interface StickerPanelProps {
+  stickers: StickerInfo[];
+}
 
-// eslint-disable-next-line no-empty-pattern
-export function StickerPanel({ children }: StickerPanelProps) {
+export function StickerPanel({ stickers }: StickerPanelProps) {
+  const [isOpen, setIsOpen] = useState(false);
+
   const { isOver, setNodeRef } = useDroppable({
     id: "panel",
   });
 
+  let layout: ReactNode;
+  if (isOpen) {
+    layout = (
+      <>
+        <div className={styles.header}>
+          <div>
+            <p>Drag a sticker anywhere on the page to place it</p>
+            <a className={styles.what} href="/website/sticker-book">
+              <InfoIcon className={styles.infoIcon}>
+                <title>Info</title>
+              </InfoIcon>
+              Wait, what is this?
+            </a>
+          </div>
+          <button
+            className={clsx(styles.iconButton, styles.close)}
+            onClick={() => setIsOpen(false)}
+          >
+            <XIcon>
+              <title>Close</title>
+            </XIcon>
+          </button>
+        </div>
+        <div className={styles.list}>
+          {stickers.map((sticker) => (
+            <MovableStickerWrapper key={sticker.id} sticker={sticker} />
+          ))}
+        </div>
+      </>
+    );
+  } else {
+    layout = (
+      <button
+        className={styles.iconButton}
+        onClick={() => setIsOpen((open) => !open)}
+      >
+        {isOver ? (
+          <Trash2Icon>
+            <title>Remove from page</title>
+          </Trash2Icon>
+        ) : (
+          <SmilePlusIcon>
+            <title>Open sticker book</title>
+          </SmilePlusIcon>
+        )}
+      </button>
+    );
+  }
+
   return (
     <div
       ref={setNodeRef}
-      className={clsx(styles.zone, isOver && styles.zoneOver)}
+      className={clsx(
+        styles.zone,
+        isOver && styles.zoneOver,
+        !isOpen && styles.closed,
+      )}
     >
-      <div className={styles.header}>
-        <div>
-          <p>Drag a sticker anywhere on the page</p>
-          <a href="/website/sticker-book">
-            <InfoIcon>
-              <title>Info</title>
-            </InfoIcon>{" "}
-            Wait, what is this?
-          </a>
-        </div>
-        <button className={styles.close}>
-          <XIcon>
-            <title>Close</title>
-          </XIcon>
-        </button>
-      </div>
-      <div className={styles.list}>{children}</div>
+      {layout}
     </div>
   );
 }

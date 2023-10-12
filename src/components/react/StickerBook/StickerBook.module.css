@@ -13,12 +13,9 @@
     --sticker-size: 5em;
   }
 }
+
 .stickerCanActivate {
   cursor: pointer;
-}
-
-.pageStickerWrapper {
-  position: absolute !important;
 }
 
 .stickerDrag {

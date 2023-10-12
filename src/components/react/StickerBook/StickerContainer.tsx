@@ -7,7 +7,6 @@ import {
 import { useState } from "react";
 import styles from "./StickerBook.module.css";
 import { STICKER_TYPE_MAP } from "./data";
-import { MovableStickerWrapper } from "./stickers/MovableStickerWrapper.tsx";
 import { Sticker } from "./stickers/Sticker.tsx";
 import type { StickerInfo } from "./types";
 import { PageZone } from "./zones/PageZone.tsx";
@@ -121,27 +120,14 @@ export function StickerContainer({ id }: StickerContainerProps) {
         },
       }}
     >
-      <PageZone>
-        {pageStickers.map((sticker) => (
-          <MovableStickerWrapper
-            key={sticker.id}
-            sticker={sticker}
-            className={styles.pageStickerWrapper}
-          />
-        ))}
-      </PageZone>
+      <PageZone stickers={pageStickers} />
+      <StickerPanel stickers={panelStickers} />
 
       <DragOverlay>
         {draggingSticker ? (
           <Sticker sticker={draggingSticker} className={styles.stickerDrag} />
         ) : null}
       </DragOverlay>
-
-      <StickerPanel>
-        {panelStickers.map((sticker) => (
-          <MovableStickerWrapper key={sticker.id} sticker={sticker} />
-        ))}
-      </StickerPanel>
     </DndContext>
   );
 }
