@@ -26,6 +26,7 @@
     "astro": "^3.2.0",
     "clsx": "^2.0.0",
     "fenceparser": "^2.2.0",
+    "immer": "^10.0.3",
     "lottie-web": "^5.12.2",
     "lucide-react": "^0.285.0",
     "mime-types": "^2.1.35",
@@ -36,7 +37,8 @@
     "react-dom": "^18.2.0",
     "sharp": "^0.32.6",
     "shiki-twoslash": "^3.1.2",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "zustand": "^4.4.3"
   },
   "devDependencies": {
     "@types/mime-types": "^2.1.2",

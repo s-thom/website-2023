@@ -5,6 +5,7 @@ import {
   type DragEndEvent,
 } from "@dnd-kit/core";
 import { useState } from "react";
+import { useStore } from "../store";
 import styles from "./StickerBook.module.css";
 import { STICKER_TYPE_MAP } from "./data";
 import { Sticker } from "./stickers/Sticker.tsx";
@@ -20,20 +21,18 @@ export function StickerContainer({ id }: StickerContainerProps) {
   // eslint-disable-next-line @typescript-eslint/no-unused-expressions
   id;
 
-  const [stickers, setStickers] = useState<StickerInfo[]>(() =>
-    Object.keys(STICKER_TYPE_MAP).map((type, i) => ({
-      id: i.toString(),
-      coordinates: { x: 0, y: 0 },
-      type: type as any,
-      zone: "panel",
-    })),
-  );
+  const stickers = useStore((state) => state.stickers);
+  const placeOnPage = useStore((state) => state.placeOnPage);
+  const removeFromPage = useStore((state) => state.removeFromPage);
+
   const [dragId, setDragId] = useState<string>();
 
   const draggingSticker =
     dragId !== undefined && stickers.find((sticker) => sticker.id === dragId);
-  const panelStickers = stickers.filter((sticker) => sticker.zone === "panel");
-  const pageStickers = stickers.filter((sticker) => sticker.zone === "page");
+  const panelStickers = stickers.filter(
+    (sticker) => sticker.pageId === undefined,
+  );
+  const pageStickers = stickers.filter((sticker) => sticker.pageId === id);
 
   function handleDragStart(event: DragEndEvent) {
     setDragId(event.active.id as string);
@@ -43,29 +42,17 @@ export function StickerContainer({ id }: StickerContainerProps) {
     setDragId(undefined);
 
     if (draggingSticker && event.over) {
-      const coordinates: StickerInfo["coordinates"] =
-        event.over.id === "page"
-          ? {
-              x:
-                (event.active.rect.current.translated?.left ?? 0) +
-                window.scrollX,
-              y:
-                (event.active.rect.current.translated?.top ?? 0) +
-                window.scrollY,
-            }
-          : { x: 0, y: 0 };
+      if (event.over.id === "panel") {
+        removeFromPage(draggingSticker.id);
+        return;
+      }
 
-      const sticker: StickerInfo = {
-        ...draggingSticker,
-        zone: event.over.id as string,
-        coordinates,
+      const coordinates: StickerInfo["coordinates"] = {
+        x: (event.active.rect.current.translated?.left ?? 0) + window.scrollX,
+        y: (event.active.rect.current.translated?.top ?? 0) + window.scrollY,
       };
 
-      const oldIndex = stickers.indexOf(draggingSticker);
-      const newStickers = [...stickers];
-      newStickers.splice(oldIndex, 1, sticker);
-
-      setStickers(newStickers);
+      placeOnPage(draggingSticker.id, id, coordinates);
     }
   }
 

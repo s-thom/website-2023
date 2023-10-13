@@ -2,6 +2,7 @@
   "root": true,
   "extends": [
     "airbnb/base",
+    "airbnb/hooks",
     "airbnb-typescript/base",
     "plugin:prettier/recommended",
     "plugin:astro/recommended",

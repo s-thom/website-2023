@@ -24,8 +24,8 @@ export type StickerTypes =
 
 export interface StickerInfo {
   id: string;
-  zone: string;
   type: StickerTypes;
+  pageId: string | undefined;
   coordinates: {
     x: number;
     y: number;
