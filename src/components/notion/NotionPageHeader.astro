@@ -30,16 +30,23 @@ const titleComponents = getPageTitleComponents(page);
 <style>
   .page-header {
     padding: 1em;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+    text-align: center;
   }
 
-  .page-title {
-    text-align: center;
+  .page-icon {
+    background-color: var(--color-background);
   }
 
   .page-icon,
   .page-icon > :global(img) {
-    width: 10em;
-    height: 10em;
+    width: 10rem;
+    height: 10rem;
     margin: auto;
     border-radius: 50%;
   }

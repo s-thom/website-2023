@@ -1,10 +1,11 @@
 ---
 import BlogListPageItem from "../../components/notion/blog/BlogListPageItem.astro";
 import NotionPageLayout from "../../layouts/NotionPageLayout.astro";
+import { BLOG_PAGE_ID } from "../../lib/constants";
 import { getPage } from "../../lib/notion";
 import { getFilteredBlogItems } from "../../lib/notion/blog";
 
-const page = await getPage("b749d283-ebbd-4b6f-92d4-13301479c2da");
+const page = await getPage(BLOG_PAGE_ID);
 
 const pages = await getFilteredBlogItems();
 ---
@@ -17,7 +18,7 @@ const pages = await getFilteredBlogItems();
     { name: "Blog", url: "/blog" },
   ]}
 >
-  <ul>
+  <ul class="page-list small-bleed">
     {
       pages.map((childPage) => (
         <li>
@@ -27,3 +28,17 @@ const pages = await getFilteredBlogItems();
     }
   </ul>
 </NotionPageLayout>
+
+<style>
+  .page-list {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 1200px) {
+    .page-list {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

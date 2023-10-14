@@ -22,7 +22,7 @@
 
   @media (prefers-contrast: more) {
     :root {
-      --font-family-heading: serif;
+      --font-family-heading: "Lora Variable", "Lora", serif;
     }
   }
 

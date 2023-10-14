@@ -8,6 +8,21 @@ export interface Props {
 const { property } = Astro.props;
 ---
 
-<ul>
-  {property.multi_select.map((option) => <li>{option.name}</li>)}
+<ul class="tag-list">
+  {property.multi_select.map((option) => <li class="tag">{option.name}</li>)}
 </ul>
+
+<style>
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+  }
+
+  .tag {
+    border: 2px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: 0 0.2em;
+    text-wrap: nowrap;
+  }
+</style>

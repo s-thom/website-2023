@@ -36,6 +36,15 @@ switch (icon.type) {
       class={className}
     />
   ) : (
-    <span>{(icon as any).emoji}</span>
+    <span class:list={[className, "emoji-icon"]} {...rest}>
+      {(icon as any).emoji}
+    </span>
   )
 }
+
+<style>
+  .emoji-icon {
+    text-decoration: none;
+    font-size: 3em;
+  }
+</style>
