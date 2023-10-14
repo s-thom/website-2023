@@ -13,6 +13,7 @@
   },
   "rules": {
     "import/prefer-default-export": "off",
+    "no-continue": "off",
     "no-plusplus": "off",
     "prettier/prettier": "warn"
   },

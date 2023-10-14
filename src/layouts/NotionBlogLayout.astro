@@ -3,10 +3,12 @@ import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endp
 import SkipLinks from "../components/SkipLinks.astro";
 import BlogPageFooter from "../components/notion/blog/BlogPageFooter.astro";
 import BlogPageHeader from "../components/notion/blog/BlogPageHeader.astro";
-import { getUrlSlugForPage, richTextToUnformattedString } from "../lib/notion";
+import { getUrlSlugForPage } from "../lib/notion";
 import PageWithHeaderLayout from "./PageWithHeaderLayout.astro";
 import NotionImage from "../components/notion/common/NotionImage.astro";
 import DefaultPageBackdrop from "../components/site/DefaultPageBackdrop.astro";
+import { getPageTitleComponents } from "../lib/notion/titles";
+import { richTextToUnformattedString } from "../lib/notion/util";
 
 export interface Props {
   page: DatabaseObjectResponse;
@@ -15,9 +17,8 @@ export interface Props {
 const { page } = Astro.props;
 
 const pageSlug = getUrlSlugForPage(page);
-const pageTitle = richTextToUnformattedString(
-  (page.properties.Name as any).title,
-);
+const titleComponents = getPageTitleComponents(page);
+const pageTitle = richTextToUnformattedString(titleComponents);
 const pageUrl = `/blog/${pageSlug}`;
 ---
 

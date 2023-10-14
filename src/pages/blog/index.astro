@@ -1,13 +1,12 @@
 ---
 import BlogListPageItem from "../../components/notion/blog/BlogListPageItem.astro";
-import PageLayout from "../../layouts/PageLayout.astro";
-import { BLOG_COLLECTION_ID } from "../../lib/constants";
-import { getFilteredPageCollectionItems } from "../../lib/notion";
+import PageWithHeaderLayout from "../../layouts/PageWithHeaderLayout.astro";
+import { getFilteredBlogItems } from "../../lib/notion/blog";
 
-const pages = await getFilteredPageCollectionItems(BLOG_COLLECTION_ID);
+const pages = await getFilteredBlogItems();
 ---
 
-<PageLayout
+<PageWithHeaderLayout
   meta={{ title: "Blog", url: "/blog", rssUrl: "/blog/feed.xml" }}
   breadcrumbs={[
     { name: "Home", url: "/" },
@@ -23,4 +22,4 @@ const pages = await getFilteredPageCollectionItems(BLOG_COLLECTION_ID);
       ))
     }
   </ul>
-</PageLayout>
+</PageWithHeaderLayout>

@@ -8,10 +8,16 @@ export interface Props {
 
 const { block } = Astro.props;
 
-const html = await highlightCode(block);
+const result = await highlightCode(block);
+
+// TODO: override components
 ---
 
-{html && <code data-block={block.id} class="block-code" set:html={html} />}
+{
+  result.type === "html" && (
+    <code data-block={block.id} class="block-code" set:html={result.html} />
+  )
+}
 
 <style>
   .block-code {

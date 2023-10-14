@@ -1,5 +1,6 @@
 ---
 import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import { getPageTitleComponents } from "../../../lib/notion/titles";
 import NotionIcon from "../common/NotionIcon.astro";
 import RichText from "../common/RichText.astro";
 
@@ -8,6 +9,8 @@ export interface Props {
 }
 
 const { page } = Astro.props;
+
+const titleComponents = getPageTitleComponents(page);
 ---
 
 <div class="page-header">
@@ -17,7 +20,7 @@ const { page } = Astro.props;
     )
   }
   <h1 class="page-title">
-    <RichText components={(page.properties.Name as any).title} />
+    <RichText components={titleComponents} />
   </h1>
 </div>
 

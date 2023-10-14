@@ -2,17 +2,16 @@
 import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import NotionRenderer from "../../components/notion/blocks/NotionRenderer.astro";
 import NotionBlogLayout from "../../layouts/NotionBlogLayout.astro";
-import { BLOG_COLLECTION_ID } from "../../lib/constants";
 import {
-  getFilteredPageCollectionItems,
+  getBlockChildren,
   getPage,
-  getPageBlocks,
   getPageIdFromSlug,
   getUrlSlugForPage,
 } from "../../lib/notion";
+import { getFilteredBlogItems } from "../../lib/notion/blog";
 
 export async function getStaticPaths() {
-  const pages = await getFilteredPageCollectionItems(BLOG_COLLECTION_ID);
+  const pages = await getFilteredBlogItems();
 
   return pages.map((page) => ({ params: { id: getUrlSlugForPage(page) } }));
 }
@@ -21,7 +20,7 @@ const { id: slug } = Astro.params;
 
 const id = await getPageIdFromSlug(slug!);
 
-const [page, blocks] = await Promise.all([getPage(id), getPageBlocks(id)]);
+const [page, blocks] = await Promise.all([getPage(id), getBlockChildren(id)]);
 ---
 
 <NotionBlogLayout page={page as unknown as DatabaseObjectResponse}>

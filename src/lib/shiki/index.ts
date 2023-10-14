@@ -5,7 +5,7 @@ import {
   renderCodeToHTML,
   runTwoSlash,
 } from "shiki-twoslash";
-import { richTextToUnformattedString } from "../notion";
+import { richTextToUnformattedString } from "../notion/util";
 import { doesLanguageSupportTwoSlash, languageMap } from "./languageMap";
 import { syntaxTheme } from "./theme";
 
@@ -49,9 +49,22 @@ function doShikiTwoSlash(
   return html;
 }
 
+type HighlightResult =
+  | {
+      type: "html";
+      html: string;
+    }
+  | {
+      type: "override";
+      component: string;
+    }
+  | {
+      type: "none";
+    };
+
 export async function highlightCode(
   block: CodeBlockObjectResponse,
-): Promise<string | undefined> {
+): Promise<HighlightResult> {
   const blockLanguage = block.code.language;
   const blockContent = richTextToUnformattedString(block.code.rich_text);
 
@@ -76,21 +89,25 @@ export async function highlightCode(
     if (language === "override") {
       // eslint-disable-next-line no-param-reassign
       (block as any).OVERRIDE_COMPONENT = meta.component;
+      return { type: "override", component: meta.component as string };
     }
 
     try {
       const html = doShikiTwoSlash(highlighter, code, language, meta);
 
-      return html;
+      return { type: "html", html };
     } catch (err: unknown) {
       // eslint-disable-next-line no-console
       console.error(err);
       if (import.meta.env.DEV && err instanceof Error) {
-        return `<pre>${err.stack}</pre>`;
+        return { type: "html", html: `<pre>${err.stack}</pre>` };
       }
 
       const plaintext = doShikiTwoSlash(highlighter, code, "", meta);
-      return `${plaintext}<!-- Error while highlighting, displaying as plain text -->`;
+      return {
+        type: "html",
+        html: `${plaintext}<!-- Error while highlighting, displaying as plain text -->`,
+      };
     }
   }
 
@@ -98,5 +115,5 @@ export async function highlightCode(
   console.warn(
     `Unable to determine language and/or content of code block ${block.id}`,
   );
-  return undefined;
+  return { type: "none" };
 }
