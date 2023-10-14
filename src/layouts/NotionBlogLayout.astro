@@ -1,14 +1,10 @@
 ---
 import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
-import SkipLinks from "../components/SkipLinks.astro";
 import BlogPageFooter from "../components/notion/blog/BlogPageFooter.astro";
-import BlogPageHeader from "../components/notion/blog/BlogPageHeader.astro";
 import { getUrlSlugForPage } from "../lib/notion";
-import PageWithHeaderLayout from "./PageWithHeaderLayout.astro";
-import NotionImage from "../components/notion/common/NotionImage.astro";
-import DefaultPageBackdrop from "../components/site/DefaultPageBackdrop.astro";
 import { getPageTitleComponents } from "../lib/notion/titles";
 import { richTextToUnformattedString } from "../lib/notion/util";
+import NotionPageLayout from "./NotionPageLayout.astro";
 
 export interface Props {
   page: DatabaseObjectResponse;
@@ -22,63 +18,18 @@ const pageTitle = richTextToUnformattedString(titleComponents);
 const pageUrl = `/blog/${pageSlug}`;
 ---
 
-<PageWithHeaderLayout
+<NotionPageLayout
+  page={page}
   meta={{ title: pageTitle, url: pageUrl, rssUrl: "/blog/feed.xml" }}
   breadcrumbs={[
     { name: "Home", url: "/" },
     { name: "Blog", url: "/blog" },
     { name: pageTitle, url: pageUrl },
   ]}
-  enableExperiments
 >
-  <SkipLinks links={[{ name: "Content", url: "#content" }]} slot="skip-links" />
-
-  <BlogPageHeader page={page} slot="page-header" />
-  <div class="header-backdrop" slot="page-backdrop">
-    {
-      page.cover ? (
-        <NotionImage
-          id={`${page.id}-cover`}
-          image={page.cover}
-          alt=""
-          class="header-backdrop-image"
-        />
-      ) : (
-        <DefaultPageBackdrop />
-      )
-    }
-  </div>
-
   <article class="flow" id="content">
     <slot />
   </article>
 
-  <BlogPageFooter page={page} />
-</PageWithHeaderLayout>
-
-<style>
-  .header-backdrop::after {
-    content: " ";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0 0 0 / 0.5);
-  }
-
-  .header-backdrop-image {
-    position: relative;
-    height: 100%;
-  }
-
-  .header-backdrop-image > :global(img) {
-    min-height: 100%;
-    min-width: 100%;
-    max-width: none;
-    position: relative;
-    top: 50%;
-    left: 50%;
-    translate: -50% -50%;
-  }
-</style>
+  <BlogPageFooter page={page} slot="page-footer" />
+</NotionPageLayout>

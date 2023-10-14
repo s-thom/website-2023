@@ -1,12 +1,16 @@
 ---
 import BlogListPageItem from "../../components/notion/blog/BlogListPageItem.astro";
-import PageWithHeaderLayout from "../../layouts/PageWithHeaderLayout.astro";
+import NotionPageLayout from "../../layouts/NotionPageLayout.astro";
+import { getPage } from "../../lib/notion";
 import { getFilteredBlogItems } from "../../lib/notion/blog";
+
+const page = await getPage("b749d283-ebbd-4b6f-92d4-13301479c2da");
 
 const pages = await getFilteredBlogItems();
 ---
 
-<PageWithHeaderLayout
+<NotionPageLayout
+  page={page}
   meta={{ title: "Blog", url: "/blog", rssUrl: "/blog/feed.xml" }}
   breadcrumbs={[
     { name: "Home", url: "/" },
@@ -15,11 +19,11 @@ const pages = await getFilteredBlogItems();
 >
   <ul>
     {
-      pages.map((page) => (
+      pages.map((childPage) => (
         <li>
-          <BlogListPageItem page={page} />
+          <BlogListPageItem page={childPage} />
         </li>
       ))
     }
   </ul>
-</PageWithHeaderLayout>
+</NotionPageLayout>

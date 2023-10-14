@@ -20,6 +20,12 @@
     --font-family-mono: "Roboto Mono Variable", "Jetbrains Mono", monospace;
   }
 
+  @media (prefers-contrast: more) {
+    :root {
+      --font-family-heading: serif;
+    }
+  }
+
   body {
     font-family: var(--font-family-body);
     font-size: var(--size-step-0);
