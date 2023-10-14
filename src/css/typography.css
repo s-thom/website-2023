@@ -1,8 +1,11 @@
 @layer base {
-  @import "../../node_modules/@fontsource/source-serif-4/index.css";
-  @import "../../node_modules/@fontsource-variable/source-serif-4/index.css";
-  @import "../../node_modules/@fontsource/jetbrains-mono/index.css";
-  @import "../../node_modules/@fontsource-variable/jetbrains-mono/index.css";
+  @import "../../node_modules/@fontsource/fredericka-the-great/index.css";
+  @import "../../node_modules/@fontsource/gabarito/index.css";
+  @import "../../node_modules/@fontsource-variable/gabarito/index.css";
+  @import "../../node_modules/@fontsource/lora/index.css";
+  @import "../../node_modules/@fontsource-variable/lora/index.css";
+  @import "../../node_modules/@fontsource/roboto-mono/index.css";
+  @import "../../node_modules/@fontsource-variable/roboto-mono/index.css";
 
   :root {
     --size-step-min1: clamp(0.8rem, calc(0.8rem + 0.14vw), 1rem);
@@ -12,9 +15,9 @@
     --size-step-3: clamp(1.95rem, calc(1.71rem + 1.24vw), 2.66rem);
     --size-step-4: clamp(2.44rem, calc(2.05rem + 1.93vw), 3.55rem);
 
-    --font-family-body: "Source Serif 4 Variable", "Source Serif 4", serif;
-    --font-family-heading: "Source Serif 4 Variable", "Source Serif 4", serif;
-    --font-family-mono: "JetBrains Mono Variable", "Jetbrains Mono", monospace;
+    --font-family-body: "Lora Variable", "Lora", serif;
+    --font-family-heading: "Fredericka the Great", serif;
+    --font-family-mono: "Roboto Mono Variable", "Jetbrains Mono", monospace;
   }
 
   body {
