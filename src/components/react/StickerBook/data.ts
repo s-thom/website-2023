@@ -23,7 +23,7 @@ export const STICKER_TYPE_MAP: Record<StickerTypes, StickerData> = {
     type: "lottie",
     name: "Light bulb",
     url: "/static/lottie/light-bulb.json",
-    initialFrame: 50,
+    initialFrame: 130,
   },
   lizard: {
     type: "lottie",
@@ -47,13 +47,13 @@ export const STICKER_TYPE_MAP: Record<StickerTypes, StickerData> = {
     type: "lottie",
     name: "Smile",
     url: "/static/lottie/smile.json",
-    initialFrame: 40,
+    initialFrame: 100,
   },
   "thumbs-up": {
     type: "lottie",
     name: "Thumbs up",
     url: "/static/lottie/thumbs-up.json",
-    initialFrame: 0,
+    initialFrame: 60,
   },
   turtle: {
     type: "lottie",

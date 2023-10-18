@@ -5,8 +5,10 @@
 
 .zone {
   position: fixed;
-  bottom: 1em;
-  right: 1em;
+  z-index: 999;
+  bottom: 1rem;
+  right: 1rem;
+  max-width: calc(100vw - 2rem);
   padding: 0.5em;
   background-color: var(--color-background);
   transition: background-color var(--transition-duration) ease-in-out;
@@ -24,10 +26,16 @@
 }
 
 .header {
-  display: grid;
-  grid-template-columns: 1fr 3em;
+  display: flex;
   gap: 1em;
-  margin-bottom: 1em;
+}
+
+.headerTitle {
+  flex-grow: 1;
+}
+
+.whatLine {
+  margin-bottom: 1rem;
 }
 
 .what {

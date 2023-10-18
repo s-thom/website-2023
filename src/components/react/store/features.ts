@@ -2,11 +2,11 @@
 import type { SimpleStateCreator } from "./types";
 
 export interface FeaturesSlice {
-  features: {
+  enabled: {
     stickers: boolean;
   };
   toggleFeature: (
-    name: keyof FeaturesSlice["features"],
+    name: keyof FeaturesSlice["enabled"],
     value?: boolean,
   ) => void;
 }
@@ -15,15 +15,15 @@ export const createFeaturesSlice: SimpleStateCreator<FeaturesSlice> = (
   set,
   get,
 ) => ({
-  features: {
+  enabled: {
     stickers: true,
   },
   toggleFeature: (name, value) =>
     set((state) => {
       let newVal = value;
       if (newVal === undefined) {
-        newVal = !get().features[name];
+        newVal = !get().enabled[name];
       }
-      state.features[name] = newVal;
+      state.enabled[name] = newVal;
     }),
 });

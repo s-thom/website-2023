@@ -1,15 +1,6 @@
 import type { StateCreator } from "zustand";
+import type { FeaturesSlice } from "./features";
 import type { StickersSlice } from "./stickers";
-
-interface FeaturesSlice {
-  features: {
-    stickers: boolean;
-  };
-  toggleFeature: (
-    name: keyof FeaturesSlice["features"],
-    value?: boolean,
-  ) => void;
-}
 
 export type AppState = FeaturesSlice & StickersSlice;
 

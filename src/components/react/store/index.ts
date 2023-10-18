@@ -3,10 +3,9 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
-import { createFeaturesSlice, type FeaturesSlice } from "./features";
-import { createStickersSlice, type StickersSlice } from "./stickers";
-
-export type AppState = FeaturesSlice & StickersSlice;
+import { createFeaturesSlice } from "./features";
+import { createStickersSlice } from "./stickers";
+import { type AppState } from "./types";
 
 export const useStore = create<AppState>()(
   persist(
