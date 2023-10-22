@@ -13,10 +13,10 @@ import { getFilteredBlogItems } from "../../lib/notion/blog";
 export async function getStaticPaths() {
   const pages = await getFilteredBlogItems();
 
-  return pages.map((page) => ({ params: { id: getUrlSlugForPage(page) } }));
+  return pages.map((page) => ({ params: { slug: getUrlSlugForPage(page) } }));
 }
 
-const { id: slug } = Astro.params;
+const { slug } = Astro.params;
 
 const id = await getPageIdFromSlug(slug!);
 

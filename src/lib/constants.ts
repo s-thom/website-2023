@@ -2,6 +2,7 @@
 export const SPACE_ID = "e0a1d437-085c-4280-8d31-2918df11590b";
 export const ROOT_PAGE_ID = "25c54908-c86d-426c-a1c7-af314e09d74b";
 export const BLOG_COLLECTION_ID = "2f724a36-d61f-4f05-9a51-5d7f464baf01";
+export const PAGES_COLLECTION_ID = "4e043a71-8fe5-48a1-b460-ed69366d567d";
 
 // TODO: not have to use this
 export const BLOG_PAGE_ID = "b749d283-ebbd-4b6f-92d4-13301479c2da";

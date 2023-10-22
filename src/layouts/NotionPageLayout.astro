@@ -10,6 +10,7 @@ import NotionPageHeader from "../components/notion/NotionPageHeader.astro";
 import NotionImage from "../components/notion/common/NotionImage.astro";
 import DefaultPageBackdrop from "../components/site/DefaultPageBackdrop.astro";
 import PageWithHeaderLayout from "./PageWithHeaderLayout.astro";
+import DevOnly from "../components/DevOnly.astro";
 
 export interface Props {
   page: DatabaseObjectResponse | PageObjectResponse;
@@ -39,6 +40,9 @@ const { page, meta, breadcrumbs } = Astro.props;
     }
   </div>
 
+  <DevOnly>
+    <div id="DEV-notion-page-id" style={{ display: "none" }}>{page.id}</div>
+  </DevOnly>
   <article class="flow">
     <div id="content"></div>
     <slot />

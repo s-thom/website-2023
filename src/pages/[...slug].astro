@@ -1,0 +1,44 @@
+---
+import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import NotionRenderer from "../components/notion/blocks/NotionRenderer.astro";
+import NotionPageLayout from "../layouts/NotionPageLayout.astro";
+import {
+  getBlockChildren,
+  getPage,
+  getPageIdFromSlug,
+  getPageTitleComponents,
+  getUrlSlugForPage,
+} from "../lib/notion";
+import { getFilteredPageItems } from "../lib/notion/blog";
+import { richTextToUnformattedString } from "../lib/notion/util";
+
+export async function getStaticPaths() {
+  const pages = await getFilteredPageItems();
+
+  return pages.map((page) => ({
+    params: { slug: getUrlSlugForPage(page) },
+  }));
+}
+
+const { slug } = Astro.params;
+
+const id = await getPageIdFromSlug(slug!);
+
+const [page, blocks] = await Promise.all([getPage(id), getBlockChildren(id)]);
+
+const pageSlug = getUrlSlugForPage(page);
+const titleComponents = getPageTitleComponents(page);
+const pageTitle = richTextToUnformattedString(titleComponents);
+const pageUrl = `/${pageSlug}`;
+---
+
+<NotionPageLayout
+  meta={{ title: pageTitle, url: pageUrl }}
+  breadcrumbs={[
+    { name: "Home", url: "/" },
+    { name: pageTitle, url: pageUrl },
+  ]}
+  page={page as unknown as DatabaseObjectResponse}
+>
+  <NotionRenderer blocks={blocks} />
+</NotionPageLayout>

@@ -44,10 +44,5 @@ export function getUrlSlugForPage(
 ) {
   const title = richTextToUnformattedString(getPageTitleComponents(page));
   const formattedTitle = normalizeTitle(title);
-
-  if (import.meta.env.DEV) {
-    return `${formattedTitle}-${page.id.replace("-", "")}`;
-  }
-
   return formattedTitle;
 }
