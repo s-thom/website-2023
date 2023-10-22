@@ -1,4 +1,7 @@
-import type { RichTextItemResponse } from "@notionhq/client/build/src/api-endpoints";
+import type {
+  PageObjectResponse,
+  RichTextItemResponse,
+} from "@notionhq/client/build/src/api-endpoints";
 
 export function richTextToUnformattedString(
   components: RichTextItemResponse[],
@@ -19,4 +22,13 @@ export function normalizeTitle(title?: string | null): string {
     .replace(/^-/, "")
     .trim()
     .toLowerCase();
+}
+
+type DatabasePropertyConfigResponse = PageObjectResponse["properties"][""];
+
+export function getPagePropertyByName(
+  page: PageObjectResponse,
+  name: string,
+): DatabasePropertyConfigResponse | undefined {
+  return page.properties[name] ?? undefined;
 }

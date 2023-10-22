@@ -4,7 +4,11 @@ import type {
   PageObjectResponse,
   RichTextItemResponse,
 } from "@notionhq/client/build/src/api-endpoints";
-import { normalizeTitle, richTextToUnformattedString } from "./util";
+import {
+  getPagePropertyByName,
+  normalizeTitle,
+  richTextToUnformattedString,
+} from "./util";
 
 export function getPageTitleComponents(
   page: DatabaseObjectResponse | PageObjectResponse,
@@ -42,6 +46,21 @@ export function getPageTitleComponents(
 export function getUrlSlugForPage(
   page: DatabaseObjectResponse | PageObjectResponse,
 ) {
+  if (
+    page.object === "page" && // TODO: figure out what to do about database type pages
+    page.parent &&
+    page.parent.type === "database_id"
+  ) {
+    const slugProperty =
+      getPagePropertyByName(page, "Slug") ??
+      getPagePropertyByName(page, "slug");
+    if (slugProperty && slugProperty.type === "rich_text") {
+      return richTextToUnformattedString(
+        slugProperty.rich_text as unknown as RichTextItemResponse[],
+      );
+    }
+  }
+
   const title = richTextToUnformattedString(getPageTitleComponents(page));
   const formattedTitle = normalizeTitle(title);
   return formattedTitle;
