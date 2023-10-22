@@ -15,6 +15,7 @@ const { meta } = Astro.props;
 const { title, description, url, imageUrl, rssUrl } = meta;
 
 const canonicalURL = new URL(url, Astro.site);
+const sitemapURL = new URL("/sitemap.xml", Astro.site);
 ---
 
 <meta property="og:type" content="website" />
@@ -62,6 +63,7 @@ const canonicalURL = new URL(url, Astro.site);
 }
 
 <link rel="manifest" href="/manifest.json" />
+<link rel="sitemap" href={sitemapURL} />
 
 <link rel="shortcut icon" href="/favicon.ico" />
 <link
