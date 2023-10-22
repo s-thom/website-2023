@@ -3,16 +3,18 @@ import type { BlockObjectResponse } from "@notionhq/client/build/src/api-endpoin
 import BulletedListItemBlock from "./BulletedListItemBlock.astro";
 import CalloutBlock from "./CalloutBlock.astro";
 import CodeBlock from "./CodeBlock.astro";
+import Column from "./Column.astro";
+import ColumnList from "./ColumnList.astro";
 import DefaultBlock from "./DefaultBlock.astro";
+import DividerBlock from "./DividerBlock.astro";
 import Heading1Block from "./Heading1Block.astro";
 import Heading2Block from "./Heading2Block.astro";
 import Heading3Block from "./Heading3Block.astro";
 import ImageBlock from "./ImageBlock.astro";
 import NumberedListItemBlock from "./NumberedListItemBlock.astro";
 import ParagraphBlock from "./ParagraphBlock.astro";
-import ToggleBlock from "./ToggleBlock.astro";
-import DividerBlock from "./DividerBlock.astro";
 import QuoteBlock from "./QuoteBlock.astro";
+import ToggleBlock from "./ToggleBlock.astro";
 
 export interface Props {
   block: BlockObjectResponse;
@@ -58,6 +60,12 @@ switch (block.type) {
   case "divider":
     Component = DividerBlock;
     break;
+  case "column_list":
+    Component = ColumnList;
+    break;
+  case "column":
+    Component = Column;
+    break;
   case "to_do":
   case "template":
   case "synced_block":
@@ -66,8 +74,6 @@ switch (block.type) {
   case "equation":
   case "breadcrumb":
   case "table_of_contents":
-  case "column_list":
-  case "column":
   case "link_to_page":
   case "table":
   case "table_row":

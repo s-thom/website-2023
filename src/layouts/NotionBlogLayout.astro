@@ -27,9 +27,7 @@ const pageUrl = `/blog/${pageSlug}`;
     { name: pageTitle, url: pageUrl },
   ]}
 >
-  <article class="flow" id="content">
-    <slot />
-  </article>
+  <slot />
 
   <BlogPageFooter page={page} slot="page-footer" />
 </NotionPageLayout>

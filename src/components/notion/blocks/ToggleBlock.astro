@@ -17,5 +17,11 @@ const children = block.has_children ? await getBlockChildren(block.id) : [];
   <summary>
     <RichText components={block.toggle.rich_text} />
   </summary>
-  {children.length > 0 ? <NotionRenderer blocks={children} /> : undefined}
+  {
+    children.length > 0 ? (
+      <div class="flow">
+        <NotionRenderer blocks={children} />
+      </div>
+    ) : undefined
+  }
 </details>
