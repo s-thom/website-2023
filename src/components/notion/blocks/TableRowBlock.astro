@@ -1,0 +1,20 @@
+---
+import type { TableRowBlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import RichText from "../common/RichText.astro";
+
+export interface Props {
+  block: TableRowBlockObjectResponse;
+}
+
+const { block } = Astro.props;
+---
+
+<tr>
+  {
+    block.table_row.cells.map((cell) => (
+      <td>
+        <RichText components={cell} />
+      </td>
+    ))
+  }
+</tr>

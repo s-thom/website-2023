@@ -1,0 +1,54 @@
+---
+import type {
+  BlockObjectResponse,
+  TableBlockObjectResponse,
+} from "@notionhq/client/build/src/api-endpoints";
+import { getBlockChildren } from "../../../lib/notion";
+import NotionRenderer from "./NotionRenderer.astro";
+
+export interface Props {
+  block: TableBlockObjectResponse;
+}
+
+const { block } = Astro.props;
+
+const children = block.has_children ? await getBlockChildren(block.id) : [];
+
+let headerRow: BlockObjectResponse | undefined;
+let bodyRows = children;
+if (block.table.has_column_header) {
+  [headerRow, ...bodyRows] = children;
+}
+---
+
+<table>
+  {
+    headerRow && (
+      <thead>
+        <NotionRenderer blocks={[headerRow]} />
+      </thead>
+    )
+  }
+  <tbody>
+    <NotionRenderer blocks={bodyRows} />
+  </tbody>
+</table>
+
+<style>
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    min-width: 100%;
+  }
+
+  table :global(th),
+  table :global(td) {
+    border: 2px solid var(--color-border);
+    padding: 0.5em;
+  }
+
+  table :global(thead > tr > td),
+  table :global(th) {
+    background-color: var(--color-alt-background);
+  }
+</style>

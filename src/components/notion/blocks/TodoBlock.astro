@@ -1,0 +1,55 @@
+---
+import type { ToDoBlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import { CheckSquareIcon, SquareIcon } from "lucide-react";
+import { getBlockChildren } from "../../../lib/notion";
+import RichText from "../common/RichText.astro";
+import NotionRenderer from "./NotionRenderer.astro";
+
+export interface Props {
+  block: ToDoBlockObjectResponse;
+}
+
+const { block } = Astro.props;
+
+const children = block.has_children ? await getBlockChildren(block.id) : [];
+---
+
+<li class="flow tiny-flow todo-item">
+  {
+    block.to_do.checked ? (
+      <CheckSquareIcon className="todo-item-icon" aria-label="" />
+    ) : (
+      <SquareIcon className="todo-item-icon" aria-label="" />
+    )
+  }
+  <p>
+    <input
+      class="visually-hidden"
+      id={`todo-${block.id}`}
+      type="checkbox"
+      value={block.id}
+      checked={block.to_do.checked}
+      disabled
+      readonly
+    />
+    <label id={`todo-${block.id}-label`} for={`todo-${block.id}`}>
+      <RichText components={block.to_do.rich_text} />
+    </label>
+  </p>
+  {children.length > 0 ? <NotionRenderer blocks={children} /> : undefined}
+</li>
+
+<style>
+  .todo-item {
+    position: relative;
+  }
+
+  .todo-item-icon {
+    position: absolute;
+    left: -1em;
+    width: 1em;
+    height: 1em;
+    top: 0.25em;
+    padding: 0.1em 0.2em 0.1em 0;
+  }
+</style>

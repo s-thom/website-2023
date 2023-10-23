@@ -55,9 +55,12 @@ export function getUrlSlugForPage(
       getPagePropertyByName(page, "Slug") ??
       getPagePropertyByName(page, "slug");
     if (slugProperty && slugProperty.type === "rich_text") {
-      return richTextToUnformattedString(
+      const slug = richTextToUnformattedString(
         slugProperty.rich_text as unknown as RichTextItemResponse[],
       );
+      if (slug) {
+        return slug;
+      }
     }
   }
 

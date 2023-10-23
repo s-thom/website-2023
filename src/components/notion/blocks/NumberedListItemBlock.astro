@@ -13,7 +13,9 @@ const { block } = Astro.props;
 const children = block.has_children ? await getBlockChildren(block.id) : [];
 ---
 
-<li>
-  <RichText components={block.numbered_list_item.rich_text} />
+<li class="flow tiny-flow">
+  <p>
+    <RichText components={block.numbered_list_item.rich_text} />
+  </p>
+  {children.length > 0 ? <NotionRenderer blocks={children} /> : undefined}
 </li>
-{children.length > 0 ? <NotionRenderer blocks={children} /> : undefined}

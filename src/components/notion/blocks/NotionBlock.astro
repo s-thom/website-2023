@@ -14,6 +14,9 @@ import ImageBlock from "./ImageBlock.astro";
 import NumberedListItemBlock from "./NumberedListItemBlock.astro";
 import ParagraphBlock from "./ParagraphBlock.astro";
 import QuoteBlock from "./QuoteBlock.astro";
+import TableBlock from "./TableBlock.astro";
+import TableRowBlock from "./TableRowBlock.astro";
+import TodoBlock from "./TodoBlock.astro";
 import ToggleBlock from "./ToggleBlock.astro";
 
 export interface Props {
@@ -67,6 +70,14 @@ switch (block.type) {
     Component = Column;
     break;
   case "to_do":
+    Component = TodoBlock;
+    break;
+  case "table":
+    Component = TableBlock;
+    break;
+  case "table_row":
+    Component = TableRowBlock;
+    break;
   case "template":
   case "synced_block":
   case "child_page":
@@ -75,8 +86,6 @@ switch (block.type) {
   case "breadcrumb":
   case "table_of_contents":
   case "link_to_page":
-  case "table":
-  case "table_row":
   case "embed":
   case "bookmark":
   case "video":

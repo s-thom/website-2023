@@ -76,6 +76,14 @@
     --flow-space: 0.5em;
   }
 
+  :is(li) + * {
+    --flow-space: 0.5em;
+  }
+
+  .tiny-flow > * {
+    --flow-space: 0.5em;
+  }
+
   .lede {
     font-size: var(--size-step-1);
     max-width: 50ch;

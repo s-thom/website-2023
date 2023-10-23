@@ -4,6 +4,12 @@ export interface Props {}
 // const {} = Astro.props;
 ---
 
-<ol>
+<ol class="flow">
   <slot />
 </ol>
+
+<style>
+  ol:is(ol) {
+    list-style: decimal;
+  }
+</style>
