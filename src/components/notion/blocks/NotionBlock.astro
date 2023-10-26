@@ -18,12 +18,17 @@ import TableBlock from "./TableBlock.astro";
 import TableRowBlock from "./TableRowBlock.astro";
 import TodoBlock from "./TodoBlock.astro";
 import ToggleBlock from "./ToggleBlock.astro";
+import { getBlockChildren } from "../../../lib/notion";
 
 export interface Props {
   block: BlockObjectResponse;
 }
 
 const { block } = Astro.props;
+
+const children = block.has_children
+  ? await getBlockChildren(block.id)
+  : undefined;
 
 let Component: any;
 switch (block.type) {
@@ -99,4 +104,6 @@ switch (block.type) {
 }
 ---
 
-<Component block={block} />
+<Component block={block}>
+  {children}
+</Component>

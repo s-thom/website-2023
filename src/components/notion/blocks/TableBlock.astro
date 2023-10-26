@@ -12,6 +12,7 @@ export interface Props {
 
 const { block } = Astro.props;
 
+// Table has its own special behaviour when it comes to children, so doesn't use `<slot />`s
 const children = block.has_children ? await getBlockChildren(block.id) : [];
 
 let headerRow: BlockObjectResponse | undefined;

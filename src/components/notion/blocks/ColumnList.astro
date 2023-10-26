@@ -1,19 +1,15 @@
 ---
 import type { ColumnListBlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
-import { getBlockChildren } from "../../../lib/notion";
-import NotionRenderer from "./NotionRenderer.astro";
 
 export interface Props {
   block: ColumnListBlockObjectResponse;
 }
 
 const { block } = Astro.props;
-
-const children = block.has_children ? await getBlockChildren(block.id) : [];
 ---
 
-<div class="column-list">
-  {children.length > 0 ? <NotionRenderer blocks={children} /> : undefined}
+<div class="column-list" data-block={block.id}>
+  <slot />
 </div>
 
 <style>

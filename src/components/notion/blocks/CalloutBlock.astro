@@ -10,7 +10,10 @@ export interface Props {
 const { block } = Astro.props;
 ---
 
-<div class={`block-callout block-callout-${block.callout.color}`}>
+<div
+  class={`block-callout block-callout-${block.callout.color}`}
+  data-block={block.id}
+>
   <div>
     {
       block.callout.icon && (
@@ -18,7 +21,10 @@ const { block } = Astro.props;
       )
     }
   </div>
-  <div>
-    <RichText components={block.callout.rich_text} />
+  <div class="flow">
+    <p>
+      <RichText components={block.callout.rich_text} />
+    </p>
+    <slot />
   </div>
 </div>

@@ -9,8 +9,9 @@ export interface Props {
 const { block } = Astro.props;
 ---
 
-<p>
+<p data-block={block.id}>
   <RichText components={block.paragraph.rich_text} />
+  <slot />
 </p>
 
 <style></style>

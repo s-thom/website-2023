@@ -7,9 +7,11 @@ export interface Props {
 }
 
 const { block } = Astro.props;
+
+// TODO: is_toggleable and <slot />
 ---
 
-<h2>
+<h2 data-block={block.id}>
   <RichText components={block.heading_1.rich_text} />
 </h2>
 
