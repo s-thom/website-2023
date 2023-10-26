@@ -11,6 +11,7 @@ import {
 } from "../lib/notion";
 import { getFilteredPageItems } from "../lib/notion/blog";
 import { richTextToUnformattedString } from "../lib/notion/util";
+import { getComponentOverrides } from "../lib/notion/overrides";
 
 export async function getStaticPaths() {
   const pages = await getFilteredPageItems();
@@ -25,6 +26,7 @@ const { slug } = Astro.params;
 const id = await getPageIdFromSlug(slug!);
 
 const [page, blocks] = await Promise.all([getPage(id), getBlockChildren(id)]);
+const overrides = getComponentOverrides(id);
 
 const pageSlug = getUrlSlugForPage(page);
 const titleComponents = getPageTitleComponents(page);
@@ -40,5 +42,5 @@ const pageUrl = `/${pageSlug}`;
   ]}
   page={page as unknown as DatabaseObjectResponse}
 >
-  <NotionRenderer blocks={blocks} />
+  <NotionRenderer blocks={blocks} overrides={overrides} />
 </NotionPageLayout>
