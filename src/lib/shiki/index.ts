@@ -87,8 +87,6 @@ export async function highlightCode(
 
     // Extra: marker for component override
     if (language === "override") {
-      // eslint-disable-next-line no-param-reassign
-      (block as any).OVERRIDE_COMPONENT = meta.component;
       return { type: "override", component: meta.component as string };
     }
 

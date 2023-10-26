@@ -1,6 +1,7 @@
 ---
 import type { CodeBlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { highlightCode } from "../../../lib/shiki";
+import DefaultBlock from "./DefaultBlock.astro";
 
 export interface Props {
   block: CodeBlockObjectResponse;
@@ -10,8 +11,16 @@ const { block } = Astro.props;
 
 const result = await highlightCode(block);
 
-// TODO: override components
+let Component: any;
+if (result.type === "override") {
+  switch (result.component) {
+    default:
+      Component = DefaultBlock;
+  }
+}
 ---
+
+{result.type === "override" && <Component />}
 
 {
   result.type === "html" && (
