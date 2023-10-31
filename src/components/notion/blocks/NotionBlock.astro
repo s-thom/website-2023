@@ -20,6 +20,7 @@ import TableRowBlock from "./TableRowBlock.astro";
 import TodoBlock from "./TodoBlock.astro";
 import ToggleBlock from "./ToggleBlock.astro";
 import type { NotionOverrideableProps } from "./types";
+import NotionRenderer from "./NotionRenderer.astro";
 
 export interface Props extends NotionOverrideableProps {
   block: BlockObjectResponse;
@@ -110,5 +111,9 @@ if (overrides[block.type]) {
 ---
 
 <Component block={block} overrides={overrides}>
-  {children}
+  {
+    children ? (
+      <NotionRenderer blocks={children} overrides={overrides} />
+    ) : undefined
+  }
 </Component>

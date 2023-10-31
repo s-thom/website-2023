@@ -5,7 +5,10 @@ import { getFilteredBlogItems } from "../../lib/notion/blog";
 import { richTextToUnformattedString } from "../../lib/notion/util";
 
 export async function GET(context: APIContext) {
-  const pages = await getFilteredBlogItems();
+  const pages = await getFilteredBlogItems({
+    allowUnpublished: false,
+    allowUnlisted: false,
+  });
 
   return rss({
     title: "Stuart Thomson’s Blog",

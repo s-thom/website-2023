@@ -24,7 +24,7 @@ if (block.table.has_column_header) {
 }
 ---
 
-<table>
+<table data-block={block.id}>
   {
     headerRow && (
       <thead>
@@ -46,7 +46,7 @@ if (block.table.has_column_header) {
 
   table :global(th),
   table :global(td) {
-    border: 2px solid var(--color-border);
+    border: 1.5px solid var(--color-border);
     padding: 0.5em;
   }
 

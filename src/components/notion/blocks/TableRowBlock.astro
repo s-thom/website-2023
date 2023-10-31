@@ -9,7 +9,7 @@ export interface Props {
 const { block } = Astro.props;
 ---
 
-<tr>
+<tr data-block={block.id}>
   {
     block.table_row.cells.map((cell) => (
       <td>

@@ -15,8 +15,7 @@ import {
 } from "./requests";
 import { getUrlSlugForPage } from "./titles";
 
-// eslint-disable-next-line prefer-const
-let hasRequestedAllPages = false;
+let allPagesPromise: Promise<PageObjectResponse[]> | undefined;
 
 type QueryResponseValue = Awaited<ReturnType<typeof baseQueryDatabase>>;
 
@@ -124,7 +123,7 @@ export function queryDatabase(
   return promise;
 }
 
-export async function getAllPages(root: string): Promise<PageObjectResponse[]> {
+async function getAllPagesInner(root: string): Promise<PageObjectResponse[]> {
   // These are used for both pages and databases
   const allPagesQueue = new PQueue({ concurrency: 4 });
   const processed = new Set<string>();
@@ -176,11 +175,9 @@ export async function getAllPages(root: string): Promise<PageObjectResponse[]> {
     results.forEach((result) => enqueuePage(result.id));
   }
 
-  if (!hasRequestedAllPages) {
-    // Start everything off
-    enqueuePage(root);
-    await allPagesQueue.onIdle();
-  }
+  // Start everything off
+  enqueuePage(root);
+  await allPagesQueue.onIdle();
 
   // Post-processing
   // At this point we can expect that all relevant pages have been cached.
@@ -208,10 +205,16 @@ export async function getAllPages(root: string): Promise<PageObjectResponse[]> {
   return pages;
 }
 
-export async function getPageIdFromSlug(slug: string) {
-  if (!hasRequestedAllPages) {
-    await getAllPages(ROOT_PAGE_ID);
+export async function getAllPages(): Promise<PageObjectResponse[]> {
+  if (!allPagesPromise) {
+    allPagesPromise = getAllPagesInner(ROOT_PAGE_ID);
   }
+
+  return allPagesPromise;
+}
+
+export async function getPageIdFromSlug(slug: string) {
+  await getAllPages();
 
   const pageId = SLUG_TO_PAGE_ID.get(slug);
   if (pageId === undefined) {

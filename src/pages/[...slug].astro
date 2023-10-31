@@ -14,7 +14,10 @@ import { richTextToUnformattedString } from "../lib/notion/util";
 import { getComponentOverrides } from "../lib/notion/overrides";
 
 export async function getStaticPaths() {
-  const pages = await getFilteredPageItems();
+  const pages = await getFilteredPageItems({
+    allowUnpublished: import.meta.env.DEV,
+    allowUnlisted: true,
+  });
 
   return pages.map((page) => ({
     params: { slug: getUrlSlugForPage(page) },

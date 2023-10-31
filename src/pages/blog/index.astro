@@ -7,7 +7,10 @@ import { getFilteredBlogItems } from "../../lib/notion/blog";
 
 const page = await getPage(BLOG_PAGE_ID);
 
-const pages = await getFilteredBlogItems();
+const pages = await getFilteredBlogItems({
+  allowUnpublished: import.meta.env.DEV,
+  allowUnlisted: false,
+});
 ---
 
 <NotionPageLayout

@@ -12,7 +12,10 @@ import { getFilteredBlogItems } from "../../lib/notion/blog";
 import { getComponentOverrides } from "../../lib/notion/overrides";
 
 export async function getStaticPaths() {
-  const pages = await getFilteredBlogItems();
+  const pages = await getFilteredBlogItems({
+    allowUnpublished: import.meta.env.DEV,
+    allowUnlisted: true,
+  });
 
   return pages.map((page) => ({ params: { slug: getUrlSlugForPage(page) } }));
 }

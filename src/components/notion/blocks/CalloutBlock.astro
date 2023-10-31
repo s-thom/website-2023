@@ -17,7 +17,11 @@ const { block } = Astro.props;
   <div>
     {
       block.callout.icon && (
-        <Icon id={`${block.id}_icon`} icon={block.callout.icon} />
+        <Icon
+          id={`${block.id}_icon`}
+          class="block-callout-icon"
+          icon={block.callout.icon}
+        />
       )
     }
   </div>
@@ -28,3 +32,19 @@ const { block } = Astro.props;
     <slot />
   </div>
 </div>
+
+<style>
+  .block-callout {
+    display: flex;
+    gap: 0.5em;
+    padding: 0.5em;
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--border-radius);
+  }
+
+  .block-callout-icon {
+    font-size: 1em;
+    width: 1.5em;
+    height: 1.5em;
+  }
+</style>
