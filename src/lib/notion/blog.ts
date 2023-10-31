@@ -14,7 +14,7 @@ interface FilterOptions {
   allowUnlisted?: boolean;
 }
 
-function getFilter({
+export function getFilter({
   allowUnlisted,
   allowUnpublished,
 }: FilterOptions): QueryDatabaseParameters["filter"] {

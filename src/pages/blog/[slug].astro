@@ -25,7 +25,7 @@ const { slug } = Astro.params;
 const id = await getPageIdFromSlug(slug!);
 
 const [page, blocks] = await Promise.all([getPage(id), getBlockChildren(id)]);
-const overrides = getComponentOverrides(id);
+const overrides = await getComponentOverrides(id);
 ---
 
 <NotionBlogLayout page={page as unknown as DatabaseObjectResponse}>

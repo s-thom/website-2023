@@ -1,0 +1,19 @@
+---
+import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import type { NotionOverrideableProps } from "../../blocks/types";
+import { getBlockChildren } from "../../../../lib/notion";
+import NotionRenderer from "../../blocks/NotionRenderer.astro";
+
+export interface Props extends NotionOverrideableProps {
+  item: DatabaseObjectResponse;
+}
+
+const { item, overrides } = Astro.props;
+
+const children = await getBlockChildren(item.id);
+---
+
+<div data-block={item.id} class="projects-item">
+  {item.id}
+  <NotionRenderer blocks={children} overrides={overrides} />
+</div>

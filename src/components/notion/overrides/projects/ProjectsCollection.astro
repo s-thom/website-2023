@@ -1,0 +1,33 @@
+---
+import type {
+  ChildDatabaseBlockObjectResponse,
+  DatabaseObjectResponse,
+} from "@notionhq/client/build/src/api-endpoints";
+import { queryDatabase } from "../../../../lib/notion";
+import { getFilter } from "../../../../lib/notion/blog";
+import type { NotionOverrideableProps } from "../../blocks/types";
+import ProjectsItem from "./ProjectsItem.astro";
+
+export interface Props extends NotionOverrideableProps {
+  block: ChildDatabaseBlockObjectResponse;
+}
+
+const { block, overrides } = Astro.props;
+
+const items = (await queryDatabase(
+  block.id,
+  getFilter({ allowUnlisted: import.meta.env.DEV }),
+  [
+    {
+      property: "Sorting",
+      direction: "ascending",
+    },
+  ],
+)) as DatabaseObjectResponse[];
+---
+
+<div data-block={block.id} class="projects-collection">
+  {items.map((item) => <ProjectsItem item={item} overrides={overrides} />)}
+</div>
+
+<style></style>
