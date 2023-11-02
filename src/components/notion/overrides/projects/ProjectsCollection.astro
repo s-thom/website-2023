@@ -27,7 +27,19 @@ const items = (await queryDatabase(
 ---
 
 <div data-block={block.id} class="projects-collection">
-  {items.map((item) => <ProjectsItem item={item} overrides={overrides} />)}
+  {items.map((page) => <ProjectsItem page={page} overrides={overrides} />)}
 </div>
 
-<style></style>
+<style>
+  .projects-collection {
+    display: grid;
+    gap: 1em;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 900px) {
+    .projects-collection {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

@@ -1,19 +1,56 @@
 ---
 import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
-import type { NotionOverrideableProps } from "../../blocks/types";
-import { getBlockChildren } from "../../../../lib/notion";
+import {
+  getBlockChildren,
+  getPageTitleComponents,
+} from "../../../../lib/notion";
+import DefaultPageBackdrop from "../../../site/DefaultPageBackdrop.astro";
 import NotionRenderer from "../../blocks/NotionRenderer.astro";
+import type { NotionOverrideableProps } from "../../blocks/types";
+import NotionImage from "../../common/NotionImage.astro";
+import RichText from "../../common/RichText.astro";
 
 export interface Props extends NotionOverrideableProps {
-  item: DatabaseObjectResponse;
+  page: DatabaseObjectResponse;
 }
 
-const { item, overrides } = Astro.props;
+const { page, overrides } = Astro.props;
 
-const children = await getBlockChildren(item.id);
+const children = await getBlockChildren(page.id);
+const titleComponents = getPageTitleComponents(page);
 ---
 
-<div data-block={item.id} class="projects-item">
-  {item.id}
-  <NotionRenderer blocks={children} overrides={overrides} />
+<div data-block={page.id} class="projects-item">
+  <div>
+    {
+      page.cover ? (
+        <NotionImage
+          id={`${page.id}-cover`}
+          image={page.cover}
+          alt=""
+          class="header-backdrop header-backdrop-image"
+        />
+      ) : (
+        <DefaultPageBackdrop class="header-backdrop" />
+      )
+    }
+  </div>
+  <div class="flow">
+    <h3>
+      <RichText components={titleComponents} />
+    </h3>
+    <NotionRenderer blocks={children} overrides={overrides} />
+  </div>
 </div>
+
+<style>
+  .projects-item {
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+  }
+
+  .flow {
+    padding: 0.5em;
+  }
+</style>
