@@ -52,9 +52,9 @@ export function getUrlSlugForPage(
     page.parent.type === "database_id"
   ) {
     const slugProperty =
-      getPagePropertyByName(page, "Slug") ??
-      getPagePropertyByName(page, "slug");
-    if (slugProperty && slugProperty.type === "rich_text") {
+      getPagePropertyByName(page, "Slug", "rich_text") ??
+      getPagePropertyByName(page, "slug", "rich_text");
+    if (slugProperty) {
       const slug = richTextToUnformattedString(
         slugProperty.rich_text as unknown as RichTextItemResponse[],
       );

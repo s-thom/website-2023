@@ -1,9 +1,14 @@
 ---
 import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import { GithubIcon } from "lucide-react";
 import {
   getBlockChildren,
   getPageTitleComponents,
 } from "../../../../lib/notion";
+import {
+  getPagePropertyByName,
+  richTextToUnformattedString,
+} from "../../../../lib/notion/util";
 import DefaultPageBackdrop from "../../../site/DefaultPageBackdrop.astro";
 import NotionRenderer from "../../blocks/NotionRenderer.astro";
 import type { NotionOverrideableProps } from "../../blocks/types";
@@ -17,7 +22,13 @@ export interface Props extends NotionOverrideableProps {
 const { page, overrides } = Astro.props;
 
 const children = await getBlockChildren(page.id);
+
 const titleComponents = getPageTitleComponents(page);
+
+const url = getPagePropertyByName(page, "URL", "url");
+const github = getPagePropertyByName(page, "GitHub", "rich_text");
+const githubFragment =
+  github && (richTextToUnformattedString(github.rich_text) || undefined);
 ---
 
 <div data-block={page.id} class="projects-item">
@@ -37,8 +48,31 @@ const titleComponents = getPageTitleComponents(page);
   </div>
   <div class="flow">
     <h3>
-      <RichText components={titleComponents} />
+      {
+        url && url.url ? (
+          <a href={url.url} rel="external noreferrer">
+            <RichText components={titleComponents} />
+          </a>
+        ) : (
+          <RichText components={titleComponents} />
+        )
+      }
     </h3>
+    {
+      githubFragment !== undefined && (
+        <div>
+          <a
+            href={`https://github.com/${githubFragment}`}
+            rel="enternal noreferrer"
+          >
+            <GithubIcon>
+              <title>{githubFragment} on GitHub</title>
+            </GithubIcon>
+          </a>
+        </div>
+      )
+    }
+    <div></div>
     <NotionRenderer blocks={children} overrides={overrides} />
   </div>
 </div>

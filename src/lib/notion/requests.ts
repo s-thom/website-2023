@@ -105,3 +105,24 @@ export const queryDatabase = withQueue(async function queryDatabase(
 
   return results;
 });
+
+// export const getPageProperties = withQueue(async function getPageProperties(
+//   id: string,
+//   filter: QueryDatabaseParameters["filter"],
+//   sorts: QueryDatabaseParameters["sorts"],
+// ) {
+//   if (NOISY_LOGS) {
+//     // eslint-disable-next-line no-console
+//     console.log(`[Notion] querying database ${id}`);
+//   }
+
+//   const client = getClient();
+
+//   const results = await collectPaginatedAPI(client.databases.query, {
+//     database_id: id,
+//     filter,
+//     sorts,
+//   });
+
+//   return results;
+// });
