@@ -2,8 +2,6 @@
   @import "../../node_modules/@fontsource/fredericka-the-great/index.css";
   @import "../../node_modules/@fontsource/lora/index.css";
   @import "../../node_modules/@fontsource-variable/lora/index.css";
-  @import "../../node_modules/@fontsource/roboto-mono/index.css";
-  @import "../../node_modules/@fontsource-variable/roboto-mono/index.css";
 
   @font-face {
     font-family: "Lora-fallback";
@@ -17,6 +15,124 @@
     src: local("Arial");
   }
 
+  /* #region Monaspace */
+  @font-face {
+    font-family: "Monaspace Fallback";
+    src: local(Courier New);
+    size-adjust: 103%;
+    ascent-override: 87%;
+    descent-override: 29%;
+    line-gap-override: 0%;
+  }
+
+  @font-face {
+    font-family: "Monaspace Neon";
+    font-style: italic;
+    font-display: swap;
+    font-weight: 200;
+    src: url(/static/fonts/monaspace/MonaspaceNeon-ExtraLightItalic.woff)
+      format("woff");
+  }
+  @font-face {
+    font-family: "Monaspace Neon";
+    font-style: normal;
+    font-display: swap;
+    font-weight: 200;
+    src: url(/static/fonts/monaspace/MonaspaceNeon-ExtraLight.woff)
+      format("woff");
+  }
+  @font-face {
+    font-family: "Monaspace Neon";
+    font-style: italic;
+    font-display: swap;
+    font-weight: 300;
+    src: url(/static/fonts/monaspace/MonaspaceNeon-LightItalic.woff)
+      format("woff");
+  }
+  @font-face {
+    font-family: "Monaspace Neon";
+    font-style: normal;
+    font-display: swap;
+    font-weight: 300;
+    src: url(/static/fonts/monaspace/MonaspaceNeon-Light.woff) format("woff");
+  }
+  @font-face {
+    font-family: "Monaspace Neon";
+    font-style: italic;
+    font-display: swap;
+    font-weight: 400;
+    src: url(/static/fonts/monaspace/MonaspaceNeon-Italic.woff) format("woff");
+  }
+  @font-face {
+    font-family: "Monaspace Neon";
+    font-style: normal;
+    font-display: swap;
+    font-weight: 400;
+    src: url(/static/fonts/monaspace/MonaspaceNeon-Regular.woff) format("woff");
+  }
+  @font-face {
+    font-family: "Monaspace Neon";
+    font-style: italic;
+    font-display: swap;
+    font-weight: 500;
+    src: url(/static/fonts/monaspace/MonaspaceNeon-MediumItalic.woff)
+      format("woff");
+  }
+  @font-face {
+    font-family: "Monaspace Neon";
+    font-style: normal;
+    font-display: swap;
+    font-weight: 500;
+    src: url(/static/fonts/monaspace/MonaspaceNeon-Medium.woff) format("woff");
+  }
+  @font-face {
+    font-family: "Monaspace Neon";
+    font-style: italic;
+    font-display: swap;
+    font-weight: 600;
+    src: url(/static/fonts/monaspace/MonaspaceNeon-SemiBoldItalic.woff)
+      format("woff");
+  }
+  @font-face {
+    font-family: "Monaspace Neon";
+    font-style: normal;
+    font-display: swap;
+    font-weight: 600;
+    src: url(/static/fonts/monaspace/MonaspaceNeon-SemiBold.woff) format("woff");
+  }
+  @font-face {
+    font-family: "Monaspace Neon";
+    font-style: italic;
+    font-display: swap;
+    font-weight: 700;
+    src: url(/static/fonts/monaspace/MonaspaceNeon-BoldItalic.woff)
+      format("woff");
+  }
+  @font-face {
+    font-family: "Monaspace Neon";
+    font-style: normal;
+    font-display: swap;
+    font-weight: 700;
+    src: url(/static/fonts/monaspace/MonaspaceNeon-Bold.woff) format("woff");
+  }
+  @font-face {
+    font-family: "Monaspace Neon";
+    font-style: italic;
+    font-display: swap;
+    font-weight: 800;
+    src: url(/static/fonts/monaspace/MonaspaceNeon-ExtraBoldItalic.woff)
+      format("woff");
+  }
+  @font-face {
+    font-family: "Monaspace Neon";
+    font-style: normal;
+    font-display: swap;
+    font-weight: 800;
+    src: url(/static/fonts/monaspace/MonaspaceNeon-ExtraBold.woff)
+      format("woff");
+  }
+  /* #endregion */
+
   :root {
     --size-step-min1: clamp(0.8rem, calc(0.8rem + 0.14vw), 1rem);
     --size-step-0: clamp(1rem, calc(0.96rem + 0.22vw), 1.13rem);
@@ -28,7 +144,7 @@
     --font-family-body: "Lora Variable", "Lora", "Lora-fallback", serif;
     --font-family-heading: "Fredericka the Great",
       "Fredericka the Great-fallback", serif;
-    --font-family-mono: "Roboto Mono Variable", "Jetbrains Mono", monospace;
+    --font-family-mono: "Monaspace Neon", "Monaspace Fallback", monospace;
   }
 
   @media (prefers-contrast: more) {
@@ -80,6 +196,7 @@
   .text-code,
   code {
     font-family: var(--font-family-mono);
+    font-weight: 300;
   }
 
   b,
