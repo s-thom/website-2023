@@ -9,6 +9,9 @@
     --border-radius: 4px;
 
     --transition-duration: 100ms;
+
+    --spacing: 16px;
+    --spacing-half: calc(var(--spacing) / 2);
   }
 
   body {

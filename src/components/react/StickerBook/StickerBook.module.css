@@ -1,16 +1,16 @@
 :root {
-  --sticker-size: 3em;
+  --sticker-size: calc(var(--spacing) * 3);
 }
 
 @media (min-width: 900px) {
   :root {
-    --sticker-size: 4em;
+    --sticker-size: calc(var(--spacing) * 4);
   }
 }
 
 @media (min-width: 1200px) {
   :root {
-    --sticker-size: 5em;
+    --sticker-size: calc(var(--spacing) * 5);
   }
 }
 

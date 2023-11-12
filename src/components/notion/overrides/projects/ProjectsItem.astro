@@ -1,6 +1,6 @@
 ---
 import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
-import { GithubIcon } from "lucide-react";
+import { GithubIcon, ExternalLinkIcon } from "lucide-react";
 import {
   getBlockChildren,
   getPageTitleComponents,
@@ -51,7 +51,10 @@ const githubFragment =
       {
         url && url.url ? (
           <a href={url.url} rel="external noreferrer">
-            <RichText components={titleComponents} />
+            <>
+              <RichText components={titleComponents} />
+              <ExternalLinkIcon className="external-icon" />
+            </>
           </a>
         ) : (
           <RichText components={titleComponents} />
@@ -85,6 +88,10 @@ const githubFragment =
   }
 
   .flow {
-    padding: 0.5em;
+    padding: var(--spacing);
+  }
+
+  .external-icon {
+    padding-inline-start: var(--spacing-half);
   }
 </style>

@@ -16,13 +16,16 @@
     display: grid;
     /* Remember to duplicate to src/components/SiteHeader.astro */
     grid-template-columns:
-      [l-edge] 2em /* Gutter */
+      [l-edge] var(--spacing) /* Gutter */
       [l-wide-bleed] 1fr /* Centring  */
       [l-small-bleed] minmax(auto, 15ch) /* Small bleed for special elements */
-      [content-column] min(65ch, calc(100% - (2 * 2em))) /* Content */
+      [content-column] min(
+        65ch,
+        calc(100% - (2 * var(--spacing)))
+      ) /* Content */
       minmax(auto, 15ch) [r-small-bleed] /* Small bleed for special elements */
       1fr [r-wide-bleed] /* Centring */
-      2em [r-edge]; /* Gutter */
+      var(--spacing) [r-edge]; /* Gutter */
 
     & > * {
       grid-column: content-column;

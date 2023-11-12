@@ -6,10 +6,10 @@
 .zone {
   position: fixed;
   z-index: 999;
-  bottom: 1rem;
-  right: 1rem;
+  bottom: var(--spacing);
+  right: var(--spacing);
   max-width: calc(100vw - 2rem);
-  padding: 0.5em;
+  padding: var(--spacing-half);
   background-color: var(--color-background);
   transition: background-color var(--transition-duration) ease-in-out;
   border: 1.5px solid var(--color-border);
