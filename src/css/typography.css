@@ -4,15 +4,21 @@
   @import "../../node_modules/@fontsource-variable/lora/index.css";
 
   @font-face {
-    font-family: "Lora-fallback";
-    size-adjust: 115.62%;
-    src: local("Times New Roman");
+    font-family: "Lora Fallback";
+    src: local(Georgia);
+    size-adjust: 105%;
+    ascent-override: 95%;
+    descent-override: normal;
+    line-gap-override: normal;
   }
 
   @font-face {
-    font-family: "Fredericka the Great-fallback";
-    size-adjust: 105.13%;
-    src: local("Arial");
+    font-family: "Fredericka the Great Fallback";
+    src: local(Times New Roman);
+    size-adjust: 121%;
+    ascent-override: 79%;
+    descent-override: normal;
+    line-gap-override: normal;
   }
 
   /* #region Monaspace */
@@ -141,15 +147,15 @@
     --size-step-3: clamp(1.95rem, calc(1.71rem + 1.24vw), 2.66rem);
     --size-step-4: clamp(2.44rem, calc(2.05rem + 1.93vw), 3.55rem);
 
-    --font-family-body: "Lora Variable", "Lora", "Lora-fallback", serif;
+    --font-family-body: "Lora Variable", "Lora", "Lora Fallback", serif;
     --font-family-heading: "Fredericka the Great",
-      "Fredericka the Great-fallback", serif;
+      "Fredericka the Great Fallback", serif;
     --font-family-mono: "Monaspace Neon", "Monaspace Fallback", monospace;
   }
 
   @media (prefers-contrast: more) {
     :root {
-      --font-family-heading: "Lora Variable", "Lora", "Lora-fallback", serif;
+      --font-family-heading: "Lora Variable", "Lora", "Lora Fallback", serif;
     }
   }
 
