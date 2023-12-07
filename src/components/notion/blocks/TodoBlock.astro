@@ -29,7 +29,7 @@ const { block } = Astro.props;
       readonly
     />
     <label id={`todo-${block.id}-label`} for={`todo-${block.id}`}>
-      <RichText components={block.to_do.rich_text} />
+      {""}<RichText components={block.to_do.rich_text} />
     </label>
   </p>
   <slot />
