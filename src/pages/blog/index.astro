@@ -2,7 +2,7 @@
 import BlogListPageItem from "../../components/notion/blog/BlogListPageItem.astro";
 import NotionPageLayout from "../../layouts/NotionPageLayout.astro";
 import { BLOG_PAGE_ID } from "../../lib/constants";
-import { getPage } from "../../lib/notion";
+import { getPage } from "../../lib/notion/caches";
 import { getFilteredBlogItems } from "../../lib/notion/blog";
 
 const page = await getPage(BLOG_PAGE_ID);

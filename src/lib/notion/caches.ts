@@ -20,6 +20,7 @@ import {
   queryDatabase as baseQueryDatabase,
 } from "./requests";
 import { getUrlSlugForPage } from "./titles";
+import { isPageListed, isPagePublished } from "./util";
 
 let allPagesPromise: Promise<PageObjectResponse[]> | undefined;
 
@@ -37,6 +38,8 @@ export interface BasicPageInfo {
   id: string;
   slug: string;
   path: string;
+  isPublished: boolean;
+  isListed: boolean;
 }
 
 const PAGE_ID_TO_SLUG = new Map<string, BasicPageInfo>();
@@ -169,7 +172,13 @@ async function getAllPagesInner(root: string): Promise<PageObjectResponse[]> {
     // Save URL mapping
     const slug = getUrlSlugForPage(page);
     const path = PAGE_PATH_PREFIX_OVERRIDES[id] ?? join(parentPath, slug);
-    PAGE_ID_TO_SLUG.set(id, { id, slug, path });
+    PAGE_ID_TO_SLUG.set(id, {
+      id,
+      slug,
+      path,
+      isPublished: isPagePublished(page),
+      isListed: isPageListed(page),
+    });
 
     const children = await getBlockChildren(id);
     const directChildPages = children.filter(
@@ -198,7 +207,7 @@ async function getAllPagesInner(root: string): Promise<PageObjectResponse[]> {
   }
 
   // Start everything off
-  enqueuePage(root, "");
+  enqueuePage(root, "/");
   await allPagesQueue.onIdle();
 
   // Post-processing
@@ -234,6 +243,34 @@ export async function getAllPages(): Promise<PageObjectResponse[]> {
   return allPagesPromise;
 }
 
+export async function getPageIdFromPath(path: string) {
+  await getAllPages();
+
+  const possibleIds: string[] = [];
+  // eslint-disable-next-line no-restricted-syntax
+  for (const [id, info] of PAGE_ID_TO_SLUG) {
+    if (info.path === path) {
+      possibleIds.push(id);
+    }
+  }
+
+  if (possibleIds.length === 0) {
+    throw new Error(`Unknown path ${path}`);
+  } else if (possibleIds.length > 1) {
+    possibleIds.sort();
+
+    // eslint-disable-next-line no-console
+    console.warn(
+      `[Notion] WARNING: Multiple pages have path ${path} (${possibleIds.join(
+        ", ",
+      )}). Using first ID`,
+    );
+  }
+
+  return possibleIds[0];
+}
+
+/** @deprecated Migrate towards {@link getPageIdFromPath} instead */
 export async function getPageIdFromSlug(slug: string) {
   await getAllPages();
 
@@ -259,4 +296,15 @@ export async function getPageIdFromSlug(slug: string) {
   }
 
   return possibleIds[0];
+}
+
+export async function getInfoForPage(id: string) {
+  await getAllPages();
+
+  const info = PAGE_ID_TO_SLUG.get(id);
+  if (!info) {
+    throw new Error(`URLs for page ${id} not found`);
+  }
+
+  return info;
 }

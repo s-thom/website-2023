@@ -2,22 +2,32 @@
 import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import NotionRenderer from "../../components/notion/blocks/NotionRenderer.astro";
 import NotionBlogLayout from "../../layouts/NotionBlogLayout.astro";
+import { getFilteredBlogItems } from "../../lib/notion/blog";
 import {
   getBlockChildren,
+  getInfoForPage,
   getPage,
   getPageIdFromSlug,
-  getUrlSlugForPage,
-} from "../../lib/notion";
-import { getFilteredBlogItems } from "../../lib/notion/blog";
+} from "../../lib/notion/caches";
 import { getComponentOverrides } from "../../lib/notion/overrides";
 
 export async function getStaticPaths() {
-  const pages = await getFilteredBlogItems({
+  const results = await getFilteredBlogItems({
     allowUnpublished: import.meta.env.DEV,
     allowUnlisted: true,
   });
 
-  return pages.map((page) => ({ params: { slug: getUrlSlugForPage(page) } }));
+  const paths = await Promise.all(
+    results.map(async (result) => {
+      const info = await getInfoForPage(result.id);
+
+      return {
+        params: { slug: info.slug },
+      };
+    }),
+  );
+
+  return paths;
 }
 
 const { slug } = Astro.params;

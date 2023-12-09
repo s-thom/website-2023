@@ -45,3 +45,26 @@ export function getPagePropertyByName<
   }
   return undefined;
 }
+
+export function isPagePublished(
+  page: PageObjectResponse | DatabaseObjectResponse,
+) {
+  const property = getPagePropertyByName(page, "Published", "date");
+  if (!(property && property.date)) {
+    return true;
+  }
+
+  const date = new Date(property.date.start);
+  return date.getDate() <= Date.now();
+}
+
+export function isPageListed(
+  page: PageObjectResponse | DatabaseObjectResponse,
+) {
+  const property = getPagePropertyByName(page, "Tags", "multi_select");
+  if (!property) {
+    return true;
+  }
+
+  return !property.multi_select.find((option) => option.name === "unlisted");
+}
