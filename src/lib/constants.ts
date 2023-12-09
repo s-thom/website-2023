@@ -7,6 +7,13 @@ export const PAGES_COLLECTION_ID = "4e043a71-8fe5-48a1-b460-ed69366d567d";
 // TODO: not have to use this
 export const BLOG_PAGE_ID = "b749d283-ebbd-4b6f-92d4-13301479c2da";
 
+export const PAGE_PATH_PREFIX_OVERRIDES: Record<string, string> = {
+  [BLOG_PAGE_ID]: "blog",
+  [ROOT_PAGE_ID]: "",
+};
+
+export const NOISY_LOGS = import.meta.env.NOISY_LOGS === "true";
+
 /**
  * Pages/databases to ignore when listing all pages.
  * Adding items to this array will mean that they, and any children (*)

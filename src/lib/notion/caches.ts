@@ -5,8 +5,14 @@ import type {
   QueryDatabaseParameters,
 } from "@notionhq/client/build/src/api-endpoints";
 import isDeepEqual from "fast-deep-equal";
+import { join } from "node:path/posix";
 import PQueue from "p-queue";
-import { IGNORE_FROM_ALL, ROOT_PAGE_ID } from "../constants";
+import {
+  IGNORE_FROM_ALL,
+  NOISY_LOGS,
+  PAGE_PATH_PREFIX_OVERRIDES,
+  ROOT_PAGE_ID,
+} from "../constants";
 import {
   getBlock as baseGetBlock,
   getBlockChildren as baseGetBlockChildren,
@@ -27,8 +33,13 @@ const QUERY_CACHE = new Map<
   { key: any; promise: Promise<QueryResponseValue> }[]
 >();
 
-const PAGE_ID_TO_SLUG = new Map<string, string>();
-const SLUG_TO_PAGE_ID = new Map<string, string>();
+export interface BasicPageInfo {
+  id: string;
+  slug: string;
+  path: string;
+}
+
+const PAGE_ID_TO_SLUG = new Map<string, BasicPageInfo>();
 
 export function getBlock(id: string): Promise<BlockObjectResponse> {
   const cached = BLOCK_CACHE.get(id);
@@ -130,17 +141,21 @@ async function getAllPagesInner(root: string): Promise<PageObjectResponse[]> {
 
   IGNORE_FROM_ALL.forEach((ignored) => processed.add(ignored));
 
-  function enqueuePage(id: string) {
+  function enqueuePage(id: string, parentPath: string) {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    allPagesQueue.add(() => processPage(id), { throwOnTimeout: true });
+    allPagesQueue.add(() => processPage(id, parentPath), {
+      throwOnTimeout: true,
+    });
   }
 
-  function enqueueDatabase(id: string) {
+  function enqueueDatabase(id: string, parentPath: string) {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    allPagesQueue.add(() => processDatabase(id), { throwOnTimeout: true });
+    allPagesQueue.add(() => processDatabase(id, parentPath), {
+      throwOnTimeout: true,
+    });
   }
 
-  async function processPage(id: string) {
+  async function processPage(id: string, parentPath: string) {
     // Ensure we don't have duplicates running
     if (processed.has(id)) {
       return;
@@ -149,21 +164,26 @@ async function getAllPagesInner(root: string): Promise<PageObjectResponse[]> {
     processed.add(id);
 
     // Ensure page is in cache
-    await getPage(id);
+    const page = await getPage(id);
+
+    // Save URL mapping
+    const slug = getUrlSlugForPage(page);
+    const path = PAGE_PATH_PREFIX_OVERRIDES[id] ?? join(parentPath, slug);
+    PAGE_ID_TO_SLUG.set(id, { id, slug, path });
 
     const children = await getBlockChildren(id);
     const directChildPages = children.filter(
       (child) => child.type === "child_page" || child.type === "link_to_page",
     );
-    directChildPages.forEach((child) => enqueuePage(child.id));
+    directChildPages.forEach((child) => enqueuePage(child.id, path));
 
     const databases = children.filter(
       (child) => child.type === "child_database",
     );
-    databases.forEach((database) => enqueueDatabase(database.id));
+    databases.forEach((database) => enqueueDatabase(database.id, path));
   }
 
-  async function processDatabase(id: string) {
+  async function processDatabase(id: string, parentPath: string) {
     // Ensure we don't have duplicates running
     if (processed.has(id)) {
       return;
@@ -171,12 +191,14 @@ async function getAllPagesInner(root: string): Promise<PageObjectResponse[]> {
     // And prevent any new duplicates
     processed.add(id);
 
+    const path = PAGE_PATH_PREFIX_OVERRIDES[id] ?? parentPath;
+
     const results = await queryDatabase(id, undefined, undefined);
-    results.forEach((result) => enqueuePage(result.id));
+    results.forEach((result) => enqueuePage(result.id, path));
   }
 
   // Start everything off
-  enqueuePage(root);
+  enqueuePage(root, "");
   await allPagesQueue.onIdle();
 
   // Post-processing
@@ -186,19 +208,7 @@ async function getAllPagesInner(root: string): Promise<PageObjectResponse[]> {
   // eslint-disable-next-line no-restricted-syntax
   const pagePromises = Array.from(PAGE_CACHE.values());
   const pagesOrNot = await Promise.all(
-    pagePromises.map((pagePromise) =>
-      pagePromise.then(
-        (page) => {
-          const slug = getUrlSlugForPage(page);
-
-          PAGE_ID_TO_SLUG.set(page.id, slug);
-          SLUG_TO_PAGE_ID.set(slug, page.id);
-
-          return page;
-        },
-        () => undefined,
-      ),
-    ),
+    pagePromises.map((pagePromise) => pagePromise.catch(() => undefined)),
   );
 
   const pages = pagesOrNot.filter((page): page is PageObjectResponse => !!page);
@@ -208,6 +218,17 @@ async function getAllPagesInner(root: string): Promise<PageObjectResponse[]> {
 export async function getAllPages(): Promise<PageObjectResponse[]> {
   if (!allPagesPromise) {
     allPagesPromise = getAllPagesInner(ROOT_PAGE_ID);
+
+    if (NOISY_LOGS) {
+      allPagesPromise.then(() => {
+        // eslint-disable-next-line no-console
+        console.log(
+          `[Notion] All pages paths:\n${Array.from(PAGE_ID_TO_SLUG.values())
+            .map((info) => `    ${info.id}: ${info.path}`)
+            .join("\n")}`,
+        );
+      });
+    }
   }
 
   return allPagesPromise;
@@ -216,10 +237,26 @@ export async function getAllPages(): Promise<PageObjectResponse[]> {
 export async function getPageIdFromSlug(slug: string) {
   await getAllPages();
 
-  const pageId = SLUG_TO_PAGE_ID.get(slug);
-  if (pageId === undefined) {
-    throw new Error(`Unknown slug ${slug}`);
+  const possibleIds: string[] = [];
+  // eslint-disable-next-line no-restricted-syntax
+  for (const [id, info] of PAGE_ID_TO_SLUG) {
+    if (info.slug === slug) {
+      possibleIds.push(id);
+    }
   }
 
-  return pageId;
+  if (possibleIds.length === 0) {
+    throw new Error(`Unknown slug ${slug}`);
+  } else if (possibleIds.length > 1) {
+    possibleIds.sort();
+
+    // eslint-disable-next-line no-console
+    console.warn(
+      `[Notion] Multiple pages have slug ${slug} (${possibleIds.join(
+        ", ",
+      )}). Using first ID`,
+    );
+  }
+
+  return possibleIds[0];
 }

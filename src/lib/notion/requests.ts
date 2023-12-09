@@ -7,8 +7,7 @@ import type {
   QueryDatabaseParameters,
 } from "@notionhq/client/build/src/api-endpoints";
 import PQueue from "p-queue";
-
-const NOISY_LOGS = import.meta.env.NOISY_LOGS === "true";
+import { NOISY_LOGS } from "../constants";
 
 const requestQueue = new PQueue({
   concurrency: 4,
