@@ -49,12 +49,21 @@ export function getPagePropertyByName<
 export function isPagePublished(
   page: PageObjectResponse | DatabaseObjectResponse,
 ) {
-  const property = getPagePropertyByName(page, "Published", "date");
-  if (!(property && property.date)) {
+  const tagsProperty = getPagePropertyByName(page, "Tags", "multi_select");
+  if (tagsProperty) {
+    if (
+      tagsProperty.multi_select.find((option) => option.name === "unlisted")
+    ) {
+      return false;
+    }
+  }
+
+  const publishedProperty = getPagePropertyByName(page, "Published", "date");
+  if (!(publishedProperty && publishedProperty.date)) {
     return true;
   }
 
-  const date = new Date(property.date.start);
+  const date = new Date(publishedProperty.date.start);
   return date.getDate() <= Date.now();
 }
 
