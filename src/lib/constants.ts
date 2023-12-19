@@ -10,7 +10,12 @@ export const BLOG_PAGE_ID = "b749d283-ebbd-4b6f-92d4-13301479c2da";
 export const PAGE_PATH_PREFIX_OVERRIDES: Record<string, string> = {
   [BLOG_PAGE_ID]: "/blog",
   [ROOT_PAGE_ID]: "/",
+  "f745c582-4881-4b70-badf-70b005f1bd72": "/projects", // TODO: Remove after deleting old version of site
 };
+
+export const PAGE_PATH_PREFIX_INVERSE_OVERRIDES = Object.fromEntries(
+  Object.entries(PAGE_PATH_PREFIX_OVERRIDES).map(([k, v]) => [v, k]),
+);
 
 export const NOISY_LOGS = import.meta.env.NOISY_LOGS === "true";
 

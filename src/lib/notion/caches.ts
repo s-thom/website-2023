@@ -10,6 +10,7 @@ import PQueue from "p-queue";
 import {
   IGNORE_FROM_ALL,
   NOISY_LOGS,
+  PAGE_PATH_PREFIX_INVERSE_OVERRIDES,
   PAGE_PATH_PREFIX_OVERRIDES,
   ROOT_PAGE_ID,
 } from "../constants";
@@ -245,6 +246,10 @@ export async function getAllPages(): Promise<PageObjectResponse[]> {
 
 export async function getPageIdFromPath(path: string) {
   await getAllPages();
+
+  if (PAGE_PATH_PREFIX_INVERSE_OVERRIDES[path]) {
+    return PAGE_PATH_PREFIX_INVERSE_OVERRIDES[path];
+  }
 
   const possibleIds: string[] = [];
   // eslint-disable-next-line no-restricted-syntax
