@@ -26,7 +26,7 @@ const items = (await queryDatabase(
 )) as DatabaseObjectResponse[];
 ---
 
-<div data-block={block.id} class="projects-collection small-bleed">
+<div data-block={block.id} class="projects-collection">
   {items.map((page) => <ProjectsItem page={page} overrides={overrides} />)}
 </div>
 
@@ -44,9 +44,9 @@ const items = (await queryDatabase(
     }
   }
 
-  @media (min-width: 900px) {
+  /* @media (min-width: 900px) {
     .projects-collection {
       --num-tracks: 3;
     }
-  }
+  } */
 </style>
