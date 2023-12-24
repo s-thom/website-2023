@@ -19,10 +19,8 @@
       [l-edge] var(--spacing) /* Gutter */
       [l-wide-bleed] 1fr /* Centring  */
       [l-small-bleed] minmax(auto, 15ch) /* Small bleed for special elements */
-      [content-column] min(
-        65ch,
-        calc(100% - (2 * var(--spacing)))
-      ) /* Content */
+      [content-column] min(65ch, calc(100% - (2 * var(--spacing))))
+      /* Content */
       minmax(auto, 15ch) [r-small-bleed] /* Small bleed for special elements */
       1fr [r-wide-bleed] /* Centring */
       var(--spacing) [r-edge]; /* Gutter */
@@ -104,5 +102,23 @@
     position: absolute;
     white-space: nowrap;
     width: 1px;
+  }
+
+  .full-motion {
+    display: unset;
+  }
+
+  .reduced-motion {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion) {
+    .full-motion {
+      display: none;
+    }
+
+    .reduced-motion {
+      display: unset;
+    }
   }
 }

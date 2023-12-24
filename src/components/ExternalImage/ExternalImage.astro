@@ -6,26 +6,17 @@ export interface Props {
   src: string;
   alt: string;
   class?: string;
-  imgClass?: string;
   widths?: number[];
 }
 
-const {
-  id,
-  src,
-  alt,
-  class: className,
-  imgClass,
-  widths,
-  ...rest
-} = Astro.props;
+const { id, src, alt, class: className, widths, ...rest } = Astro.props;
 
 const imageInfo = await getImageInfo(id, src, widths ?? []);
 const formats = imageInfo.formats.slice();
 const finalFormat = formats.at(-1)!.sizes[0];
 ---
 
-<picture class={className} {...rest}>
+<picture {...rest}>
   {
     formats.map((format) => {
       const srcset = format.sizes
@@ -35,5 +26,5 @@ const finalFormat = formats.at(-1)!.sizes[0];
       return <source srcset={srcset} type={format.type} />;
     })
   }
-  <img class={imgClass} src={finalFormat.path} alt={alt} />
+  <img class={className} src={finalFormat.path} alt={alt} />
 </picture>

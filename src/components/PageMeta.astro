@@ -1,10 +1,17 @@
 ---
+import type { IconType, MaskType } from "../lib/svg-masks";
+
 export interface PageMetaType {
   title: string;
   description?: string;
   url: string;
   imageUrl?: string;
   rssUrl?: string;
+  header?: {
+    seed: string;
+    maskType: MaskType;
+    iconType: IconType;
+  };
 }
 
 export interface Props {

@@ -25,6 +25,7 @@ const { enableExperiments = true, meta, breadcrumbs } = Astro.props;
       { name: "Projects", url: "/projects" },
     ]}
     breadcrumbs={breadcrumbs}
+    header={meta.header}
   >
     <slot name="page-header" slot="page-header" />
     <slot name="page-backdrop" slot="page-backdrop" />

@@ -8,10 +8,9 @@ export interface Props {
   image: NonNullable<DatabaseObjectResponse["cover"]>;
   alt: string;
   class?: string;
-  imgClass?: string;
 }
 
-const { id, class: className, imgClass, alt, image, ...rest } = Astro.props;
+const { id, class: className, alt, image, ...rest } = Astro.props;
 
 const GENERATE_IMAGE_WIDTHS = [1920, 720, 360];
 
@@ -37,7 +36,6 @@ switch (image.type) {
       alt={alt}
       widths={GENERATE_IMAGE_WIDTHS}
       class={className}
-      imgClass={imgClass}
     />
   ) : (
     <DevOnly>

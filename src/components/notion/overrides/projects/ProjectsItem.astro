@@ -7,10 +7,9 @@ import {
   getPagePropertyByName,
   richTextToUnformattedString,
 } from "../../../../lib/notion/util";
-import DefaultPageBackdrop from "../../../site/DefaultPageBackdrop.astro";
 import NotionRenderer from "../../blocks/NotionRenderer.astro";
 import type { NotionOverrideableProps } from "../../blocks/types";
-import NotionImage from "../../common/NotionImage.astro";
+import NotionBackdrop from "../../common/NotionBackdrop.astro";
 import RichText from "../../common/RichText.astro";
 
 export interface Props extends NotionOverrideableProps {
@@ -31,18 +30,7 @@ const githubFragment =
 
 <div data-block={page.id} class="projects-item">
   <div>
-    {
-      page.cover ? (
-        <NotionImage
-          id={`${page.id}-cover`}
-          image={page.cover}
-          alt=""
-          class="header-backdrop header-backdrop-image"
-        />
-      ) : (
-        <DefaultPageBackdrop class="header-backdrop" />
-      )
-    }
+    <NotionBackdrop page={page} />
   </div>
   <div class="flow">
     <h3>

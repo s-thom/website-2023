@@ -46,7 +46,11 @@ const pageTitle = richTextToUnformattedString(titleComponents);
 ---
 
 <NotionPageLayout
-  meta={{ title: pageTitle, url: info.path }}
+  meta={{
+    title: pageTitle,
+    url: info.path,
+    header: { seed: id, maskType: "waves", iconType: "none" },
+  }}
   breadcrumbs={[
     { name: "Home", url: "/" },
     { name: pageTitle, url: info.path },

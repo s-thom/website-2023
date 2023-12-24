@@ -15,7 +15,12 @@ const pages = await getFilteredBlogItems({
 
 <NotionPageLayout
   page={page}
-  meta={{ title: "Blog", url: "/blog", rssUrl: "/blog/feed.xml" }}
+  meta={{
+    title: "Blog",
+    url: "/blog",
+    rssUrl: "/blog/feed.xml",
+    header: { seed: page.id, maskType: "waves", iconType: "none" },
+  }}
   breadcrumbs={[
     { name: "Home", url: "/" },
     { name: "Blog", url: "/blog" },

@@ -8,8 +8,7 @@ import type { PageMetaType } from "../components/PageMeta.astro";
 import type { LinkInfo } from "../components/SiteHeader.astro";
 import SkipLinks from "../components/SkipLinks.astro";
 import NotionPageHeader from "../components/notion/NotionPageHeader.astro";
-import NotionImage from "../components/notion/common/NotionImage.astro";
-import DefaultPageBackdrop from "../components/site/DefaultPageBackdrop.astro";
+import NotionBackdrop from "../components/notion/common/NotionBackdrop.astro";
 import PageWithHeaderLayout from "./PageWithHeaderLayout.astro";
 
 export interface Props {
@@ -25,20 +24,7 @@ const { page, meta, breadcrumbs } = Astro.props;
   <SkipLinks links={[{ name: "Content", url: "#content" }]} slot="skip-links" />
 
   <NotionPageHeader page={page} slot="page-header" />
-  <div class="header-backdrop" slot="page-backdrop">
-    {
-      page.cover ? (
-        <NotionImage
-          id={`${page.id}-cover`}
-          image={page.cover}
-          alt=""
-          class="header-backdrop-image"
-        />
-      ) : (
-        <DefaultPageBackdrop />
-      )
-    }
-  </div>
+  <NotionBackdrop page={page} shade slot="page-backdrop" />
 
   <DevOnly>
     <div id="DEV-notion-page-id" style={{ display: "none" }}>{page.id}</div>
@@ -51,29 +37,4 @@ const { page, meta, breadcrumbs } = Astro.props;
   <slot name="page-footer" />
 </PageWithHeaderLayout>
 
-<style>
-  .header-backdrop::after {
-    content: " ";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0 0 0 / 0.5);
-  }
-
-  .header-backdrop-image {
-    position: relative;
-    height: 100%;
-  }
-
-  .header-backdrop-image > :global(img) {
-    min-height: 100%;
-    min-width: 100%;
-    max-width: none;
-    position: relative;
-    top: 50%;
-    left: 50%;
-    translate: -50% -50%;
-  }
-</style>
+<style></style>

@@ -1,0 +1,49 @@
+---
+import type {
+  DatabaseObjectResponse,
+  PageObjectResponse,
+} from "@notionhq/client/build/src/api-endpoints";
+import DefaultPageBackdrop from "../../site/DefaultPageBackdrop.astro";
+import NotionImage from "./NotionImage.astro";
+
+export interface Props {
+  page: DatabaseObjectResponse | PageObjectResponse;
+  shade?: boolean;
+}
+
+const { page, shade } = Astro.props;
+---
+
+<div class="notion-backdrop">
+  {
+    page.cover ? (
+      <NotionImage id={`${page.id}-cover`} image={page.cover} alt="" />
+    ) : (
+      <DefaultPageBackdrop />
+    )
+  }
+  {shade && <div class="shade" />}
+</div>
+
+<style>
+  .notion-backdrop {
+    display: contents;
+  }
+  .notion-backdrop > :global(*),
+  .notion-backdrop > :global(picture) > :global(img) {
+    height: 100%;
+    width: 100%;
+    max-width: initial;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .shade {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+</style>

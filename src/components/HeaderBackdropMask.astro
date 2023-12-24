@@ -1,0 +1,33 @@
+---
+import { getMask, type MaskType, type IconType } from "../lib/svg-masks";
+
+export interface Props {
+  id: string;
+  seed: string;
+  maskType: MaskType;
+  iconType: IconType;
+}
+
+const { id, maskType, iconType } = Astro.props;
+const svg = getMask({
+  id,
+  seed: id,
+  maskType,
+  iconType,
+  width: 1920,
+  height: 350,
+});
+---
+
+<Fragment set:html={svg} />
+<div class="masked" style={`mask-image: url(#${id});`}>
+  <slot />
+</div>
+
+<style>
+  .masked {
+    width: 100%;
+    height: 100%;
+    mask: url(#invalid) luminance;
+  }
+</style>

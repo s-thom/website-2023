@@ -3,7 +3,7 @@ import { createIconMask, type IconType as InnerIconType } from "./icon";
 import { createNoneMask } from "./none";
 import { createWaveMask } from "./wave";
 
-export type BackgroundType = "none" | "waves";
+export type MaskType = "none" | "waves";
 export type IconType = "none" | InnerIconType;
 
 export interface MaskOptions {
@@ -11,7 +11,7 @@ export interface MaskOptions {
   seed: string;
   width: number;
   height: number;
-  backgroundType: BackgroundType;
+  maskType: MaskType;
   iconType: IconType;
 }
 
@@ -20,7 +20,7 @@ export function getMask({
   seed,
   width,
   height,
-  backgroundType,
+  maskType,
   iconType,
 }: MaskOptions) {
   const random = seedrandom(seed);
@@ -44,7 +44,7 @@ export function getMask({
       });
   }
 
-  switch (backgroundType) {
+  switch (maskType) {
     case "waves":
       content += createWaveMask({
         id,
@@ -52,7 +52,7 @@ export function getMask({
         width,
         height,
         numDisplacements: 2,
-        pathCount: 3,
+        pathCount: 7,
         animation: { durationSeconds: 60, numKeyframes: 4 },
         maskId: iconMaskId,
       });
@@ -60,7 +60,7 @@ export function getMask({
     case "none":
     default:
       content += createNoneMask({
-        id: iconMaskId,
+        id,
         height,
         width,
         maskId: iconMaskId,
@@ -71,7 +71,7 @@ export function getMask({
   return `
     <svg
       xmlns='http://www.w3.org/2000/svg'
-      style="min-width:${width}px;display:none"
+      style="min-width:${width}px;position:absolute;top:-100%"
       preserveAspectRatio='xMidYMid'
       viewBox="0 0 ${width} ${height}"
     >

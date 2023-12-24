@@ -39,12 +39,8 @@ const titleComponents = getPageTitleComponents(page);
     text-align: center;
   }
 
-  .page-icon {
+  .page-header :global(.page-icon) {
     background-color: var(--color-background);
-  }
-
-  .page-icon,
-  .page-icon > :global(img) {
     width: calc(var(--spacing) * 10);
     height: calc(var(--spacing) * 10);
     margin: auto;
