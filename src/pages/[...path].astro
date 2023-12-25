@@ -12,7 +12,11 @@ import {
 } from "../lib/notion/caches";
 import { getComponentOverrides } from "../lib/notion/overrides";
 import { getPageTitleComponents } from "../lib/notion/titles";
-import { richTextToUnformattedString } from "../lib/notion/util";
+import {
+  getPagePropertyByName,
+  richTextToUnformattedString,
+} from "../lib/notion/util";
+import type { IconType } from "../components/react/SvgMask";
 
 export async function getStaticPaths() {
   const results = await getFilteredPageItems({
@@ -43,13 +47,16 @@ const overrides = await getComponentOverrides(id);
 const info = await getInfoForPage(page.id);
 const titleComponents = getPageTitleComponents(page);
 const pageTitle = richTextToUnformattedString(titleComponents);
+
+const iconTypeProperty = getPagePropertyByName(page, "Theme", "select");
+const iconType = (iconTypeProperty?.select?.name as IconType) ?? "none";
 ---
 
 <NotionPageLayout
   meta={{
     title: pageTitle,
     url: info.path,
-    header: { seed: id, maskType: "waves", iconType: "none" },
+    header: { seed: id, maskType: "waves", iconType },
   }}
   breadcrumbs={[
     { name: "Home", url: "/" },

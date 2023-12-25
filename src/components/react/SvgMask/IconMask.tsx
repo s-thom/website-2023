@@ -63,7 +63,7 @@ interface CreateIconMaskOptions {
   height: number;
 }
 
-export function createIconMask({
+export function IconMask({
   id,
   random,
   iconMaskId,

@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import seedrandom from "seedrandom";
-import { createIconMask, type IconType as InnerIconType } from "./IconMask.tsx";
+import { IconMask, type IconType as InnerIconType } from "./IconMask.tsx";
 import { NoneMask } from "./NoneMask.tsx";
 import { WaveMask } from "./WaveMask.tsx";
 
@@ -36,15 +36,17 @@ export function SvgMask({
       iconMask = <NoneMask id={iconMaskId} height={height} width={width} />;
       break;
     default:
-      iconMask = createIconMask({
-        id: `${id}-icon`,
-        random,
-        iconMaskId: iconType,
-        width,
-        height,
-        minIconSize: height * 0.75,
-        maxIconSize: height,
-      });
+      iconMask = (
+        <IconMask
+          id={`${id}-icon`}
+          random={random}
+          iconMaskId={iconType}
+          width={width}
+          height={height}
+          minIconSize={height * 0.75}
+          maxIconSize={height}
+        />
+      );
   }
 
   let backgroundMask: ReactNode;
@@ -58,7 +60,7 @@ export function SvgMask({
           height={height}
           numDisplacements={2}
           pathCount={7}
-          maskId={iconMaskId ? "icons" : undefined}
+          maskId={iconMaskId}
           animation={{ durationSeconds: 60, numKeyframes: 4 }}
         />
       );
