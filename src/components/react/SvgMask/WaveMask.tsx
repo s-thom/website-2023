@@ -1,5 +1,4 @@
 import type { PRNG } from "seedrandom";
-import { trim } from "../util/trim";
 import type { Point2 } from "./types";
 
 function getDisplacement(random: PRNG, maxDisplacement: number) {
@@ -144,7 +143,7 @@ interface AnimatedWavePathProps {
   maskId?: string;
 }
 
-function createAnimatedPath({
+function AnimatedWavePath({
   random,
   width,
   height,
@@ -166,32 +165,34 @@ function createAnimatedPath({
     index !== animation.numKeyframes ? index * (1 / animation.numKeyframes) : 1,
   );
 
-  return trim`
-    <path
-      class='full-motion mask-layer'
-      d="${keyframes[0]}"
-      mask="${maskId ? `url(#${maskId})` : ""}"
-    >
-      <animate
-        attributeName='d'
-        values="${keyframes.join(";")}"
-        dur="${`${animation.durationSeconds}s`}"
-        begin="${`${animation.currentFrameBeginOffset}s`}"
-        repeatCount='indefinite'
-        calcMode='spline'
-        keySplines="${splineConfig.join(";")}"
-        keyTimes="${times.join(";")}"
-      ></animate>
-    </path>
-    <path
-      class='reduced-motion mask-layer'
-      d="${keyframes[0]}"
-      mask="${maskId ? `url(#${maskId})` : ""}"
-    />
-  `;
+  return (
+    <>
+      <path
+        className="full-motion mask-layer"
+        d={keyframes[0]}
+        mask={maskId ? `url(#${maskId})` : undefined}
+      >
+        <animate
+          attributeName="d"
+          values={keyframes.join(";")}
+          dur={`${animation.durationSeconds}s`}
+          begin={`${animation.currentFrameBeginOffset}s`}
+          repeatCount="indefinite"
+          calcMode="spline"
+          keySplines={splineConfig.join(";")}
+          keyTimes={times.join(";")}
+        ></animate>
+      </path>
+      <path
+        className="reduced-motion mask-layer"
+        d={keyframes[0]}
+        mask={maskId ? `url(#${maskId})` : undefined}
+      />
+    </>
+  );
 }
 
-interface CreateWaveMaskOptions {
+interface WaveMaskProps {
   id: string;
   random: PRNG;
   width: number;
@@ -205,7 +206,7 @@ interface CreateWaveMaskOptions {
   maskId?: string;
 }
 
-export function createWaveMask({
+export function WaveMask({
   id,
   random,
   width,
@@ -214,27 +215,28 @@ export function createWaveMask({
   numDisplacements,
   animation,
   maskId,
-}: CreateWaveMaskOptions) {
-  const paths = [...Array(pathCount)].map((_, index) => {
-    return createAnimatedPath({
-      random,
-      width,
-      height,
-      numDisplacements,
-      maskId,
-      animation: {
+}: WaveMaskProps) {
+  const paths = [...Array(pathCount)].map((_, index) => (
+    <AnimatedWavePath
+      key={index}
+      random={random}
+      width={width}
+      height={height}
+      numDisplacements={numDisplacements}
+      maskId={maskId}
+      animation={{
         numKeyframes: animation.numKeyframes,
         durationSeconds: animation.durationSeconds,
         currentFrameBeginOffset:
           (-animation.durationSeconds * index) / pathCount,
-      },
-    });
-  });
+      }}
+    />
+  ));
 
-  return trim`
-    <mask id="${id}">
-      <rect x='0' y='0' width="${width}" height="${height}" fill='#000000' />
-      ${paths.join("\n")}
+  return (
+    <mask id={id}>
+      <rect x="0" y="0" width={width} height={height} fill="#000000" />
+      {paths}
     </mask>
-  `;
+  );
 }

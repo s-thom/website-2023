@@ -1,35 +1,29 @@
 ---
-import { getMask, type MaskType, type IconType } from "../lib/svg-masks";
+import {
+  SvgMask,
+  type MaskType,
+  type IconType,
+} from "./react/SvgMask/index.tsx";
 
 export interface Props {
   id: string;
+  class?: string;
   seed: string;
   maskType: MaskType;
   iconType: IconType;
 }
 
-const { id, maskType, iconType } = Astro.props;
-const svg = getMask({
-  id,
-  seed: id,
-  maskType,
-  iconType,
-  width: 1920,
-  // Note: 250px is also present in the --height-header variable in src/css/layout.css
-  height: 250,
-});
+const { id, class: className, seed, maskType, iconType } = Astro.props;
 ---
 
-<Fragment set:html={svg} />
-<div class="masked" style={`mask-image: url(#${id});`}>
+<SvgMask
+  id={id}
+  seed={seed}
+  maskType={maskType}
+  iconType={iconType}
+  width={1920}
+  height={250 /* Note: 250px is also present in the --height-header variable in src/css/layout.css */}
+  className={className}
+>
   <slot />
-</div>
-
-<style>
-  .masked {
-    width: 100%;
-    height: 100%;
-    mask: url(#invalid) luminance;
-    mask-position: center top;
-  }
-</style>
+</SvgMask>

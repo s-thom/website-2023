@@ -1,5 +1,4 @@
 import type { PRNG } from "seedrandom";
-import { trim } from "../util/trim";
 import type { Point2 } from "./types";
 
 const ICON_MIN_TRANSLATE_X = 0.3;
@@ -84,7 +83,7 @@ export function createIconMask({
   const icon = ICON_PATHS[iconMaskId];
 
   const paths = icon
-    ? iconPositions.map((basePosition) => {
+    ? iconPositions.map((basePosition, i) => {
         // TODO: reintroduce multiple icons
         // const icon = arrayRandom(icon, random)
 
@@ -120,21 +119,22 @@ export function createIconMask({
           ICON_MAX_ROTATE,
         );
 
-        return trim`
+        return (
           <path
-            d="${icon.d}"
-            fill='#000000'
-            opacity='0.8'
-            transform="${`translate(${topLeft.x} ${topLeft.y}) scale(${scale}) rotate(${rotation} ${centrePoint.x} ${centrePoint.y})`}"
+            key={i}
+            d={icon.d}
+            fill="#000000"
+            opacity="0.8"
+            transform={`translate(${topLeft.x} ${topLeft.y}) scale(${scale}) rotate(${rotation} ${centrePoint.x} ${centrePoint.y})`}
           />
-        `;
+        );
       })
     : [];
 
-  return trim`
-    <mask id=${id}>
-      <rect x='0' y='0' width="${width}" height="${height}" fill='#FFFFFF' />
-      ${paths.join("\n")}
+  return (
+    <mask id={id}>
+      <rect x="0" y="0" width={width} height={height} fill="#FFFFFF" />
+      {paths}
     </mask>
-  `;
+  );
 }

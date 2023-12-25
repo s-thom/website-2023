@@ -70,6 +70,7 @@ const { navItems, /* breadcrumbs, */ header } = Astro.props;
     <div class="backdrop-container">
       <HeaderBackdropMask
         id="header-mask"
+        class="header-mask"
         seed={header?.seed ?? "default"}
         maskType={header?.maskType ?? "none"}
         iconType={header?.iconType ?? "none"}
@@ -119,6 +120,11 @@ const { navItems, /* breadcrumbs, */ header } = Astro.props;
     height: var(--height-header);
     z-index: -1;
     overflow: hidden;
+  }
+  .backdrop-container :global(.header-mask) {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
   }
 
   .site-header-container :global(.header-backdrop) {
