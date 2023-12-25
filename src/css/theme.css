@@ -1,6 +1,7 @@
 @layer theme {
   :root {
     --color-text: #000000;
+    --color-text-secondary: #666666;
     --color-text-header: #ffffff;
     --color-background: #ffffff;
     --color-border: #aaaaaa;

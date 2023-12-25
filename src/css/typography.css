@@ -1,17 +1,17 @@
 @layer base {
-  @import "../../node_modules/@fontsource/lora/index.css";
-  @import "../../node_modules/@fontsource-variable/lora/index.css";
   @import "../../node_modules/@fontsource/jost/index.css";
   @import "../../node_modules/@fontsource-variable/jost/index.css";
+  @import "../../node_modules/inter-ui/inter.css";
+  @import "../../node_modules/inter-ui/inter-variable.css";
 
   /* Fallbacks generated using https://screenspan.net/fallback */
 
   @font-face {
-    font-family: "Lora Fallback";
-    src: local(Georgia);
-    size-adjust: 105%;
-    ascent-override: 95%;
-    descent-override: normal;
+    font-family: "Inter Fallback";
+    src: local(Arial);
+    size-adjust: 106%;
+    ascent-override: 90%;
+    descent-override: 21%;
     line-gap-override: normal;
   }
 
@@ -150,15 +150,9 @@
     --size-step-3: clamp(1.95rem, calc(1.71rem + 1.24vw), 2.66rem);
     --size-step-4: clamp(2.44rem, calc(2.05rem + 1.93vw), 3.55rem);
 
-    --font-family-body: "Lora Variable", "Lora", "Lora Fallback", serif;
+    --font-family-body: "Inter Variable", "Inter", "Inter Fallback", serif;
     --font-family-heading: "Jost Variable", "Jost", "Jost Fallback", serif;
     --font-family-mono: "Monaspace Neon", "Monaspace Fallback", monospace;
-  }
-
-  @media (prefers-contrast: more) {
-    :root {
-      --font-family-heading: "Lora Variable", "Lora", "Lora Fallback", serif;
-    }
   }
 
   body {
@@ -204,7 +198,7 @@
   .text-code,
   code {
     font-family: var(--font-family-mono);
-    font-weight: 350;
+    font-weight: 370;
   }
 
   b,
