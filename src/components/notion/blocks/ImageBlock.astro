@@ -15,21 +15,25 @@ const captionPlain = richTextToUnformattedString(block.image.caption);
 
 <figure data-block={block.id} class="block-image">
   <NotionImage id={block.id} image={block.image} alt={captionPlain} />
-  <figcaption class="block-image-caption">
-    <RichText components={block.image.caption} />
-  </figcaption>
+  {
+    block.image.caption.length > 0 ? (
+      <figcaption class="block-image-caption">
+        <RichText components={block.image.caption} />
+      </figcaption>
+    ) : undefined
+  }
 </figure>
 
 <style>
   .block-image {
-    grid-column: var(--area-small-bleed) !important;
-    padding: var(--spacing);
-    background-color: var(--color-alt-background);
-    border-radius: var(--border-radius);
+    padding: var(--spacing-half);
+    overflow: hidden;
   }
 
   .block-image-caption {
+    margin-top: var(--spacing-half);
     text-align: center;
     font-style: italic;
+    color: var(--color-text-secondary);
   }
 </style>

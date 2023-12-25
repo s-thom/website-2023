@@ -34,19 +34,11 @@
     }
   }
 
-  body main {
+  :is(body main, body main article, body main article astro-island) {
     display: contents;
 
     & > * {
       grid-column: content-column;
-    }
-
-    & > article {
-      display: contents;
-
-      & > * {
-        grid-column: content-column;
-      }
     }
   }
 
