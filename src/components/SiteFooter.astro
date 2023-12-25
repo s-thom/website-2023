@@ -4,7 +4,15 @@ import Goose from "./Goose.astro";
 const THE_YEAR_I_LAST_UPDATED_THIS_FILE = 2023;
 ---
 
-<footer>
+<footer class="site-footer small-bleed">
   <span>&copy; Stuart Thomson {THE_YEAR_I_LAST_UPDATED_THIS_FILE}</span>
   <Goose />
 </footer>
+
+<style>
+  .site-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+</style>
