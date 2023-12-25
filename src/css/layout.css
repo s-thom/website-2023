@@ -70,7 +70,7 @@
   }
 
   :is(h1, h2, h3) + * {
-    --flow-space: 0.5em;
+    --flow-space: 0.8em;
   }
 
   :is(li) + * {
