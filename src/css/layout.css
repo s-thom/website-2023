@@ -4,6 +4,9 @@
     --area-wide-bleed: l-wide-bleed / r-wide-bleed;
     --area-small-bleed: l-small-bleed / r-small-bleed;
     --area-header: var(--area-small-bleed);
+
+    /* Note: src/components/HeaderBackdropMask.astro hard-codes 250px */
+    --height-header: 250px;
   }
 
   @media (min-width: 1500px) {

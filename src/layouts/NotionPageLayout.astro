@@ -29,8 +29,7 @@ const { page, meta, breadcrumbs } = Astro.props;
   <DevOnly>
     <div id="DEV-notion-page-id" style={{ display: "none" }}>{page.id}</div>
   </DevOnly>
-  <article class="flow">
-    <div id="content"></div>
+  <article class="flow" id="content">
     <slot />
   </article>
 

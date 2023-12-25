@@ -17,18 +17,19 @@ const titleComponents = getPageTitleComponents(page);
 ---
 
 <div class="page-header">
+  <h1 class="page-title">
+    <RichText components={titleComponents} />
+  </h1>
   {
     page.icon && (
       <NotionIcon id={`${page.id}-icon`} icon={page.icon} class="page-icon" />
     )
   }
-  <h1 class="page-title">
-    <RichText components={titleComponents} />
-  </h1>
 </div>
 
 <style>
   .page-header {
+    color: var(--color-text);
     padding: var(--spacing);
     height: 100%;
     display: flex;
@@ -39,8 +40,19 @@ const titleComponents = getPageTitleComponents(page);
     text-align: center;
   }
 
+  @media (min-width: 1500px) {
+    .page-header {
+      color: var(--color-text-header);
+    }
+
+    .page-title {
+      text-shadow: 0px 0px 3px rgba(0 0 0 / 0.4);
+    }
+  }
+
   .page-header :global(.page-icon) {
     background-color: var(--color-background);
+    box-shadow: 0px 2px 4px 3px rgba(0 0 0 / 0.1);
     width: calc(var(--spacing) * 10);
     height: calc(var(--spacing) * 10);
     margin: auto;

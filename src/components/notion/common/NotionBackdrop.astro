@@ -17,7 +17,12 @@ const { page, shade } = Astro.props;
 <div class="notion-backdrop">
   {
     page.cover ? (
-      <NotionImage id={`${page.id}-cover`} image={page.cover} alt="" />
+      <NotionImage
+        id={`${page.id}-cover`}
+        image={page.cover}
+        alt=""
+        class="notion-backdrop-image"
+      />
     ) : (
       <DefaultPageBackdrop />
     )
@@ -30,12 +35,19 @@ const { page, shade } = Astro.props;
     display: contents;
   }
   .notion-backdrop > :global(*),
-  .notion-backdrop > :global(picture) > :global(img) {
+  .notion-backdrop :global(.notion-backdrop-image) {
     height: 100%;
     width: 100%;
     max-width: initial;
     object-fit: cover;
     object-position: center;
+  }
+
+  .notion-backdrop :global(.notion-backdrop-image) {
+    filter: blur(2px);
+    transform: scale(
+      103%
+    ); /* Quick hack so that the blur's edges aren't visible */
   }
 
   .shade {
@@ -44,6 +56,6 @@ const { page, shade } = Astro.props;
     top: 0;
     left: 0;
     position: absolute;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.6);
   }
 </style>

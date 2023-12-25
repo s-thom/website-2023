@@ -12,7 +12,7 @@ function midpointDisplacement(
   iterations: number,
   random: PRNG,
   waveHeight: number,
-  height: number,
+  maxControlPointY: number,
 ): Point2[] {
   let arr = [start, end];
 
@@ -35,7 +35,7 @@ function midpointDisplacement(
 
       midpoint.y += getDisplacement(random, iterationMax);
       // Ensure the midpoint is within the bounds of the drawing area
-      midpoint.y = Math.max(Math.min(midpoint.y, height), 0);
+      midpoint.y = Math.max(Math.min(midpoint.y, maxControlPointY), 0);
 
       nextArr.push(midpoint);
       nextArr.push(point);
@@ -53,8 +53,13 @@ function createPathData(
   height: number,
   numIterations: number,
 ) {
-  const topPadding = height / 4;
-  const waveHeight = height - topPadding * 1.5;
+  // A "safe" zone at the top and bottom. May not actually be safe, as I can't be bothered doing the maths.
+  // Plus, since this is all probability based, I suspect that if I wanted the *true* safe zone, it'd be a lot
+  // larger than what I'd actually want visually, so I'm happy to accept some of the background getting cut
+  // off in exchange for simpler code. This file is mathematical enough as it is.
+  const topPaddingY = height / 5;
+  const bottomPaddingY = height - topPaddingY;
+  const waveHeight = height - topPaddingY * 2;
 
   const initialHeightRandomness = waveHeight / 4;
 
@@ -63,18 +68,18 @@ function createPathData(
       x: 0,
       y:
         (waveHeight + getDisplacement(random, initialHeightRandomness)) / 2 +
-        topPadding,
+        topPaddingY,
     },
     {
       x: width,
       y:
         (waveHeight + getDisplacement(random, initialHeightRandomness)) / 2 +
-        topPadding,
+        topPaddingY,
     },
     numIterations,
     random,
     waveHeight,
-    height,
+    bottomPaddingY,
   );
 
   let path = "M0 0";
