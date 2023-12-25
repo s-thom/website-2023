@@ -12,6 +12,7 @@ export interface PageMetaType {
     maskType: MaskType;
     iconType: IconType;
   };
+  noCrawl?: boolean;
 }
 
 export interface Props {
@@ -19,7 +20,7 @@ export interface Props {
 }
 
 const { meta } = Astro.props;
-const { title, description, url, imageUrl, rssUrl } = meta;
+const { title, description, url, imageUrl, rssUrl, noCrawl } = meta;
 
 const canonicalURL = new URL(url, Astro.site);
 const sitemapURL = new URL("/sitemap.xml", Astro.site);
@@ -31,6 +32,8 @@ const sitemapURL = new URL("/sitemap.xml", Astro.site);
 <title>{title}</title>
 <meta property="og:title" content={title} />
 <meta name="twitter:title" content={title} />
+
+{noCrawl && <meta name="robots" content="noindex" />}
 
 <link rel="canonical" href={canonicalURL} />
 <meta property="og:url" content={canonicalURL} />
