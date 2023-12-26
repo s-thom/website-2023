@@ -1,6 +1,13 @@
 import type { StickerData, StickerTypes } from "./types";
 
 export const STICKER_TYPE_MAP: Record<StickerTypes, StickerData> = {
+  "chequered-flag": {
+    type: "lottie",
+    rarity: "unique",
+    name: "Chequered Flag",
+    url: "/static/lottie/chequered-flag.json",
+    initialFrame: 0,
+  },
   clap: {
     type: "lottie",
     rarity: "common",
@@ -21,6 +28,13 @@ export const STICKER_TYPE_MAP: Record<StickerTypes, StickerData> = {
     name: "Fire",
     url: "/static/lottie/fire.json",
     initialFrame: 0,
+  },
+  "glowing-star": {
+    type: "lottie",
+    rarity: "unique",
+    name: "Glowing Star",
+    url: "/static/lottie/glowing-star.json",
+    initialFrame: 50,
   },
   goose: {
     type: "lottie",

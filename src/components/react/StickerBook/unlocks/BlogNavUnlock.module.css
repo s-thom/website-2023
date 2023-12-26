@@ -1,0 +1,24 @@
+.box {
+  background-color: var(--color-alt-background);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: var(--spacing);
+  text-align: center;
+  font-size: var(--size-step-min1);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-half);
+  height: 100%;
+}
+
+.claimed {
+  filter: grayscale();
+  opacity: 0.5;
+}
+
+.button {
+  background-color: transparent;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-half);
+}

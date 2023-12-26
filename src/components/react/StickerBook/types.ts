@@ -12,9 +12,11 @@ export interface LottieStickerData extends BaseStickerData {
 export type StickerData = LottieStickerData;
 
 export type StickerTypes =
+  | "chequered-flag"
   | "clap"
   | "dragon"
   | "fire"
+  | "glowing-star"
   | "goose"
   | "light-bulb"
   | "lizard"
