@@ -1,9 +1,10 @@
 import clsx from "clsx";
-import { StrictMode, Suspense, useMemo, useState } from "react";
+import { StrictMode, Suspense } from "react";
 import { useStore } from "../../store";
-import { Sticker } from "../stickers/Sticker.tsx";
+import { Sticker } from "../components/Sticker/Sticker.tsx";
 import type { StickerTypes } from "../types";
 import styles from "./BlogNavUnlock.module.css";
+import { useAddUniqueSticker } from "./useAddUniqueSticker";
 
 export interface BlogNavUnlockProps {
   stickerType: StickerTypes;
@@ -12,20 +13,9 @@ export interface BlogNavUnlockProps {
 export function BlogNavUnlock({ stickerType }: BlogNavUnlockProps) {
   const isStickersEnabled = useStore((store) => store.enabled.stickers);
 
-  const stickers = useStore((store) => store.stickers);
-  const hasAlreadyUnlocked = useMemo(
-    () => !!stickers.find((sticker) => sticker.type === stickerType),
-    [stickers, stickerType],
-  );
-  const [didUnlockThisLoad, setDidUnlockThisLoad] = useState(false);
-
-  function unlockSticker() {
-    const event = new CustomEvent("addsticker", {
-      detail: { type: stickerType },
-    });
-    window.dispatchEvent(event);
-    setDidUnlockThisLoad(true);
-  }
+  const { addSticker, isUnlocked, isRecentlyUnlocked } = useAddUniqueSticker({
+    type: stickerType,
+  });
 
   if (!isStickersEnabled) {
     return null;
@@ -35,10 +25,10 @@ export function BlogNavUnlock({ stickerType }: BlogNavUnlockProps) {
     <StrictMode>
       <Suspense>
         <div className={styles.box}>
-          {hasAlreadyUnlocked ? (
+          {isUnlocked ? (
             <div className="flow">
               <p>
-                {didUnlockThisLoad
+                {isRecentlyUnlocked
                   ? "You can add stickers to any page on this site, not just this one."
                   : "You've already claimed this sticker. There are more hidden around the site!"}
               </p>
@@ -47,14 +37,7 @@ export function BlogNavUnlock({ stickerType }: BlogNavUnlockProps) {
                 type="button"
                 disabled
               >
-                <Sticker
-                  sticker={{
-                    id: "fake",
-                    pageId: undefined,
-                    coordinates: { x: 0, y: 0 },
-                    type: stickerType,
-                  }}
-                />
+                <Sticker type={stickerType} />
               </button>
             </div>
           ) : (
@@ -66,16 +49,9 @@ export function BlogNavUnlock({ stickerType }: BlogNavUnlockProps) {
               <button
                 className={clsx(styles.button)}
                 type="button"
-                onClick={() => unlockSticker()}
+                onClick={addSticker}
               >
-                <Sticker
-                  sticker={{
-                    id: "fake",
-                    pageId: undefined,
-                    coordinates: { x: 0, y: 0 },
-                    type: stickerType,
-                  }}
-                />
+                <Sticker type={stickerType} />
               </button>
             </div>
           )}

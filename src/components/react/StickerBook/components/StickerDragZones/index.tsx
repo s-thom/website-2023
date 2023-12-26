@@ -6,11 +6,11 @@ const StickerApp = lazy(() =>
   })),
 );
 
-export interface StickerBookProps {
+export interface StickerDragZonesProps {
   pageId: string;
 }
 
-export function StickerBook({ pageId }: StickerBookProps) {
+export function StickerDragZones({ pageId }: StickerDragZonesProps) {
   return (
     <StrictMode>
       <Suspense>

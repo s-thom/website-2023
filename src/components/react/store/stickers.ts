@@ -1,9 +1,5 @@
-import {
-  addSticker,
-  placeOnPage,
-  removeFromPage,
-} from "../StickerBook/reducers";
 import type { StickerInfo } from "../StickerBook/types";
+import { addSticker, placeOnPage, removeFromPage } from "./reducers/stickers";
 import type { SimpleStateCreator } from "./types";
 
 export interface StickersSlice {

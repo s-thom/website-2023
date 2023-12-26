@@ -2,10 +2,10 @@ import { useDroppable } from "@dnd-kit/core";
 import clsx from "clsx";
 import { InfoIcon, XIcon } from "lucide-react";
 import { useMemo } from "react";
-import { useStore } from "../../store";
-import { STICKER_TYPE_MAP } from "../data";
-import { MovableStickerWrapper } from "../stickers/MovableStickerWrapper.tsx";
-import type { StickerInfo } from "../types";
+import { useStore } from "../../../../store/index";
+import { STICKER_TYPE_MAP } from "../../../data";
+import type { StickerInfo } from "../../../types";
+import { MovableStickerWrapper } from "../../Sticker/MovableStickerWrapper.tsx";
 import styles from "./StickerPanel.module.css";
 import zoneStyles from "./zones.module.css";
 

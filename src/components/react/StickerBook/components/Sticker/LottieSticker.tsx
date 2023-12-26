@@ -6,8 +6,8 @@ import {
   useState,
   type PointerEvent,
 } from "react";
-import { useStore } from "../../store";
-import type { LottieStickerData, StickerInfo } from "../types";
+import { useStore } from "../../../store";
+import type { LottieStickerData } from "../../types";
 import styles from "./LottieSticker.module.css";
 
 async function requestLottieFile(url: string) {
@@ -27,7 +27,6 @@ async function getLottieData(url: string) {
 }
 
 export interface LottieStickerProps {
-  sticker: StickerInfo;
   data: LottieStickerData;
 }
 

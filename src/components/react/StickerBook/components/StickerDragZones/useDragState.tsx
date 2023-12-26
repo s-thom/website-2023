@@ -1,8 +1,8 @@
 import type { DndContext, DragCancelEvent, DragEndEvent } from "@dnd-kit/core";
 import { useCallback, useMemo, useState } from "react";
-import { useStore } from "../store";
-import { STICKER_TYPE_MAP } from "./data";
-import type { StickerInfo } from "./types";
+import { useStore } from "../../../store";
+import { STICKER_TYPE_MAP } from "../../data";
+import type { StickerInfo } from "../../types";
 
 export function useDragState(pageId: string) {
   const stickers = useStore((state) => state.stickers);

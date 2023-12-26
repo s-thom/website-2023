@@ -1,5 +1,5 @@
-import { STICKER_TYPE_MAP } from "./data";
-import type { StickerInfo } from "./types";
+import { STICKER_TYPE_MAP } from "../../StickerBook/data";
+import type { StickerInfo } from "../../StickerBook/types";
 
 function canAddSticker(stickers: StickerInfo[], sticker: StickerInfo): boolean {
   // Ensure this is a valid sticker

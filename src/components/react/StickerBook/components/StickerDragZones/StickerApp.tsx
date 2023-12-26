@@ -1,7 +1,7 @@
 import { DndContext, DragOverlay } from "@dnd-kit/core";
 import { useState } from "react";
+import { Sticker } from "../Sticker/Sticker.tsx";
 import styles from "./StickerBook.module.css";
-import { Sticker } from "./stickers/Sticker.tsx";
 import { useDragState } from "./useDragState.tsx";
 import { useStickerEventListeners } from "./useStickerEventListeners";
 import { PageZone } from "./zones/PageZone.tsx";
@@ -45,7 +45,7 @@ export function StickerApp({ pageId }: StickerAppProps) {
 
       <DragOverlay>
         {draggingSticker ? (
-          <Sticker sticker={draggingSticker} className={styles.stickerDrag} />
+          <Sticker type={draggingSticker.type} className={styles.stickerDrag} />
         ) : null}
       </DragOverlay>
     </DndContext>

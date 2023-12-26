@@ -1,22 +1,22 @@
 import clsx from "clsx";
 import { type ReactNode } from "react";
-import { STICKER_TYPE_MAP } from "../data";
-import type { StickerInfo } from "../types";
+import { STICKER_TYPE_MAP } from "../../data";
+import type { StickerTypes } from "../../types";
 import { LottieSticker } from "./LottieSticker.tsx";
 import styles from "./Sticker.module.css";
 
 export interface StickerProps {
-  sticker: StickerInfo;
+  type: StickerTypes;
   className?: string;
 }
 
-export function Sticker({ sticker, className }: StickerProps) {
+export function Sticker({ type, className }: StickerProps) {
   let child: ReactNode = null;
 
-  const data = STICKER_TYPE_MAP[sticker.type];
+  const data = STICKER_TYPE_MAP[type];
   switch (data.type) {
     case "lottie":
-      child = <LottieSticker sticker={sticker} data={data} />;
+      child = <LottieSticker data={data} />;
       break;
     default:
       return null;

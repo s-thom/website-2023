@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { v4 as uuid } from "uuid";
-import { useStore } from "../store";
-import type { AddStickerEvent } from "./types";
+import { useStore } from "../../../store";
+import type { AddStickerEvent } from "../../types";
 
 export function useStickerEventListeners() {
   const addSticker = useStore((store) => store.addSticker);
