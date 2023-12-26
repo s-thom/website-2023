@@ -6,9 +6,12 @@ import type {
 } from "@notionhq/client/build/src/api-endpoints";
 
 export function richTextToUnformattedString(
-  components: RichTextItemResponse[],
+  components: RichTextItemResponse | RichTextItemResponse[],
 ): string {
-  return components.map((component) => component.plain_text).join("");
+  return [components]
+    .flatMap((component) => component)
+    .map((component) => component.plain_text)
+    .join("");
 }
 
 export function normalizeTitle(title?: string | null): string {

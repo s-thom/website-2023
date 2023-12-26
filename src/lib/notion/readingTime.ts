@@ -15,34 +15,24 @@ export async function estimateReadingTime(
     switch (child.type) {
       case "paragraph":
         return child.paragraph.rich_text;
-        break;
       case "heading_1":
         return child.heading_1.rich_text;
-        break;
       case "heading_2":
         return child.heading_2.rich_text;
-        break;
       case "heading_3":
         return child.heading_3.rich_text;
-        break;
       case "bulleted_list_item":
         return child.bulleted_list_item.rich_text;
-        break;
       case "numbered_list_item":
         return child.numbered_list_item.rich_text;
-        break;
       case "quote":
         return child.quote.rich_text;
-        break;
       case "to_do":
         return child.to_do.rich_text;
-        break;
       case "toggle":
         return child.toggle.rich_text;
-        break;
       case "callout":
         return child.callout.rich_text;
-        break;
       default:
         return [];
     }
