@@ -63,6 +63,7 @@ const iconType = (iconTypeProperty?.select?.name as IconType) ?? "none";
     { name: pageTitle, url: info.path },
   ]}
   page={page as unknown as DatabaseObjectResponse}
+  showCoverSource
 >
   <NotionRenderer blocks={blocks} overrides={overrides} />
 </NotionPageLayout>

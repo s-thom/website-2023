@@ -4,19 +4,38 @@ import type {
   PageObjectResponse,
 } from "@notionhq/client/build/src/api-endpoints";
 import { getPageTitleComponents } from "../../lib/notion/titles";
+import { getPagePropertyByName } from "../../lib/notion/util";
+import { estimateReadingTime } from "../../lib/notion/readingTime";
 import NotionIcon from "./common/NotionIcon.astro";
 import RichText from "./common/RichText.astro";
-import { getPagePropertyByName } from "../../lib/notion/util";
+import NotionProperty from "./properties/NotionProperty.astro";
 
 export interface Props {
   page: DatabaseObjectResponse | PageObjectResponse;
+  showCoverSource?: boolean;
+  showReadingTime?: boolean;
+  showPublishEditDates?: boolean;
 }
 
-const { page } = Astro.props;
+const { page, showCoverSource, showReadingTime, showPublishEditDates } =
+  Astro.props;
 
 const titleComponents = getPageTitleComponents(page);
 
-const coverSource = getPagePropertyByName(page, "Cover Source", "rich_text");
+const coverSourceProperty = getPagePropertyByName(
+  page,
+  "Cover Source",
+  "rich_text",
+);
+const publishedDateProperty = getPagePropertyByName(page, "Published", "date");
+const editedDateProperty = getPagePropertyByName(page, "Edited", "date");
+
+let readingTimeInfo:
+  | Awaited<ReturnType<typeof estimateReadingTime>>
+  | undefined;
+if (showReadingTime) {
+  readingTimeInfo = await estimateReadingTime(page);
+}
 ---
 
 <div class="page-header">
@@ -28,13 +47,40 @@ const coverSource = getPagePropertyByName(page, "Cover Source", "rich_text");
       <NotionIcon id={`${page.id}-icon`} icon={page.icon} class="page-icon" />
     )
   }
-  {
-    coverSource && (
-      <p class="info">
-        Cover image source: <RichText components={coverSource.rich_text} />
-      </p>
-    )
-  }
+  <div class="summary-info">
+    {
+      showReadingTime && readingTimeInfo && (
+        <div class="read-time">
+          Estimated reading time: {readingTimeInfo.minutes} minutes
+        </div>
+      )
+    }
+    {
+      showPublishEditDates &&
+        publishedDateProperty &&
+        publishedDateProperty.date !== null && (
+          <div class="date-info">
+            Published: <NotionProperty property={publishedDateProperty} />
+          </div>
+        )
+    }
+    {
+      showPublishEditDates &&
+        editedDateProperty &&
+        editedDateProperty.date !== null && (
+          <div class="date-info">
+            Edited: <NotionProperty property={editedDateProperty} />
+          </div>
+        )
+    }
+    {
+      showCoverSource && coverSourceProperty && (
+        <div class="cover-source">
+          Cover image source: <NotionProperty property={coverSourceProperty} />
+        </div>
+      )
+    }
+  </div>
 </div>
 
 <style>
@@ -94,9 +140,29 @@ const coverSource = getPagePropertyByName(page, "Cover Source", "rich_text");
     }
   }
 
-  .info {
-    align-self: start;
-    font-weight: 300;
+  .summary-info {
+    width: 100%;
+    display: grid;
+    gap: var(--spacing-half);
+    font-size: var(--size-step-min1);
     color: var(--color-text-secondary);
+    text-align: center;
+  }
+
+  @media (min-width: 900px) {
+    .summary-info {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .read-time,
+    .cover-source {
+      text-align: start;
+      grid-column: 1;
+    }
+
+    .date-info {
+      text-align: end;
+      grid-column: 2;
+    }
   }
 </style>

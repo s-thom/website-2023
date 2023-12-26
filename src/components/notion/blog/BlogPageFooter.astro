@@ -1,34 +1,190 @@
 ---
-import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import { type DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import { Image } from "astro:assets";
+import { BLOG_PAGE_ID } from "../../../lib/constants";
+import { getFilteredBlogItems } from "../../../lib/notion/blog";
+import { getPage } from "../../../lib/notion/caches";
+import { getPagePropertyByName } from "../../../lib/notion/util";
+import profile2023 from "../../../resources/profile-2023.jpg";
 import NotionProperty from "../properties/NotionProperty.astro";
+import BlogListPageItem from "./BlogListPageItem.astro";
 
 export interface Props {
   page: DatabaseObjectResponse;
 }
 
 const { page } = Astro.props;
+
+const blogHomePage = await getPage(BLOG_PAGE_ID);
+const allBlogPages = await getFilteredBlogItems({
+  allowUnpublished: import.meta.env.DEV,
+  allowUnlisted: false,
+});
+
+// Get next/previous entries
+let next: DatabaseObjectResponse | undefined;
+let prev: DatabaseObjectResponse | undefined;
+const index = allBlogPages.findIndex((curr) => curr.id === page.id);
+if (index !== -1) {
+  if (index !== 0) {
+    next = allBlogPages[index - 1];
+  }
+  if (index !== allBlogPages.length - 1) {
+    prev = allBlogPages[index + 1];
+  }
+}
+
+const publishedDateProperty = getPagePropertyByName(page, "Published", "date");
+const editedDateProperty = getPagePropertyByName(page, "Edited", "date");
+const tagsProperty = getPagePropertyByName(page, "Tags", "multi_select");
 ---
 
-<div>
-  <div>
-    <div>Written by Stuart Thomson</div>
-    <div>
-      <a href="/blog">Back to posts</a>
+<div class="blog-footer flow">
+  <div class="properties-box">
+    <div class="dates-list">
+      {
+        publishedDateProperty && publishedDateProperty.date !== null && (
+          <div>
+            Published: <NotionProperty property={publishedDateProperty} />
+          </div>
+        )
+      }
+      {
+        editedDateProperty && editedDateProperty.date !== null && (
+          <div>
+            Edited: <NotionProperty property={editedDateProperty} />
+          </div>
+        )
+      }
+    </div>
+
+    {
+      tagsProperty && (
+        <div>
+          <NotionProperty property={tagsProperty} />
+        </div>
+      )
+    }
+    <div class="author">
+      <Image
+        src={profile2023}
+        alt="Stuart Thomson smiling, with water and hills in the background"
+        class="profile-photo"
+        densities={[1, 1.5, 2]}
+        height={24}
+      /> Written by <a href="/">Stuart Thomson</a>
     </div>
   </div>
-  <div>
-    <div>
-      <p>
-        Cover Source: <NotionProperty
-          property={page.properties["Cover Source"]}
-        />
-      </p>
-    </div>
-    <div>
-      <NotionProperty property={page.properties.Published} />
-    </div>
-    <div>
-      <NotionProperty property={page.properties.Tags} />
+
+  <div class="links-box">
+    {
+      next ? (
+        <div class="next">
+          <BlogListPageItem page={next} showTitle>
+            <Fragment slot="info-top">
+              <span>&nbsp;</span>
+              <span class="pre-title">Next post</span>
+            </Fragment>
+          </BlogListPageItem>
+        </div>
+      ) : undefined
+    }
+    {
+      prev ? (
+        <div class="prev">
+          <BlogListPageItem page={prev} showTitle>
+            <Fragment slot="info-top">
+              <span>&nbsp;</span>
+              <span class="pre-title">Previous post</span>
+            </Fragment>
+          </BlogListPageItem>
+        </div>
+      ) : undefined
+    }
+    <div class="up">
+      <BlogListPageItem page={blogHomePage as any} showTitle>
+        <Fragment slot="info-top">
+          <span>&nbsp;</span>
+          <span class="pre-title">More posts</span>
+        </Fragment>
+      </BlogListPageItem>
     </div>
   </div>
 </div>
+
+<style>
+  .blog-footer {
+    padding-block-end: var(--spacing);
+  }
+
+  .properties-box {
+    background-color: var(--color-alt-background);
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--spacing);
+    text-align: center;
+    font-size: var(--size-step-min1);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-half);
+  }
+
+  .dates-list {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing);
+  }
+
+  .properties-box :global(.tag-list) {
+    justify-content: center;
+  }
+
+  .author {
+    display: flex;
+    gap: var(--spacing-half);
+    justify-content: center;
+  }
+
+  .profile-photo {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+  }
+
+  .links-box {
+    display: grid;
+    gap: var(--spacing);
+    grid-template-columns: repeat(1, 1fr);
+    grid-template-areas:
+      "next"
+      "prev"
+      "up";
+  }
+
+  .next {
+    grid-area: next;
+  }
+  .prev {
+    grid-area: prev;
+  }
+  .up {
+    grid-area: up;
+  }
+
+  @media (min-width: 900px) {
+    .links-box {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-areas:
+        "prev next"
+        "up up";
+    }
+  }
+
+  .pre-title {
+    align-self: flex-start;
+    font-size: var(--size-step-min1);
+    font-style: italic;
+    position: absolute;
+    top: var(--spacing);
+  }
+</style>

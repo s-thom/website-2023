@@ -1,8 +1,5 @@
 ---
-import type {
-  RichTextItemResponse,
-  RichTextPropertyItemObjectResponse,
-} from "@notionhq/client/build/src/api-endpoints";
+import type { RichTextPropertyItemObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import RichText from "../common/RichText.astro";
 
 export interface Props {
@@ -12,6 +9,4 @@ export interface Props {
 const { property } = Astro.props;
 ---
 
-<RichText
-  components={property.rich_text as unknown as RichTextItemResponse[]}
-/>
+<RichText components={[property.rich_text].flatMap((r) => r)} />

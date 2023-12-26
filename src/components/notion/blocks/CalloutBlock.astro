@@ -25,7 +25,7 @@ const { block } = Astro.props;
       )
     }
   </div>
-  <div class="flow">
+  <div class="flow block-callout-content">
     <p>
       <RichText components={block.callout.rich_text} />
     </p>
@@ -35,7 +35,10 @@ const { block } = Astro.props;
 
 <style>
   .block-callout {
-    display: flex;
+    display: grid;
+    grid-template-columns:
+      [icon] 28px
+      [content] 1fr;
     gap: var(--spacing-half);
     padding: var(--spacing-half);
     border: 1.5px solid var(--color-border);
@@ -43,8 +46,13 @@ const { block } = Astro.props;
   }
 
   .block-callout-icon {
+    grid-column: icon;
     font-size: 1em;
     width: 1.5em;
     height: 1.5em;
+  }
+
+  .block-callout-content {
+    overflow-x: auto;
   }
 </style>

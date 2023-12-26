@@ -1,6 +1,7 @@
 import type {
   DatabaseObjectResponse,
   PageObjectResponse,
+  PropertyItemObjectResponse,
   RichTextItemResponse,
 } from "@notionhq/client/build/src/api-endpoints";
 
@@ -25,23 +26,19 @@ export function normalizeTitle(title?: string | null): string {
     .toLowerCase();
 }
 
-type DatabasePropertyConfigResponse = PageObjectResponse["properties"][""];
-
 export function getPagePropertyByName<
-  T extends DatabasePropertyConfigResponse["type"],
+  T extends PropertyItemObjectResponse["type"],
 >(
   page: PageObjectResponse | DatabaseObjectResponse,
   name: string,
   type: T,
-): Extract<DatabasePropertyConfigResponse, { type: T }> | undefined {
+): Extract<PropertyItemObjectResponse, { type: T }> | undefined {
   const property =
-    (page as unknown as PageObjectResponse).properties[name] ?? undefined;
+    (page.properties[name] as PropertyItemObjectResponse | undefined) ??
+    undefined;
 
   if (property?.type === type) {
-    return property as unknown as Extract<
-      DatabasePropertyConfigResponse,
-      { type: T }
-    >;
+    return property as Extract<PropertyItemObjectResponse, { type: T }>;
   }
   return undefined;
 }

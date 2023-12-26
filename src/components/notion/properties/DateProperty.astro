@@ -17,7 +17,7 @@ const start = property.date?.start ? new Date(property.date?.start) : undefined;
     start?.toLocaleString("en-NZ", {
       timeZone: "Pacific/Auckland",
       year: "numeric",
-      month: "short",
+      month: "long",
       day: "numeric",
     })
   }

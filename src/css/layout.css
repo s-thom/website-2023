@@ -50,8 +50,8 @@
     grid-column: var(--area-small-bleed);
   }
 
-  ul,
-  ol {
+  ul:not([class]),
+  ol:not([class]) {
     padding-inline-start: 1em;
   }
 

@@ -15,15 +15,31 @@ export interface Props {
   page: DatabaseObjectResponse | PageObjectResponse;
   meta: PageMetaType;
   breadcrumbs?: LinkInfo[];
+  showCoverSource?: boolean;
+  showReadingTime?: boolean;
+  showPublishEditDates?: boolean;
 }
 
-const { page, meta, breadcrumbs } = Astro.props;
+const {
+  page,
+  meta,
+  breadcrumbs,
+  showCoverSource,
+  showReadingTime,
+  showPublishEditDates,
+} = Astro.props;
 ---
 
 <PageWithHeaderLayout meta={meta} breadcrumbs={breadcrumbs}>
   <SkipLinks links={[{ name: "Content", url: "#content" }]} slot="skip-links" />
 
-  <NotionPageHeader page={page} slot="page-header" />
+  <NotionPageHeader
+    page={page}
+    slot="page-header"
+    showCoverSource={showCoverSource}
+    showReadingTime={showReadingTime}
+    showPublishEditDates={showPublishEditDates}
+  />
   <NotionBackdrop page={page} shade slot="page-backdrop" />
 
   <DevOnly>

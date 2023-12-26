@@ -25,12 +25,13 @@ const pages = await getFilteredBlogItems({
     { name: "Home", url: "/" },
     { name: "Blog", url: "/blog" },
   ]}
+  showCoverSource
 >
   <ul class="page-list small-bleed">
     {
       pages.map((childPage) => (
         <li>
-          <BlogListPageItem page={childPage} />
+          <BlogListPageItem page={childPage} showTitle showIcon showTags />
         </li>
       ))
     }
