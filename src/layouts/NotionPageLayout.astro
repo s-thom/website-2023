@@ -10,6 +10,9 @@ import SkipLinks from "../components/SkipLinks.astro";
 import NotionPageHeader from "../components/notion/NotionPageHeader.astro";
 import NotionBackdrop from "../components/notion/common/NotionBackdrop.astro";
 import PageWithHeaderLayout from "./PageWithHeaderLayout.astro";
+import { getPagePropertyByName } from "../lib/notion/util";
+import { PageViewUnlock } from "../components/react/StickerBook/unlocks/PageViewUnlock.tsx";
+import type { StickerTypes } from "../components/react/StickerBook/types";
 
 export interface Props {
   page: DatabaseObjectResponse | PageObjectResponse;
@@ -28,9 +31,24 @@ const {
   showReadingTime,
   showPublishEditDates,
 } = Astro.props;
+
+const giveStickersProperty = getPagePropertyByName(
+  page,
+  "Page View Stickers",
+  "select",
+);
+const specialSticker = giveStickersProperty
+  ? (giveStickersProperty.select?.name as StickerTypes | "none" | undefined)
+  : "none";
+const shouldGiveStickers = specialSticker !== "none";
 ---
 
-<PageWithHeaderLayout id={page.id} meta={meta} breadcrumbs={breadcrumbs}>
+<PageWithHeaderLayout
+  id={page.id}
+  meta={meta}
+  breadcrumbs={breadcrumbs}
+  allowPageViewStickerUnlocks={shouldGiveStickers}
+>
   <SkipLinks links={[{ name: "Content", url: "#content" }]} slot="skip-links" />
 
   <NotionPageHeader
@@ -50,6 +68,17 @@ const {
   </article>
 
   <slot name="page-footer" />
+
+  {
+    shouldGiveStickers && (
+      <PageViewUnlock
+        pageId={page.id}
+        specialSticker={specialSticker}
+        client:idle
+        client:only="react"
+      />
+    )
+  }
 </PageWithHeaderLayout>
 
 <style></style>

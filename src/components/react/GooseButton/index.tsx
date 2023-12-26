@@ -1,5 +1,6 @@
 import { useCallback, useRef } from "react";
 import { delay } from "../../../util";
+import { AddStickerEvent } from "../StickerBook/types";
 import styles from "./Goose.module.css";
 
 const TOOLTIP_TIMEOUT = 3000;
@@ -68,7 +69,9 @@ export function GooseButton({ children }: React.PropsWithChildren) {
 
     parent.appendChild(child);
 
-    const event = new CustomEvent("addsticker", { detail: { type: "goose" } });
+    const event = new AddStickerEvent("addsticker", {
+      detail: { type: "goose" },
+    });
     window.dispatchEvent(event);
 
     await delay(TOOLTIP_TIMEOUT);

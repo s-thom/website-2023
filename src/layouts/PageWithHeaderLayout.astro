@@ -7,15 +7,15 @@ import PageLayout from "./PageLayout.astro";
 
 export interface Props {
   id: string;
-  enableExperiments?: boolean;
+  allowPageViewStickerUnlocks?: boolean;
   meta: PageMetaType;
   breadcrumbs?: LinkInfo[];
 }
 
-const { id, enableExperiments = true, meta, breadcrumbs } = Astro.props;
+const { id, meta, breadcrumbs } = Astro.props;
 ---
 
-<PageLayout id={id} enableExperiments={enableExperiments} meta={meta}>
+<PageLayout id={id} meta={meta}>
   <slot name="head" slot="head" />
   <slot name="skip-links" slot="skip-links" />
 

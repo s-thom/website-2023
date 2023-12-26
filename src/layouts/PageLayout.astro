@@ -1,16 +1,15 @@
 ---
 import PageMeta, { type PageMetaType } from "../components/PageMeta.astro";
-import { StickerBook } from "../components/react/StickerBook/index.tsx";
+import { StickerDragZones } from "../components/react/StickerBook/components/StickerDragZones/index.tsx";
 import "../css/index.css";
 import MinimalLayout from "./MinimalLayout.astro";
 
 export interface Props {
   id: string;
-  enableExperiments: boolean;
   meta: PageMetaType;
 }
 
-const { id, enableExperiments, meta } = Astro.props;
+const { id, meta } = Astro.props;
 ---
 
 <MinimalLayout>
@@ -29,11 +28,5 @@ const { id, enableExperiments, meta } = Astro.props;
 
   <slot name="site-footer" />
 
-  {
-    enableExperiments && (
-      <>
-        <StickerBook pageId={id} client:idle client:only="react" />
-      </>
-    )
-  }
+  <StickerDragZones pageId={id} client:idle client:only="react" />
 </MinimalLayout>

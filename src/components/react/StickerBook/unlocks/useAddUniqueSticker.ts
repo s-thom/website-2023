@@ -1,12 +1,17 @@
 import { useMemo, useState } from "react";
 import { useStore } from "../../store";
-import type { StickerTypes } from "../types";
+import { type StickerTypes } from "../types";
+import { addSticker as sendAddStickerEvent } from "./util";
 
 export interface UseAddUniqueStickerOptions {
-  type: StickerTypes;
+  type: StickerTypes | "none";
+  pageId?: string;
 }
 
-export function useAddUniqueSticker({ type }: UseAddUniqueStickerOptions) {
+export function useAddUniqueSticker({
+  pageId,
+  type,
+}: UseAddUniqueStickerOptions) {
   const stickers = useStore((store) => store.stickers);
   const isUnlocked = useMemo(
     () => !!stickers.find((sticker) => sticker.type === type),
@@ -15,10 +20,11 @@ export function useAddUniqueSticker({ type }: UseAddUniqueStickerOptions) {
   const [isRecentlyUnlocked, setIsRecentlyUnlocked] = useState(false);
 
   function addSticker() {
-    const event = new CustomEvent("addsticker", {
-      detail: { type },
-    });
-    window.dispatchEvent(event);
+    if (type === "none") {
+      return;
+    }
+
+    sendAddStickerEvent(type, pageId);
     setIsRecentlyUnlocked(true);
   }
 

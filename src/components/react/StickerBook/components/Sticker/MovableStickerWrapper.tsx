@@ -1,7 +1,6 @@
 import { useDraggable } from "@dnd-kit/core";
 import clsx from "clsx";
 import type { StickerInfo } from "../../types";
-import bookStyles from "../StickerBook.module.css";
 import styles from "./MovableStickerWrapper.module.css";
 import { Sticker } from "./Sticker.tsx";
 
@@ -34,7 +33,7 @@ export function MovableStickerWrapper({
       <Sticker
         className={clsx(
           styles.stickerMovable,
-          isDragging && bookStyles.stickerDrag,
+          isDragging && styles.stickerDrag,
         )}
         type={sticker.type}
       />

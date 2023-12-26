@@ -17,8 +17,3 @@
 .stickerCanActivate {
   cursor: pointer;
 }
-
-.stickerDrag {
-  opacity: 0.5;
-  cursor: move;
-}

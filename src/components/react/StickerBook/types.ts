@@ -29,7 +29,9 @@ export type StickerTypes =
 export interface StickerInfo {
   id: string;
   type: StickerTypes;
-  pageId: string | undefined;
+  unlockTime: number;
+  unlockPageId: string | undefined;
+  zone: string | undefined;
   coordinates: {
     x: number;
     y: number;
@@ -37,13 +39,8 @@ export interface StickerInfo {
 }
 
 export interface AddStickerEventData {
-  id?: string;
   type: StickerTypes;
   pageId?: string;
-  coordinates?: {
-    x: number;
-    y: number;
-  };
 }
 
-export type AddStickerEvent = CustomEvent<AddStickerEventData>;
+export const AddStickerEvent = CustomEvent<AddStickerEventData>;

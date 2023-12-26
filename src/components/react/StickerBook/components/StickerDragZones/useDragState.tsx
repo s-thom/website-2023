@@ -14,10 +14,10 @@ export function useDragState(pageId: string) {
   const draggingSticker =
     dragId !== undefined && stickers.find((sticker) => sticker.id === dragId);
   const panelStickers = stickers.filter(
-    (sticker) => sticker.pageId === undefined,
+    (sticker) => sticker.zone === undefined,
   );
   const currentPageStickers = stickers.filter(
-    (sticker) => sticker.pageId === pageId,
+    (sticker) => sticker.zone === pageId,
   );
 
   const handleDragStart = useCallback((event: DragEndEvent) => {

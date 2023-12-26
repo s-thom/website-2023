@@ -35,7 +35,7 @@ export function placeOnPage(
     return;
   }
 
-  sticker.pageId = pageId;
+  sticker.zone = pageId;
   sticker.coordinates = position;
 }
 
@@ -45,6 +45,6 @@ export function removeFromPage(stickers: StickerInfo[], stickerId: string) {
     return;
   }
 
-  sticker.pageId = undefined;
+  sticker.zone = undefined;
   sticker.coordinates = { x: 0, y: 0 };
 }

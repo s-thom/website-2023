@@ -3,3 +3,11 @@ export function delay(ms: number) {
     setTimeout(() => res(), ms);
   });
 }
+
+export function arrayRandom<T>(arr: T[]): T {
+  if (arr.length === 0) {
+    throw new Error("Array must have items");
+  }
+
+  return arr[Math.floor(Math.random() * arr.length)];
+}
