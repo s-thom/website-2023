@@ -1,0 +1,19 @@
+.panelButton {
+  line-height: 1em;
+}
+
+.iconButton {
+  background-color: transparent;
+  color: var(--color-border);
+  transition: color var(--transition-duration) ease-in-out;
+  border: none;
+  justify-self: end;
+  grid-column: 2;
+  line-height: 1em;
+  padding: 0;
+  cursor: pointer;
+}
+
+.iconButton:hover {
+  color: var(--color-text);
+}

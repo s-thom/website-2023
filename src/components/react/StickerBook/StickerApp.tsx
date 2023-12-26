@@ -1,21 +1,53 @@
-import { StrictMode, Suspense, lazy } from "react";
-
-const StickerContainer = lazy(() =>
-  import("./StickerContainer.tsx").then((module) => ({
-    default: module.StickerContainer,
-  })),
-);
+import { DndContext, DragOverlay } from "@dnd-kit/core";
+import { useState } from "react";
+import styles from "./StickerBook.module.css";
+import { Sticker } from "./stickers/Sticker.tsx";
+import { useDragState } from "./useDragState.tsx";
+import { useStickerEventListeners } from "./useStickerEventListeners";
+import { PageZone } from "./zones/PageZone.tsx";
+import { PanelButton } from "./zones/PanelButton.tsx";
+import { StickerPanel } from "./zones/StickerPanel.tsx";
 
 export interface StickerAppProps {
-  id: string;
+  pageId: string;
 }
 
-export function StickerApp({ id }: StickerAppProps) {
+export function StickerApp({ pageId }: StickerAppProps) {
+  const {
+    draggingSticker,
+    currentPageStickers,
+    panelStickers,
+    handleDragStart,
+    handleDragEnd,
+    handleDragCancel,
+    accessibility,
+  } = useDragState(pageId);
+
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
+  useStickerEventListeners();
+
   return (
-    <StrictMode>
-      <Suspense>
-        <StickerContainer id={id} />
-      </Suspense>
-    </StrictMode>
+    <DndContext
+      onDragStart={handleDragStart}
+      onDragCancel={handleDragCancel}
+      onDragEnd={handleDragEnd}
+      accessibility={accessibility}
+    >
+      <PageZone stickers={currentPageStickers} />
+      {isPanelOpen ? (
+        <StickerPanel
+          stickers={panelStickers}
+          onCloseClick={() => setIsPanelOpen(false)}
+        />
+      ) : (
+        <PanelButton onClick={() => setIsPanelOpen(true)} />
+      )}
+
+      <DragOverlay>
+        {draggingSticker ? (
+          <Sticker sticker={draggingSticker} className={styles.stickerDrag} />
+        ) : null}
+      </DragOverlay>
+    </DndContext>
   );
 }

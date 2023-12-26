@@ -1,15 +1,16 @@
 ---
 import PageMeta, { type PageMetaType } from "../components/PageMeta.astro";
-import { StickerApp } from "../components/react/StickerBook";
+import { StickerBook } from "../components/react/StickerBook/index.tsx";
 import "../css/index.css";
 import MinimalLayout from "./MinimalLayout.astro";
 
 export interface Props {
+  id: string;
   enableExperiments: boolean;
   meta: PageMetaType;
 }
 
-const { enableExperiments, meta } = Astro.props;
+const { id, enableExperiments, meta } = Astro.props;
 ---
 
 <MinimalLayout>
@@ -31,7 +32,7 @@ const { enableExperiments, meta } = Astro.props;
   {
     enableExperiments && (
       <>
-        <StickerApp id="temp" client:idle client:only="react" />
+        <StickerBook pageId={id} client:idle client:only="react" />
       </>
     )
   }

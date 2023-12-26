@@ -30,7 +30,7 @@ const {
 } = Astro.props;
 ---
 
-<PageWithHeaderLayout meta={meta} breadcrumbs={breadcrumbs}>
+<PageWithHeaderLayout id={page.id} meta={meta} breadcrumbs={breadcrumbs}>
   <SkipLinks links={[{ name: "Content", url: "#content" }]} slot="skip-links" />
 
   <NotionPageHeader

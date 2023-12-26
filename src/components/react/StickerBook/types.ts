@@ -1,5 +1,6 @@
 interface BaseStickerData {
   name: string;
+  rarity: "common" | "unique";
 }
 
 export interface LottieStickerData extends BaseStickerData {
@@ -14,6 +15,7 @@ export type StickerTypes =
   | "clap"
   | "dragon"
   | "fire"
+  | "goose"
   | "light-bulb"
   | "lizard"
   | "party-popper"
@@ -31,3 +33,15 @@ export interface StickerInfo {
     y: number;
   };
 }
+
+export interface AddStickerEventData {
+  id?: string;
+  type: StickerTypes;
+  pageId?: string;
+  coordinates?: {
+    x: number;
+    y: number;
+  };
+}
+
+export type AddStickerEvent = CustomEvent<AddStickerEventData>;

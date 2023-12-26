@@ -1,4 +1,8 @@
-/* eslint-disable no-param-reassign */
+import {
+  addSticker,
+  placeOnPage,
+  removeFromPage,
+} from "../StickerBook/reducers";
 import type { StickerInfo } from "../StickerBook/types";
 import type { SimpleStateCreator } from "./types";
 
@@ -33,31 +37,14 @@ export const createStickersSlice: SimpleStateCreator<StickersSlice> = (
   stickers: [],
   animationFrequency: getInitialAnimationFrequency(),
   stickerPageData: {},
-  addSticker: (sticker) =>
-    set((state) => {
-      state.stickers.push(sticker);
-    }),
+  addSticker: (sticker) => set((state) => addSticker(state.stickers, sticker)),
   placeOnPage: (stickerId, pageId, position) =>
-    set((state) => {
-      const sticker = state.stickers.find((s) => s.id === stickerId);
-      if (!sticker) {
-        return;
-      }
-
-      sticker.pageId = pageId;
-      sticker.coordinates = position;
-    }),
+    set((state) => placeOnPage(state.stickers, stickerId, pageId, position)),
   removeFromPage: (stickerId) =>
-    set((state) => {
-      const sticker = state.stickers.find((s) => s.id === stickerId);
-      if (!sticker) {
-        return;
-      }
-      sticker.pageId = undefined;
-      sticker.coordinates = { x: 0, y: 0 };
-    }),
+    set((state) => removeFromPage(state.stickers, stickerId)),
   setAnimationFrequency: (freq) =>
     set((state) => {
+      // eslint-disable-next-line no-param-reassign
       state.animationFrequency = freq;
     }),
 });

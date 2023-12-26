@@ -68,6 +68,9 @@ export function GooseButton({ children }: React.PropsWithChildren) {
 
     parent.appendChild(child);
 
+    const event = new CustomEvent("addsticker", { detail: { type: "goose" } });
+    window.dispatchEvent(event);
+
     await delay(TOOLTIP_TIMEOUT);
     child.classList.add(styles["goose-heart-exit"]!);
 
