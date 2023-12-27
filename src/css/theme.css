@@ -9,6 +9,17 @@
     --color-primary: #1a8fe3;
     --color-background-header: #002355;
 
+    --color-sticker-common: oklch(85% 0 0);
+    --color-sticker-common-background: oklch(92% 0 0);
+    --color-sticker-uncommon: oklch(60% 0.15 153);
+    --color-sticker-uncommon-background: oklch(92% 0.03 153);
+    --color-sticker-rare: oklch(63.68% 0.175 250);
+    --color-sticker-rare-background: oklch(92% 0.03 250);
+    --color-sticker-legendary: oklch(60% 0.25 340);
+    --color-sticker-legendary-background: oklch(92% 0.03 340);
+    --color-sticker-unique: oklch(85% 0.175 99);
+    --color-sticker-unique-background: oklch(92% 0.03 99);
+
     --border-radius: 4px;
 
     --transition-duration: 100ms;

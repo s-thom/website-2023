@@ -1,6 +1,8 @@
 interface BaseStickerData {
   name: string;
-  rarity: "common" | "unique";
+  description?: string;
+  unlockedBy?: string;
+  rarity: "common" | "uncommon" | "rare" | "legendary" | "unique";
 }
 
 export interface LottieStickerData extends BaseStickerData {

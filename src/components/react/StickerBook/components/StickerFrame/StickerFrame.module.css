@@ -1,0 +1,116 @@
+.frame {
+  --sticker-color-primary: var(--color-sticker-common);
+  --sticker-color-background: var(--color-sticker-common-background);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing);
+  border: 3px solid var(--sticker-color-primary);
+  border-radius: 9px;
+  background-color: var(--sticker-color-background);
+  overflow: hidden;
+}
+
+.frame-uncommon {
+  --sticker-color-primary: var(--color-sticker-uncommon);
+  --sticker-color-background: var(--color-sticker-uncommon-background);
+}
+
+.frame-rare {
+  --sticker-color-primary: var(--color-sticker-rare);
+  --sticker-color-background: var(--color-sticker-rare-background);
+}
+
+.frame-legendary {
+  --sticker-color-primary: var(--color-sticker-legendary);
+  --sticker-color-background: var(--color-sticker-legendary-background);
+}
+
+.frame-unique {
+  --sticker-color-primary: var(--color-sticker-unique);
+  --sticker-color-background: var(--color-sticker-unique-background);
+}
+
+.frame-legendary,
+.frame-unique {
+  &::before {
+    content: " ";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(
+      70deg,
+      transparent 2.5%,
+      #ffffff88 2.5%,
+      #ffffff88 4.5%,
+      transparent 4.5%,
+      transparent 10.5%,
+      #ffffff88 10.6%,
+      #ffffff88 12.4%,
+      transparent 12.5%,
+      transparent 14.5%,
+      #ffffff88 14.6%,
+      #ffffff88 19.4%,
+      transparent 19.5%,
+      transparent 24.5%,
+      #ffffff88 24.6%,
+      #ffffff88 28.4%,
+      transparent 28.5%,
+      transparent 35.5%,
+      #ffffff88 35.6%,
+      #ffffff88 37.4%,
+      transparent 37.5%,
+      transparent 40.5%,
+      #ffffff88 40.6%,
+      #ffffff88 42.4%,
+      transparent 42.5%
+    );
+    background-size: 400% auto;
+    background-position: right center;
+    transition: background-position 600ms ease-out;
+  }
+
+  &:hover::before {
+    background-position: left center;
+  }
+}
+
+.rarity {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: var(--size-step-min1);
+  background-color: var(--sticker-color-primary);
+  color: var(--color-text-header);
+  padding-left: 3px;
+  padding-right: 0.5em;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 0.5em) 100%, 0 100%);
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-block-start: var(--flow-space, 1em);
+}
+
+.name {
+  font-family: var(--font-family-heading);
+  font-size: var(--size-step-point5);
+}
+
+.unlockedBy,
+.description {
+  font-size: var(--size-step-min1);
+  font-style: italic;
+}
+
+.unlockedByText {
+  font-style: normal;
+}

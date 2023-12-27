@@ -11,14 +11,23 @@
   height: 100%;
 }
 
-.claimed {
-  filter: grayscale();
-  opacity: 0.5;
+.button {
+  border: none;
+  padding: 0;
+  background-color: transparent;
+  transition:
+    transform var(--transition-duration) ease-in-out,
+    filter var(--transition-duration) ease-in-out,
+    opacity var(--transition-duration) ease-in-out;
+  filter: grayscale(0);
+  opacity: 1;
+
+  &:not(.claimed):hover {
+    transform: scale(1.02);
+  }
 }
 
-.button {
-  background-color: transparent;
-  border: 1.5px solid var(--color-border);
-  border-radius: var(--border-radius);
-  padding: var(--spacing-half);
+.claimed {
+  filter: grayscale(1);
+  opacity: 0.5;
 }
