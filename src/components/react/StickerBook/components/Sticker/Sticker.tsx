@@ -7,16 +7,17 @@ import styles from "./Sticker.module.css";
 
 export interface StickerProps {
   type: StickerTypes;
+  animated?: boolean;
   className?: string;
 }
 
-export function Sticker({ type, className }: StickerProps) {
+export function Sticker({ type, animated, className }: StickerProps) {
   let child: ReactNode = null;
 
   const data = STICKER_TYPE_MAP[type];
   switch (data.type) {
     case "lottie":
-      child = <LottieSticker data={data} />;
+      child = <LottieSticker data={data} animated={animated} />;
       break;
     default:
       return null;

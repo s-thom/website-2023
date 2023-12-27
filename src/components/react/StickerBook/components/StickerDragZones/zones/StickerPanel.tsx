@@ -89,7 +89,7 @@ export function StickerPanel({ stickers, onCloseClick }: StickerPanelProps) {
       <div className={styles.list}>
         {stickersByType.map((stickerGroup) => (
           <div className={styles.stickerWrapper} key={stickerGroup[0].id}>
-            <MovableStickerWrapper sticker={stickerGroup[0]} />
+            <MovableStickerWrapper sticker={stickerGroup[0]} animated />
             {stickerGroup.length > 1 && (
               <span className={styles.count}>{stickerGroup.length}</span>
             )}

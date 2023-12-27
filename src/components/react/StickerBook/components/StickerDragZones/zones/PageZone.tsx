@@ -19,6 +19,7 @@ export function PageZone({ stickers }: PageZoneProps) {
             key={sticker.id}
             sticker={sticker}
             className={styles.pageStickerWrapper}
+            animated
           />
         ))}
       </div>

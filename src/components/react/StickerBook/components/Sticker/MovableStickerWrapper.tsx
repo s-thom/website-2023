@@ -6,11 +6,13 @@ import { Sticker } from "./Sticker.tsx";
 
 export interface MovableStickerWrapperProps {
   sticker: StickerInfo;
+  animated?: boolean;
   className?: string;
 }
 
 export function MovableStickerWrapper({
   sticker,
+  animated,
   className,
 }: MovableStickerWrapperProps) {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
@@ -36,6 +38,7 @@ export function MovableStickerWrapper({
           isDragging && styles.stickerDrag,
         )}
         type={sticker.type}
+        animated={animated}
       />
     </button>
   );

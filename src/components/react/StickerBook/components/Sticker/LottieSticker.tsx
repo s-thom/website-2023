@@ -1,4 +1,5 @@
 import lottie, { type AnimationItem } from "lottie-web";
+import { MoreHorizontalIcon } from "lucide-react";
 import {
   useCallback,
   useEffect,
@@ -28,9 +29,10 @@ async function getLottieData(url: string) {
 
 export interface LottieStickerProps {
   data: LottieStickerData;
+  animated?: boolean;
 }
 
-export function LottieSticker({ data }: LottieStickerProps) {
+export function LottieSticker({ data, animated }: LottieStickerProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [animation, setAnimation] = useState<AnimationItem>();
   const [isHovering, setIsHovering] = useState<boolean>(false);
@@ -38,10 +40,10 @@ export function LottieSticker({ data }: LottieStickerProps) {
   const animationFrequency = useStore((state) => state.animationFrequency);
 
   const play = useCallback(() => {
-    if (animation) {
+    if (animated && animation) {
       animation.play();
     }
-  }, [animation]);
+  }, [animated, animation]);
 
   const stop = useCallback(() => {
     if (animation) {
@@ -82,7 +84,7 @@ export function LottieSticker({ data }: LottieStickerProps) {
       }
 
       anim = lottie.loadAnimation({
-        container: ref.current,
+        container: ref.current!,
         animationData,
         loop: true,
         autoplay: false,
@@ -106,6 +108,10 @@ export function LottieSticker({ data }: LottieStickerProps) {
     if (!animation) {
       return;
     }
+    if (!animated) {
+      stop();
+      return;
+    }
     if (animationFrequency === "never") {
       stop();
       return;
@@ -126,6 +132,7 @@ export function LottieSticker({ data }: LottieStickerProps) {
 
     // TODO: Add a "sometimes" which plays randomly
   }, [
+    animated,
     animation,
     animationFrequency,
     data.initialFrame,
@@ -134,5 +141,22 @@ export function LottieSticker({ data }: LottieStickerProps) {
     stop,
   ]);
 
-  return <div ref={ref} onPointerOver={onHover} onPointerLeave={onUnhover} />;
+  return (
+    <div
+      className={styles.lottieSticker}
+      ref={ref}
+      onPointerOver={onHover}
+      onPointerLeave={onUnhover}
+    >
+      {!animation && (
+        <div className={styles.fallback}>
+          <MoreHorizontalIcon
+            className={styles.fallbackDots}
+            width={48}
+            height={48}
+          />
+        </div>
+      )}
+    </div>
+  );
 }
