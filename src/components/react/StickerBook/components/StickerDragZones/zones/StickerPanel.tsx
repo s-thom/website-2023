@@ -79,7 +79,7 @@ export function StickerPanel({ stickers, onCloseClick }: StickerPanelProps) {
         </button>
       </div>
       <p className={styles.whatLine}>
-        <a className={styles.what} href="/website/sticker-book">
+        <a className={styles.what} href="/sticker-book">
           <InfoIcon className={styles.infoIcon}>
             <title>Info</title>
           </InfoIcon>

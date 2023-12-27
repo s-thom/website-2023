@@ -9,6 +9,7 @@ export interface StickerFrameProps extends React.PropsWithChildren {
   showName?: boolean;
   showDescription?: boolean;
   showUnlockedBy?: boolean;
+  className?: string;
 }
 
 export function StickerFrame({
@@ -17,6 +18,7 @@ export function StickerFrame({
   showName,
   showDescription,
   showUnlockedBy,
+  className,
   children,
 }: StickerFrameProps) {
   const data = STICKER_TYPE_MAP[type];
@@ -24,7 +26,9 @@ export function StickerFrame({
   const hasInfo = showName || showDescription || showUnlockedBy;
 
   return (
-    <div className={clsx(styles.frame, styles[`frame-${data.rarity}`])}>
+    <div
+      className={clsx(className, styles.frame, styles[`frame-${data.rarity}`])}
+    >
       {showRarityLabel && <span className={styles.rarity}>{data.rarity}</span>}
       {children}
       {hasInfo && (

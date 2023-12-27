@@ -10,5 +10,5 @@ const { block } = Astro.props;
 ---
 
 <DevOnly>
-  block {block.id} has type {block.type}
+  <div data-block={block.id}>block {block.id} has type {block.type}</div>
 </DevOnly>
