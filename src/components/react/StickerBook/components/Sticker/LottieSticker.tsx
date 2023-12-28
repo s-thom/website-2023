@@ -8,7 +8,8 @@ import {
   type PointerEvent,
 } from "react";
 import { useStore } from "../../../store";
-import type { LottieStickerData } from "../../types";
+import { STICKER_TYPE_MAP } from "../../data";
+import type { StickerTypes } from "../../types";
 import styles from "./LottieSticker.module.css";
 
 async function requestLottieFile(url: string) {
@@ -19,20 +20,24 @@ async function requestLottieFile(url: string) {
 
 const LOTTIE_PROMISE_CACHE: { [key: string]: any } = {};
 
-async function getLottieData(url: string) {
-  if (!LOTTIE_PROMISE_CACHE[url]) {
-    LOTTIE_PROMISE_CACHE[url] = requestLottieFile(url);
+export async function getLottieData(type: StickerTypes) {
+  const data = STICKER_TYPE_MAP[type];
+
+  if (!LOTTIE_PROMISE_CACHE[type]) {
+    LOTTIE_PROMISE_CACHE[type] = requestLottieFile(data.url);
   }
 
-  return LOTTIE_PROMISE_CACHE[url]!;
+  return LOTTIE_PROMISE_CACHE[type]!;
 }
 
 export interface LottieStickerProps {
-  data: LottieStickerData;
+  type: StickerTypes;
   animated?: boolean;
 }
 
-export function LottieSticker({ data, animated }: LottieStickerProps) {
+export function LottieSticker({ type, animated }: LottieStickerProps) {
+  const data = STICKER_TYPE_MAP[type];
+
   const ref = useRef<HTMLDivElement>(null);
   const [animation, setAnimation] = useState<AnimationItem>();
   const [isHovering, setIsHovering] = useState<boolean>(false);
@@ -77,7 +82,7 @@ export function LottieSticker({ data, animated }: LottieStickerProps) {
         return;
       }
 
-      const animationData = await getLottieData(data.url);
+      const animationData = await getLottieData(type);
       // This is a guard against strict mode's double effect behaviour
       if (didCleanup) {
         return;
@@ -102,7 +107,7 @@ export function LottieSticker({ data, animated }: LottieStickerProps) {
         anim.destroy();
       }
     };
-  }, [data]);
+  }, [data, type]);
 
   useEffect(() => {
     if (!animation) {

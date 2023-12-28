@@ -2,6 +2,7 @@ import { useDroppable } from "@dnd-kit/core";
 import clsx from "clsx";
 import { SmilePlusIcon, Trash2Icon } from "lucide-react";
 import styles from "./PanelButton.module.css";
+import { PanelButtonPreview } from "./PanelButtonPreview.tsx";
 import zoneStyles from "./zones.module.css";
 
 export interface PanelButtonProps {
@@ -34,6 +35,7 @@ export function PanelButton({ onClick }: PanelButtonProps) {
           </SmilePlusIcon>
         )}
       </button>
+      <PanelButtonPreview />
     </div>
   );
 }

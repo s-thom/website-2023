@@ -9,6 +9,7 @@ export interface StickerFrameProps extends React.PropsWithChildren {
   showName?: boolean;
   showDescription?: boolean;
   showUnlockedBy?: boolean;
+  hideFrameOnCommon?: boolean;
   className?: string;
 }
 
@@ -18,6 +19,7 @@ export function StickerFrame({
   showName,
   showDescription,
   showUnlockedBy,
+  hideFrameOnCommon,
   className,
   children,
 }: StickerFrameProps) {
@@ -25,9 +27,15 @@ export function StickerFrame({
 
   const hasInfo = showName || showDescription || showUnlockedBy;
 
+  const shouldHaveBorder = hideFrameOnCommon ? data.rarity !== "common" : true;
+
   return (
     <div
-      className={clsx(className, styles.frame, styles[`frame-${data.rarity}`])}
+      className={clsx(
+        className,
+        styles.frame,
+        shouldHaveBorder && styles[`frame-${data.rarity}`],
+      )}
     >
       {showRarityLabel && <span className={styles.rarity}>{data.rarity}</span>}
       {children}

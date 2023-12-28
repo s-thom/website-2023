@@ -2,8 +2,18 @@ import clsx from "clsx";
 import { type ReactNode } from "react";
 import { STICKER_TYPE_MAP } from "../../data";
 import type { StickerTypes } from "../../types";
-import { LottieSticker } from "./LottieSticker.tsx";
+import { LottieSticker, getLottieData } from "./LottieSticker.tsx";
 import styles from "./Sticker.module.css";
+
+export function loadSticker(type: StickerTypes): Promise<void> {
+  const data = STICKER_TYPE_MAP[type];
+  switch (data.type) {
+    case "lottie":
+      return getLottieData(type);
+    default:
+      return Promise.reject(new Error(`Unknown type ${type}`));
+  }
+}
 
 export interface StickerProps {
   type: StickerTypes;
@@ -17,7 +27,7 @@ export function Sticker({ type, animated, className }: StickerProps) {
   const data = STICKER_TYPE_MAP[type];
   switch (data.type) {
     case "lottie":
-      child = <LottieSticker data={data} animated={animated} />;
+      child = <LottieSticker type={type} animated={animated} />;
       break;
     default:
       return null;

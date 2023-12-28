@@ -1,6 +1,6 @@
 .frame {
-  --sticker-color-primary: var(--color-sticker-common);
-  --sticker-color-background: var(--color-sticker-common-background);
+  --sticker-color-primary: transparent;
+  --sticker-color-background: transparent;
 
   position: relative;
   display: flex;
@@ -13,6 +13,11 @@
   border-radius: 9px;
   background-color: var(--sticker-color-background);
   overflow: hidden;
+}
+
+.frame-common {
+  --sticker-color-primary: var(--color-sticker-common);
+  --sticker-color-background: var(--color-sticker-common-background);
 }
 
 .frame-uncommon {
