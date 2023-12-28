@@ -1,8 +1,23 @@
+export type StickerRarity =
+  | "common"
+  | "uncommon"
+  | "rare"
+  | "legendary"
+  | "unique";
+
+export const RARITY_RANK: Record<StickerRarity, number> = {
+  common: 0,
+  uncommon: 1,
+  rare: 2,
+  legendary: 3,
+  unique: 4,
+};
+
 interface BaseStickerData {
   name: string;
   description?: string;
   unlockedBy?: string;
-  rarity: "common" | "uncommon" | "rare" | "legendary" | "unique";
+  rarity: StickerRarity;
 }
 
 export interface LottieStickerData extends BaseStickerData {
@@ -14,16 +29,19 @@ export interface LottieStickerData extends BaseStickerData {
 export type StickerData = LottieStickerData;
 
 export type StickerTypes =
+  | "camera-flash"
   | "chequered-flag"
   | "clap"
   | "dragon"
   | "fire"
+  | "fire-heart"
   | "glowing-star"
   | "goose"
   | "light-bulb"
   | "lizard"
   | "party-popper"
   | "rainbow"
+  | "rocket"
   | "smile"
   | "thumbs-up"
   | "turtle";

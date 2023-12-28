@@ -23,6 +23,10 @@ export interface StickersSlice {
 }
 
 function getInitialAnimationFrequency(): StickersSlice["animationFrequency"] {
+  if (!("window" in globalThis)) {
+    return "never";
+  }
+
   const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
   return mediaQuery.matches ? "never" : "hover";
 }

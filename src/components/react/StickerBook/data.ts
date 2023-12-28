@@ -1,11 +1,20 @@
-import type { StickerData, StickerTypes } from "./types";
+import type { StickerData, StickerRarity, StickerTypes } from "./types";
 
 export const STICKER_TYPE_MAP: Record<StickerTypes, StickerData> = {
+  "camera-flash": {
+    type: "lottie",
+    rarity: "unique",
+    name: "Camera Flash",
+    description: "Caught in 4k",
+    unlockedBy: "cheating it in yourself",
+    url: "/static/lottie/camera-flash.json",
+    initialFrame: 0,
+  },
   "chequered-flag": {
     type: "lottie",
     rarity: "unique",
     name: "Chequered Flag",
-    unlockedBy: "Reading the earliest blog post",
+    unlockedBy: "reading the earliest blog post",
     url: "/static/lottie/chequered-flag.json",
     initialFrame: 0,
   },
@@ -18,7 +27,7 @@ export const STICKER_TYPE_MAP: Record<StickerTypes, StickerData> = {
   },
   dragon: {
     type: "lottie",
-    rarity: "common",
+    rarity: "uncommon",
     name: "Dragon",
     url: "/static/lottie/dragon.json",
     initialFrame: 60,
@@ -30,11 +39,19 @@ export const STICKER_TYPE_MAP: Record<StickerTypes, StickerData> = {
     url: "/static/lottie/fire.json",
     initialFrame: 0,
   },
+  "fire-heart": {
+    type: "lottie",
+    rarity: "unique",
+    name: "Fire Heart",
+    unlockedBy: "reaching the end of the Sticker book page",
+    url: "/static/lottie/fire-heart.json",
+    initialFrame: 0,
+  },
   "glowing-star": {
     type: "lottie",
     rarity: "unique",
     name: "Glowing Star",
-    unlockedBy: "Reading the latest blog post",
+    unlockedBy: "reading the latest blog post",
     url: "/static/lottie/glowing-star.json",
     initialFrame: 50,
   },
@@ -42,7 +59,8 @@ export const STICKER_TYPE_MAP: Record<StickerTypes, StickerData> = {
     type: "lottie",
     rarity: "unique",
     name: "Goose",
-    unlockedBy: "Clicking the goose",
+    description: "It's a lovely morning on the internet...",
+    unlockedBy: "clicking the goose",
     url: "/static/lottie/goose.json",
     initialFrame: 0,
   },
@@ -55,7 +73,7 @@ export const STICKER_TYPE_MAP: Record<StickerTypes, StickerData> = {
   },
   lizard: {
     type: "lottie",
-    rarity: "common",
+    rarity: "uncommon",
     name: "Lizard",
     url: "/static/lottie/lizard.json",
     initialFrame: 0,
@@ -69,10 +87,17 @@ export const STICKER_TYPE_MAP: Record<StickerTypes, StickerData> = {
   },
   rainbow: {
     type: "lottie",
-    rarity: "common",
+    rarity: "legendary",
     name: "Rainbow",
     url: "/static/lottie/rainbow.json",
     initialFrame: 50,
+  },
+  rocket: {
+    type: "lottie",
+    rarity: "rare",
+    name: "Rocket",
+    url: "/static/lottie/rocket.json",
+    initialFrame: 0,
   },
   smile: {
     type: "lottie",
@@ -90,9 +115,20 @@ export const STICKER_TYPE_MAP: Record<StickerTypes, StickerData> = {
   },
   turtle: {
     type: "lottie",
-    rarity: "common",
+    rarity: "uncommon",
     name: "Turtle",
     url: "/static/lottie/turtle.json",
     initialFrame: 0,
   },
 };
+
+export const STICKER_TYPES_BY_RARITY: Record<StickerRarity, StickerTypes[]> = {
+  common: [],
+  uncommon: [],
+  rare: [],
+  legendary: [],
+  unique: [],
+};
+Object.entries(STICKER_TYPE_MAP).forEach(([key, value]) => {
+  STICKER_TYPES_BY_RARITY[value.rarity].push(key as StickerTypes);
+});

@@ -1,5 +1,6 @@
 import { DndContext, DragOverlay } from "@dnd-kit/core";
 import { useState } from "react";
+import { useStore } from "../../../store";
 import movableStickerStyles from "../Sticker/MovableStickerWrapper.module.css";
 import { Sticker } from "../Sticker/Sticker.tsx";
 import "./StickerApp.module.css";
@@ -14,6 +15,8 @@ export interface StickerAppProps {
 }
 
 export function StickerApp({ pageId }: StickerAppProps) {
+  const isStickersEnabled = useStore((store) => store.enabled.stickers);
+
   const {
     draggingSticker,
     currentPageStickers,
@@ -26,6 +29,10 @@ export function StickerApp({ pageId }: StickerAppProps) {
 
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   useStickerEventListeners();
+
+  if (!isStickersEnabled) {
+    return null;
+  }
 
   return (
     <DndContext

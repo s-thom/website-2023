@@ -1,4 +1,5 @@
 import type { PRNG } from "seedrandom";
+import { range } from "../../../util";
 import type { Point2 } from "./types";
 
 function getDisplacement(random: PRNG, maxDisplacement: number) {
@@ -151,16 +152,14 @@ function AnimatedWavePath({
   animation,
   maskId,
 }: AnimatedWavePathProps) {
-  const keyframes = [...Array(animation.numKeyframes)].map(() =>
+  const keyframes = range(animation.numKeyframes).map(() =>
     createPathData(random, width, height, numDisplacements),
   );
   // For smooth looping, add the first keyframe to the end.
   // Note that from this point, the `numKeyframes` variable is technically one less than the number of actual keyframes.
   keyframes.push(keyframes[0]);
 
-  const splineConfig = [...Array(animation.numKeyframes)].map(
-    () => "0.5 0 0.5 1",
-  );
+  const splineConfig = range(animation.numKeyframes).map(() => "0.5 0 0.5 1");
   const times = keyframes.map((_, index) =>
     index !== animation.numKeyframes ? index * (1 / animation.numKeyframes) : 1,
   );
@@ -216,7 +215,7 @@ export function WaveMask({
   animation,
   maskId,
 }: WaveMaskProps) {
-  const paths = [...Array(pathCount)].map((_, index) => (
+  const paths = range(pathCount).map((_, index) => (
     <AnimatedWavePath
       key={index}
       random={random}

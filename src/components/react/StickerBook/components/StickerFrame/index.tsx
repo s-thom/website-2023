@@ -32,7 +32,7 @@ export function StickerFrame({
       {showRarityLabel && <span className={styles.rarity}>{data.rarity}</span>}
       {children}
       {hasInfo && (
-        <div className={styles.info}>
+        <div className={clsx(styles.info, "flow")}>
           {showName && <span className={styles.name}>{data.name}</span>}
           {showDescription && data.description && (
             <span className={styles.description}>{data.description}</span>

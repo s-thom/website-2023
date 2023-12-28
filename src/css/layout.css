@@ -61,7 +61,8 @@
     border-inline-start: 0.3em solid;
   }
 
-  .flow > * + * {
+  .flow > * + *,
+  .flow > * + astro-island > * {
     margin-block-start: var(--flow-space, 1em);
   }
 

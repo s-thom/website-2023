@@ -1,0 +1,10 @@
+.noscript {
+  color: var(--color-text-secondary);
+  font-style: italic;
+  font-size: var(--size-step-min1);
+}
+
+.button {
+  display: block;
+  margin: 0 auto;
+}

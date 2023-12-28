@@ -1,0 +1,47 @@
+---
+import { StickerFrame } from "../../../react/StickerBook/components/StickerFrame/index.tsx";
+---
+
+<div class="grid">
+  <StickerFrame type="thumbs-up" showRarityLabel>
+    <div class="description">Found by reading pages on this site.</div>
+  </StickerFrame>
+  <StickerFrame type="turtle" showRarityLabel>
+    <div class="description">
+      Also found by reading pages on this site, but you won't get as many.
+    </div>
+  </StickerFrame>
+  <StickerFrame type="rocket" showRarityLabel>
+    <div class="description">
+      Given by certain pages. Usually the sticker will be related to the page.
+    </div>
+  </StickerFrame>
+  <StickerFrame type="rainbow" showRarityLabel>
+    <div class="description">
+      Unused at the moment, but I wanted to complete the set of colours.
+    </div>
+  </StickerFrame>
+  <StickerFrame type="goose" showRarityLabel>
+    <div class="description">
+      Given by doing certain actions on the site. Each will only be given once.
+    </div>
+  </StickerFrame>
+</div>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing);
+  }
+
+  @media (min-width: 500px) {
+    .grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .grid :global(.description) {
+    min-height: var(--sticker-size);
+  }
+</style>

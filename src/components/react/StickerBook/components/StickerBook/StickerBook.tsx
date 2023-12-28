@@ -1,12 +1,13 @@
 import { useMemo } from "react";
 import { useStore } from "../../../store";
-import type { STICKER_TYPE_MAP } from "../../data";
-import type { StickerInfo } from "../../types";
+import { STICKER_TYPE_MAP } from "../../data";
+import { RARITY_RANK, type StickerInfo } from "../../types";
 import { Sticker } from "../Sticker/Sticker.tsx";
 import { StickerFrame } from "../StickerFrame/index.tsx";
 import styles from "./StickerBook.module.css";
 
 export function StickerBook() {
+  const isStickersEnabled = useStore((store) => store.enabled.stickers);
   const stickers = useStore((store) => store.stickers);
 
   const firstStickersOfType = useMemo(() => {
@@ -21,7 +22,17 @@ export function StickerBook() {
     });
 
     const firstsOfGroups = Array.from(map.entries())
-      .sort((a, z) => (a[0] < z[0] ? -1 : 1))
+      // Sort groups by rarity, then by name
+      .sort((a, z) => {
+        const rarityDifference =
+          RARITY_RANK[STICKER_TYPE_MAP[a[0]].rarity] -
+          RARITY_RANK[STICKER_TYPE_MAP[z[0]].rarity];
+        if (rarityDifference !== 0) {
+          return rarityDifference * -1;
+        }
+        // Compare name strings
+        return a[0] < z[0] ? -1 : 1;
+      })
       .map(([, group]) => {
         // Sort stickers by when they were unlocked, and return the first one
         group.sort((a, z) => a.unlockTime - z.unlockTime);
@@ -30,6 +41,10 @@ export function StickerBook() {
 
     return firstsOfGroups;
   }, [stickers]);
+
+  if (!isStickersEnabled) {
+    return null;
+  }
 
   return firstStickersOfType.length === 0 ? (
     <div className={styles.empty}>No stickers unlocked yet...</div>

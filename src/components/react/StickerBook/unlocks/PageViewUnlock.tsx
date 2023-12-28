@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { arrayRandom } from "../../../../util";
+import { arrayRandom, range } from "../../../../util";
 import { useStore } from "../../store";
 import type { StickerTypes } from "../types";
 import { addSticker } from "./util";
@@ -36,8 +36,8 @@ export function PageViewUnlock({ pageId }: PageViewUnlockProps) {
       // If there's not much to scroll, only give one sticker for the page
       const numStickersToGive =
         pageHeight > viewportHeight ? MAX_STICKER_UNLOCKS_ON_PAGE : 1;
-      const allThresholds = [...Array(numStickersToGive)].map(
-        (_, i) => (i + 1) / (numStickersToGive + 1),
+      const allThresholds = range(numStickersToGive).map(
+        (i) => (i + 1) / (numStickersToGive + 1),
       );
 
       // Remove a number of thresholds based on how many stickers have already been granted

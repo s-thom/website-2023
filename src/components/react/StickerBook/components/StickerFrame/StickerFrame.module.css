@@ -35,7 +35,6 @@
   --sticker-color-background: var(--color-sticker-unique-background);
 }
 
-.frame-legendary,
 .frame-unique {
   &::before {
     content: " ";
@@ -91,6 +90,12 @@
   padding-left: 3px;
   padding-right: 0.5em;
   clip-path: polygon(0 0, 100% 0, calc(100% - 0.5em) 100%, 0 100%);
+  z-index: 2;
+  text-transform: capitalize;
+}
+
+.frame:has(.rarity) {
+  padding-top: calc(var(--spacing) + var(--size-step-min1));
 }
 
 .info {
