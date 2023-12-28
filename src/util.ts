@@ -26,3 +26,5 @@ export function arrayRandom<T>(arr: T[]): T {
 export function range(length: number): number[] {
   return [...Array(length)].map((_, i) => i);
 }
+
+export const isBrowser = "window" in globalThis;

@@ -1,3 +1,4 @@
+import { isBrowser } from "../../../util";
 import type { StickerInfo } from "../StickerBook/types";
 import { addSticker, placeOnPage, removeFromPage } from "./reducers/stickers";
 import type { SimpleStateCreator } from "./types";
@@ -23,7 +24,7 @@ export interface StickersSlice {
 }
 
 function getInitialAnimationFrequency(): StickersSlice["animationFrequency"] {
-  if (!("window" in globalThis)) {
+  if (!isBrowser) {
     return "never";
   }
 

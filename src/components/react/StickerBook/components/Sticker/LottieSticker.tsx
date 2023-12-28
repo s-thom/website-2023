@@ -1,16 +1,21 @@
+import clsx from "clsx";
 import lottie, { type AnimationItem } from "lottie-web";
 import { MoreHorizontalIcon } from "lucide-react";
 import {
   useCallback,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   type PointerEvent,
 } from "react";
+import { isBrowser } from "../../../../../util";
 import { useStore } from "../../../store";
 import { STICKER_TYPE_MAP } from "../../data";
 import type { StickerTypes } from "../../types";
 import styles from "./LottieSticker.module.css";
+
+const useIsomorphicLayoutEffect = isBrowser ? useLayoutEffect : useEffect;
 
 async function requestLottieFile(url: string) {
   const response = await fetch(url);
@@ -18,13 +23,21 @@ async function requestLottieFile(url: string) {
   return json;
 }
 
-const LOTTIE_PROMISE_CACHE: { [key: string]: any } = {};
+const LOTTIE_PROMISE_CACHE: { [key: string]: Promise<any> } = {};
+// For the most part you want to use the Promise cache but in special
+// circumstances it's nice to get the actual value, even if it's a bit
+// unsafe to do so. Hopefully the word "sneaky" in the name gives a
+// clue that this really shouldn't be used.
+const LOTTIE_SNEAKY_CACHE: { [key: string]: any } = {};
 
-export async function getLottieData(type: StickerTypes) {
+export function getLottieData(type: StickerTypes) {
   const data = STICKER_TYPE_MAP[type];
 
   if (!LOTTIE_PROMISE_CACHE[type]) {
-    LOTTIE_PROMISE_CACHE[type] = requestLottieFile(data.url);
+    LOTTIE_PROMISE_CACHE[type] = requestLottieFile(data.url).then((json) => {
+      LOTTIE_SNEAKY_CACHE[type] = json;
+      return json;
+    });
   }
 
   return LOTTIE_PROMISE_CACHE[type]!;
@@ -73,7 +86,7 @@ export function LottieSticker({ type, animated }: LottieStickerProps) {
     }
   }
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     let anim: AnimationItem | undefined;
     let didCleanup = false;
 
@@ -82,7 +95,8 @@ export function LottieSticker({ type, animated }: LottieStickerProps) {
         return;
       }
 
-      const animationData = await getLottieData(type);
+      const animationData =
+        LOTTIE_SNEAKY_CACHE[type] ?? (await getLottieData(type));
       // This is a guard against strict mode's double effect behaviour
       if (didCleanup) {
         return;
@@ -147,14 +161,15 @@ export function LottieSticker({ type, animated }: LottieStickerProps) {
   ]);
 
   return (
-    <div
-      className={styles.lottieSticker}
-      ref={ref}
-      onPointerOver={onHover}
-      onPointerLeave={onUnhover}
-    >
+    <>
+      <div
+        className={clsx(styles.lottieSticker, !animation && "fully-hidden")}
+        ref={ref}
+        onPointerOver={onHover}
+        onPointerLeave={onUnhover}
+      />
       {!animation && (
-        <div className={styles.fallback}>
+        <div className={clsx(styles.lottieSticker, styles.fallback)}>
           <MoreHorizontalIcon
             className={styles.fallbackDots}
             width={48}
@@ -162,6 +177,6 @@ export function LottieSticker({ type, animated }: LottieStickerProps) {
           />
         </div>
       )}
-    </div>
+    </>
   );
 }
