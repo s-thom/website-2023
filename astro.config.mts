@@ -12,4 +12,8 @@ export default defineConfig({
     react(),
     // sitemap(),
   ],
+  scopedStyleStrategy: "class",
+  build: {
+    assets: "static/build",
+  },
 });
