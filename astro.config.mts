@@ -4,9 +4,19 @@ import react from "@astrojs/react";
 import { defineConfig } from "astro/config";
 import sthomExternalImages from "./src/components/ExternalImage/integration";
 
+function getSiteUrl() {
+  if (process.env.CF_PAGES_URL) {
+    return process.env.CF_PAGES_URL;
+  }
+
+  return process.env.NODE_ENV === "production"
+    ? "https://sthom.kiwi"
+    : "http://localhost:4321";
+}
+
 // https://astro.build/config
 export default defineConfig({
-  site: import.meta.env.PROD ? "https://sthom.kiwi" : "http://localhost:4321",
+  site: getSiteUrl(),
   integrations: [
     sthomExternalImages(),
     react(),
