@@ -27,7 +27,18 @@ const items = (await queryDatabase(
 ---
 
 <div data-block={block.id} class="projects-collection">
-  {items.map((page) => <ProjectsItem page={page} overrides={overrides} />)}
+  {
+    items.map((page) => (
+      <ProjectsItem
+        page={page}
+        overrides={overrides}
+        showImage
+        showTitle
+        showGitHub
+        showChildren
+      />
+    ))
+  }
 </div>
 
 <style>

@@ -14,11 +14,16 @@ import RichText from "../../common/RichText.astro";
 
 export interface Props extends NotionOverrideableProps {
   page: DatabaseObjectResponse;
+  showImage?: boolean;
+  showTitle?: boolean;
+  showGitHub?: boolean;
+  showChildren?: boolean;
 }
 
-const { page, overrides } = Astro.props;
+const { page, overrides, showImage, showTitle, showGitHub, showChildren } =
+  Astro.props;
 
-const children = await getBlockChildren(page.id);
+const children = showChildren ? await getBlockChildren(page.id) : [];
 
 const titleComponents = getPageTitleComponents(page);
 
@@ -29,23 +34,29 @@ const githubFragment =
 ---
 
 <div data-block={page.id} class="projects-item">
-  <div>
-    <NotionBackdrop page={page} />
-  </div>
+  {
+    showImage && (
+      <div>
+        <NotionBackdrop page={page} />
+      </div>
+    )
+  }
   <div class="flow">
-    <h3>
-      {
-        url && url.url ? (
-          <a href={url.url} rel="external noreferrer">
-            <RichText components={titleComponents} />
-          </a>
-        ) : (
-          <RichText components={titleComponents} />
-        )
-      }
-    </h3>
     {
-      githubFragment !== undefined && (
+      showTitle && (
+        <h3>
+          {url && url.url ? (
+            <a href={url.url} rel="external noreferrer">
+              <RichText components={titleComponents} />
+            </a>
+          ) : (
+            <RichText components={titleComponents} />
+          )}
+        </h3>
+      )
+    }
+    {
+      showGitHub && githubFragment !== undefined && (
         <div>
           <a
             href={`https://github.com/${githubFragment}`}
@@ -59,7 +70,7 @@ const githubFragment =
       )
     }
     <div></div>
-    <NotionRenderer blocks={children} overrides={overrides} />
+    {showChildren && <NotionRenderer blocks={children} overrides={overrides} />}
   </div>
 </div>
 
