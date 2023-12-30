@@ -5,6 +5,9 @@ import { defineConfig } from "astro/config";
 import sthomExternalImages from "./src/components/ExternalImage/integration";
 
 function getSiteUrl() {
+  if (process.env.SITE_URL) {
+    return process.env.SITE_URL;
+  }
   if (process.env.CF_PAGES_URL) {
     return process.env.CF_PAGES_URL;
   }
