@@ -13,9 +13,10 @@ import "inter-ui/inter.css";
 export interface Props {
   id: string;
   meta: PageMetaType;
+  class?: string;
 }
 
-const { id, meta } = Astro.props;
+const { id, meta, class: className } = Astro.props;
 ---
 
 <MinimalLayout>
@@ -28,7 +29,7 @@ const { id, meta } = Astro.props;
 
   <slot name="site-header" />
 
-  <main>
+  <main class={className}>
     <slot />
   </main>
 

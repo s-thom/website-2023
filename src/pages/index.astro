@@ -25,11 +25,15 @@ const activeProjectItems = (await queryDatabase(
 const projectItemsToShow = activeProjectItems.slice(0, NUM_PROJECTS_TO_SHOW);
 ---
 
-<PageLayout id="home" meta={{ title: "Stuart Thomson", url: "/" }}>
-  <div>
+<PageLayout
+  id="home"
+  class="home flow"
+  meta={{ title: "Stuart Thomson", url: "/" }}
+>
+  <div class="header">
     <Image
       src={profile2023}
-      alt="Stuart Thomson smiling, with water and hills in the background"
+      alt="Stuart Thomson smiling, with water and hills in the background. He has brown/ginger hair, a ginger beard, black-rimmed glasses, and is wearing a blue and white striped shirt."
       class="profile-photo"
       densities={[1, 1.5, 2]}
       loading="eager"
@@ -37,12 +41,14 @@ const projectItemsToShow = activeProjectItems.slice(0, NUM_PROJECTS_TO_SHOW);
     <h1>Stuart Thomson</h1>
     <h2>Software Developer | Human Being</h2>
   </div>
-  <div>
+
+  <div class="links-list">
     <a href="/about">About me</a>
     <a href="/blog">Blog</a>
     <a href="/projects">Projects</a>
   </div>
-  <div>
+
+  <div class="links-list">
     <a
       href="https://github.com/s-thom"
       aria-label="GitHub"
@@ -68,13 +74,101 @@ const projectItemsToShow = activeProjectItems.slice(0, NUM_PROJECTS_TO_SHOW);
       <LinkedinIcon />
     </a>
   </div>
-  <div>
-    {
-      projectItemsToShow.map((item) => (
-        <ProjectsItem page={item} overrides={{}} showImage showTitle />
-      ))
-    }
-    <a href="/projects">See more...</a>
+
+  <div class="projects-area small-bleed flow">
+    <h3 class="projects-heading">Recent projects</h3>
+    <div class="projects-list">
+      {
+        projectItemsToShow.map((item) => (
+          <ProjectsItem
+            class="project-card"
+            page={item}
+            overrides={{}}
+            showImage
+            showTitle
+          />
+        ))
+      }
+      <a href="/projects" class="projects-see-more">See more...</a>
+    </div>
   </div>
+
   <SiteFooter slot="site-footer" />
 </PageLayout>
+
+<style>
+  h1,
+  h2,
+  h3 {
+    max-width: unset !important;
+  }
+
+  .home {
+    text-align: center;
+  }
+
+  .header {
+    margin-top: var(--spacing);
+
+    & > *:not(:first-child) {
+      margin-top: var(--spacing);
+    }
+  }
+
+  .profile-photo {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    margin: 0 auto;
+  }
+
+  @media (min-width: 600px) {
+    .profile-photo {
+      width: 8rem;
+      height: 8rem;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .profile-photo {
+      width: 10rem;
+      height: 10rem;
+    }
+  }
+
+  .links-list {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing);
+  }
+
+  .projects-area {
+    overflow-x: scroll;
+  }
+
+  .projects-list {
+    display: flex;
+    gap: var(--spacing);
+    overflow-x: auto;
+  }
+
+  @media (min-width: 1000px) {
+    .projects-list {
+      justify-content: center;
+    }
+  }
+
+  .project-card {
+    min-width: 15em;
+    max-width: 15em;
+
+    & :global(h3) {
+      font-size: var(--size-step-1) !important;
+    }
+  }
+
+  .projects-see-more {
+    white-space: nowrap;
+    align-self: center;
+  }
+</style>

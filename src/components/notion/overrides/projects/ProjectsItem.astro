@@ -14,14 +14,22 @@ import RichText from "../../common/RichText.astro";
 
 export interface Props extends NotionOverrideableProps {
   page: DatabaseObjectResponse;
+  class?: string;
   showImage?: boolean;
   showTitle?: boolean;
   showGitHub?: boolean;
   showChildren?: boolean;
 }
 
-const { page, overrides, showImage, showTitle, showGitHub, showChildren } =
-  Astro.props;
+const {
+  page,
+  overrides,
+  class: className,
+  showImage,
+  showTitle,
+  showGitHub,
+  showChildren,
+} = Astro.props;
 
 const children = showChildren ? await getBlockChildren(page.id) : [];
 
@@ -33,7 +41,7 @@ const githubFragment =
   github && (richTextToUnformattedString(github.rich_text) || undefined);
 ---
 
-<div data-block={page.id} class="projects-item">
+<div data-block={page.id} class:list={["projects-item", className]}>
   {
     showImage && (
       <div>
