@@ -1,13 +1,14 @@
 ---
 import PageMeta, { type PageMetaType } from "../components/PageMeta.astro";
 import { StickerDragZones } from "../components/react/StickerBook/components/StickerDragZones/index.tsx";
+import "../components/react/StickerBook/index.css";
 import "../css/index.css";
 import MinimalLayout from "./MinimalLayout.astro";
 
-import "@fontsource/jost/index.css";
 import "@fontsource-variable/jost/index.css";
-import "inter-ui/inter.css";
+import "@fontsource/jost/index.css";
 import "inter-ui/inter-variable.css";
+import "inter-ui/inter.css";
 
 export interface Props {
   id: string;

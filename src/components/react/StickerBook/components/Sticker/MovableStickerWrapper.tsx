@@ -2,7 +2,6 @@ import { useDraggable } from "@dnd-kit/core";
 import clsx from "clsx";
 import type { StickerInfo } from "../../types";
 import { Sticker } from "./Sticker.tsx";
-import "./index.css";
 
 export interface MovableStickerWrapperProps {
   sticker: StickerInfo;

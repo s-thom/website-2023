@@ -1,0 +1,469 @@
+.sticker {
+  position: relative;
+  width: var(--sticker-size);
+  height: var(--sticker-size);
+}
+
+.lottie-sticker {
+  width: 100%;
+  height: 100%;
+}
+
+.lottie-animation {
+  width: var(--sticker-size) !important;
+  height: var(--sticker-size) !important;
+}
+
+.lottie-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.lottie-fallback-dots {
+  color: var(--color-text);
+
+  circle {
+    animation: pulse 1s ease-in-out infinite alternate;
+
+    /* The icon has its dots in a weird order */
+    &:nth-child(2) {
+      animation-delay: 0.3s;
+    }
+    &:nth-child(1) {
+      animation-delay: 0.15s;
+    }
+    &:nth-child(3) {
+      animation-delay: 0s;
+    }
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+.movable-sticker {
+  cursor: grab;
+}
+
+.movable-sticker-wrapper {
+  position: relative;
+  background-color: transparent;
+  border: none;
+}
+
+.movable-sticker-drag {
+  opacity: 0.5;
+  cursor: move;
+}
+
+.stickers-toggle-noscript {
+  color: var(--color-text-secondary);
+  font-style: italic;
+  font-size: var(--size-step-min1);
+}
+
+.stickers-toggle-button {
+  display: block;
+  margin: 0 auto;
+}
+
+.sticker-book-empty {
+  color: var(--color-text-secondary);
+  font-style: italic;
+  text-align: center;
+}
+
+.sticker-book-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing);
+}
+
+@media (min-width: 500px) {
+  .sticker-book-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.sticker-drag-zone {
+  padding: var(--spacing-half);
+  background-color: var(--color-background);
+  transition: background-color var(--transition-duration) ease-in-out;
+  border: 1.5px solid var(--color-border);
+  box-shadow: 0px 2px 4px 3px rgba(0 0 0 / 0.1);
+  border-radius: var(--border-radius);
+}
+
+.sticker-drag-zone-floating {
+  position: fixed;
+  z-index: 999;
+  bottom: var(--spacing);
+  right: var(--spacing);
+  max-width: calc(100vw - 2rem);
+}
+
+.sticker-drag-zone-over {
+  background-color: color-mix(
+    in srgb,
+    var(--color-background) 95%,
+    rgb(255 0 0) 5%
+  );
+}
+
+.sticker-page-positioning {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.sticker-page-zone {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255 255 255 / 0);
+  pointer-events: none;
+  transition: background-color var(--transition-duration) linear;
+}
+
+.sticker-page-zone-over {
+  background-color: rgba(255 255 255 / 0.2);
+}
+
+.sticker-page-sticker {
+  position: absolute !important;
+}
+
+.sticker-panel-button {
+  line-height: 1em;
+}
+
+.sticker-panel-icon-button {
+  background-color: transparent;
+  color: var(--color-border);
+  transition: color var(--transition-duration) ease-in-out;
+  border: none;
+  justify-self: end;
+  grid-column: 2;
+  line-height: 1em;
+  padding: 0;
+  cursor: pointer;
+}
+
+.sticker-panel-icon-button:hover {
+  color: var(--color-text);
+}
+
+.panel-button-preview {
+  position: absolute;
+  pointer-events: none;
+  bottom: 100%;
+  left: 50%;
+  transform: translate(-50%);
+}
+
+.panel-button-preview-positioning {
+  --animation-duration: 2s;
+  --animation-delay: calc(
+    (var(--index) * var(--animation-duration)) / (var(--count) * 4)
+  );
+
+  --min-rotation: max(calc(80deg - (var(--count) * 10deg)), 0deg);
+  --max-rotation: clamp(10deg, calc(var(--count) * 15deg), 175deg);
+  --rotation-per-index: max(
+    calc((1 / (var(--count))) * var(--max-rotation)),
+    5deg
+  );
+  --initial-rotation: calc(
+    -95deg + var(--min-rotation) + (var(--index) * var(--rotation-per-index))
+  );
+
+  --scale: min(1, calc(1.2 - (var(--index) * 0.005)));
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) scale(var(--scale))
+    rotate(var(--initial-rotation));
+  animation: PanelButtonPreviewRotateIn var(--animation-duration) ease-in-out
+    var(--animation-delay) 1;
+}
+
+.panel-button-preview-frame {
+  --spacing: 0.5em;
+  --sticker-size: 2em;
+
+  --offset: -50px;
+
+  opacity: 0;
+  transform: translateY(var(--offset));
+  animation: PanelButtonPreviewMoveDownAndFade var(--animation-duration)
+    ease-in-out var(--animation-delay) 1;
+}
+
+@keyframes PanelButtonPreviewRotateIn {
+  0% {
+    transform: translateX(-50%) scale(var(--scale))
+      rotate(var(--initial-rotation));
+  }
+  50% {
+    transform: translateX(-50%) scale(var(--scale))
+      rotate(var(--initial-rotation));
+  }
+  100% {
+    transform: translateX(-50%) scale(var(--scale)) rotate(0);
+  }
+}
+
+@keyframes PanelButtonPreviewMoveDownAndFade {
+  0% {
+    opacity: 0;
+    transform: translateY(calc(var(--offset) * 0.8))
+      rotate(calc(var(--initial-rotation) * -0.5));
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(var(--offset))
+      rotate(calc(var(--initial-rotation) * -0.5));
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(var(--offset))
+      rotate(calc(var(--initial-rotation) * -0.5));
+  }
+  90% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(0) rotate(0);
+  }
+}
+
+.sticker-panel-header {
+  display: flex;
+  gap: 1em;
+}
+
+.sticker-panel-title {
+  flex-grow: 1;
+}
+
+.sticker-panel-what {
+  margin-bottom: 1rem;
+  font-size: var(--size-step-min1);
+}
+
+.sticker-panel-info-icon {
+  height: 1.2em;
+  width: 1.2em;
+  vertical-align: text-bottom;
+  margin-inline-end: 0.25em;
+}
+
+.sticker-panel-close {
+  align-self: flex-start;
+}
+
+.sticker-panel-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+}
+
+.sticker-panel-list-sticker {
+  position: relative;
+}
+
+.sticker-panel-list-sticker-count {
+  position: absolute;
+  font-size: var(--size-step-min1);
+  bottom: 0;
+  right: 0;
+  background-color: var(--color-alt-background);
+  padding: 0em 0.5em;
+  border-radius: 0.5em;
+}
+
+.sticker-frame {
+  --sticker-color-primary: transparent;
+  --sticker-color-background: transparent;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  justify-content: start;
+  padding: var(--spacing);
+  border: 3px solid var(--sticker-color-primary);
+  border-radius: 9px;
+  background-color: var(--sticker-color-background);
+  overflow: hidden;
+}
+
+.sticker-frame-common {
+  --sticker-color-primary: var(--color-sticker-common);
+  --sticker-color-background: var(--color-sticker-common-background);
+}
+
+.sticker-frame-uncommon {
+  --sticker-color-primary: var(--color-sticker-uncommon);
+  --sticker-color-background: var(--color-sticker-uncommon-background);
+}
+
+.sticker-frame-rare {
+  --sticker-color-primary: var(--color-sticker-rare);
+  --sticker-color-background: var(--color-sticker-rare-background);
+}
+
+.sticker-frame-legendary {
+  --sticker-color-primary: var(--color-sticker-legendary);
+  --sticker-color-background: var(--color-sticker-legendary-background);
+}
+
+.sticker-frame-unique {
+  --sticker-color-primary: var(--color-sticker-unique);
+  --sticker-color-background: var(--color-sticker-unique-background);
+}
+
+.sticker-frame-unique {
+  &::before {
+    content: " ";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(
+      70deg,
+      transparent 2.5%,
+      #ffffff66 2.5%,
+      #ffffff66 4.5%,
+      transparent 4.5%,
+      transparent 10.5%,
+      #ffffff66 10.6%,
+      #ffffff66 12.4%,
+      transparent 12.5%,
+      transparent 14.5%,
+      #ffffff66 14.6%,
+      #ffffff66 19.4%,
+      transparent 19.5%,
+      transparent 24.5%,
+      #ffffff66 24.6%,
+      #ffffff66 28.4%,
+      transparent 28.5%,
+      transparent 35.5%,
+      #ffffff66 35.6%,
+      #ffffff66 37.4%,
+      transparent 37.5%,
+      transparent 40.5%,
+      #ffffff66 40.6%,
+      #ffffff66 42.4%,
+      transparent 42.5%
+    );
+    background-size: 400% auto;
+    background-position: right center;
+    transition: background-position 600ms ease-out;
+  }
+
+  &:hover::before {
+    background-position: left center;
+  }
+}
+
+.sticker-frame-rarity {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: var(--size-step-min1);
+  background-color: var(--sticker-color-primary);
+  color: var(--color-text-header);
+  padding-left: 3px;
+  padding-right: 0.5em;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 0.5em) 100%, 0 100%);
+  z-index: 2;
+  text-transform: capitalize;
+}
+
+.sticker-frame:has(.sticker-frame-rarity) {
+  padding-top: calc(var(--spacing) + var(--size-step-min1));
+}
+
+.sticker-frame-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-block-start: var(--flow-space, 1em);
+}
+
+.sticker-frame-name {
+  font-family: var(--font-family-heading);
+  font-size: var(--size-step-point5);
+}
+
+.sticker-frame-unlockedBy,
+.sticker-frame-description {
+  font-size: var(--size-step-min1);
+  font-style: italic;
+}
+
+.sticker-frame-unlockedByText {
+  font-style: normal;
+}
+
+.sticker-unlock-box {
+  background-color: var(--color-alt-background);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: var(--spacing);
+  text-align: center;
+  font-size: var(--size-step-min1);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-half);
+  height: 100%;
+}
+
+.sticker-unlock-button {
+  border: none;
+  padding: 0;
+  background-color: transparent;
+  transition:
+    transform var(--transition-duration) ease-in-out,
+    filter var(--transition-duration) ease-in-out,
+    opacity var(--transition-duration) ease-in-out;
+  filter: grayscale(0);
+  opacity: 1;
+
+  &:not(.claimed):hover {
+    transform: scale(1.02);
+  }
+}
+
+.sticker-unlock-claimed {
+  filter: grayscale(1);
+  opacity: 0.5;
+}
+
+.sticker-book-free-stickers-button {
+  display: block;
+  margin: 0 auto;
+}

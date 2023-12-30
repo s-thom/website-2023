@@ -4,7 +4,6 @@ import { STICKER_TYPE_MAP } from "../../data";
 import { RARITY_RANK, type StickerInfo } from "../../types";
 import { Sticker } from "../Sticker/Sticker.tsx";
 import { StickerFrame } from "../StickerFrame/index.tsx";
-import "./index.css";
 
 export function StickerBook() {
   const isStickersEnabled = useStore((store) => store.enabled.stickers);

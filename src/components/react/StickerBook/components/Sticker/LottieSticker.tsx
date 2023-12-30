@@ -13,7 +13,6 @@ import { isBrowser } from "../../../../../util";
 import { useStore } from "../../../store";
 import { STICKER_TYPE_MAP } from "../../data";
 import type { StickerTypes } from "../../types";
-import "./index.css";
 
 const useIsomorphicLayoutEffect = isBrowser ? useLayoutEffect : useEffect;
 
