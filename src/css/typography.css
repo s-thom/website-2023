@@ -1,11 +1,7 @@
 @layer base {
-  @import "../../node_modules/@fontsource/jost/index.css";
-  @import "../../node_modules/@fontsource-variable/jost/index.css";
-  @import "../../node_modules/inter-ui/inter.css";
-  @import "../../node_modules/inter-ui/inter-variable.css";
+  /* External fonts are included in src/layouts/PageLayout.astro */
 
   /* Fallbacks generated using https://screenspan.net/fallback */
-
   @font-face {
     font-family: "Inter Fallback";
     src: local(Arial);
