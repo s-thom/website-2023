@@ -1,0 +1,56 @@
+---
+import type {
+  ChildDatabaseBlockObjectResponse,
+  DatabaseObjectResponse,
+} from "@notionhq/client/build/src/api-endpoints";
+import { queryDatabase } from "../../../../lib/notion/caches";
+import { getFilter } from "../../../../lib/notion/blog";
+import type { NotionOverrideableProps } from "../../blocks/types";
+import BlogListPageItem from "../../blog/BlogListPageItem.astro";
+
+export interface Props extends NotionOverrideableProps {
+  block: ChildDatabaseBlockObjectResponse;
+}
+
+const { block } = Astro.props;
+
+const items = (await queryDatabase(
+  block.id,
+  getFilter({ allowUnlisted: import.meta.env.DEV }),
+  [
+    {
+      property: "Published",
+      direction: "descending",
+    },
+  ],
+)) as DatabaseObjectResponse[];
+---
+
+<div data-block={block.id} class="blog-collection small-bleed">
+  {
+    items.map((page) => (
+      <BlogListPageItem page={page} showTitle showIcon showTags />
+    ))
+  }
+</div>
+
+<style>
+  .blog-collection {
+    display: grid;
+    gap: var(--spacing);
+    --num-tracks: 1;
+    grid-template-columns: repeat(var(--num-tracks), 1fr);
+  }
+
+  @media (min-width: 900px) {
+    .blog-collection {
+      --num-tracks: 2;
+    }
+  }
+
+  /* @media (min-width: 900px) {
+    .projects-collection {
+      --num-tracks: 3;
+    }
+  } */
+</style>
