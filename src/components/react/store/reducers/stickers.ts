@@ -1,7 +1,10 @@
 import { STICKER_TYPE_MAP } from "../../StickerBook/data";
 import type { StickerInfo } from "../../StickerBook/types";
 
-function canAddSticker(stickers: StickerInfo[], sticker: StickerInfo): boolean {
+export function canAddSticker(
+  stickers: StickerInfo[],
+  sticker: StickerInfo,
+): boolean {
   // Ensure this is a valid sticker
   if (!(sticker.type in STICKER_TYPE_MAP)) {
     return false;
