@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { arrayRandom, range } from "../../../../util";
 import { useStore } from "../../store";
 import { STICKER_TYPES_BY_RARITY } from "../data";
-import styles from "./StickerBookFreeStickersUnlock.module.css";
+import "./StickerBookFreeStickersUnlock.css";
 import { addSticker } from "./util";
 
 const COMMONS_TO_ADD = 5;
@@ -34,7 +34,7 @@ export function StickerBookFreeStickersUnlock() {
         <button
           type="button"
           onClick={() => addMoreStickers()}
-          className={styles.button}
+          className="sticker-book-free-stickers-button"
           data-hello-world="Hello world!"
         >
           Give me more stickers

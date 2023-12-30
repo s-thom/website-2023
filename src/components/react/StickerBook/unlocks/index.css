@@ -1,4 +1,4 @@
-.box {
+.sticker-unlock-box {
   background-color: var(--color-alt-background);
   border: 1.5px solid var(--color-border);
   border-radius: var(--border-radius);
@@ -11,7 +11,7 @@
   height: 100%;
 }
 
-.button {
+.sticker-unlock-button {
   border: none;
   padding: 0;
   background-color: transparent;
@@ -27,7 +27,7 @@
   }
 }
 
-.claimed {
+.sticker-unlock-claimed {
   filter: grayscale(1);
   opacity: 0.5;
 }

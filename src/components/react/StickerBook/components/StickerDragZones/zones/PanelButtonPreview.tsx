@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 import type { AddStickerEvent, StickerTypes } from "../../../types";
 import { Sticker, loadSticker } from "../../Sticker/Sticker.tsx";
 import { StickerFrame } from "../../StickerFrame/index.tsx";
-import styles from "./PanelButtonPreview.module.css";
 
 // This is actually larger than the real animation time, but it provides a
 // larger gap between animations
@@ -93,11 +92,11 @@ export function PanelButtonPreview() {
   }
 
   return (
-    <div className={styles.container}>
+    <div className="panel-button-preview">
       {displayingTypes.map((type, i) => (
         <div
           key={i}
-          className={styles.positioning}
+          className="panel-button-preview-positioning"
           style={
             {
               "--index": i,
@@ -105,7 +104,11 @@ export function PanelButtonPreview() {
             } as React.CSSProperties
           }
         >
-          <StickerFrame className={styles.frame} type={type} hideFrameOnCommon>
+          <StickerFrame
+            className="panel-button-preview-frame"
+            type={type}
+            hideFrameOnCommon
+          >
             <Sticker type={type} />
           </StickerFrame>
         </div>

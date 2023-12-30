@@ -27,7 +27,21 @@
     --spacing: 16px;
     --spacing-half: calc(var(--spacing) / 2);
 
+    --sticker-size: calc(var(--spacing) * 3);
+
     color-scheme: light;
+  }
+
+  @media (min-width: 900px) {
+    :root {
+      --sticker-size: calc(var(--spacing) * 4);
+    }
+  }
+
+  @media (min-width: 1200px) {
+    :root {
+      --sticker-size: calc(var(--spacing) * 5);
+    }
   }
 
   body {

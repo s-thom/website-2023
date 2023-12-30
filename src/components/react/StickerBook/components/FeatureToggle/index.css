@@ -1,10 +1,10 @@
-.noscript {
+.stickers-toggle-noscript {
   color: var(--color-text-secondary);
   font-style: italic;
   font-size: var(--size-step-min1);
 }
 
-.button {
+.stickers-toggle-button {
   display: block;
   margin: 0 auto;
 }

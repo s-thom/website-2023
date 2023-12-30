@@ -4,7 +4,7 @@ import { STICKER_TYPE_MAP } from "../../data";
 import { RARITY_RANK, type StickerInfo } from "../../types";
 import { Sticker } from "../Sticker/Sticker.tsx";
 import { StickerFrame } from "../StickerFrame/index.tsx";
-import styles from "./StickerBook.module.css";
+import "./index.css";
 
 export function StickerBook() {
   const isStickersEnabled = useStore((store) => store.enabled.stickers);
@@ -47,9 +47,9 @@ export function StickerBook() {
   }
 
   return firstStickersOfType.length === 0 ? (
-    <div className={styles.empty}>No stickers unlocked yet...</div>
+    <div className="sticker-book-empty">No stickers unlocked yet...</div>
   ) : (
-    <div className={styles.grid}>
+    <div className="sticker-book-grid">
       {firstStickersOfType.map((sticker) => (
         <StickerFrame
           key={sticker.type}

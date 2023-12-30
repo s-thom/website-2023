@@ -1,4 +1,4 @@
-.frame {
+.sticker-frame {
   --sticker-color-primary: transparent;
   --sticker-color-background: transparent;
 
@@ -15,32 +15,32 @@
   overflow: hidden;
 }
 
-.frame-common {
+.sticker-frame-common {
   --sticker-color-primary: var(--color-sticker-common);
   --sticker-color-background: var(--color-sticker-common-background);
 }
 
-.frame-uncommon {
+.sticker-frame-uncommon {
   --sticker-color-primary: var(--color-sticker-uncommon);
   --sticker-color-background: var(--color-sticker-uncommon-background);
 }
 
-.frame-rare {
+.sticker-frame-rare {
   --sticker-color-primary: var(--color-sticker-rare);
   --sticker-color-background: var(--color-sticker-rare-background);
 }
 
-.frame-legendary {
+.sticker-frame-legendary {
   --sticker-color-primary: var(--color-sticker-legendary);
   --sticker-color-background: var(--color-sticker-legendary-background);
 }
 
-.frame-unique {
+.sticker-frame-unique {
   --sticker-color-primary: var(--color-sticker-unique);
   --sticker-color-background: var(--color-sticker-unique-background);
 }
 
-.frame-unique {
+.sticker-frame-unique {
   &::before {
     content: " ";
     position: absolute;
@@ -85,7 +85,7 @@
   }
 }
 
-.rarity {
+.sticker-frame-rarity {
   position: absolute;
   top: 0;
   left: 0;
@@ -99,11 +99,11 @@
   text-transform: capitalize;
 }
 
-.frame:has(.rarity) {
+.sticker-frame:has(.sticker-frame-rarity) {
   padding-top: calc(var(--spacing) + var(--size-step-min1));
 }
 
-.info {
+.sticker-frame-info {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -111,17 +111,17 @@
   margin-block-start: var(--flow-space, 1em);
 }
 
-.name {
+.sticker-frame-name {
   font-family: var(--font-family-heading);
   font-size: var(--size-step-point5);
 }
 
-.unlockedBy,
-.description {
+.sticker-frame-unlockedBy,
+.sticker-frame-description {
   font-size: var(--size-step-min1);
   font-style: italic;
 }
 
-.unlockedByText {
+.sticker-frame-unlockedByText {
   font-style: normal;
 }

@@ -1,9 +1,7 @@
 import { useDroppable } from "@dnd-kit/core";
 import clsx from "clsx";
 import { SmilePlusIcon, Trash2Icon } from "lucide-react";
-import styles from "./PanelButton.module.css";
 import { PanelButtonPreview } from "./PanelButtonPreview.tsx";
-import zoneStyles from "./zones.module.css";
 
 export interface PanelButtonProps {
   onClick?: () => void;
@@ -18,13 +16,13 @@ export function PanelButton({ onClick }: PanelButtonProps) {
     <div
       ref={setNodeRef}
       className={clsx(
-        styles.panelButton,
-        zoneStyles.zone,
-        zoneStyles.floatingZone,
-        isOver && zoneStyles.zoneOver,
+        "sticker-panel-button",
+        "sticker-drag-zone",
+        "sticker-drag-zone-floating",
+        isOver && "sticker-drag-zone-over",
       )}
     >
-      <button className={styles.iconButton} onClick={() => onClick?.()}>
+      <button className="sticker-panel-icon-button" onClick={() => onClick?.()}>
         {isOver ? (
           <Trash2Icon>
             <title>Remove from page</title>

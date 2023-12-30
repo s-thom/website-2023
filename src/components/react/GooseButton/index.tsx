@@ -1,7 +1,7 @@
 import { useCallback, useRef } from "react";
 import { delay } from "../../../util";
 import { AddStickerEvent } from "../StickerBook/types";
-import styles from "./Goose.module.css";
+import "./index.css";
 
 const TOOLTIP_TIMEOUT = 3000;
 const TRANSITION_DURATION = 200;
@@ -11,7 +11,7 @@ const NOTES = ["🎵", "🎶", "🎼"];
 
 function createHeart(index: number, count: number) {
   const heart = document.createElement("div");
-  heart.classList.add(styles["goose-heart"]!);
+  heart.classList.add("goose-heart");
   heart.textContent = HEARTS[index]!;
   heart.ariaHidden = "true";
 
@@ -29,7 +29,7 @@ function createNote(index: number, count: number) {
   const heart = document.createElement("a");
   heart.href = "https://goose.sthom.kiwi";
   heart.rel = "external";
-  heart.classList.add(styles["goose-heart"]!, "umami--click--goose-note");
+  heart.classList.add("goose-heart", "umami--click--goose-note");
   heart.textContent = NOTES[index]!;
   heart.ariaHidden = "true";
 
@@ -75,7 +75,7 @@ export function GooseButton({ children }: React.PropsWithChildren) {
     window.dispatchEvent(event);
 
     await delay(TOOLTIP_TIMEOUT);
-    child.classList.add(styles["goose-heart-exit"]!);
+    child.classList.add("goose-heart-exit");
 
     await delay(TRANSITION_DURATION);
     parent.removeChild(child);
@@ -84,7 +84,7 @@ export function GooseButton({ children }: React.PropsWithChildren) {
   return (
     <button
       id="goose"
-      className={`${styles.button} goose-button`}
+      className="goose-button"
       aria-label="Goose"
       onClick={onClick}
       ref={ref}

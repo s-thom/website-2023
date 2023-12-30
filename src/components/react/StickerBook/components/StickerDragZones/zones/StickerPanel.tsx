@@ -6,8 +6,6 @@ import { useStore } from "../../../../store/index";
 import { STICKER_TYPE_MAP } from "../../../data";
 import type { StickerInfo } from "../../../types";
 import { MovableStickerWrapper } from "../../Sticker/MovableStickerWrapper.tsx";
-import styles from "./StickerPanel.module.css";
-import zoneStyles from "./zones.module.css";
 
 export interface StickerPanelProps {
   stickers: StickerInfo[];
@@ -45,13 +43,13 @@ export function StickerPanel({ stickers, onCloseClick }: StickerPanelProps) {
     <div
       ref={setNodeRef}
       className={clsx(
-        zoneStyles.zone,
-        zoneStyles.floatingZone,
-        isOver && zoneStyles.zoneOver,
+        "sticker-drag-zone",
+        "sticker-drag-zone-floating",
+        isOver && "sticker-drag-zone-over",
       )}
     >
-      <div className={styles.header}>
-        <div className={styles.headerTitle}>
+      <div className="sticker-panel-header">
+        <div className="sticker-panel-title">
           <p>Drag a sticker anywhere on the page to place it</p>
         </div>
         <label htmlFor="panel-anim-freq">
@@ -70,7 +68,7 @@ export function StickerPanel({ stickers, onCloseClick }: StickerPanelProps) {
         </label>
 
         <button
-          className={clsx(styles.iconButton, styles.close)}
+          className={clsx("sticker-panel-icon-button", "sticker-panel-close")}
           onClick={() => onCloseClick?.()}
         >
           <XIcon>
@@ -78,20 +76,22 @@ export function StickerPanel({ stickers, onCloseClick }: StickerPanelProps) {
           </XIcon>
         </button>
       </div>
-      <p className={styles.whatLine}>
-        <a className={styles.what} href="/sticker-book">
-          <InfoIcon className={styles.infoIcon}>
+      <p className="sticker-panel-what">
+        <a href="/sticker-book">
+          <InfoIcon className="sticker-panel-info-icon">
             <title>Info</title>
           </InfoIcon>
           Wait, what is this?
         </a>
       </p>
-      <div className={styles.list}>
+      <div className="sticker-panel-list">
         {stickersByType.map((stickerGroup) => (
-          <div className={styles.stickerWrapper} key={stickerGroup[0].id}>
+          <div className="sticker-panel-list-sticker" key={stickerGroup[0].id}>
             <MovableStickerWrapper sticker={stickerGroup[0]} animated />
             {stickerGroup.length > 1 && (
-              <span className={styles.count}>{stickerGroup.length}</span>
+              <span className="sticker-panel-list-count">
+                {stickerGroup.length}
+              </span>
             )}
           </div>
         ))}

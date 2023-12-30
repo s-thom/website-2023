@@ -1,17 +1,17 @@
-.empty {
+.sticker-book-empty {
   color: var(--color-text-secondary);
   font-style: italic;
   text-align: center;
 }
 
-.grid {
+.sticker-book-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: var(--spacing);
 }
 
 @media (min-width: 500px) {
-  .grid {
+  .sticker-book-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }

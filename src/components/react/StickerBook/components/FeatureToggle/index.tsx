@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { useStore } from "../../../store";
-import styles from "./FeatureToggle.module.css";
+import "./index.css";
 
 export function FeatureToggle() {
   const isStickersEnabled = useStore((store) => store.enabled.stickers);
@@ -9,7 +9,7 @@ export function FeatureToggle() {
   return (
     <Suspense>
       <noscript>
-        <p className={styles.noscript}>
+        <p className="stickers-toggle-noscript">
           You have Javascript disabled, which means this button won't work. It
           also means the stickers won't work, so I guess there's no problem
           here?
@@ -20,7 +20,7 @@ export function FeatureToggle() {
           type="button"
           onClick={() => toggleFeature("stickers")}
           suppressHydrationWarning
-          className={styles.button}
+          className="stickers-toggle-button"
         >
           {isStickersEnabled ? "Disable stickers" : "Enable stickers"}
         </button>

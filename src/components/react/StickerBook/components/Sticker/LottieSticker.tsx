@@ -13,7 +13,7 @@ import { isBrowser } from "../../../../../util";
 import { useStore } from "../../../store";
 import { STICKER_TYPE_MAP } from "../../data";
 import type { StickerTypes } from "../../types";
-import styles from "./LottieSticker.module.css";
+import "./index.css";
 
 const useIsomorphicLayoutEffect = isBrowser ? useLayoutEffect : useEffect;
 
@@ -108,7 +108,7 @@ export function LottieSticker({ type, animated }: LottieStickerProps) {
         loop: true,
         autoplay: false,
         name: data.name,
-        rendererSettings: { className: styles.animation },
+        rendererSettings: { className: "lottie-animation" },
       });
       setAnimation(anim);
     }
@@ -163,15 +163,15 @@ export function LottieSticker({ type, animated }: LottieStickerProps) {
   return (
     <>
       <div
-        className={clsx(styles.lottieSticker, !animation && "fully-hidden")}
+        className={clsx("lottie-sticker", !animation && "fully-hidden")}
         ref={ref}
         onPointerOver={onHover}
         onPointerLeave={onUnhover}
       />
       {!animation && (
-        <div className={clsx(styles.lottieSticker, styles.fallback)}>
+        <div className="lottie-sticker lottie-fallback">
           <MoreHorizontalIcon
-            className={styles.fallbackDots}
+            className="lottie-fallback-dots"
             width={48}
             height={48}
           />

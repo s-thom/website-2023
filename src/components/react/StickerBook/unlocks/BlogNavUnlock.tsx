@@ -4,7 +4,7 @@ import { useStore } from "../../store";
 import { Sticker } from "../components/Sticker/Sticker.tsx";
 import { StickerFrame } from "../components/StickerFrame/index.tsx";
 import type { StickerTypes } from "../types";
-import styles from "./BlogNavUnlock.module.css";
+import "./index.css";
 import { useAddUniqueSticker } from "./useAddUniqueSticker";
 
 export interface BlogNavUnlockProps {
@@ -29,7 +29,7 @@ export function BlogNavUnlock({ stickerType }: BlogNavUnlockProps) {
   return (
     <StrictMode>
       <Suspense>
-        <div className={styles.box}>
+        <div className="sticker-unlock-box">
           <div className="flow">
             <p>
               {isUnlocked
@@ -37,7 +37,10 @@ export function BlogNavUnlock({ stickerType }: BlogNavUnlockProps) {
                 : "You've reached the end of this blog! While you wait for me to write more words, have a sticker for your collection."}
             </p>
             <button
-              className={clsx(styles.button, isUnlocked && styles.claimed)}
+              className={clsx(
+                "sticker-unlock-button",
+                isUnlocked && "sticker-unlock-claimed",
+              )}
               type="button"
               onClick={!isUnlocked ? addSticker : undefined}
               disabled={isUnlocked}
