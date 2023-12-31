@@ -3,7 +3,6 @@ import { useStore } from "../../../../store/index";
 import { canAddSticker } from "../../../../store/reducers/stickers";
 import type { AddStickerEvent, StickerTypes } from "../../../types";
 import { Sticker, loadSticker } from "../../Sticker/Sticker.tsx";
-import { StickerFrame } from "../../StickerFrame/index.tsx";
 
 // This is actually larger than the real animation time, but it provides a
 // larger gap between animations
@@ -119,13 +118,9 @@ export function PanelButtonPreview() {
             } as React.CSSProperties
           }
         >
-          <StickerFrame
-            className="panel-button-preview-frame"
-            type={type}
-            hideFrameOnCommon
-          >
+          <div className="panel-button-preview-frame">
             <Sticker type={type} />
-          </StickerFrame>
+          </div>
         </div>
       ))}
     </div>

@@ -1,6 +1,18 @@
-import type { StickerData, StickerRarity, StickerTypes } from "./types";
+import {
+  ORDERED_STICKER_TYPES,
+  type StickerData,
+  type StickerRarity,
+  type StickerTypes,
+} from "./types";
 
 export const STICKER_TYPE_MAP: Record<StickerTypes, StickerData> = {
+  "100": {
+    type: "lottie",
+    rarity: "uncommon",
+    name: "100",
+    url: "/static/lottie/100.json",
+    initialFrame: 0,
+  },
   "camera-flash": {
     type: "lottie",
     rarity: "unique",
@@ -27,14 +39,14 @@ export const STICKER_TYPE_MAP: Record<StickerTypes, StickerData> = {
   },
   dragon: {
     type: "lottie",
-    rarity: "uncommon",
+    rarity: "legendary",
     name: "Dragon",
     url: "/static/lottie/dragon.json",
     initialFrame: 60,
   },
   fire: {
     type: "lottie",
-    rarity: "common",
+    rarity: "uncommon",
     name: "Fire",
     url: "/static/lottie/fire.json",
     initialFrame: 0,
@@ -64,6 +76,27 @@ export const STICKER_TYPE_MAP: Record<StickerTypes, StickerData> = {
     url: "/static/lottie/goose.json",
     initialFrame: 0,
   },
+  heart: {
+    type: "lottie",
+    rarity: "common",
+    name: "Heart",
+    url: "/static/lottie/heart.json",
+    initialFrame: 0,
+  },
+  joy: {
+    type: "lottie",
+    rarity: "common",
+    name: "Joy",
+    url: "/static/lottie/joy.json",
+    initialFrame: 0,
+  },
+  laughing: {
+    type: "lottie",
+    rarity: "common",
+    name: "Laughing",
+    url: "/static/lottie/laughing.json",
+    initialFrame: 0,
+  },
   "light-bulb": {
     type: "lottie",
     rarity: "common",
@@ -73,10 +106,17 @@ export const STICKER_TYPE_MAP: Record<StickerTypes, StickerData> = {
   },
   lizard: {
     type: "lottie",
-    rarity: "uncommon",
+    rarity: "legendary",
     name: "Lizard",
     url: "/static/lottie/lizard.json",
     initialFrame: 0,
+  },
+  "mind-blown": {
+    type: "lottie",
+    rarity: "uncommon",
+    name: "Mind blown",
+    url: "/static/lottie/mind-blown.json",
+    initialFrame: 28,
   },
   "party-popper": {
     type: "lottie",
@@ -99,12 +139,26 @@ export const STICKER_TYPE_MAP: Record<StickerTypes, StickerData> = {
     url: "/static/lottie/rocket.json",
     initialFrame: 0,
   },
+  rofl: {
+    type: "lottie",
+    rarity: "uncommon",
+    name: "ROFL",
+    url: "/static/lottie/rofl.json",
+    initialFrame: 0,
+  },
   smile: {
     type: "lottie",
     rarity: "common",
     name: "Smile",
     url: "/static/lottie/smile.json",
     initialFrame: 100,
+  },
+  thinking: {
+    type: "lottie",
+    rarity: "common",
+    name: "Thinking",
+    url: "/static/lottie/thinking.json",
+    initialFrame: 0,
   },
   "thumbs-up": {
     type: "lottie",
@@ -115,7 +169,7 @@ export const STICKER_TYPE_MAP: Record<StickerTypes, StickerData> = {
   },
   turtle: {
     type: "lottie",
-    rarity: "uncommon",
+    rarity: "legendary",
     name: "Turtle",
     url: "/static/lottie/turtle.json",
     initialFrame: 0,
@@ -132,3 +186,7 @@ export const STICKER_TYPES_BY_RARITY: Record<StickerRarity, StickerTypes[]> = {
 Object.entries(STICKER_TYPE_MAP).forEach(([key, value]) => {
   STICKER_TYPES_BY_RARITY[value.rarity].push(key as StickerTypes);
 });
+
+export function sortStickerTypes(a: StickerTypes, z: StickerTypes): number {
+  return ORDERED_STICKER_TYPES.indexOf(a) - ORDERED_STICKER_TYPES.indexOf(z);
+}

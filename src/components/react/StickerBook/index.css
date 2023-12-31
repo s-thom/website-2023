@@ -185,7 +185,7 @@
     (var(--index) * var(--animation-duration)) / (var(--count) * 4)
   );
 
-  --min-rotation: max(calc(80deg - (var(--count) * 10deg)), 0deg);
+  --min-rotation: max(calc(95deg - (var(--count) * 10deg)), 0deg);
   --max-rotation: clamp(10deg, calc(var(--count) * 15deg), 175deg);
   --rotation-per-index: max(
     calc((1 / (var(--count))) * var(--max-rotation)),
@@ -202,7 +202,7 @@
   left: 50%;
   transform: translateX(-50%) scale(var(--scale))
     rotate(var(--initial-rotation));
-  animation: PanelButtonPreviewRotateIn var(--animation-duration) ease-in-out
+  animation: PanelButtonPreviewRotateIn var(--animation-duration) ease-in
     var(--animation-delay) 1;
 }
 
@@ -210,12 +210,12 @@
   --spacing: 0.5em;
   --sticker-size: 2em;
 
-  --offset: -50px;
+  --offset: calc(min(calc(45px + (var(--count) * 5px)), 80px) * -1);
 
   opacity: 0;
   transform: translateY(var(--offset));
-  animation: PanelButtonPreviewMoveDownAndFade var(--animation-duration)
-    ease-in-out var(--animation-delay) 1;
+  animation: PanelButtonPreviewMoveDownAndFade var(--animation-duration) ease-in
+    var(--animation-delay) 1;
 }
 
 @keyframes PanelButtonPreviewRotateIn {
@@ -265,6 +265,7 @@
 .sticker-panel-title {
   flex-grow: 1;
   margin-block-end: var(--spacing-half);
+  max-width: unset !important;
 }
 
 .sticker-panel-what {

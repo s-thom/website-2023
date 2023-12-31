@@ -1,17 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { arrayRandom, range } from "../../../../util";
 import { useStore } from "../../store";
+import { STICKER_TYPES_BY_RARITY } from "../data";
 import type { StickerTypes } from "../types";
 import { addSticker } from "./util";
 
 const MAX_STICKER_UNLOCKS_ON_PAGE = 3;
-const ALLOWED_STICKER_TYPES: StickerTypes[] = [
-  "clap",
-  "fire",
-  "thumbs-up",
-  "light-bulb",
-  "party-popper",
-];
+const UNCOMMON_STICKER_CHANCE = 0.25;
 
 export interface PageViewUnlockProps {
   pageId: string;
@@ -25,6 +20,7 @@ export function PageViewUnlock({ pageId }: PageViewUnlockProps) {
     [pageId, stickers],
   );
 
+  const [lastMatchedThreshold, setLastMatchedThreshold] = useState(0);
   const [thresholds, setThresholds] = useState<number[]>([]);
 
   useEffect(() => {
@@ -62,19 +58,27 @@ export function PageViewUnlock({ pageId }: PageViewUnlockProps) {
 
       const progress = document.documentElement.scrollTop / pageHeight;
       const matchedThresholds = thresholds.filter(
-        (threshold) => threshold < progress,
+        (threshold) => threshold > lastMatchedThreshold && threshold < progress,
       );
-      matchedThresholds.forEach(() => {
-        const type = arrayRandom(ALLOWED_STICKER_TYPES);
-        addSticker(type, pageId);
-      });
+
+      if (matchedThresholds.length > 0) {
+        setLastMatchedThreshold(progress);
+
+        matchedThresholds.forEach(() => {
+          addSticker(arrayRandom(STICKER_TYPES_BY_RARITY.common), pageId);
+
+          if (Math.random() < UNCOMMON_STICKER_CHANCE) {
+            addSticker(arrayRandom(STICKER_TYPES_BY_RARITY.uncommon), pageId);
+          }
+        });
+      }
     }
 
     window.addEventListener("scrollend", onScrollEnd);
     return () => {
       window.removeEventListener("scrollend", onScrollEnd);
     };
-  }, [pageId, thresholds]);
+  }, [lastMatchedThreshold, pageId, thresholds]);
 
   return null;
 }

@@ -28,23 +28,39 @@ export interface LottieStickerData extends BaseStickerData {
 
 export type StickerData = LottieStickerData;
 
-export type StickerTypes =
-  | "camera-flash"
-  | "chequered-flag"
-  | "clap"
-  | "dragon"
-  | "fire"
-  | "fire-heart"
-  | "glowing-star"
-  | "goose"
-  | "light-bulb"
-  | "lizard"
-  | "party-popper"
-  | "rainbow"
-  | "rocket"
-  | "smile"
-  | "thumbs-up"
-  | "turtle";
+export const ORDERED_STICKER_TYPES = [
+  // Emoji series
+  "thumbs-up",
+  "clap",
+  "smile",
+  "laughing",
+  "joy",
+  "rofl",
+  "mind-blown",
+  "thinking",
+  "heart",
+  "fire",
+  "100",
+  "party-popper",
+  "light-bulb",
+  "rocket",
+
+  // Unused so far
+  "turtle",
+  "lizard",
+  "dragon",
+
+  "rainbow",
+
+  // Uniques
+  "camera-flash",
+  "chequered-flag",
+  "fire-heart",
+  "glowing-star",
+  "goose",
+] as const;
+
+export type StickerTypes = (typeof ORDERED_STICKER_TYPES)[number];
 
 export interface StickerInfo {
   id: string;

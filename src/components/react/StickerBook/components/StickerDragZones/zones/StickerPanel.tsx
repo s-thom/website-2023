@@ -2,7 +2,7 @@ import { useDroppable } from "@dnd-kit/core";
 import clsx from "clsx";
 import { InfoIcon, XIcon } from "lucide-react";
 import { useMemo } from "react";
-import { STICKER_TYPE_MAP } from "../../../data";
+import { STICKER_TYPE_MAP, sortStickerTypes } from "../../../data";
 import type { StickerInfo } from "../../../types";
 import { MovableStickerWrapper } from "../../Sticker/MovableStickerWrapper.tsx";
 
@@ -24,7 +24,7 @@ export function StickerPanel({ stickers, onCloseClick }: StickerPanelProps) {
     });
 
     const groups = Array.from(map.entries())
-      .sort((a, z) => (a[0] < z[0] ? -1 : 1))
+      .sort((a, z) => sortStickerTypes(a[0], z[0]))
       .map(([, group]) => group);
     return groups;
   }, [stickers]);
