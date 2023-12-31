@@ -7,12 +7,23 @@ import clsx from "clsx";
 import DefaultPageBackdrop from "../../site/DefaultPageBackdrop.astro";
 import NotionImage from "./NotionImage.astro";
 
+// The backdrop images are always blurred, so we can afford to load lower
+// quality images. A "width" of 360 pixels will load the 720 wide image
+// on 2x density displays.
+const SIZES_DEFAULT_SHADED = "360px";
+const SIZES_DEFAULT_UNSHADED = "100vw";
+
 export interface Props {
   page: DatabaseObjectResponse | PageObjectResponse;
   shade?: boolean;
+  sizes?: string;
 }
 
-const { page, shade } = Astro.props;
+const {
+  page,
+  shade,
+  sizes = shade ? SIZES_DEFAULT_SHADED : SIZES_DEFAULT_UNSHADED,
+} = Astro.props;
 
 const shouldIncludeShade = !!(page.cover && shade);
 const imageClasses = clsx(
@@ -29,6 +40,7 @@ const imageClasses = clsx(
         image={page.cover}
         alt=""
         class={imageClasses}
+        sizes={sizes}
       />
     ) : (
       <DefaultPageBackdrop />

@@ -6,9 +6,10 @@ export interface Props {
   id: string;
   icon: NonNullable<DatabaseObjectResponse["icon"]>;
   class?: string;
+  sizes?: string;
 }
 
-const { id, class: className, icon, ...rest } = Astro.props;
+const { id, class: className, icon, sizes, ...rest } = Astro.props;
 
 const GENERATE_ICON_WIDTHS = [256, 128, 96, 64, 32];
 
@@ -34,6 +35,7 @@ switch (icon.type) {
       alt=""
       widths={GENERATE_ICON_WIDTHS}
       class={className}
+      sizes={sizes}
     />
   ) : (
     <span class:list={[className, "emoji-icon"]} {...rest}>

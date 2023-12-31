@@ -36,7 +36,12 @@ const tagsProperty = getPagePropertyByName(page, "Tags", "multi_select") ?? {
     <slot name="info-top" />
     {
       showIcon && page.icon && (
-        <NotionIcon id={`${page.id}-icon`} icon={page.icon} class="icon" />
+        <NotionIcon
+          id={`${page.id}-icon`}
+          icon={page.icon}
+          class="icon"
+          sizes="80px"
+        />
       )
     }
     {

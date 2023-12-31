@@ -7,9 +7,18 @@ export interface Props {
   alt: string;
   class?: string;
   widths?: number[];
+  sizes?: string;
 }
 
-const { id, src, alt, class: className, widths, ...rest } = Astro.props;
+const {
+  id,
+  src,
+  alt,
+  class: className,
+  widths,
+  sizes = "100vw",
+  ...rest
+} = Astro.props;
 
 const imageInfo = await getImageInfo(id, src, widths ?? []);
 const formats = imageInfo.formats.slice();
@@ -23,7 +32,7 @@ const finalFormat = formats.at(-1)!.sizes[0];
         .map((size) => `${size.path} ${size.width}w`)
         .join(", ");
 
-      return <source srcset={srcset} type={format.type} />;
+      return <source srcset={srcset} sizes={sizes} type={format.type} />;
     })
   }
   <img class={className} src={finalFormat.path} alt={alt} />

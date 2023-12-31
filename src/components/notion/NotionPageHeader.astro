@@ -44,7 +44,12 @@ if (showReadingTime) {
   </h1>
   {
     page.icon && (
-      <NotionIcon id={`${page.id}-icon`} icon={page.icon} class="page-icon" />
+      <NotionIcon
+        id={`${page.id}-icon`}
+        icon={page.icon}
+        class="page-icon"
+        sizes="(min-width: 1200px) 128px, (min-width: 900px) 96px, 64px"
+      />
     )
   }
   <div class="summary-info">
