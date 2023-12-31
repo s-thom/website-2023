@@ -20,6 +20,15 @@
     line-gap-override: normal;
   }
 
+  @font-face {
+    font-family: "Shantell Sans Fallback";
+    src: local(Tahoma);
+    size-adjust: 110%;
+    ascent-override: 93%;
+    descent-override: 31%;
+    line-gap-override: normal;
+  }
+
   /* #region Monaspace */
   @font-face {
     font-family: "Monaspace Fallback";

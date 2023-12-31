@@ -2,6 +2,7 @@
   position: relative;
   width: var(--sticker-size);
   height: var(--sticker-size);
+  filter: drop-shadow(2px 2px 2px #808080);
 }
 
 .lottie-sticker {
@@ -263,6 +264,7 @@
 
 .sticker-panel-title {
   flex-grow: 1;
+  margin-block-end: var(--spacing-half);
 }
 
 .sticker-panel-what {
@@ -271,10 +273,9 @@
 }
 
 .sticker-panel-info-icon {
-  height: 1.2em;
-  width: 1.2em;
-  vertical-align: text-bottom;
-  margin-inline-end: 0.25em;
+  vertical-align: text-top;
+  margin-inline-start: 0.25em;
+  margin-block-start: 0.1em;
 }
 
 .sticker-panel-close {
@@ -285,6 +286,10 @@
   display: flex;
   flex-wrap: wrap;
   gap: 1em;
+}
+
+.sticker-panel-list:has(.sticker-panel-list-sticker) {
+  margin-block-start: var(--spacing);
 }
 
 .sticker-panel-list-sticker {

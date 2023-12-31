@@ -2,7 +2,6 @@ import { useDroppable } from "@dnd-kit/core";
 import clsx from "clsx";
 import { InfoIcon, XIcon } from "lucide-react";
 import { useMemo } from "react";
-import { useStore } from "../../../../store/index";
 import { STICKER_TYPE_MAP } from "../../../data";
 import type { StickerInfo } from "../../../types";
 import { MovableStickerWrapper } from "../../Sticker/MovableStickerWrapper.tsx";
@@ -13,11 +12,6 @@ export interface StickerPanelProps {
 }
 
 export function StickerPanel({ stickers, onCloseClick }: StickerPanelProps) {
-  const animationFrequency = useStore((state) => state.animationFrequency);
-  const setAnimationFrequency = useStore(
-    (state) => state.setAnimationFrequency,
-  );
-
   const stickersByType = useMemo(() => {
     const map = new Map<keyof typeof STICKER_TYPE_MAP, StickerInfo[]>();
     stickers.forEach((sticker) => {
@@ -49,23 +43,14 @@ export function StickerPanel({ stickers, onCloseClick }: StickerPanelProps) {
       )}
     >
       <div className="sticker-panel-header">
-        <div className="sticker-panel-title">
-          <p>Drag a sticker anywhere on the page to place it</p>
-        </div>
-        <label htmlFor="panel-anim-freq">
-          Animate:{" "}
-          <select
-            id="panel-anim-freq"
-            value={animationFrequency}
-            onChange={(event) =>
-              setAnimationFrequency(event.target.value as any)
-            }
-          >
-            <option value="always">Always</option>
-            <option value="hover">On hover</option>
-            <option value="never">Never</option>
-          </select>
-        </label>
+        <h2 className="sticker-panel-title">
+          <a href="/sticker-book">
+            Sticker book
+            <InfoIcon className="sticker-panel-info-icon">
+              <title>Info</title>
+            </InfoIcon>
+          </a>
+        </h2>
 
         <button
           className={clsx("sticker-panel-icon-button", "sticker-panel-close")}
@@ -76,14 +61,8 @@ export function StickerPanel({ stickers, onCloseClick }: StickerPanelProps) {
           </XIcon>
         </button>
       </div>
-      <p className="sticker-panel-what">
-        <a href="/sticker-book">
-          <InfoIcon className="sticker-panel-info-icon">
-            <title>Info</title>
-          </InfoIcon>
-          Wait, what is this?
-        </a>
-      </p>
+      <p>Drag a sticker anywhere on the page to place it</p>
+
       <div className="sticker-panel-list">
         {stickersByType.map((stickerGroup) => (
           <div className="sticker-panel-list-sticker" key={stickerGroup[0].id}>
