@@ -43,6 +43,7 @@ export function BlogNavUnlock({ stickerType }: BlogNavUnlockProps) {
               type="button"
               onClick={!isUnlocked ? addSticker : undefined}
               disabled={isUnlocked}
+              data-umami-event="stickers-blog-nav-unlock"
             >
               <StickerFrame type={stickerType}>
                 <Sticker type={stickerType} animated={!isUnlocked} />

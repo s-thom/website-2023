@@ -20,6 +20,9 @@ export function FeatureToggle() {
           onClick={() => toggleFeature("stickers")}
           suppressHydrationWarning
           className="stickers-toggle-button"
+          data-umami-event={`stickers-toggle-${
+            isStickersEnabled ? "disabled" : "enabled"
+          }`}
         >
           {isStickersEnabled ? "Disable stickers" : "Enable stickers"}
         </button>

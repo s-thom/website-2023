@@ -55,6 +55,7 @@ export function StickerPanel({ stickers, onCloseClick }: StickerPanelProps) {
         <button
           className={clsx("sticker-panel-icon-button", "sticker-panel-close")}
           onClick={() => onCloseClick?.()}
+          data-umami-event="stickers-close-panel"
         >
           <XIcon>
             <title>Close</title>

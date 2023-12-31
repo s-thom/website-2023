@@ -39,6 +39,7 @@ export function StickerBookUniqueUnlock() {
               type="button"
               onClick={!isUnlocked ? addSticker : undefined}
               disabled={isUnlocked}
+              data-umami-event="sickers-sticker-book-unlock"
             >
               <StickerFrame type={STICKER_TYPE}>
                 <Sticker type={STICKER_TYPE} animated />

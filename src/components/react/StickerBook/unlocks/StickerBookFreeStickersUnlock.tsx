@@ -35,18 +35,9 @@ export function StickerBookFreeStickersUnlock() {
           onClick={() => addMoreStickers()}
           className="sticker-book-free-stickers-button"
           data-hello-world="Hello world!"
+          data-umami-event="stickers-free-stickers"
         >
           Give me more stickers
-        </button>
-        <button
-          type="button"
-          onClick={() =>
-            addSticker(arrayRandom(STICKER_TYPES_BY_RARITY.common))
-          }
-          className="sticker-book-free-stickers-button"
-          data-hello-world="Hello world!"
-        >
-          one
         </button>
       </div>
     </Suspense>

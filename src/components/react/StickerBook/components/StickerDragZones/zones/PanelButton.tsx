@@ -22,7 +22,11 @@ export function PanelButton({ onClick }: PanelButtonProps) {
         isOver && "sticker-drag-zone-over",
       )}
     >
-      <button className="sticker-panel-icon-button" onClick={() => onClick?.()}>
+      <button
+        className="sticker-panel-icon-button"
+        data-umami-event="stickers-open-panel"
+        onClick={() => onClick?.()}
+      >
         {isOver ? (
           <Trash2Icon>
             <title>Remove from page</title>
