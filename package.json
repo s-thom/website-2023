@@ -50,6 +50,7 @@
     "@types/mime-types": "^2.1.4",
     "@types/react": "^18.2.45",
     "@types/seedrandom": "^3.0.8",
+    "@types/umami": "^0.1.5",
     "@types/uuid": "^9.0.7",
     "@typescript-eslint/eslint-plugin": "^6.16.0",
     "@typescript-eslint/parser": "^6.16.0",

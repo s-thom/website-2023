@@ -1,5 +1,6 @@
 import type { DndContext, DragCancelEvent, DragEndEvent } from "@dnd-kit/core";
 import { useCallback, useMemo, useState } from "react";
+import { sendEvent } from "../../../../../lib/analytics";
 import { useStore } from "../../../store";
 import { STICKER_TYPE_MAP } from "../../data";
 import type { StickerInfo } from "../../types";
@@ -31,6 +32,10 @@ export function useDragState(pageId: string) {
       if (draggingSticker && event.over) {
         if (event.over.id === "panel") {
           removeFromPage(draggingSticker.id);
+          sendEvent("stickers-remove-sticker", {
+            sticker: draggingSticker.type,
+            pageId,
+          });
           return;
         }
 
@@ -40,6 +45,10 @@ export function useDragState(pageId: string) {
         };
 
         placeOnPage(draggingSticker.id, pageId, coordinates);
+        sendEvent("stickers-place-sticker", {
+          sticker: draggingSticker.type,
+          pageId,
+        });
       }
     },
     [draggingSticker, pageId, placeOnPage, removeFromPage],
