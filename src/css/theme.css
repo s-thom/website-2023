@@ -9,6 +9,27 @@
     --color-primary: #1a8fe3;
     --color-background-header: #002355;
 
+    --color-notion-default: oklch(45% 0 0);
+    --color-notion-default-background: oklch(92% 0 0);
+    --color-notion-gray: oklch(45% 0 0);
+    --color-notion-gray-background: oklch(92% 0 0);
+    --color-notion-brown: oklch(45% 0.08 255);
+    --color-notion-brown-background: oklch(92% 0.03 255);
+    --color-notion-orange: oklch(45% 0.08 40);
+    --color-notion-orange-background: oklch(92% 0.03 40);
+    --color-notion-yellow: oklch(45% 0.08 95);
+    --color-notion-yellow-background: oklch(92% 0.03 95);
+    --color-notion-green: oklch(45% 0.08 155);
+    --color-notion-green-background: oklch(92% 0.03 155);
+    --color-notion-blue: oklch(45% 0.08 255);
+    --color-notion-blue-background: oklch(92% 0.03 255);
+    --color-notion-purple: oklch(45% 0.08 300);
+    --color-notion-purple-background: oklch(92% 0.03 300);
+    --color-notion-pink: oklch(45% 0.08 341);
+    --color-notion-pink-background: oklch(92% 0.03 341);
+    --color-notion-red: oklch(45% 0.08 23);
+    --color-notion-red-background: oklch(92% 0.03 23);
+
     --color-sticker-common: oklch(80% 0 0);
     --color-sticker-common-background: oklch(92% 0 0);
     --color-sticker-uncommon: oklch(60% 0.15 153);
