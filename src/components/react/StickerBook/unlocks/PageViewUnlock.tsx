@@ -5,15 +5,26 @@ import { STICKER_TYPES_BY_RARITY } from "../data";
 import type { StickerTypes } from "../types";
 import { addSticker } from "./util";
 
-const MAX_STICKER_UNLOCKS_ON_PAGE = 3;
+const MIN_STICKER_UNLOCKS_ON_PAGE = 1;
+const MAX_STICKER_UNLOCKS_ON_PAGE = 5;
 const UNCOMMON_STICKER_CHANCE = 0.25;
+
+interface ScrollThresholdData {
+  progress: number;
+  shouldGiveCommon: boolean;
+  shouldGiveUncommon: boolean;
+  shouldGiveRare: boolean;
+}
 
 export interface PageViewUnlockProps {
   pageId: string;
-  specialSticker?: StickerTypes;
+  specialStickerType?: StickerTypes;
 }
 
-export function PageViewUnlock({ pageId }: PageViewUnlockProps) {
+export function PageViewUnlock({
+  pageId,
+  specialStickerType,
+}: PageViewUnlockProps) {
   const stickers = useStore((store) => store.stickers);
   const stickersUnlockedOnPage = useMemo(
     () => stickers.filter((sticker) => sticker.unlockPageId === pageId),
@@ -21,7 +32,18 @@ export function PageViewUnlock({ pageId }: PageViewUnlockProps) {
   );
 
   const [lastMatchedThreshold, setLastMatchedThreshold] = useState(0);
-  const [thresholds, setThresholds] = useState<number[]>([]);
+  const [thresholds, setThresholds] = useState<ScrollThresholdData[]>([]);
+
+  const hasGivenRare = useMemo(() => {
+    if (!specialStickerType) {
+      return true;
+    }
+
+    return !!stickers.find(
+      (sticker) =>
+        sticker.unlockPageId === pageId && sticker.type === specialStickerType,
+    );
+  }, [pageId, specialStickerType, stickers]);
 
   useEffect(() => {
     function onResize() {
@@ -30,10 +52,18 @@ export function PageViewUnlock({ pageId }: PageViewUnlockProps) {
       const pageHeight = document.documentElement.scrollHeight - viewportHeight;
 
       // If there's not much to scroll, only give one sticker for the page
-      const numStickersToGive =
-        pageHeight > viewportHeight ? MAX_STICKER_UNLOCKS_ON_PAGE : 1;
-      const allThresholds = range(numStickersToGive).map(
-        (i) => (i + 1) / (numStickersToGive + 1),
+      const numViewports = pageHeight / viewportHeight;
+      const numStickersToGive = Math.max(
+        Math.min(Math.ceil(numViewports), MAX_STICKER_UNLOCKS_ON_PAGE),
+        MIN_STICKER_UNLOCKS_ON_PAGE,
+      );
+      const allThresholds = range(numStickersToGive).map<ScrollThresholdData>(
+        (i) => ({
+          progress: (i + 1) / (numStickersToGive + 1),
+          shouldGiveCommon: true,
+          shouldGiveUncommon: Math.random() < UNCOMMON_STICKER_CHANCE,
+          shouldGiveRare: !hasGivenRare,
+        }),
       );
 
       // Remove a number of thresholds based on how many stickers have already been granted
@@ -48,7 +78,7 @@ export function PageViewUnlock({ pageId }: PageViewUnlockProps) {
     return () => {
       window.removeEventListener("resize", onResize);
     };
-  }, [stickersUnlockedOnPage.length]);
+  }, [hasGivenRare, stickersUnlockedOnPage.length]);
 
   useEffect(() => {
     function onScrollEnd() {
@@ -58,17 +88,28 @@ export function PageViewUnlock({ pageId }: PageViewUnlockProps) {
 
       const progress = document.documentElement.scrollTop / pageHeight;
       const matchedThresholds = thresholds.filter(
-        (threshold) => threshold > lastMatchedThreshold && threshold < progress,
+        (threshold) =>
+          threshold.progress > lastMatchedThreshold &&
+          threshold.progress < progress,
       );
 
       if (matchedThresholds.length > 0) {
         setLastMatchedThreshold(progress);
 
-        matchedThresholds.forEach(() => {
-          addSticker(arrayRandom(STICKER_TYPES_BY_RARITY.common), pageId);
+        // Prevent rare stickers from being given twice if a lot of scrolling happened at once
+        let didGiveRare = false;
 
-          if (Math.random() < UNCOMMON_STICKER_CHANCE) {
+        matchedThresholds.forEach((threshold) => {
+          if (threshold.shouldGiveCommon) {
+            addSticker(arrayRandom(STICKER_TYPES_BY_RARITY.common), pageId);
+          }
+          if (threshold.shouldGiveUncommon) {
             addSticker(arrayRandom(STICKER_TYPES_BY_RARITY.uncommon), pageId);
+          }
+
+          if (threshold.shouldGiveRare && specialStickerType && !didGiveRare) {
+            didGiveRare = true;
+            addSticker(specialStickerType, pageId);
           }
         });
       }
@@ -78,7 +119,7 @@ export function PageViewUnlock({ pageId }: PageViewUnlockProps) {
     return () => {
       window.removeEventListener("scrollend", onScrollEnd);
     };
-  }, [lastMatchedThreshold, pageId, thresholds]);
+  }, [lastMatchedThreshold, pageId, specialStickerType, thresholds]);
 
   return null;
 }

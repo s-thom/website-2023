@@ -73,7 +73,7 @@ const shouldGiveStickers = specialSticker !== "none";
     shouldGiveStickers && (
       <PageViewUnlock
         pageId={page.id}
-        specialSticker={specialSticker}
+        specialStickerType={specialSticker}
         client:idle
         client:only="react"
       />
