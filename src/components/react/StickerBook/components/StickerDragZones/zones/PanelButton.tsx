@@ -1,6 +1,7 @@
 import { useDroppable } from "@dnd-kit/core";
 import clsx from "clsx";
-import { SmilePlusIcon, Trash2Icon } from "lucide-react";
+import { BookHeartIcon, Trash2Icon } from "lucide-react";
+import { useStore } from "../../../../store";
 import { PanelButtonPreview } from "./PanelButtonPreview.tsx";
 
 export interface PanelButtonProps {
@@ -8,6 +9,7 @@ export interface PanelButtonProps {
 }
 
 export function PanelButton({ onClick }: PanelButtonProps) {
+  const stickers = useStore((store) => store.stickers);
   const { isOver, setNodeRef } = useDroppable({
     id: "panel",
   });
@@ -20,6 +22,7 @@ export function PanelButton({ onClick }: PanelButtonProps) {
         "sticker-drag-zone",
         "sticker-drag-zone-floating",
         isOver && "sticker-drag-zone-over",
+        stickers.length > 0 && "sticker-panel-button-has-stickers",
       )}
     >
       <button
@@ -32,9 +35,9 @@ export function PanelButton({ onClick }: PanelButtonProps) {
             <title>Remove from page</title>
           </Trash2Icon>
         ) : (
-          <SmilePlusIcon>
+          <BookHeartIcon>
             <title>Open sticker book</title>
-          </SmilePlusIcon>
+          </BookHeartIcon>
         )}
       </button>
       <PanelButtonPreview />

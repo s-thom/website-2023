@@ -112,18 +112,14 @@
 
 .sticker-drag-zone-floating {
   position: fixed;
+  bottom: var(--spacing-half);
+  right: var(--spacing-half);
   z-index: 999;
-  bottom: var(--spacing);
-  right: var(--spacing);
   max-width: calc(100vw - 2rem);
 }
 
 .sticker-drag-zone-over {
-  background-color: color-mix(
-    in srgb,
-    var(--color-background) 95%,
-    rgb(255 0 0) 5%
-  );
+  background-color: var(--color-background-delete);
 }
 
 .sticker-page-positioning {
@@ -153,6 +149,14 @@
 
 .sticker-panel-button {
   line-height: 1em;
+  transition: opacity ease-in-out 0.2s;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sticker-panel-button-has-stickers {
+  opacity: 1;
+  pointer-events: all;
 }
 
 .sticker-panel-icon-button {
