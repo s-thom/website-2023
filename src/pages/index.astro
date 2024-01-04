@@ -1,7 +1,6 @@
 ---
 import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { Image } from "astro:assets";
-import { GithubIcon, LinkedinIcon, MailIcon } from "lucide-react";
 import PageLayout from "../layouts/PageLayout.astro";
 import { ACTIVE_PROJECTS_COLLECTION_ID } from "../lib/constants";
 import { getFilter } from "../lib/notion/blog";
@@ -33,50 +32,29 @@ const projectItemsToShow = activeProjectItems.slice(0, NUM_PROJECTS_TO_SHOW);
   <div class="header">
     <Image
       src={profile2023}
-      alt="Stuart Thomson smiling, with water and hills in the background. He has brown/ginger hair, a ginger beard, black-rimmed glasses, and is wearing a blue and white striped shirt."
+      alt="Stuart Thomson"
       class="profile-photo"
       densities={[1, 1.5, 2]}
       loading="eager"
     />
     <h1>Stuart Thomson</h1>
-    <h2>Software Developer | Human Being</h2>
+    <h2 class="tagline">Software Developer | Human Being</h2>
   </div>
 
-  <div class="links-list">
-    <a href="/about">About me</a>
-    <a href="/blog">Blog</a>
-    <a href="/projects">Projects</a>
-  </div>
-
-  <div class="links-list">
-    <a
-      href="https://github.com/s-thom"
-      aria-label="GitHub"
-      rel="nofollow noopener noreferrer"
-      target="_blank"
-    >
-      <GithubIcon />
-    </a>
-    <a
-      href="mailto:me@sthom.kiwi"
-      aria-label="Email"
-      rel="nofollow noopener noreferrer"
-      target="_blank"
-    >
-      <MailIcon />
-    </a>
-    <a
-      href="https://www.linkedin.com/in/s-thom/"
-      aria-label="LinkedIn"
-      rel="nofollow noopener noreferrer"
-      target="_blank"
-    >
-      <LinkedinIcon />
-    </a>
+  <div>
+    <p>
+      Hi, my name is Stuart and I make things on the internet. Sometimes that
+      comes in the form of <a href="/projects">small websites</a> or other
+      projects, and sometimes in the form of <a href="/blog">blog posts</a>. You
+      can also read a little <a href="/about">about me</a> too.
+    </p>
   </div>
 
   <div class="projects-area small-bleed flow">
-    <h3 class="projects-heading">Recent projects</h3>
+    <div class="projects-heading">
+      <h3>Recent projects</h3>
+      <a href="/projects" class="projects-see-more">See more...</a>
+    </div>
     <div class="projects-list">
       {
         projectItemsToShow.map((item) => (
@@ -89,7 +67,6 @@ const projectItemsToShow = activeProjectItems.slice(0, NUM_PROJECTS_TO_SHOW);
           />
         ))
       }
-      <a href="/projects" class="projects-see-more">See more...</a>
     </div>
   </div>
 
@@ -136,14 +113,36 @@ const projectItemsToShow = activeProjectItems.slice(0, NUM_PROJECTS_TO_SHOW);
     }
   }
 
+  .tagline {
+    font-size: var(--size-step-1) !important;
+  }
+
   .links-list {
     display: flex;
     justify-content: center;
     gap: var(--spacing);
   }
 
+  .projects-heading {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-half);
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+  }
+
+  @media (min-width: 400px) {
+    .projects-heading {
+      flex-direction: row;
+      justify-content: center;
+      align-items: baseline;
+      gap: var(--spacing);
+    }
+  }
+
   .projects-area {
-    overflow-x: scroll;
+    overflow-x: auto;
   }
 
   .projects-list {
@@ -152,7 +151,7 @@ const projectItemsToShow = activeProjectItems.slice(0, NUM_PROJECTS_TO_SHOW);
     overflow-x: auto;
   }
 
-  @media (min-width: 1000px) {
+  @media (min-width: 850px) {
     .projects-list {
       justify-content: center;
     }
@@ -170,5 +169,6 @@ const projectItemsToShow = activeProjectItems.slice(0, NUM_PROJECTS_TO_SHOW);
   .projects-see-more {
     white-space: nowrap;
     align-self: center;
+    font-style: italic;
   }
 </style>

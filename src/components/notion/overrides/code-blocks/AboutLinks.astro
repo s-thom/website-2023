@@ -1,0 +1,62 @@
+---
+import { GithubIcon, LinkedinIcon, MailIcon } from "lucide-react";
+---
+
+<ul class="links-list">
+  <li class="link-item">
+    <a
+      class="link"
+      href="https://github.com/s-thom"
+      aria-label="GitHub"
+      rel="nofollow noopener noreferrer"
+      target="_blank"
+    >
+      <GithubIcon width={32} />
+    </a>
+  </li>
+  <li class="link-item">
+    <a
+      class="link"
+      href="mailto:me@sthom.kiwi"
+      aria-label="Email"
+      rel="nofollow noopener noreferrer"
+      target="_blank"
+    >
+      <MailIcon width={32} />
+    </a>
+  </li>
+  <li class="link-item">
+    <a
+      class="link"
+      href="https://www.linkedin.com/in/s-thom/"
+      aria-label="LinkedIn"
+      rel="nofollow noopener noreferrer"
+      target="_blank"
+    >
+      <LinkedinIcon width={32} />
+    </a>
+  </li>
+</ul>
+
+<style>
+  .links-list {
+    display: flex;
+    gap: var(--spacing);
+    justify-content: center;
+  }
+
+  .link-item {
+    display: flex;
+    line-height: 1em;
+    gap: var(--spacing);
+    align-items: center;
+
+    &:not(:last-child)::after {
+      content: "|";
+    }
+  }
+
+  .link {
+    display: inline-block;
+  }
+</style>

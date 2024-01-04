@@ -1,12 +1,13 @@
 ---
 import type { CodeBlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { highlightCode } from "../../../lib/shiki";
-import DefaultBlock from "./DefaultBlock.astro";
+import AboutLinks from "../overrides/code-blocks/AboutLinks.astro";
 import StickerBook from "../overrides/code-blocks/StickerBook.astro";
 import StickerBookFeatureToggle from "../overrides/code-blocks/StickerBookFeatureToggle.astro";
 import StickerBookFreeStickersUnlock from "../overrides/code-blocks/StickerBookFreeStickersUnlock.astro";
 import StickerBookRarityList from "../overrides/code-blocks/StickerBookRarityList.astro";
 import StickerBookUniqueUnlock from "../overrides/code-blocks/StickerBookUniqueUnlock.astro";
+import DefaultBlock from "./DefaultBlock.astro";
 
 export interface Props {
   block: CodeBlockObjectResponse;
@@ -19,6 +20,9 @@ const result = await highlightCode(block);
 let Component: any;
 if (result.type === "override") {
   switch (result.component) {
+    case "AboutLinks":
+      Component = AboutLinks;
+      break;
     case "StickerBook":
       Component = StickerBook;
       break;
