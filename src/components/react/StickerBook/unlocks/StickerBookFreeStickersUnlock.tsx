@@ -6,7 +6,7 @@ import { addSticker } from "./util";
 
 const COMMONS_TO_ADD = 5;
 const UNCOMMONS_TO_ADD = 2;
-const RARES_TO_ADD = 1;
+const RARES_TO_ADD = 0;
 
 export function StickerBookFreeStickersUnlock() {
   const isStickersEnabled = useStore((store) => store.enabled.stickers);

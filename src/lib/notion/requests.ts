@@ -1,4 +1,9 @@
-import { Client, collectPaginatedAPI } from "@notionhq/client";
+import {
+  APIErrorCode,
+  Client,
+  collectPaginatedAPI,
+  isNotionClientError,
+} from "@notionhq/client";
 import type {
   BlockObjectResponse,
   GetBlockResponse,
@@ -96,13 +101,27 @@ export const queryDatabase = withQueue(async function queryDatabase(
 
   const client = getClient();
 
-  const results = await collectPaginatedAPI(client.databases.query, {
-    database_id: id,
-    filter,
-    sorts,
-  });
+  try {
+    const results = await collectPaginatedAPI(client.databases.query, {
+      database_id: id,
+      filter,
+      sorts,
+    });
 
-  return results;
+    return results;
+  } catch (err) {
+    if (isNotionClientError(err) && err.code === APIErrorCode.ObjectNotFound) {
+      // This is likely a linked database problem, as the public API doesn't support linked databases
+      // eslint-disable-next-line no-console
+      console.error(
+        `[Notion] error querying database ${id}, it is likely a linked database`,
+      );
+      return [];
+    }
+    // eslint-disable-next-line no-console
+    console.error(`[Notion] error querying database ${id}, unknown cause`);
+    throw err;
+  }
 });
 
 // export const getPageProperties = withQueue(async function getPageProperties(
