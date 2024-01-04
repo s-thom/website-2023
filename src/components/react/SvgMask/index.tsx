@@ -89,6 +89,7 @@ export function SvgMask({
       <style>{`
         .mask-layer {
           fill: rgba(255, 255, 255, 0.4);
+          fill: rgba(255, 255, 255, var(--header-backdrop-mask-opacity, 0.4));
         }
       `}</style>
       {iconMask}

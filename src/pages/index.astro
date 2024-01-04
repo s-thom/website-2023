@@ -8,6 +8,8 @@ import { queryDatabase } from "../lib/notion/caches";
 import profile2023 from "../resources/profile-2023.jpg";
 import ProjectsItem from "../components/notion/overrides/projects/ProjectsItem.astro";
 import SiteFooter from "../components/SiteFooter.astro";
+import HeaderBackdropMask from "../components/HeaderBackdropMask.astro";
+import DefaultPageBackdrop from "../components/site/DefaultPageBackdrop.astro";
 
 const NUM_PROJECTS_TO_SHOW = 3;
 
@@ -29,6 +31,12 @@ const projectItemsToShow = activeProjectItems.slice(0, NUM_PROJECTS_TO_SHOW);
   class="home flow"
   meta={{ title: "Stuart Thomson", url: "/" }}
 >
+  <div class="site-header full-bleed" slot="site-header">
+    <HeaderBackdropMask id="home" seed="home" maskType="waves" iconType="none">
+      <DefaultPageBackdrop />
+    </HeaderBackdropMask>
+  </div>
+
   <div class="header">
     <Image
       src={profile2023}
@@ -78,6 +86,12 @@ const projectItemsToShow = activeProjectItems.slice(0, NUM_PROJECTS_TO_SHOW);
   h2,
   h3 {
     max-width: unset !important;
+  }
+
+  .site-header {
+    position: absolute;
+    top: 0;
+    z-index: -1;
   }
 
   .home {
