@@ -315,7 +315,7 @@
   font-size: var(--size-step-min1);
   bottom: 0;
   right: 0;
-  background-color: var(--color-alt-background);
+  background-color: var(--color-background-secondary);
   padding: 0em 0.5em;
   border-radius: 0.5em;
 }
@@ -449,7 +449,7 @@
 }
 
 .sticker-unlock-box {
-  background-color: var(--color-alt-background);
+  background-color: var(--color-background-secondary);
   border: 1.5px solid var(--color-border);
   border-radius: var(--border-radius);
   padding: var(--spacing);

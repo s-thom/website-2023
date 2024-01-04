@@ -4,11 +4,15 @@
     --color-text-secondary: #606060;
     --color-text-header: #ffffff;
     --color-background: #f8f8f8;
-    --color-border: #aaaaaa;
-    --color-alt-background: #dddddd;
-    --color-background-delete: #f8ecec;
-    --color-primary: #1a8fe3;
+    --color-background-secondary: #dddddd;
     --color-background-header: #002355;
+    --color-background-delete: #f8ecec;
+    --color-border: #aaaaaa;
+    --color-link: oklch(60% 0.185 258);
+    --color-link-hover: oklch(65% 0.14 258);
+    --color-link-active: oklch(60% 0.185 20);
+    --color-link-visited: oklch(60% 0.185 304);
+    --color-link-visited-hover: oklch(65% 0.185 304);
 
     --color-notion-default: oklch(45% 0 0);
     --color-notion-default-background: oklch(92% 0 0);
@@ -73,9 +77,27 @@
 
   a {
     color: currentColor;
-    text-decoration-color: var(--color-primary);
-    text-decoration-thickness: 0.3ex;
-    text-underline-offset: 0.3ex;
+    text-decoration-color: var(--color-link);
+    text-decoration-thickness: 0.2ex;
+    text-underline-offset: 0.2ex;
+
+    &:hover,
+    &:focus {
+      text-decoration-color: var(--color-link-hover);
+    }
+
+    &:visited {
+      text-decoration-color: var(--color-link-visited);
+    }
+
+    &:visited:hover,
+    &:visited:focus {
+      text-decoration-color: var(--color-link-visited-hover);
+    }
+
+    &:active {
+      text-decoration-color: var(--color-link-active);
+    }
   }
 
   .lede {

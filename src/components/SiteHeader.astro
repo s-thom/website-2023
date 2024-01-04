@@ -36,11 +36,13 @@ const { navItems, /* breadcrumbs, */ header } = Astro.props;
 
       {
         navItems && (
-          <nav aria-label="Main">
+          <nav class="site-nav" aria-label="Main">
             <ul class="nav-list">
               {navItems.map((navItem) => (
                 <li class="nav-item">
-                  <a href={navItem.url}>{navItem.name}</a>
+                  <a class="nav-link" href={navItem.url}>
+                    {navItem.name}
+                  </a>
                 </li>
               ))}
             </ul>
@@ -168,6 +170,20 @@ const { navItems, /* breadcrumbs, */ header } = Astro.props;
     }
   }
 
+  .site-name,
+  .nav-link {
+    text-decoration-style: -moz-none;
+    text-decoration-style: none;
+    text-decoration-thickness: 0;
+
+    &:focus-within,
+    &:hover,
+    &:active {
+      text-decoration-style: inherit;
+      text-decoration-thickness: inherit;
+    }
+  }
+
   .profile-photo {
     width: calc(var(--spacing) * 2);
     height: calc(var(--spacing) * 2);
@@ -183,6 +199,10 @@ const { navItems, /* breadcrumbs, */ header } = Astro.props;
       width: calc(var(--spacing) * 3);
       height: calc(var(--spacing) * 3);
     }
+  }
+
+  .site-nav {
+    margin-top: var(--spacing);
   }
 
   .nav-list {
