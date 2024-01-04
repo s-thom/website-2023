@@ -58,7 +58,12 @@ const shouldGiveStickers = specialSticker !== "none";
     showReadingTime={showReadingTime}
     showPublishEditDates={showPublishEditDates}
   />
-  <NotionBackdrop page={page} shade slot="page-backdrop" />
+  <NotionBackdrop
+    class="notion-page-backdrop"
+    page={page}
+    shade
+    slot="page-backdrop"
+  />
 
   <DevOnly>
     <div id="DEV-notion-page-id" style={{ display: "none" }}>{page.id}</div>
@@ -81,4 +86,12 @@ const shouldGiveStickers = specialSticker !== "none";
   }
 </PageWithHeaderLayout>
 
-<style></style>
+<style>
+  img.notion-page-backdrop {
+    min-height: var(--height-header);
+    width: 100vw !important;
+    position: relative;
+    left: 50%;
+    translate: -50% 0 0;
+  }
+</style>

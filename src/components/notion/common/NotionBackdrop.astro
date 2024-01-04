@@ -17,16 +17,19 @@ export interface Props {
   page: DatabaseObjectResponse | PageObjectResponse;
   shade?: boolean;
   sizes?: string;
+  class?: string;
 }
 
 const {
   page,
   shade,
   sizes = shade ? SIZES_DEFAULT_SHADED : SIZES_DEFAULT_UNSHADED,
+  class: className,
 } = Astro.props;
 
 const shouldIncludeShade = !!(page.cover && shade);
 const imageClasses = clsx(
+  className,
   "notion-backdrop-image",
   shouldIncludeShade && "notion-backdrop-image-blur",
 );
@@ -43,7 +46,7 @@ const imageClasses = clsx(
         sizes={sizes}
       />
     ) : (
-      <DefaultPageBackdrop />
+      <DefaultPageBackdrop class={className} />
     )
   }
   {shouldIncludeShade && <div class="shade" />}

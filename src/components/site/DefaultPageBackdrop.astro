@@ -1,8 +1,12 @@
 ---
+export interface Props {
+  class?: string;
+}
 
+const { class: className } = Astro.props;
 ---
 
-<div class="backdrop"></div>
+<div class:list={[className, "backdrop"]}></div>
 
 <style>
   .backdrop {

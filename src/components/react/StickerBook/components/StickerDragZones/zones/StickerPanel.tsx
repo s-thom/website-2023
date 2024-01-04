@@ -37,6 +37,7 @@ export function StickerPanel({ stickers, onCloseClick }: StickerPanelProps) {
     <div
       ref={setNodeRef}
       className={clsx(
+        "sticker-panel",
         "sticker-drag-zone",
         "sticker-drag-zone-floating",
         isOver && "sticker-drag-zone-over",

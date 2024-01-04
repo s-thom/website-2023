@@ -7,7 +7,7 @@ export const ACTIVE_PROJECTS_COLLECTION_ID =
   "d04e2d18-e9d5-4bd9-b398-a0edbe844ee5";
 
 // TODO: not have to use this
-export const BLOG_PAGE_ID = "b749d283-ebbd-4b6f-92d4-13301479c2da";
+export const BLOG_PAGE_ID = "13389202-34aa-41c3-8bdd-dcda10f24840";
 
 export const PAGE_PATH_PREFIX_OVERRIDES: Record<string, string> = {
   [BLOG_PAGE_ID]: "/blog",

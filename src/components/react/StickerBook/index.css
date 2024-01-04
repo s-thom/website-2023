@@ -115,7 +115,6 @@
   bottom: var(--spacing-half);
   right: var(--spacing-half);
   z-index: 999;
-  max-width: calc(100vw - 2rem);
 }
 
 .sticker-drag-zone-over {
@@ -145,6 +144,16 @@
 
 .sticker-page-sticker {
   position: absolute !important;
+}
+
+.sticker-panel {
+  max-width: calc(100vw - (2 * var(--spacing-half)));
+}
+
+@media (min-width: 1200px) {
+  .sticker-panel {
+    max-width: calc(50vw - (2 * var(--spacing-half)));
+  }
 }
 
 .sticker-panel-button {
@@ -301,7 +310,7 @@
   position: relative;
 }
 
-.sticker-panel-list-sticker-count {
+.sticker-panel-list-count {
   position: absolute;
   font-size: var(--size-step-min1);
   bottom: 0;
