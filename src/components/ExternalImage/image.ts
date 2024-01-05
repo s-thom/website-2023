@@ -4,6 +4,7 @@ import { join, posix, sep } from "node:path";
 import pMemo from "p-memoize";
 import PQueue from "p-queue";
 import sharp, { type Sharp } from "sharp";
+import { NOISY_LOGS } from "../../lib/constants";
 import {
   DEV_IMAGE_DIR,
   IMAGE_DIR,
@@ -112,6 +113,10 @@ export async function getImageInfo(
   }
 
   // Download file
+  if (NOISY_LOGS) {
+    // eslint-disable-next-line no-console
+    console.log(`[Images] Fetching ${id} from ${url}`);
+  }
   const response = await fetch(url);
   const mimeType = response.headers.get("Content-Type");
   const buffer = await response.arrayBuffer();

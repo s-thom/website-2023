@@ -3,6 +3,7 @@ import react from "@astrojs/react";
 // import sitemap from "@astrojs/sitemap";
 import { defineConfig } from "astro/config";
 import sthomExternalImages from "./src/components/ExternalImage/integration";
+import { IMAGE_OPTIMISATION_ALLOWED_DOMAINS } from "./src/lib/constants";
 
 function getSiteUrl() {
   if (process.env.SITE_URL) {
@@ -28,5 +29,8 @@ export default defineConfig({
   scopedStyleStrategy: "class",
   build: {
     assets: "static/build",
+  },
+  image: {
+    domains: IMAGE_OPTIMISATION_ALLOWED_DOMAINS,
   },
 });

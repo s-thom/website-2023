@@ -33,3 +33,7 @@ export const IGNORE_FROM_ALL = [
   "7737a4e6-0ff5-4170-b95a-6100471d0c0f",
   "10b11d8d-a09e-4707-ab22-bb6d768cb3fa",
 ];
+
+export const IMAGE_OPTIMISATION_ALLOWED_DOMAINS = [
+  "prod-files-secure.s3.us-west-2.amazonaws.com",
+];
