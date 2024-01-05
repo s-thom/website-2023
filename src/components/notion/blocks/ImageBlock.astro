@@ -14,7 +14,12 @@ const captionPlain = richTextToUnformattedString(block.image.caption);
 ---
 
 <figure data-block={block.id} class="block-image">
-  <NotionImage id={block.id} image={block.image} alt={captionPlain} />
+  <NotionImage
+    id={block.id}
+    image={block.image}
+    alt={captionPlain}
+    sizes="(min-width: 750px) 720px,  100vw"
+  />
   {
     block.image.caption.length > 0 ? (
       <figcaption class="block-image-caption">

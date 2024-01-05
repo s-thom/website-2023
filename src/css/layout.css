@@ -23,7 +23,7 @@
       [l-edge] var(--spacing) /* Gutter */
       [l-wide-bleed] 1fr /* Centring  */
       [l-small-bleed] minmax(auto, 15ch) /* Small bleed for special elements */
-      [content-column] min(65ch, calc(100% - (2 * var(--spacing))))
+      [content-column] min(65ch, 45rem, calc(100% - (2 * var(--spacing))))
       /* Content */
       minmax(auto, 15ch) [r-small-bleed] /* Small bleed for special elements */
       1fr [r-wide-bleed] /* Centring */

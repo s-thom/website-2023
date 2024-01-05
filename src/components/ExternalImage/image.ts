@@ -14,6 +14,14 @@ import {
 } from "./constants";
 import { addToManifest, getFromManifest } from "./manifest";
 
+type ImageTypeIdentifier =
+  | "png"
+  | "jpeg"
+  | "webp"
+  | "avif"
+  | "jxl"
+  | "webp-lossless";
+
 const convertQueue = new PQueue({ concurrency: 3, throwOnTimeout: true });
 const writeQueue = new PQueue({ concurrency: 3, throwOnTimeout: true });
 
@@ -27,7 +35,33 @@ function getConvertFunctionFactory(
     async () => (await rootSharp.metadata()).width!,
   );
 
-  return (mimeType: string): (() => Promise<ImageFormatInfo>) => {
+  return (
+    typeIdentifier: ImageTypeIdentifier,
+  ): (() => Promise<ImageFormatInfo>) => {
+    let mimeType: string;
+    switch (typeIdentifier) {
+      case "png":
+        mimeType = "image/png";
+        break;
+      case "jpeg":
+        mimeType = "image/jpeg";
+        break;
+      case "webp":
+        mimeType = "image/webp";
+        break;
+      case "avif":
+        mimeType = "image/avif";
+        break;
+      case "jxl":
+        mimeType = "image/jxl";
+        break;
+      case "webp-lossless":
+        mimeType = "image/webp";
+        break;
+      default:
+        throw new Error(`Unknown image type identifier ${typeIdentifier}`);
+    }
+
     const ext = extension(mimeType);
 
     return async (): Promise<ImageFormatInfo> => {
@@ -43,21 +77,27 @@ function getConvertFunctionFactory(
 
       let clone = rootSharp.clone();
 
-      switch (mimeType) {
-        case "image/png":
+      switch (typeIdentifier) {
+        case "png":
           clone = clone.png();
           break;
-        case "image/jpeg":
+        case "jpeg":
           clone = clone.jpeg();
           break;
-        case "image/webp":
+        case "jxl":
+          clone = clone.jxl();
+          break;
+        case "webp":
           clone = clone.webp();
           break;
-        case "image/avif":
+        case "webp-lossless":
+          clone = clone.webp({ lossless: true });
+          break;
+        case "avif":
           clone = clone.avif();
           break;
         default:
-          throw new Error(`Unable to convert to MIME type ${mimeType}`);
+          throw new Error(`Unable to convert to type ${typeIdentifier}`);
       }
 
       const generationPromises = widthsToGenerate.map(
@@ -131,15 +171,18 @@ export async function getImageInfo(
     [];
   switch (mimeType) {
     case "image/png":
-      outputs.push(convertForType("image/png"));
+      outputs.push(convertForType("webp-lossless"));
+      outputs.push(convertForType("png"));
       break;
+    // case "image/jxl":
     case "image/jpeg":
     case "image/avif":
     case "image/webp":
       outputs.push(
-        convertForType("image/webp"),
-        convertForType("image/avif"),
-        convertForType("image/jpeg"),
+        // convertForType("jxl"), // Not supported
+        convertForType("webp"),
+        convertForType("avif"),
+        convertForType("jpeg"),
       );
       break;
     default:
