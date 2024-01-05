@@ -32,8 +32,14 @@ const projectItemsToShow = activeProjectItems.slice(0, NUM_PROJECTS_TO_SHOW);
   meta={{ title: "Stuart Thomson", url: "/" }}
 >
   <div class="site-header full-bleed" slot="site-header">
-    <HeaderBackdropMask id="home" seed="home" maskType="waves" iconType="none">
-      <DefaultPageBackdrop />
+    <HeaderBackdropMask
+      class="site-header-mask"
+      id="home"
+      seed="home"
+      maskType="waves"
+      iconType="none"
+    >
+      <DefaultPageBackdrop class="site-header-backdrop" />
     </HeaderBackdropMask>
   </div>
 
@@ -90,8 +96,17 @@ const projectItemsToShow = activeProjectItems.slice(0, NUM_PROJECTS_TO_SHOW);
 
   .site-header {
     position: absolute;
+    overflow: hidden;
+
+    max-width: 100vw;
+  }
+
+  .site-header-mask {
+    position: relative;
     top: 0;
     z-index: -1;
+    left: 50%;
+    transform: translateX(-50%);
   }
 
   .home {

@@ -2,8 +2,11 @@ import type { DndContext, DragCancelEvent, DragEndEvent } from "@dnd-kit/core";
 import { useCallback, useMemo, useState } from "react";
 import { sendEvent } from "../../../../../lib/analytics";
 import { useStore } from "../../../store";
+import {
+  pageCoordsToPosition,
+  screenCoordsToPageCoords,
+} from "../../coordinates";
 import { STICKER_TYPE_MAP } from "../../data";
-import type { StickerInfo } from "../../types";
 
 export function useDragState(pageId: string) {
   const stickers = useStore((state) => state.stickers);
@@ -39,12 +42,13 @@ export function useDragState(pageId: string) {
           return;
         }
 
-        const coordinates: StickerInfo["coordinates"] = {
-          x: (event.active.rect.current.translated?.left ?? 0) + window.scrollX,
-          y: (event.active.rect.current.translated?.top ?? 0) + window.scrollY,
-        };
+        const pageCoords = screenCoordsToPageCoords({
+          x: event.active.rect.current.translated?.left ?? 0,
+          y: event.active.rect.current.translated?.top ?? 0,
+        });
+        const position = pageCoordsToPosition(pageCoords);
 
-        placeOnPage(draggingSticker.id, pageId, coordinates);
+        placeOnPage(draggingSticker.id, pageId, position);
         sendEvent("stickers-place-sticker", {
           sticker: draggingSticker.type,
           pageId,

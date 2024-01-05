@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { v4 as uuid } from "uuid";
 import { useStore } from "../../../store";
+import { pageCoordsToPosition } from "../../coordinates";
 import { AddStickerEvent } from "../../types";
 
 export function useStickerEventListeners() {
@@ -14,7 +15,7 @@ export function useStickerEventListeners() {
         unlockTime: Date.now(),
         unlockPageId: event.detail.pageId,
         zone: undefined,
-        coordinates: { x: 0, y: 0 },
+        position: pageCoordsToPosition({ x: 0, y: 0 }),
       });
     }
 

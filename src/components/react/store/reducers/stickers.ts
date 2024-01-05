@@ -31,7 +31,7 @@ export function placeOnPage(
   stickers: StickerInfo[],
   stickerId: string,
   pageId: string | undefined,
-  position: StickerInfo["coordinates"],
+  position: StickerInfo["position"],
 ) {
   const sticker = stickers.find((s) => s.id === stickerId);
   if (!sticker) {
@@ -39,7 +39,7 @@ export function placeOnPage(
   }
 
   sticker.zone = pageId;
-  sticker.coordinates = position;
+  sticker.position = position;
 }
 
 export function removeFromPage(stickers: StickerInfo[], stickerId: string) {
@@ -49,5 +49,5 @@ export function removeFromPage(stickers: StickerInfo[], stickerId: string) {
   }
 
   sticker.zone = undefined;
-  sticker.coordinates = { x: 0, y: 0 };
+  sticker.position = { type: "none" };
 }

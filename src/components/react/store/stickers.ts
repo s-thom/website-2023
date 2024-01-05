@@ -17,7 +17,7 @@ export interface StickersSlice {
   placeOnPage: (
     stickerId: string,
     pageId: string,
-    position: { x: number; y: number },
+    position: StickerInfo["position"],
   ) => void;
   removeFromPage: (stickerId: string) => void;
   setAnimationFrequency: (freq: StickersSlice["animationFrequency"]) => void;

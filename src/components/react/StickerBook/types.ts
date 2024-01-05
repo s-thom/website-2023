@@ -62,16 +62,29 @@ export const ORDERED_STICKER_TYPES = [
 
 export type StickerTypes = (typeof ORDERED_STICKER_TYPES)[number];
 
+export interface Vec2 {
+  x: number;
+  y: number;
+}
+
+export interface NonePosition {
+  type: "none";
+}
+
+export interface CenterPosition {
+  type: "center";
+  coordinates: Vec2;
+}
+
+export type StickerPosition = NonePosition | CenterPosition;
+
 export interface StickerInfo {
   id: string;
   type: StickerTypes;
   unlockTime: number;
   unlockPageId: string | undefined;
   zone: string | undefined;
-  coordinates: {
-    x: number;
-    y: number;
-  };
+  position: StickerPosition;
 }
 
 export interface AddStickerEventData {

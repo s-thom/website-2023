@@ -72,7 +72,7 @@ export function PanelButtonPreview() {
           unlockPageId: undefined,
           unlockTime: Date.now(),
           zone: undefined,
-          coordinates: { x: 0, y: 0 },
+          position: { type: "none" },
         })
       ) {
         enqueueSticker(event.detail.type);

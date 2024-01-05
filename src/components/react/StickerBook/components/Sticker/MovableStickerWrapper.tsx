@@ -1,5 +1,7 @@
 import { useDraggable } from "@dnd-kit/core";
 import clsx from "clsx";
+import { useCallback, useEffect, useRef } from "react";
+import { positionToPageCoords } from "../../coordinates";
 import type { StickerInfo } from "../../types";
 import { Sticker } from "./Sticker.tsx";
 
@@ -19,16 +21,53 @@ export function MovableStickerWrapper({
       id: sticker.id,
     });
 
+  const ref = useRef<HTMLButtonElement | null>(null);
+  const setRef = useCallback(
+    (button: HTMLButtonElement | null) => {
+      ref.current = button;
+      setNodeRef(button);
+    },
+    [setNodeRef],
+  );
+
+  // Coordinates should always be 0 in the sticker panel
+  const coordinates =
+    sticker.zone !== undefined
+      ? positionToPageCoords(sticker.position)
+      : { x: 0, y: 0 };
+  // Update position on resize as well
+  useEffect(() => {
+    if (!sticker.zone) {
+      return undefined;
+    }
+
+    function onResize() {
+      if (!ref.current) {
+        return;
+      }
+
+      const newCoordinates = positionToPageCoords(sticker.position);
+      ref.current.style.left = `${newCoordinates.x}px`;
+      ref.current.style.top = `${newCoordinates.y}px`;
+    }
+
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      window.removeEventListener("resize", onResize);
+    };
+  }, [sticker.position, sticker.zone]);
+
   return (
     <button
       className={clsx("movable-sticker-wrapper", className)}
-      ref={setNodeRef}
+      ref={setRef}
       {...listeners}
       {...attributes}
       style={{
         translate: transform ? `${transform.x}px, ${transform.y}px` : undefined,
-        top: sticker.coordinates.y,
-        left: sticker.coordinates.x,
+        top: coordinates.y,
+        left: coordinates.x,
       }}
     >
       <Sticker
