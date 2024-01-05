@@ -48,6 +48,7 @@
     --color-sticker-frame-shiny: #ffffff66;
 
     --header-backdrop-mask-opacity: 0.4;
+    --background-image-dots: url(/static/images/dots.png) center/16px;
 
     --border-radius: 4px;
 
@@ -127,7 +128,7 @@
   }
 
   body {
-    background: var(--color-background);
+    background: var(--color-background) var(--background-image-dots);
     color: var(--color-text);
   }
 
