@@ -15,6 +15,9 @@ export interface PageMetaType {
   noCrawl?: boolean;
 }
 
+const FAVICON_SIZES = [16, 64, 96, 128];
+const APPLE_ICON_SIZES = [144, 180, 192, 512];
+
 export interface Props {
   meta: PageMetaType;
 }
@@ -75,25 +78,27 @@ const sitemapURL = new URL("/sitemap.xml", Astro.site);
 <link rel="manifest" href="/manifest.json" />
 <link rel="sitemap" href={sitemapURL} />
 
-<link rel="shortcut icon" href="/favicon.ico" />
-<link
-  rel="apple-touch-icon"
-  sizes="180x180"
-  href="/static/icons/apple-icon.png"
-/>
-<link
-  rel="icon"
-  type="image/png"
-  sizes="96x96"
-  href="/static/icons/favicon-96x96.png"
-/>
-<link
-  rel="icon"
-  type="image/png"
-  sizes="32x32"
-  href="/static/icons/favicon-32x32.png"
-/>
-<link type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
+<link rel="icon" href="/favicon.ico" />
+{
+  APPLE_ICON_SIZES.map((size) => (
+    <link
+      rel="apple-touch-icon"
+      type="image/png"
+      sizes={`${size}x${size}`}
+      href={`/static/icons/apple-icon-${size}x${size}.png`}
+    />
+  ))
+}
+{
+  FAVICON_SIZES.map((size) => (
+    <link
+      rel="icon"
+      type="image/png"
+      sizes={`${size}x${size}`}
+      href={`/static/icons/favicon-${size}x${size}.png`}
+    />
+  ))
+}
 
 <script
   async

@@ -5,7 +5,7 @@ import {
   DEV_IMAGE_DIR,
   DIST_IMAGE_DIR,
   IMAGE_MANIFEST_FILENAME,
-} from "./constants";
+} from "../components/ExternalImage/constants";
 
 export default function sthomExternalImages(): AstroIntegration {
   return {

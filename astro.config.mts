@@ -2,7 +2,8 @@
 import react from "@astrojs/react";
 // import sitemap from "@astrojs/sitemap";
 import { defineConfig } from "astro/config";
-import sthomExternalImages from "./src/components/ExternalImage/integration";
+import sthomExternalImages from "./src/integrations/externalImages";
+import sthomFavicon from "./src/integrations/favicon";
 import { IMAGE_OPTIMISATION_ALLOWED_DOMAINS } from "./src/lib/constants";
 
 function getSiteUrl() {
@@ -23,6 +24,7 @@ export default defineConfig({
   site: getSiteUrl(),
   integrations: [
     sthomExternalImages(),
+    sthomFavicon({ src: "./src/resources/profile-2023.jpg" }),
     react(),
     // sitemap(),
   ],
