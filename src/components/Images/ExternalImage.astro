@@ -9,6 +9,7 @@ export interface Props {
   class?: string;
   widths?: number[];
   sizes?: string;
+  loading?: "eager" | "lazy";
 }
 
 const { id, src, ...rest } = Astro.props;

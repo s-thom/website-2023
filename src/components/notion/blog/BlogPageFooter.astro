@@ -1,14 +1,14 @@
 ---
 import { type DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
-import { Image } from "astro:assets";
 import { BLOG_PAGE_ID } from "../../../lib/constants";
 import { getFilteredBlogItems } from "../../../lib/notion/blog";
 import { getPage } from "../../../lib/notion/caches";
 import { getPagePropertyByName } from "../../../lib/notion/util";
 import profile2023 from "../../../resources/profile-2023.jpg";
+import LocalImage from "../../Images/LocalImage.astro";
+import { BlogNavUnlock } from "../../react/StickerBook/unlocks/BlogNavUnlock.tsx";
 import NotionProperty from "../properties/NotionProperty.astro";
 import BlogListPageItem from "./BlogListPageItem.astro";
-import { BlogNavUnlock } from "../../react/StickerBook/unlocks/BlogNavUnlock.tsx";
 
 export interface Props {
   page: DatabaseObjectResponse;
@@ -67,12 +67,14 @@ const tagsProperty = getPagePropertyByName(page, "Tags", "multi_select");
       )
     }
     <div class="author">
-      <Image
-        src={profile2023}
-        alt="Stuart Thomson smiling, with water and hills in the background"
+      <LocalImage
+        id="blog-footer-profile"
+        image={profile2023}
         class="profile-photo"
-        densities={[1, 1.5, 2]}
-        height={24}
+        alt="Stuart Thomson"
+        widths={[24, 48]}
+        sizes="24px"
+        loading="lazy"
       /> Written by <a href="/">Stuart Thomson</a>
     </div>
   </div>

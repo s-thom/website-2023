@@ -1,15 +1,15 @@
 ---
 import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
-import { Image } from "astro:assets";
+import HeaderBackdropMask from "../components/HeaderBackdropMask.astro";
+import LocalImage from "../components/Images/LocalImage.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import ProjectsItem from "../components/notion/overrides/projects/ProjectsItem.astro";
+import DefaultPageBackdrop from "../components/site/DefaultPageBackdrop.astro";
 import PageLayout from "../layouts/PageLayout.astro";
 import { ACTIVE_PROJECTS_COLLECTION_ID } from "../lib/constants";
 import { getFilter } from "../lib/notion/blog";
 import { queryDatabase } from "../lib/notion/caches";
 import profile2023 from "../resources/profile-2023.jpg";
-import ProjectsItem from "../components/notion/overrides/projects/ProjectsItem.astro";
-import SiteFooter from "../components/SiteFooter.astro";
-import HeaderBackdropMask from "../components/HeaderBackdropMask.astro";
-import DefaultPageBackdrop from "../components/site/DefaultPageBackdrop.astro";
 
 const NUM_PROJECTS_TO_SHOW = 3;
 
@@ -44,11 +44,13 @@ const projectItemsToShow = activeProjectItems.slice(0, NUM_PROJECTS_TO_SHOW);
   </div>
 
   <div class="header">
-    <Image
-      src={profile2023}
-      alt="Stuart Thomson"
+    <LocalImage
+      id="home-profile"
+      image={profile2023}
       class="profile-photo"
-      densities={[1, 1.5, 2]}
+      alt="Stuart Thomson"
+      widths={[80, 128, 160, 256, 320]}
+      sizes="(min-width: 900px) 160px, (min-width: 600px) 128px, 80px"
       loading="eager"
     />
     <h1>Stuart Thomson</h1>

@@ -7,6 +7,7 @@ export interface Props {
   class?: string;
   widths?: number[];
   sizes?: string;
+  loading?: "eager" | "lazy";
 }
 
 const {
@@ -15,6 +16,7 @@ const {
   class: className,
   widths,
   sizes = "100vw",
+  loading,
   ...rest
 } = Astro.props;
 
@@ -33,5 +35,5 @@ const finalFormat = formats.at(-1)!.sizes[0];
       return <source srcset={srcset} sizes={sizes} type={format.type} />;
     })
   }
-  <img class={className} src={finalFormat.path} alt={alt} />
+  <img class={className} src={finalFormat.path} alt={alt} loading={loading} />
 </picture>

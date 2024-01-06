@@ -1,10 +1,10 @@
 ---
-import { Image } from "astro:assets";
 import profile2023 from "../resources/profile-2023.jpg";
+import HeaderBackdropMask from "./HeaderBackdropMask.astro";
+import LocalImage from "./Images/LocalImage.astro";
+import type { PageMetaType } from "./PageMeta.astro";
 import DefaultPageBackdrop from "./site/DefaultPageBackdrop.astro";
 import DefaultPageHeader from "./site/DefaultPageHeader.astro";
-import type { PageMetaType } from "./PageMeta.astro";
-import HeaderBackdropMask from "./HeaderBackdropMask.astro";
 
 export interface LinkInfo {
   url: string;
@@ -24,11 +24,13 @@ const { navItems, /* breadcrumbs, */ header } = Astro.props;
   <div class="site-header-container">
     <header class="site-header">
       <a href="/" class="site-name">
-        <Image
-          src={profile2023}
-          alt="Stuart Thomson"
+        <LocalImage
+          id="site-header-profile"
+          image={profile2023}
           class="profile-photo"
-          densities={[1, 1.5, 2]}
+          alt="Stuart Thomson"
+          widths={[32, 48, 64, 96]}
+          sizes="(min-width: 900px) 48px, 32px"
           loading="eager"
         />
         <h1 class="site-name-heading">Stuart Thomson</h1>

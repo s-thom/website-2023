@@ -1,7 +1,7 @@
 ---
-import { Image } from "astro:assets";
-import { GooseButton } from "./react/GooseButton/index.tsx";
 import gooseImg from "../resources/goose.png";
+import LocalImage from "./Images/LocalImage.astro";
+import { GooseButton } from "./react/GooseButton/index.tsx";
 
 export interface Props {}
 
@@ -10,11 +10,20 @@ const {} = Astro.props;
 ---
 
 <GooseButton client:visible>
-  <Image
-    src={gooseImg}
+  <LocalImage
+    id="footer-goose"
+    class="goose-image"
+    image={gooseImg}
     alt="Goose"
-    height={48}
-    densities={[1, 1.5, 2]}
-    quality="max"
+    widths={[48, 96]}
+    sizes="48px"
+    loading="lazy"
   />
 </GooseButton>
+
+<style>
+  .goose-image {
+    width: 48px;
+    height: 48px;
+  }
+</style>

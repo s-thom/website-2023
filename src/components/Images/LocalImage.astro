@@ -10,11 +10,22 @@ export type Props = {
   class?: string;
   widths?: number[];
   sizes?: string;
+  loading?: "eager" | "lazy";
 };
 
 const { id, image, ...rest } = Astro.props;
 
-const buffer = await readFile(image.src);
+let path: string;
+// Astro prepends `@fs` to file paths
+const pathMatch = image.src.match(/^(?:[\\/])?@fs[\\/]([^?]*)(?:\?.*)?$/);
+if (pathMatch) {
+  // eslint-disable-next-line prefer-destructuring
+  path = pathMatch[1];
+} else {
+  path = image.src;
+}
+
+const buffer = await readFile(path);
 
 let mimeType: string;
 switch (image.format) {

@@ -1,12 +1,7 @@
 ---
 import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
-import { Picture } from "astro:assets";
-import sharp from "sharp";
-import { IMAGE_OPTIMISATION_ALLOWED_DOMAINS } from "../../../lib/constants";
 import DevOnly from "../../DevOnly.astro";
 import ExternalImage from "../../Images/ExternalImage.astro";
-
-const USE_ASTRO_IMAGE = false;
 
 export interface Props {
   id: string;
@@ -17,15 +12,7 @@ export interface Props {
   loading?: "eager" | "lazy";
 }
 
-const {
-  id,
-  class: className,
-  alt,
-  image,
-  sizes,
-  loading,
-  ...rest
-} = Astro.props;
+const { id, class: className, alt, image, sizes, ...rest } = Astro.props;
 
 const GENERATE_IMAGE_WIDTHS = [3840, 2560, 1920, 1440, 720, 540, 360];
 
@@ -40,41 +27,10 @@ switch (image.type) {
   default:
     url = undefined;
 }
-
-let useAstroImage = false;
-const dimensions = { width: 0, height: 0 };
-if (USE_ASTRO_IMAGE && url !== undefined) {
-  const parsedUrl = new URL(url);
-  if (IMAGE_OPTIMISATION_ALLOWED_DOMAINS.includes(parsedUrl.hostname)) {
-    useAstroImage = true;
-
-    // Need to fetch intrinsic dimensions because Astro doesn't download images before it downloads images?
-    const response = await fetch(url);
-    const buffer = await response.arrayBuffer();
-    const sharpInstance = sharp(buffer);
-    const meta = await sharpInstance.metadata();
-    dimensions.width = meta.width ?? 0;
-    dimensions.height = meta.height ?? 0;
-  }
-}
 ---
 
 {
-  useAstroImage && (
-    <Picture
-      src={url! as any}
-      alt={alt}
-      formats={["avif", "webp"]}
-      loading={loading}
-      id={id}
-      width={dimensions.width}
-      height={dimensions.height}
-    />
-  )
-}
-
-{
-  !useAstroImage && url && (
+  url ? (
     <ExternalImage
       {...rest}
       id={id}
@@ -84,11 +40,7 @@ if (USE_ASTRO_IMAGE && url !== undefined) {
       sizes={sizes}
       class={className}
     />
-  )
-}
-
-{
-  !url && (
+  ) : (
     <DevOnly>
       image {id} has image type {image.type}
     </DevOnly>
