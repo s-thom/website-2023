@@ -1,9 +1,8 @@
 ---
-import { getImageInfo } from "./image";
+import { getImageInfo, type ImageSourceData } from "./image";
 
 export interface Props {
-  id: string;
-  src: string;
+  image: ImageSourceData;
   alt: string;
   class?: string;
   widths?: number[];
@@ -11,8 +10,7 @@ export interface Props {
 }
 
 const {
-  id,
-  src,
+  image,
   alt,
   class: className,
   widths,
@@ -20,7 +18,7 @@ const {
   ...rest
 } = Astro.props;
 
-const imageInfo = await getImageInfo(id, src, widths ?? []);
+const imageInfo = await getImageInfo(image, widths ?? []);
 const formats = imageInfo.formats.slice();
 const finalFormat = formats.at(-1)!.sizes[0];
 ---

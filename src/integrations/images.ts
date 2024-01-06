@@ -5,11 +5,11 @@ import {
   DEV_IMAGE_DIR,
   DIST_IMAGE_DIR,
   IMAGE_MANIFEST_FILENAME,
-} from "../components/ExternalImage/constants";
+} from "../components/Images/constants";
 
-export default function sthomExternalImages(): AstroIntegration {
+export default function sthomImages(): AstroIntegration {
   return {
-    name: "sthom-external-images",
+    name: "sthom-images",
     hooks: {
       "astro:build:done": async () => {
         await Promise.all([

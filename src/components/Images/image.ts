@@ -4,7 +4,6 @@ import { join, posix, sep } from "node:path";
 import pMemo from "p-memoize";
 import PQueue from "p-queue";
 import sharp, { type Sharp } from "sharp";
-import { NOISY_LOGS } from "../../lib/constants";
 import {
   DEV_IMAGE_DIR,
   IMAGE_DIR,
@@ -127,6 +126,12 @@ function getConvertFunctionFactory(
   };
 }
 
+export interface ImageSourceData {
+  id: string;
+  buffer: ArrayBuffer;
+  mimeType: string;
+}
+
 /**
  * @param id An ID for this image. MUST be unique across the entire application for this image
  * @param url The URL of the image
@@ -140,36 +145,26 @@ function getConvertFunctionFactory(
  * );
  */
 export async function getImageInfo(
-  id: string,
-  url: string,
+  image: ImageSourceData,
   widths: number[],
 ): Promise<ImageInfo> {
   // This function assumes that the app is running in a single-threaded
   // environment, which is at least true for local dev and static builds.
 
-  const cached = getFromManifest(id);
+  const cached = getFromManifest(image.id);
   if (cached) {
     return cached;
   }
 
-  // Download file
-  if (NOISY_LOGS) {
-    // eslint-disable-next-line no-console
-    console.log(`[Images] Fetching ${id} from ${url}`);
-  }
-  const response = await fetch(url);
-  const mimeType = response.headers.get("Content-Type");
-  const buffer = await response.arrayBuffer();
-
-  if (!mimeType) {
-    throw new Error(`URL ${url} did not have a content type`);
-  }
-
-  const convertForType = getConvertFunctionFactory(id, buffer, widths);
+  const convertForType = getConvertFunctionFactory(
+    image.id,
+    image.buffer,
+    widths,
+  );
 
   const outputs: ReturnType<ReturnType<typeof getConvertFunctionFactory>>[] =
     [];
-  switch (mimeType) {
+  switch (image.mimeType) {
     case "image/png":
       outputs.push(convertForType("webp-lossless"));
       outputs.push(convertForType("png"));
@@ -186,13 +181,13 @@ export async function getImageInfo(
       );
       break;
     default:
-      throw new Error(`Unsupported MIME type ${mimeType}`);
+      throw new Error(`Unsupported MIME type ${image.mimeType}`);
   }
 
   const formats = await Promise.all(outputs.map(async (fn) => fn()));
 
-  const info: ImageInfo = { id, formats };
-  addToManifest(id, info);
+  const info: ImageInfo = { id: image.id, formats };
+  addToManifest(image.id, info);
   // // eslint-disable-next-line no-console
   // console.log(`Saved image ${id}`);
 

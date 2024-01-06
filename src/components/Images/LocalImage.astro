@@ -1,0 +1,39 @@
+---
+import type { ImageMetadata } from "astro";
+import { readFile } from "node:fs/promises";
+import Picture from "./Picture.astro";
+
+export type Props = {
+  id: string;
+  image: ImageMetadata;
+  alt: string;
+  class?: string;
+  widths?: number[];
+  sizes?: string;
+};
+
+const { id, image, ...rest } = Astro.props;
+
+const buffer = await readFile(image.src);
+
+let mimeType: string;
+switch (image.format) {
+  case "jpeg":
+  case "jpg":
+    mimeType = "image/jpeg";
+    break;
+  case "png":
+    mimeType = "image/png";
+    break;
+  case "webp":
+    mimeType = "image/webp";
+    break;
+  case "avif":
+    mimeType = "image/avif";
+    break;
+  default:
+    throw new Error(`Unexpected image format ${image.format}`);
+}
+---
+
+<Picture image={{ id, buffer, mimeType }} {...rest} />

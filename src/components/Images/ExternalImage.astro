@@ -1,0 +1,22 @@
+---
+import Picture from "./Picture.astro";
+import { fetchImage } from "./fetchImage";
+
+export interface Props {
+  id: string;
+  src: string;
+  alt: string;
+  class?: string;
+  widths?: number[];
+  sizes?: string;
+}
+
+const { id, src, ...rest } = Astro.props;
+
+const image = await fetchImage(src);
+---
+
+<Picture
+  image={{ id, buffer: image.buffer, mimeType: image.mimeType }}
+  {...rest}
+/>
