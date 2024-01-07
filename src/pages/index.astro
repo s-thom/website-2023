@@ -54,23 +54,34 @@ const projectItemsToShow = activeProjectItems.slice(0, NUM_PROJECTS_TO_SHOW);
       loading="eager"
     />
     <h1>Stuart Thomson</h1>
-    <h2 class="tagline">Software Developer | Human Being</h2>
+    <h2 class="tagline">
+      <a href="/about">Software Developer | Human Being</a>
+    </h2>
   </div>
 
-  <div>
+  <div class="flow">
+    <p>Hi, my name is Stuart and I make things on the internet.</p>
     <p>
-      Hi, my name is Stuart and I make things on the internet. Sometimes that
-      comes in the form of <a href="/projects">small websites</a> or other
-      projects, and sometimes in the form of <a href="/blog">blog posts</a>. You
-      can also read a little <a href="/about">about me</a> too.
+      Sometimes I write words, usually to do with whatever part of the software
+      industry I'm interested in at the time. Those are all listed on <a
+        href="/blog">my blog</a
+      >.
+    </p>
+    <p>
+      Alternatively, if you just want to see the things I've made in my spare
+      time, most of them being little websites, then I have <a href="/projects"
+        >a list of those</a
+      > too. The source code for these projects are often <a
+        href="https://github.com/s-thom"
+        rel="external">up on GitHub</a
+      >.
     </p>
   </div>
 
   <div class="projects-area small-bleed flow">
-    <div class="projects-heading">
-      <h3>Recent projects</h3>
-      <a href="/projects" class="projects-see-more">See more...</a>
-    </div>
+    <h3>
+      <a href="/projects">Recent projects</a>
+    </h3>
     <div class="projects-list">
       {
         projectItemsToShow.map((item) => (
@@ -151,24 +162,6 @@ const projectItemsToShow = activeProjectItems.slice(0, NUM_PROJECTS_TO_SHOW);
     display: flex;
     justify-content: center;
     gap: var(--spacing);
-  }
-
-  .projects-heading {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-half);
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-  }
-
-  @media (min-width: 400px) {
-    .projects-heading {
-      flex-direction: row;
-      justify-content: center;
-      align-items: baseline;
-      gap: var(--spacing);
-    }
   }
 
   .projects-area {

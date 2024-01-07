@@ -71,6 +71,10 @@ const componentsWithResolvedLinks = await Promise.all(
     };
   }),
 );
+
+function isLinkExternal(url: string): boolean {
+  return new URL(url, Astro.site).hostname !== new URL(Astro.site!).hostname;
+}
 ---
 
 {
@@ -103,7 +107,13 @@ const componentsWithResolvedLinks = await Promise.all(
       case "text":
         if (component.text.link) {
           return (
-            <a href={component.text.link.url} class:list={classes}>
+            <a
+              href={component.text.link.url}
+              class:list={classes}
+              rel={
+                isLinkExternal(component.text.link.url) ? "external" : undefined
+              }
+            >
               {component.text.content}
             </a>
           );
