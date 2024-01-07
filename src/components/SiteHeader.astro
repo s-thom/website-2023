@@ -1,7 +1,7 @@
 ---
-import profile2023 from "../resources/profile-2023.jpg";
 import HeaderBackdropMask from "./HeaderBackdropMask.astro";
 import LocalImage from "./Images/LocalImage.astro";
+import { readImage } from "./Images/fetchImage";
 import type { PageMetaType } from "./PageMeta.astro";
 import DefaultPageBackdrop from "./site/DefaultPageBackdrop.astro";
 import DefaultPageHeader from "./site/DefaultPageHeader.astro";
@@ -18,6 +18,8 @@ export interface Props {
 }
 
 const { navItems, /* breadcrumbs, */ header } = Astro.props;
+
+const profile2023 = await readImage("profile-2023.jpg");
 ---
 
 <div class="header-area">

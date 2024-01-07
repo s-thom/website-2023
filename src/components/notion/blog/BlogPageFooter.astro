@@ -4,8 +4,8 @@ import { BLOG_PAGE_ID } from "../../../lib/constants";
 import { getFilteredBlogItems } from "../../../lib/notion/blog";
 import { getPage } from "../../../lib/notion/caches";
 import { getPagePropertyByName } from "../../../lib/notion/util";
-import profile2023 from "../../../resources/profile-2023.jpg";
 import LocalImage from "../../Images/LocalImage.astro";
+import { readImage } from "../../Images/fetchImage";
 import { BlogNavUnlock } from "../../react/StickerBook/unlocks/BlogNavUnlock.tsx";
 import NotionProperty from "../properties/NotionProperty.astro";
 import BlogListPageItem from "./BlogListPageItem.astro";
@@ -38,6 +38,8 @@ if (index !== -1) {
 const publishedDateProperty = getPagePropertyByName(page, "Published", "date");
 const editedDateProperty = getPagePropertyByName(page, "Edited", "date");
 const tagsProperty = getPagePropertyByName(page, "Tags", "multi_select");
+
+const profile2023 = await readImage("profile-2023.jpg");
 ---
 
 <div class="blog-footer flow">

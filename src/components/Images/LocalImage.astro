@@ -1,45 +1,15 @@
 ---
-import type { ImageMetadata } from "astro";
-import { readFile } from "node:fs/promises";
 import Picture, { type ImageRequiredProps } from "./Picture.astro";
+import type { ImageInfo } from "./fetchImage";
 
 export interface Props extends ImageRequiredProps {
   id: string;
-  image: ImageMetadata;
+  image: ImageInfo;
 }
 
 const { id, image, ...rest } = Astro.props;
 
-let path: string;
-// Astro prepends `@fs` to file paths
-const pathMatch = image.src.match(/^(?:[\\/])?@fs[\\/]([^?]*)(?:\?.*)?$/);
-if (pathMatch) {
-  // eslint-disable-next-line prefer-destructuring
-  path = pathMatch[1];
-} else {
-  path = image.src;
-}
-
-const buffer = await readFile(path);
-
-let mimeType: string;
-switch (image.format) {
-  case "jpeg":
-  case "jpg":
-    mimeType = "image/jpeg";
-    break;
-  case "png":
-    mimeType = "image/png";
-    break;
-  case "webp":
-    mimeType = "image/webp";
-    break;
-  case "avif":
-    mimeType = "image/avif";
-    break;
-  default:
-    throw new Error(`Unexpected image format ${image.format}`);
-}
+const { buffer, mimeType } = image;
 ---
 
 <Picture image={{ id, buffer, mimeType }} {...rest} />
