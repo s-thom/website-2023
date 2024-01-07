@@ -61,8 +61,10 @@ const shouldGiveStickers = specialSticker !== "none";
   <NotionBackdrop
     class="notion-page-backdrop"
     page={page}
-    shade
     slot="page-backdrop"
+    widths={[3840, 2560, 1920, 1440, 720, 540, 360]}
+    sizes="100vw"
+    shade
   />
 
   <DevOnly>

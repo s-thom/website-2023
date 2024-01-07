@@ -41,7 +41,7 @@ const circleMaskSvg = `
   />
 </svg>
 `;
-const circleMaskBuffer = await sharp(Buffer.from(circleMaskSvg), {
+const circleMaskSharp = sharp(Buffer.from(circleMaskSvg), {
   density: 1,
 })
   .resize(MASK_SIZE)
@@ -52,15 +52,15 @@ const iosMaskSvg = `
   <rect width="${MASK_SIZE}" height="${MASK_SIZE}" rx="120" />
 </svg>
 `;
-const iosMaskBuffer = await sharp(Buffer.from(iosMaskSvg), {
+const iosMaskSharp = sharp(Buffer.from(iosMaskSvg), {
   density: 1,
 })
   .resize(MASK_SIZE)
   .png();
 
 const masks = {
-  circle: circleMaskBuffer,
-  ios: iosMaskBuffer,
+  circle: circleMaskSharp,
+  ios: iosMaskSharp,
 };
 
 export const ICON_DIR = "static/icons";

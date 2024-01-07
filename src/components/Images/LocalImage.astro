@@ -1,17 +1,12 @@
 ---
 import type { ImageMetadata } from "astro";
 import { readFile } from "node:fs/promises";
-import Picture from "./Picture.astro";
+import Picture, { type ImageRequiredProps } from "./Picture.astro";
 
-export type Props = {
+export interface Props extends ImageRequiredProps {
   id: string;
   image: ImageMetadata;
-  alt: string;
-  class?: string;
-  widths?: number[];
-  sizes?: string;
-  loading?: "eager" | "lazy";
-};
+}
 
 const { id, image, ...rest } = Astro.props;
 

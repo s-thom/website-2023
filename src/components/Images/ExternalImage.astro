@@ -1,15 +1,10 @@
 ---
-import Picture from "./Picture.astro";
+import Picture, { type ImageRequiredProps } from "./Picture.astro";
 import { fetchImage } from "./fetchImage";
 
-export interface Props {
+export interface Props extends ImageRequiredProps {
   id: string;
   src: string;
-  alt: string;
-  class?: string;
-  widths?: number[];
-  sizes?: string;
-  loading?: "eager" | "lazy";
 }
 
 const { id, src, ...rest } = Astro.props;

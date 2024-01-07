@@ -45,7 +45,11 @@ const githubFragment =
   {
     showImage && (
       <div>
-        <NotionBackdrop page={page} sizes="(min-width: 600px) 360px, 100vw" />
+        <NotionBackdrop
+          page={page}
+          widths={[1440, 720, 540, 360]}
+          sizes="(min-width: 600px) 360px, 100vw"
+        />
       </div>
     )
   }

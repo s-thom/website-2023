@@ -16,13 +16,15 @@ const SIZES_DEFAULT_UNSHADED = "100vw";
 export interface Props {
   page: DatabaseObjectResponse | PageObjectResponse;
   shade?: boolean;
-  sizes?: string;
+  widths: number[];
+  sizes: string;
   class?: string;
 }
 
 const {
   page,
   shade,
+  widths,
   sizes = shade ? SIZES_DEFAULT_SHADED : SIZES_DEFAULT_UNSHADED,
   class: className,
 } = Astro.props;
@@ -43,6 +45,7 @@ const imageClasses = clsx(
         image={page.cover}
         alt=""
         class={imageClasses}
+        widths={widths}
         sizes={sizes}
         loading="eager"
       />

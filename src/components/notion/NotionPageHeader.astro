@@ -48,7 +48,10 @@ if (showReadingTime) {
         id={`${page.id}-icon`}
         icon={page.icon}
         class="page-icon"
+        alt=""
+        widths={[64, 96, 128, 192, 256]}
         sizes="(min-width: 1200px) 128px, (min-width: 900px) 96px, 64px"
+        loading="eager"
       />
     )
   }

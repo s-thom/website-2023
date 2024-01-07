@@ -10,19 +10,31 @@ import {
   type ImageFormatInfo,
   type ImageInfo,
   type ImageSizeInfo,
+  type ImageTypeIdentifier,
 } from "./constants";
-import { addToManifest, getFromManifest } from "./manifest";
-
-type ImageTypeIdentifier =
-  | "png"
-  | "jpeg"
-  | "webp"
-  | "avif"
-  | "jxl"
-  | "webp-lossless";
+import { addToManifest, getManifest } from "./manifest";
 
 const convertQueue = new PQueue({ concurrency: 3, throwOnTimeout: true });
 const writeQueue = new PQueue({ concurrency: 3, throwOnTimeout: true });
+
+type ImageFormatWidthCacheKey = `${string}_${ImageTypeIdentifier}_${number}`;
+const IMAGE_FORMAT_WIDTHS_CACHE = new Map<
+  ImageFormatWidthCacheKey,
+  Promise<ImageSizeInfo>
+>();
+
+const readManifestPromise = getManifest().then((manifest) => {
+  for (const [id, info] of Object.entries(manifest.images)) {
+    for (const format of info.formats) {
+      for (const size of format.sizes) {
+        IMAGE_FORMAT_WIDTHS_CACHE.set(
+          `${id}_${format.type}_${size.width}`,
+          Promise.resolve(size),
+        );
+      }
+    }
+  }
+});
 
 function getConvertFunctionFactory(
   id: string,
@@ -74,54 +86,60 @@ function getConvertFunctionFactory(
         .sort();
       widthsToGenerate.unshift(intrinsicWidth);
 
-      let clone = rootSharp.clone();
+      const getFormatClone = pMemo(async () => {
+        if (!rootSharp) {
+          rootSharp = sharp(buffer);
+        }
 
-      switch (typeIdentifier) {
-        case "png":
-          clone = clone.png();
-          break;
-        case "jpeg":
-          clone = clone.jpeg();
-          break;
-        case "jxl":
-          clone = clone.jxl();
-          break;
-        case "webp":
-          clone = clone.webp();
-          break;
-        case "webp-lossless":
-          clone = clone.webp({ lossless: true });
-          break;
-        case "avif":
-          clone = clone.avif();
-          break;
-        default:
-          throw new Error(`Unable to convert to type ${typeIdentifier}`);
+        switch (typeIdentifier) {
+          case "png":
+            return rootSharp.clone().png();
+          case "jpeg":
+            return rootSharp.clone().jpeg();
+          case "jxl":
+            return rootSharp.clone().jxl();
+          case "webp":
+            return rootSharp.clone().webp();
+          case "webp-lossless":
+            return rootSharp.clone().webp({ lossless: true });
+          case "avif":
+            return rootSharp.clone().avif();
+          default:
+            throw new Error(`Unable to convert to type ${typeIdentifier}`);
+        }
+      });
+
+      async function generateForWidth(width: number): Promise<ImageSizeInfo> {
+        const formatClone = await getFormatClone();
+        const widthClone = formatClone.clone().resize({ width });
+
+        const filename = `${id}_${width}.${ext}`;
+        const filePath = join(DEV_IMAGE_DIR, filename);
+        const path = join(IMAGE_DIR, filename);
+        const pathForBrowser = `/${path.split(sep).join(posix.sep)}`;
+
+        const nodeBuffer = await convertQueue.add(() => widthClone.toBuffer());
+        if (!nodeBuffer) {
+          throw new Error("Conversion exceeded timeout");
+        }
+        await writeQueue.add(() => writeFile(filePath, nodeBuffer));
+
+        return { path: pathForBrowser, width };
       }
 
       const generationPromises = widthsToGenerate.map(
-        async (width): Promise<ImageSizeInfo> => {
-          const widthClone = clone.clone().resize({ width });
-
-          const filename = `${id}_${width}.${ext}`;
-          const filePath = join(DEV_IMAGE_DIR, filename);
-          const path = join(IMAGE_DIR, filename);
-          const pathForBrowser = `/${path.split(sep).join(posix.sep)}`;
-
-          const nodeBuffer = await convertQueue.add(() =>
-            widthClone.toBuffer(),
-          );
-          if (!nodeBuffer) {
-            throw new Error("Conversion exceeded timeout");
+        (width): Promise<ImageSizeInfo> => {
+          const key: ImageFormatWidthCacheKey = `${id}_${typeIdentifier}_${width}`;
+          if (!IMAGE_FORMAT_WIDTHS_CACHE.has(key)) {
+            IMAGE_FORMAT_WIDTHS_CACHE.set(key, generateForWidth(width));
           }
-          await writeQueue.add(() => writeFile(filePath, nodeBuffer));
 
-          return { path: pathForBrowser, width };
+          return IMAGE_FORMAT_WIDTHS_CACHE.get(key)!;
         },
       );
 
       const sizes = await Promise.all(generationPromises);
-      return { type: mimeType, sizes };
+      return { type: typeIdentifier, mimeType, sizes };
     };
   };
 }
@@ -151,10 +169,8 @@ export async function getImageInfo(
   // This function assumes that the app is running in a single-threaded
   // environment, which is at least true for local dev and static builds.
 
-  const cached = getFromManifest(image.id);
-  if (cached) {
-    return cached;
-  }
+  // Ensure old entries have been added to the cache
+  await readManifestPromise;
 
   const convertForType = getConvertFunctionFactory(
     image.id,
@@ -187,7 +203,7 @@ export async function getImageInfo(
   const formats = await Promise.all(outputs.map(async (fn) => fn()));
 
   const info: ImageInfo = { id: image.id, formats };
-  addToManifest(image.id, info);
+  await addToManifest(image.id, info);
   // // eslint-disable-next-line no-console
   // console.log(`Saved image ${id}`);
 

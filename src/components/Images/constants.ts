@@ -5,10 +5,20 @@ export interface ImageSizeInfo {
   width: number;
 }
 
+export type ImageTypeIdentifier =
+  | "png"
+  | "jpeg"
+  | "webp"
+  | "avif"
+  | "jxl"
+  | "webp-lossless";
+
 export interface ImageFormatInfo {
-  type: string;
+  type: ImageTypeIdentifier;
+  mimeType: string;
   sizes: ImageSizeInfo[];
 }
+
 export interface ImageInfo {
   id: string;
   formats: ImageFormatInfo[];

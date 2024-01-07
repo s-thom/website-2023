@@ -1,13 +1,16 @@
 ---
 import { getImageInfo, type ImageSourceData } from "./image";
 
-export interface Props {
-  image: ImageSourceData;
+export interface ImageRequiredProps {
   alt: string;
+  widths: number[];
+  sizes: string;
+  loading: "eager" | "lazy";
   class?: string;
-  widths?: number[];
-  sizes?: string;
-  loading?: "eager" | "lazy";
+}
+
+export interface Props extends ImageRequiredProps {
+  image: ImageSourceData;
 }
 
 const {

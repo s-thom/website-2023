@@ -30,7 +30,12 @@ const tagsProperty = getPagePropertyByName(page, "Tags", "multi_select") ?? {
 
 <a href={info.path} class="page-item">
   <div class="backdrop-container">
-    <NotionBackdrop page={page} shade />
+    <NotionBackdrop
+      page={page}
+      widths={[1920, 1440, 960, 720, 540, 360]}
+      sizes="(min-width: 900) 540px, 100vw"
+      shade
+    />
   </div>
   <div class="info">
     <slot name="info-top" />
@@ -40,7 +45,10 @@ const tagsProperty = getPagePropertyByName(page, "Tags", "multi_select") ?? {
           id={`${page.id}-icon`}
           icon={page.icon}
           class="icon"
+          alt=""
+          widths={[80, 160]}
           sizes="80px"
+          loading="eager"
         />
       )
     }

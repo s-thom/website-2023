@@ -2,14 +2,11 @@
 import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import DevOnly from "../../DevOnly.astro";
 import ExternalImage from "../../Images/ExternalImage.astro";
+import type { ImageRequiredProps } from "../../Images/Picture.astro";
 
-export interface Props {
+export interface Props extends ImageRequiredProps {
   id: string;
   image: NonNullable<DatabaseObjectResponse["cover"]>;
-  alt: string;
-  class?: string;
-  sizes?: string;
-  loading?: "eager" | "lazy";
 }
 
 const { id, class: className, alt, image, sizes, ...rest } = Astro.props;
