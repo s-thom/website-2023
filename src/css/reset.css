@@ -83,6 +83,10 @@
     display: contents;
   }
 
+  source {
+    display: none;
+  }
+
   /* Inherit fonts for inputs and buttons */
   input,
   button,

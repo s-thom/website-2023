@@ -6,26 +6,17 @@
     font-family: "Inter Fallback";
     src: local(Arial);
     size-adjust: 106%;
-    ascent-override: 90%;
-    descent-override: 21%;
+    ascent-override: 93%;
+    descent-override: 18%;
     line-gap-override: normal;
   }
 
   @font-face {
     font-family: "Jost Fallback";
-    src: local(Arial);
-    size-adjust: 97%;
-    ascent-override: 112%;
-    descent-override: 35%;
-    line-gap-override: normal;
-  }
-
-  @font-face {
-    font-family: "Shantell Sans Fallback";
     src: local(Tahoma);
-    size-adjust: 110%;
-    ascent-override: 93%;
-    descent-override: 31%;
+    size-adjust: 96%;
+    ascent-override: 120%;
+    descent-override: 33%;
     line-gap-override: normal;
   }
 
