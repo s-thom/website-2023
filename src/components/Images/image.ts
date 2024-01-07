@@ -28,7 +28,7 @@ const readManifestPromise = getManifest().then((manifest) => {
     for (const format of info.formats) {
       for (const size of format.sizes) {
         IMAGE_FORMAT_WIDTHS_CACHE.set(
-          `${id}_${format.type}_${size.width}`,
+          `${id}_${format.id}_${size.width}`,
           Promise.resolve(size),
         );
       }
@@ -81,9 +81,7 @@ function getConvertFunctionFactory(
       }
 
       const intrinsicWidth = await getIntrinsicWidth();
-      const widthsToGenerate = widths
-        .filter((width) => width < intrinsicWidth)
-        .sort();
+      const widthsToGenerate = widths.filter((width) => width < intrinsicWidth);
       widthsToGenerate.unshift(intrinsicWidth);
 
       const getFormatClone = pMemo(async () => {
@@ -139,7 +137,7 @@ function getConvertFunctionFactory(
       );
 
       const sizes = await Promise.all(generationPromises);
-      return { type: typeIdentifier, mimeType, sizes };
+      return { id: typeIdentifier, mimeType, sizes };
     };
   };
 }
@@ -191,8 +189,8 @@ export async function getImageInfo(
     case "image/webp":
       outputs.push(
         // convertForType("jxl"), // Not supported
-        convertForType("webp"),
         convertForType("avif"),
+        convertForType("webp"),
         convertForType("jpeg"),
       );
       break;

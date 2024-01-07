@@ -75,7 +75,7 @@ export async function addToManifest(id: string, info: ImageInfo) {
 
   for (const format of info.formats) {
     const existingFormat = existingImageInfo.formats.find(
-      (f) => f.type === format.type,
+      (f) => f.id === format.id,
     );
     if (!existingFormat) {
       existingImageInfo.formats.push(format);
@@ -96,7 +96,7 @@ export async function addToManifest(id: string, info: ImageInfo) {
       }
 
       throw new Error(
-        `ID ${id} format ${format.type} already has a size ${size.width} in the manifest with a different path`,
+        `ID ${id} format ${format.id} already has a size ${size.width} in the manifest with a different path`,
       );
     }
   }

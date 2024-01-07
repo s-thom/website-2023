@@ -14,7 +14,7 @@ export type ImageTypeIdentifier =
   | "webp-lossless";
 
 export interface ImageFormatInfo {
-  type: ImageTypeIdentifier;
+  id: ImageTypeIdentifier;
   mimeType: string;
   sizes: ImageSizeInfo[];
 }
