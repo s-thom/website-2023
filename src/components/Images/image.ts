@@ -116,7 +116,7 @@ async function convertImageForWidth(
       throw new Error(`Unsupported MIME type ${mimeType}`);
   }
 
-  const instance = sharp(buffer).resize(width, width);
+  const instance = sharp(buffer).resize(width);
 
   const formatPromises = formatsToGenerate.map<Promise<ImageWidthCacheFormat>>(
     async (format) => {
