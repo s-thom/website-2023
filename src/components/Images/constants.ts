@@ -30,6 +30,7 @@ export interface ImageFormatInfo {
 
 export interface ImageInfo {
   id: string;
+  digest: string;
   formats: ImageFormatInfo[];
 }
 

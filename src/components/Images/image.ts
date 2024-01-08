@@ -1,5 +1,6 @@
 import { extension } from "mime-types";
-import { copyFile, writeFile } from "node:fs/promises";
+import { webcrypto } from "node:crypto";
+import { copyFile, stat, writeFile } from "node:fs/promises";
 import { join, posix, sep } from "node:path";
 import pMemo from "p-memoize";
 import PQueue from "p-queue";
@@ -13,7 +14,7 @@ import {
   type ImageInfo,
   type ImageTypeIdentifier,
 } from "./constants";
-import { addToManifest, getManifest } from "./manifest";
+import { addToManifest, getManifest, removeFromManifest } from "./manifest";
 
 const fetchQueue = new PQueue({ concurrency: 3, throwOnTimeout: true });
 const convertQueue = new PQueue({ concurrency: 3, throwOnTimeout: true });
@@ -34,6 +35,7 @@ interface ImageWidthCacheFormat {
 }
 interface ImageWidthCacheValue {
   width: number;
+  cacheOnly: boolean;
   formats: ImageWidthCacheFormat[];
 }
 const IMAGE_WIDTHS_CACHE = new Map<
@@ -66,6 +68,7 @@ const readManifestPromise = getManifest().then((manifest) => {
         } else {
           tempCache.set(key, {
             width: size.width,
+            cacheOnly: true,
             formats: [formatEntry],
           });
         }
@@ -78,13 +81,20 @@ const readManifestPromise = getManifest().then((manifest) => {
   }
 });
 
+function getFilename(
+  id: string,
+  width: number,
+  formatMimeType: string,
+): string {
+  const ext = extension(formatMimeType);
+  return `${id}_${width}.${ext}`;
+}
+
 async function convertImageForWidth(
   id: string,
-  getImage: () => Promise<ImageSourceData>,
+  { buffer, mimeType }: ImageSourceData,
   width: number,
 ): Promise<ImageWidthCacheFormat[]> {
-  const { buffer, mimeType } = await getImage();
-
   const formatsToGenerate: ImageTypeIdentifier[] = [];
   switch (mimeType) {
     case "image/png":
@@ -141,8 +151,7 @@ async function convertImageForWidth(
           throw new Error(`Unable to convert to type ${format}`);
       }
 
-      const ext = extension(formatMimeType);
-      const filename = `${id}_${width}.${ext}`;
+      const filename = getFilename(id, width, formatMimeType);
       const cacheFilePath = join(CACHE_IMAGE_DIR, filename);
       const publicFilePath = join(DEV_IMAGE_DIR, filename);
       const path = join(IMAGE_DIR, filename);
@@ -205,19 +214,81 @@ export async function getImageInfo(
     return RAW_IMAGE_CACHE.get(id)!;
   });
 
+  const sourceData = await getImageMemo();
+  const manifest = await getManifest();
+  const digestBuffer = await webcrypto.subtle.digest(
+    "SHA-256",
+    sourceData.buffer,
+  );
+  const digest = `sha256:${Buffer.from(digestBuffer).toString("hex")}`;
+
+  // Remove all entries for this image from cache if the digest doesn't match.
+  // Since `getImageMemo()` is so heavily memoised, this should only happen at most once.
+  const shouldResetCache = manifest.images[id]
+    ? manifest.images[id].digest !== digest
+    : false;
+
+  if (shouldResetCache) {
+    removeFromManifest(id);
+
+    const keysToRemove: ImageWidthCacheKey[] = [];
+    const keyRegex = new RegExp(`/^${id}_\\d+$/`);
+    for (const [key] of IMAGE_WIDTHS_CACHE.entries()) {
+      if (keyRegex.test(key)) {
+        keysToRemove.push(key);
+      }
+    }
+    keysToRemove.forEach((key) => IMAGE_WIDTHS_CACHE.delete(key));
+  }
+
   // Cache any values for later
-  const sizePromises = widths.map((width) => {
+  const sizePromises = widths.map(async (width) => {
     const key: ImageWidthCacheKey = `${id}_${width}`;
     if (!IMAGE_WIDTHS_CACHE.has(key)) {
       IMAGE_WIDTHS_CACHE.set(
         key,
-        convertImageForWidth(id, getImageMemo, width).then((formats) => ({
+        convertImageForWidth(id, sourceData, width).then((formats) => ({
           width,
+          cacheOnly: false,
           formats,
         })),
       );
     }
-    return IMAGE_WIDTHS_CACHE.get(`${id}_${width}`)!;
+
+    const result = await IMAGE_WIDTHS_CACHE.get(key)!;
+    // If it has been written to the public directory already, then don't bother
+    if (!result.cacheOnly) {
+      return result;
+    }
+
+    // This flag needs to be set synchronously to avoid double copies.
+    // Even though the file technically hasn't been written yet, it will be so it's
+    // pretty safe to flip it here.
+    result.cacheOnly = false;
+
+    const copyPromises = result.formats.map(async (format) => {
+      const filename = getFilename(id, width, format.mimeType);
+      const cacheFilePath = join(CACHE_IMAGE_DIR, filename);
+      const publicFilePath = join(DEV_IMAGE_DIR, filename);
+
+      await writeQueue.add(async () => {
+        // We only need to copy the file if it doesn't already exist.
+        // The control flow is a bit weird, but it works ¯\_(ツ)_/¯
+        try {
+          const fileStat = await stat(publicFilePath);
+          if (fileStat.isFile()) {
+            return;
+          }
+
+          throw new Error("Must copy file");
+        } catch (err) {
+          await copyFile(cacheFilePath, publicFilePath);
+        }
+      });
+    });
+    await Promise.all(copyPromises);
+
+    return result;
   });
 
   // We get the results back as a list of sizes with formats, but we need it to
@@ -244,7 +315,7 @@ export async function getImageInfo(
     (a, z) => IMAGE_FORMAT_PRIORITIES[z.id] - IMAGE_FORMAT_PRIORITIES[a.id],
   );
 
-  const info = { id, formats };
+  const info = { id, digest, formats };
   await addToManifest(id, info);
 
   return info;

@@ -1,4 +1,5 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { NOISY_LOGS } from "../../lib/constants";
 import {
   CACHE_IMAGE_DIR,
   DEV_IMAGE_DIR,
@@ -6,7 +7,7 @@ import {
   type ImageInfo,
 } from "./constants";
 
-const MANIFEST_VERSION = 2;
+const MANIFEST_VERSION = 3;
 
 interface ManifestType {
   version: number;
@@ -33,6 +34,10 @@ async function readManifestFile(): Promise<ManifestType> {
 
     return manifest;
   } catch (err) {
+    if (NOISY_LOGS) {
+      // eslint-disable-next-line no-console
+      console.warn(err);
+    }
     return { version: MANIFEST_VERSION, images: {} };
   }
 }
@@ -75,6 +80,10 @@ export async function addToManifest(id: string, info: ImageInfo) {
     return;
   }
 
+  if (existingImageInfo.digest !== info.digest) {
+    throw new Error(`Entry for ID ${id} did not match digest`);
+  }
+
   for (const format of info.formats) {
     const existingFormat = existingImageInfo.formats.find(
       (f) => f.id === format.id,
@@ -101,6 +110,14 @@ export async function addToManifest(id: string, info: ImageInfo) {
         `ID ${id} format ${format.id} already has a size ${size.width} in the manifest with a different path`,
       );
     }
+  }
+
+  writeManifestFile(loadedManifest);
+}
+
+export function removeFromManifest(id: string) {
+  if (loadedManifest.images[id]) {
+    delete loadedManifest.images[id];
   }
 
   writeManifestFile(loadedManifest);
