@@ -1,5 +1,6 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import {
+  CACHE_IMAGE_DIR,
   DEV_IMAGE_DIR,
   IMAGE_MANIFEST_PATH,
   type ImageInfo,
@@ -13,7 +14,8 @@ interface ManifestType {
 }
 
 async function createManifestDir() {
-  return mkdir(DEV_IMAGE_DIR, { recursive: true });
+  await mkdir(CACHE_IMAGE_DIR, { recursive: true });
+  await mkdir(DEV_IMAGE_DIR, { recursive: true });
 }
 
 async function readManifestFile(): Promise<ManifestType> {

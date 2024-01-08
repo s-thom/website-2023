@@ -10,20 +10,22 @@ export interface ImageRequiredProps {
 }
 
 export interface Props extends ImageRequiredProps {
-  image: ImageSourceData;
+  id: string;
+  getImage: () => Promise<ImageSourceData>;
 }
 
 const {
-  image,
+  id,
+  getImage,
   alt,
   class: className,
   widths,
-  sizes = "100vw",
+  sizes,
   loading,
   ...rest
 } = Astro.props;
 
-const imageInfo = await getImageInfo(image, widths ?? []);
+const imageInfo = await getImageInfo(id, getImage, widths ?? []);
 const formats = imageInfo.formats.slice();
 const finalFormat = formats.at(-1)!.sizes[0];
 ---

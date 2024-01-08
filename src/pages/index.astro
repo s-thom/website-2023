@@ -2,7 +2,6 @@
 import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import HeaderBackdropMask from "../components/HeaderBackdropMask.astro";
 import LocalImage from "../components/Images/LocalImage.astro";
-import { readImage } from "../components/Images/fetchImage";
 import SiteFooter from "../components/SiteFooter.astro";
 import ProjectsItem from "../components/notion/overrides/projects/ProjectsItem.astro";
 import DefaultPageBackdrop from "../components/site/DefaultPageBackdrop.astro";
@@ -24,8 +23,6 @@ const activeProjectItems = (await queryDatabase(
   ],
 )) as DatabaseObjectResponse[];
 const projectItemsToShow = activeProjectItems.slice(0, NUM_PROJECTS_TO_SHOW);
-
-const profile2023 = await readImage("profile-2023.jpg");
 ---
 
 <PageLayout
@@ -48,7 +45,7 @@ const profile2023 = await readImage("profile-2023.jpg");
   <div class="header">
     <LocalImage
       id="profile2023"
-      image={profile2023}
+      resourcePath="profile-2023.jpg"
       class="profile-photo"
       alt="Stuart Thomson"
       widths={[80, 128, 160, 256, 320]}

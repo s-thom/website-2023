@@ -1,7 +1,6 @@
 ---
 import HeaderBackdropMask from "./HeaderBackdropMask.astro";
 import LocalImage from "./Images/LocalImage.astro";
-import { readImage } from "./Images/fetchImage";
 import type { PageMetaType } from "./PageMeta.astro";
 import DefaultPageBackdrop from "./site/DefaultPageBackdrop.astro";
 import DefaultPageHeader from "./site/DefaultPageHeader.astro";
@@ -18,8 +17,6 @@ export interface Props {
 }
 
 const { navItems, /* breadcrumbs, */ header } = Astro.props;
-
-const profile2023 = await readImage("profile-2023.jpg");
 ---
 
 <div class="header-area">
@@ -28,7 +25,7 @@ const profile2023 = await readImage("profile-2023.jpg");
       <a href="/" class="site-name">
         <LocalImage
           id="profile2023"
-          image={profile2023}
+          resourcePath="profile-2023.jpg"
           class="profile-photo"
           alt="Stuart Thomson"
           widths={[32, 48, 64, 96]}

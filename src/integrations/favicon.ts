@@ -63,7 +63,7 @@ const masks = {
   ios: iosMaskSharp,
 };
 
-export const ICON_DIR = "static/icons";
+export const ICON_DIR = "static/icons/build";
 export const DEV_ICON_DIR = join(process.cwd(), "public", ICON_DIR);
 export const DIST_ICON_DIR = join(process.cwd(), "dist", ICON_DIR);
 export const DEV_FAVICON_FILE = join(process.cwd(), "public", "favicon.ico");

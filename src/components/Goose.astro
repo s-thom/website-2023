@@ -1,21 +1,13 @@
 ---
 import LocalImage from "./Images/LocalImage.astro";
-import { readImage } from "./Images/fetchImage";
 import { GooseButton } from "./react/GooseButton/index.tsx";
-
-export interface Props {}
-
-// eslint-disable-next-line no-empty-pattern
-const {} = Astro.props;
-
-const gooseImg = await readImage("goose.png");
 ---
 
 <GooseButton client:visible>
   <LocalImage
     id="footer-goose"
+    resourcePath="goose.png"
     class="goose-image"
-    image={gooseImg}
     alt="Goose"
     widths={[48, 96]}
     sizes="48px"

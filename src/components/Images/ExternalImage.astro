@@ -9,10 +9,7 @@ export interface Props extends ImageRequiredProps {
 
 const { id, src, ...rest } = Astro.props;
 
-const image = await fetchImage(src);
+const getImage = () => fetchImage(src);
 ---
 
-<Picture
-  image={{ id, buffer: image.buffer, mimeType: image.mimeType }}
-  {...rest}
-/>
+<Picture id={id} getImage={getImage} {...rest} />
