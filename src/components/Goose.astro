@@ -1,9 +1,13 @@
 ---
 import LocalImage from "./Images/LocalImage.astro";
-import { GooseButton } from "./react/GooseButton/index.tsx";
 ---
 
-<GooseButton client:visible>
+<button
+  id="the-goose-button"
+  class="goose-button"
+  aria-label="Goose"
+  data-umami-event="goose"
+>
   <LocalImage
     id="footer-goose"
     resourcePath="goose.png"
@@ -13,11 +17,150 @@ import { GooseButton } from "./react/GooseButton/index.tsx";
     sizes="48px"
     loading="lazy"
   />
-</GooseButton>
+</button>
 
 <style>
+  .goose-button {
+    position: relative;
+    height: 48px;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    filter: drop-shadow(0 0 0.1rem #00000022);
+  }
+
+  @media (max-width: 1199px) {
+    :global(body):has(.sticker-panel-button-has-stickers) .goose-button {
+      margin-right: 52px;
+      margin-right: calc(52px - max((100vw - 1100px) / 2, 0px));
+    }
+  }
+
   .goose-image {
     width: 48px;
     height: 48px;
   }
+
+  .goose-button :global(.goose-heart) {
+    position: absolute;
+    top: -4em;
+    padding: 0.2em;
+    border-radius: 0.2em;
+
+    animation-duration: 2s;
+    animation-name: GooseHeartIn;
+    animation-delay: 0.1s;
+    animation-fill-mode: backwards;
+    animation-timing-function: ease-out;
+  }
+  .goose-button :global(.goose-heart.goose-heart-exit) {
+    animation-duration: 0.2s;
+    animation-name: GooseHeartOut;
+  }
+
+  @keyframes GooseHeartIn {
+    0% {
+      opacity: 0;
+      top: -1em;
+    }
+    25% {
+      opacity: 1;
+    }
+    100% {
+      top: -4em;
+    }
+  }
+
+  @keyframes GooseHeartOut {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
 </style>
+
+<script>
+  import { delay } from "../util";
+  import type { AddStickerEventData } from "./react/StickerBook/types";
+
+  const TOOLTIP_TIMEOUT = 3000;
+  const TRANSITION_DURATION = 200;
+  const SCALE_SCALE = 100;
+  const HEARTS = ["❤️", "🧡", "💛", "💚", "💙", "💜"];
+  const NOTES = ["🎵", "🎶", "🎼"];
+
+  const counter = { current: 0, count: 0 };
+
+  function createHeart(index: number, count: number) {
+    const heart = document.createElement("div");
+    heart.classList.add("goose-heart");
+    heart.textContent = HEARTS[index]!;
+    heart.ariaHidden = "true";
+
+    const translateX = Math.floor(Math.random() * 100);
+    const translateY = Math.floor(Math.random() * 10);
+    heart.style.left = `${translateX}%`;
+    heart.style.transform = `translateX(-${translateX}%) translateY(${translateY}px) scale(${
+      (count + SCALE_SCALE) / SCALE_SCALE
+    })`;
+
+    return heart;
+  }
+
+  function createNote(index: number, count: number) {
+    const heart = document.createElement("a");
+    heart.href = "https://goose.sthom.kiwi";
+    heart.rel = "external";
+    heart.classList.add("goose-heart", "umami--click--goose-note");
+    heart.textContent = NOTES[index]!;
+    heart.ariaHidden = "true";
+
+    const translateX = Math.floor(Math.random() * 100);
+    const translateY = Math.floor(Math.random() * 10);
+    heart.style.left = `${translateX}%`;
+    heart.style.transform = `translateX(-${translateX}%) translateY(${translateY}px) scale(${
+      (count + SCALE_SCALE) / SCALE_SCALE
+    })`;
+
+    return heart;
+  }
+
+  async function addHeart(button: HTMLButtonElement) {
+    // The hearts are looped over backwards. Why didn't I just reverse the array?
+    // ¯\_(ツ)_/¯
+    counter.current = (counter.current - 1 + HEARTS.length) % HEARTS.length;
+    // eslint-disable-next-line no-plusplus
+    counter.count++;
+
+    let child: Element;
+    if (counter.count % 10 === 0) {
+      child = createNote(counter.count % NOTES.length, counter.count);
+    } else {
+      child = createHeart(counter.current, counter.count);
+    }
+
+    button.appendChild(child);
+
+    const event = new CustomEvent<AddStickerEventData>("addsticker", {
+      detail: { type: "goose" },
+    });
+    window.dispatchEvent(event);
+
+    await delay(TOOLTIP_TIMEOUT);
+    child.classList.add("goose-heart-exit");
+
+    await delay(TRANSITION_DURATION);
+    button.removeChild(child);
+  }
+
+  document
+    .querySelectorAll<HTMLButtonElement>("button#the-goose-button")
+    .forEach((button) =>
+      button.addEventListener("click", () => {
+        addHeart(button);
+      }),
+    );
+</script>
