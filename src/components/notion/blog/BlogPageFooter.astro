@@ -89,11 +89,7 @@ const tagsProperty = getPagePropertyByName(page, "Tags", "multi_select");
             </Fragment>
           </BlogListPageItem>
         ) : (
-          <BlogNavUnlock
-            stickerType="glowing-star"
-            client:idle
-            client:only="react"
-          />
+          <BlogNavUnlock stickerType="glowing-star" client:idle />
         )
       }
     </div>
@@ -107,11 +103,7 @@ const tagsProperty = getPagePropertyByName(page, "Tags", "multi_select");
             </Fragment>
           </BlogListPageItem>
         ) : (
-          <BlogNavUnlock
-            stickerType="chequered-flag"
-            client:idle
-            client:only="react"
-          />
+          <BlogNavUnlock stickerType="chequered-flag" client:idle />
         )
       }
     </div>

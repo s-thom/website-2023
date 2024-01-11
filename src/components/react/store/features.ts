@@ -16,7 +16,10 @@ export const createFeaturesSlice: SimpleStateCreator<FeaturesSlice> = (
   get,
 ) => ({
   enabled: {
-    stickers: true,
+    // We sneakily use the stickers feature as an "is client" check in a couple of places, allowing
+    // client:idle to be used in places instead of client:only
+    // This is naughty and will almost certainly cause issues that bite me later.
+    stickers: !("process" in globalThis),
   },
   toggleFeature: (name, value) =>
     set((state) => {

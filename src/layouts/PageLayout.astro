@@ -35,5 +35,5 @@ const { id, meta, class: className } = Astro.props;
 
   <slot name="site-footer" />
 
-  <StickerDragZones pageId={id} client:idle client:only="react" />
+  <StickerDragZones pageId={id} client:idle />
 </MinimalLayout>
