@@ -83,7 +83,6 @@ import LocalImage from "./Images/LocalImage.astro";
 </style>
 
 <script>
-  import { delay } from "../util";
   import type { AddStickerEventData } from "./react/StickerBook/types";
 
   const TOOLTIP_TIMEOUT = 3000;
@@ -93,6 +92,12 @@ import LocalImage from "./Images/LocalImage.astro";
   const NOTES = ["🎵", "🎶", "🎼"];
 
   const counter = { current: 0, count: 0 };
+
+  function delay(ms: number) {
+    return new Promise<void>((res) => {
+      setTimeout(() => res(), ms);
+    });
+  }
 
   function createHeart(index: number, count: number) {
     const heart = document.createElement("div");
