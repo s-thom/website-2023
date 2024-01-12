@@ -14,6 +14,8 @@ import RichText from "../../common/RichText.astro";
 
 export interface Props extends NotionOverrideableProps {
   page: DatabaseObjectResponse;
+  widths: number[];
+  sizes: string;
   class?: string;
   showImage?: boolean;
   showTitle?: boolean;
@@ -23,6 +25,8 @@ export interface Props extends NotionOverrideableProps {
 
 const {
   page,
+  widths,
+  sizes,
   overrides,
   class: className,
   showImage,
@@ -45,11 +49,7 @@ const githubFragment =
   {
     showImage && (
       <div>
-        <NotionBackdrop
-          page={page}
-          widths={[1440, 720, 540, 360]}
-          sizes="(min-width: 600px) 360px, 100vw"
-        />
+        <NotionBackdrop page={page} widths={widths} sizes={sizes} />
       </div>
     )
   }

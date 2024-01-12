@@ -16,6 +16,10 @@ import {
 } from "./constants";
 import { addToManifest, getManifest, removeFromManifest } from "./manifest";
 
+// High-end phones now have densities even greater than 3.
+// That said, this will also provide clearer images for those who have zoomed in on desktop.
+const DENSITIES = [1, 1.5, 2, 2.5, 3];
+
 const fetchQueue = new PQueue({ concurrency: 3, throwOnTimeout: true });
 const convertQueue = new PQueue({ concurrency: 3, throwOnTimeout: true });
 const writeQueue = new PQueue({ concurrency: 3, throwOnTimeout: true });
@@ -80,6 +84,16 @@ const readManifestPromise = getManifest().then((manifest) => {
     IMAGE_WIDTHS_CACHE.set(key, Promise.resolve(value));
   }
 });
+
+function getWidthsForDensities(widths: number[]): number[] {
+  const allMultiplied = widths.flatMap((width) =>
+    DENSITIES.map((density) => width * density),
+  );
+
+  const deDuplicated = Array.from(new Set(allMultiplied));
+
+  return deDuplicated.sort((a, b) => a - b);
+}
 
 function getFilename(
   id: string,
@@ -241,8 +255,14 @@ export async function getImageInfo(
     keysToRemove.forEach((key) => IMAGE_WIDTHS_CACHE.delete(key));
   }
 
+  const intrinsicWidth = (await sharp(sourceData.buffer).metadata()).width!;
+  const allWidths = getWidthsForDensities(widths).filter(
+    (w) => w < intrinsicWidth,
+  );
+  allWidths.push(intrinsicWidth);
+
   // Cache any values for later
-  const sizePromises = widths.map(async (width) => {
+  const sizePromises = allWidths.map(async (width) => {
     const key: ImageWidthCacheKey = `${id}_${width}`;
     if (!IMAGE_WIDTHS_CACHE.has(key)) {
       IMAGE_WIDTHS_CACHE.set(

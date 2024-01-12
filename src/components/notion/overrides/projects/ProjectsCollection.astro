@@ -31,6 +31,8 @@ const items = (await queryDatabase(
     items.map((page) => (
       <ProjectsItem
         page={page}
+        widths={[250, 360, 540]}
+        sizes="(min-width: 600px) 360px, 100vw"
         overrides={overrides}
         showImage
         showTitle

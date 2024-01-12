@@ -8,9 +8,7 @@ export interface Props extends ImageRequiredProps {
   icon: NonNullable<DatabaseObjectResponse["icon"]>;
 }
 
-const { id, class: className, icon, sizes, ...rest } = Astro.props;
-
-const GENERATE_ICON_WIDTHS = [256, 128, 96, 64, 32];
+const { id, icon, ...rest } = Astro.props;
 
 let url: string | undefined;
 switch (icon.type) {
@@ -27,17 +25,9 @@ switch (icon.type) {
 
 {
   url ? (
-    <ExternalImage
-      {...rest}
-      id={id}
-      src={url}
-      alt=""
-      widths={GENERATE_ICON_WIDTHS}
-      class={className}
-      sizes={sizes}
-    />
+    <ExternalImage {...rest} id={id} src={url} />
   ) : (
-    <span class:list={[className, "emoji-icon"]} {...rest}>
+    <span class:list={[rest.class, "emoji-icon"]} {...rest}>
       {(icon as any).emoji}
     </span>
   )

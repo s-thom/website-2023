@@ -27,7 +27,9 @@ const {
 
 const imageInfo = await getImageInfo(id, getImage, widths ?? []);
 const formats = imageInfo.formats.slice();
-const finalFormat = formats.at(-1)!.sizes[0];
+const finalFormat = formats
+  .at(-1)!
+  .sizes.reduce((max, curr) => (max.width < curr.width ? curr : max));
 ---
 
 <picture {...rest}>

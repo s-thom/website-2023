@@ -48,7 +48,7 @@ const projectItemsToShow = activeProjectItems.slice(0, NUM_PROJECTS_TO_SHOW);
       resourcePath="profile-2023.jpg"
       class="profile-photo"
       alt="Stuart Thomson"
-      widths={[80, 128, 160, 256, 320]}
+      widths={[80, 128, 160]}
       sizes="(min-width: 900px) 160px, (min-width: 600px) 128px, 80px"
       loading="eager"
     />
@@ -87,6 +87,8 @@ const projectItemsToShow = activeProjectItems.slice(0, NUM_PROJECTS_TO_SHOW);
           <ProjectsItem
             class="project-card"
             page={item}
+            widths={[240]}
+            sizes="240px"
             overrides={{}}
             showImage
             showTitle
@@ -180,8 +182,8 @@ const projectItemsToShow = activeProjectItems.slice(0, NUM_PROJECTS_TO_SHOW);
   }
 
   .project-card {
-    min-width: 15em;
-    max-width: 15em;
+    min-width: 240px;
+    width: 240px;
 
     & :global(h3) {
       font-size: var(--size-step-1) !important;

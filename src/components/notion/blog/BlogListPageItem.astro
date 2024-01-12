@@ -32,7 +32,7 @@ const tagsProperty = getPagePropertyByName(page, "Tags", "multi_select") ?? {
   <div class="backdrop-container">
     <NotionBackdrop
       page={page}
-      widths={[1920, 1440, 960, 720, 540, 360]}
+      widths={[360, 720, 540]}
       sizes="(min-width: 900) 540px, 100vw"
       shade
     />
@@ -46,7 +46,7 @@ const tagsProperty = getPagePropertyByName(page, "Tags", "multi_select") ?? {
           icon={page.icon}
           class="icon"
           alt=""
-          widths={[80, 160]}
+          widths={[80]}
           sizes="80px"
           loading="eager"
         />

@@ -9,9 +9,7 @@ export interface Props extends ImageRequiredProps {
   image: NonNullable<DatabaseObjectResponse["cover"]>;
 }
 
-const { id, class: className, alt, image, sizes, ...rest } = Astro.props;
-
-const GENERATE_IMAGE_WIDTHS = [3840, 2560, 1920, 1440, 720, 540, 360];
+const { id, image, ...rest } = Astro.props;
 
 let url: string | undefined;
 switch (image.type) {
@@ -28,15 +26,7 @@ switch (image.type) {
 
 {
   url ? (
-    <ExternalImage
-      {...rest}
-      id={id}
-      src={url}
-      alt={alt}
-      widths={GENERATE_IMAGE_WIDTHS}
-      sizes={sizes}
-      class={className}
-    />
+    <ExternalImage {...rest} id={id} src={url} />
   ) : (
     <DevOnly>
       image {id} has image type {image.type}
