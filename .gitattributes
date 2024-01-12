@@ -4,4 +4,4 @@ public/static/lottie/* linguist-vendored
 public/static/fonts/* linguist-vendored
 src/lib/shiki/theme.ts linguist-vendored
 src/lib/shiki/shiki.css linguist-vendored
-src/css/monaspace.css linguist-vendored
+src/css/fonts/*.css linguist-vendored
