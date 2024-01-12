@@ -1,5 +1,6 @@
 @layer base {
   /* Fonts in /public are included in src/layouts/PageLayout.astro */
+  /* There are also preload directives in src/components/PageMeta.astro */
 
   /* Fallbacks generated using https://screenspan.net/fallback */
   @font-face {
@@ -92,7 +93,7 @@
   b,
   strong,
   .text-bold {
-    font-weight: bold;
+    font-weight: 700;
   }
 
   i,

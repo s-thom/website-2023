@@ -80,16 +80,6 @@ const sitemapURL = new URL("/sitemap.xml", Astro.site);
 
 <link rel="icon" href="/favicon.ico" />
 {
-  APPLE_ICON_SIZES.map((size) => (
-    <link
-      rel="apple-touch-icon"
-      type="image/png"
-      sizes={`${size}x${size}`}
-      href={`/static/icons/build/apple-icon-${size}x${size}.png`}
-    />
-  ))
-}
-{
   FAVICON_SIZES.map((size) => (
     <link
       rel="icon"
@@ -99,6 +89,31 @@ const sitemapURL = new URL("/sitemap.xml", Astro.site);
     />
   ))
 }
+{
+  APPLE_ICON_SIZES.map((size) => (
+    <link
+      rel="apple-touch-icon"
+      type="image/png"
+      sizes={`${size}x${size}`}
+      href={`/static/icons/build/apple-icon-${size}x${size}.png`}
+    />
+  ))
+}
+
+<link
+  rel="preload"
+  href="/static/fonts/inter/InterVariable.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin
+/>
+<link
+  rel="preload"
+  href="/static/fonts/jost/jost-latin-wght-normal.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin
+/>
 
 <script
   is:inline
