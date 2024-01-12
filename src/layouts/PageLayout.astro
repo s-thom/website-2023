@@ -1,6 +1,6 @@
 ---
 import PageMeta, { type PageMetaType } from "../components/PageMeta.astro";
-import { StickerDragZones } from "../components/react/StickerBook/components/StickerDragZones/index.tsx";
+import { LazyLoader } from "../components/react/LazyLoader.tsx";
 import "../components/react/StickerBook/index.css";
 import "../css/index.css";
 import MinimalLayout from "./MinimalLayout.astro";
@@ -35,5 +35,5 @@ const { id, meta, class: className } = Astro.props;
 
   <slot name="site-footer" />
 
-  <StickerDragZones pageId={id} client:idle />
+  <LazyLoader type="sticker-app" props={{ pageId: id }} client:idle />
 </MinimalLayout>

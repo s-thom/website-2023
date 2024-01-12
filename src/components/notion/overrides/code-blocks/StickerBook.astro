@@ -1,5 +1,5 @@
 ---
-import { StickerBook as ReactStickerBook } from "../../../react/StickerBook/components/StickerBook/StickerBook.tsx";
+import { LazyLoader } from "../../../react/LazyLoader.tsx";
 ---
 
-<ReactStickerBook client:only="react" />
+<LazyLoader type="sticker-book" props={{}} client:idle />

@@ -9,10 +9,10 @@ import type { LinkInfo } from "../components/SiteHeader.astro";
 import SkipLinks from "../components/SkipLinks.astro";
 import NotionPageHeader from "../components/notion/NotionPageHeader.astro";
 import NotionBackdrop from "../components/notion/common/NotionBackdrop.astro";
-import PageWithHeaderLayout from "./PageWithHeaderLayout.astro";
-import { getPagePropertyByName } from "../lib/notion/util";
-import { PageViewUnlock } from "../components/react/StickerBook/unlocks/PageViewUnlock.tsx";
+import { LazyLoader } from "../components/react/LazyLoader.tsx";
 import type { StickerTypes } from "../components/react/StickerBook/types";
+import { getPagePropertyByName } from "../lib/notion/util";
+import PageWithHeaderLayout from "./PageWithHeaderLayout.astro";
 
 export interface Props {
   page: DatabaseObjectResponse | PageObjectResponse;
@@ -78,9 +78,9 @@ const shouldGiveStickers = specialSticker !== "none";
 
   {
     shouldGiveStickers && (
-      <PageViewUnlock
-        pageId={page.id}
-        specialStickerType={specialSticker}
+      <LazyLoader
+        type="sticker-page-view-unlock"
+        props={{ pageId: page.id, specialStickerType: specialSticker }}
         client:idle
       />
     )

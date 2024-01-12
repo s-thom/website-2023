@@ -5,7 +5,7 @@ import { getFilteredBlogItems } from "../../../lib/notion/blog";
 import { getPage } from "../../../lib/notion/caches";
 import { getPagePropertyByName } from "../../../lib/notion/util";
 import LocalImage from "../../Images/LocalImage.astro";
-import { BlogNavUnlock } from "../../react/StickerBook/unlocks/BlogNavUnlock.tsx";
+import { LazyLoader } from "../../react/LazyLoader.tsx";
 import NotionProperty from "../properties/NotionProperty.astro";
 import BlogListPageItem from "./BlogListPageItem.astro";
 
@@ -89,7 +89,11 @@ const tagsProperty = getPagePropertyByName(page, "Tags", "multi_select");
             </Fragment>
           </BlogListPageItem>
         ) : (
-          <BlogNavUnlock stickerType="glowing-star" client:idle />
+          <LazyLoader
+            type="sticker-blog-nav-unlock"
+            props={{ stickerType: "glowing-star" }}
+            client:idle
+          />
         )
       }
     </div>
@@ -103,7 +107,11 @@ const tagsProperty = getPagePropertyByName(page, "Tags", "multi_select");
             </Fragment>
           </BlogListPageItem>
         ) : (
-          <BlogNavUnlock stickerType="chequered-flag" client:idle />
+          <LazyLoader
+            type="sticker-blog-nav-unlock"
+            props={{ stickerType: "chequered-flag" }}
+            client:idle
+          />
         )
       }
     </div>
