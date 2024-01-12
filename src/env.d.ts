@@ -1,7 +1,5 @@
 /// <reference types="astro/client" />
 
-import "astro";
-
 interface ImportMetaEnv {
   readonly NOTION_TOKEN: string;
 }
@@ -11,9 +9,3 @@ interface ImportMeta {
 }
 
 declare module "*.astro" {}
-
-declare module "astro" {
-  interface AstroClientDirectives {
-    "client:stickers"?: string;
-  }
-}
