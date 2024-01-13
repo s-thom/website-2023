@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { arrayRandom, range } from "../../../../util";
 import { useStore } from "../../store";
 import { STICKER_TYPES_BY_RARITY } from "../data";
+import "./StickerBookFreeStickersUnlock.css";
 import { addSticker } from "./util";
 
 const COMMONS_TO_ADD = 5;

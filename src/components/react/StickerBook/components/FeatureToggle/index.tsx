@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { useStore } from "../../../store";
+import "./FeatureToggle.css";
 
 export function FeatureToggle() {
   const isStickersEnabled = useStore((store) => store.enabled.stickers);

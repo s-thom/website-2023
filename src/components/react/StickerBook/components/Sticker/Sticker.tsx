@@ -3,6 +3,7 @@ import { type ReactNode } from "react";
 import { STICKER_TYPE_MAP } from "../../data";
 import type { StickerTypes } from "../../types";
 import { LottieSticker, getLottieData } from "./LottieSticker.tsx";
+import "./Sticker.css";
 
 export function loadSticker(type: StickerTypes): Promise<void> {
   const data = STICKER_TYPE_MAP[type];

@@ -2,6 +2,7 @@ import { DndContext, DragOverlay } from "@dnd-kit/core";
 import { useState } from "react";
 import { useStore } from "../../../store";
 import { Sticker } from "../Sticker/Sticker.tsx";
+import "./StickerApp.css";
 import { useDragState } from "./useDragState.tsx";
 import { useStickerEventListeners } from "./useStickerEventListeners";
 import { PageZone } from "./zones/PageZone.tsx";

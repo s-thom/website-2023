@@ -4,6 +4,7 @@ import { useStore } from "../../store/index";
 import { Sticker } from "../components/Sticker/Sticker.tsx";
 import { StickerFrame } from "../components/StickerFrame/index.tsx";
 import type { StickerTypes } from "../types";
+import "./StickerUnlock.css";
 import { useAddUniqueSticker } from "./useAddUniqueSticker";
 
 const STICKER_TYPE: StickerTypes = "fire-heart";

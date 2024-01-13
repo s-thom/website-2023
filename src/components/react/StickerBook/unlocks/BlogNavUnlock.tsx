@@ -4,6 +4,7 @@ import { useStore } from "../../store";
 import { Sticker } from "../components/Sticker/Sticker.tsx";
 import { StickerFrame } from "../components/StickerFrame/index.tsx";
 import type { StickerTypes } from "../types";
+import "./StickerUnlock.css";
 import { useAddUniqueSticker } from "./useAddUniqueSticker";
 
 export interface BlogNavUnlockProps {
