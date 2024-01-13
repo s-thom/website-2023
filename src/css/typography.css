@@ -1,35 +1,4 @@
 @layer base {
-  /* Fonts in /public are included in src/layouts/PageLayout.astro */
-  /* There are also preload directives in src/components/PageMeta.astro */
-
-  /* Fallbacks generated using https://screenspan.net/fallback */
-  @font-face {
-    font-family: "Inter Fallback";
-    src: local(Arial);
-    size-adjust: 106%;
-    ascent-override: 93%;
-    descent-override: 18%;
-    line-gap-override: normal;
-  }
-
-  @font-face {
-    font-family: "Jost Fallback";
-    src: local(Tahoma);
-    size-adjust: 96%;
-    ascent-override: 120%;
-    descent-override: 33%;
-    line-gap-override: normal;
-  }
-
-  @font-face {
-    font-family: "Monaspace Fallback";
-    src: local(Courier New);
-    size-adjust: 103%;
-    ascent-override: 87%;
-    descent-override: 29%;
-    line-gap-override: 0%;
-  }
-
   :root {
     --size-step-min1: clamp(0.8rem, calc(0.8rem + 0.14vw), 1rem);
     --size-step-0: clamp(1rem, calc(0.96rem + 0.22vw), 1.13rem);
@@ -39,9 +8,12 @@
     --size-step-3: clamp(1.95rem, calc(1.71rem + 1.24vw), 2.66rem);
     --size-step-4: clamp(2.44rem, calc(2.05rem + 1.93vw), 3.55rem);
 
-    --font-family-body: "Inter Variable", "Inter", "Inter Fallback", sans-serif;
-    --font-family-heading: "Jost Variable", "Jost", "Jost Fallback", sans-serif;
-    --font-family-mono: "Monaspace Neon", "Monaspace Fallback", monospace;
+    --font-family-body: Inter, Roboto, "Helvetica Neue", "Arial Nova",
+      "Nimbus Sans", Arial, system-ui, sans-serif;
+    --font-family-heading: Inter, Roboto, "Helvetica Neue", "Arial Nova",
+      "Nimbus Sans", Arial, system-ui, sans-serif;
+    --font-family-mono: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo,
+      Consolas, "DejaVu Sans Mono", monospace;
   }
 
   body {
