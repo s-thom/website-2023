@@ -1,6 +1,6 @@
 // eslint-disable-next-line import/no-unresolved
 import react from "@astrojs/react";
-// import sitemap from "@astrojs/sitemap";
+import sitemap from "@astrojs/sitemap";
 import { defineConfig } from "astro/config";
 import sthomClientStickers from "./src/integrations/clientStickers";
 import sthomFavicon from "./src/integrations/favicon";
@@ -30,7 +30,7 @@ export default defineConfig({
     sthomFavicon({ src: "./src/resources/profile-2023.jpg" }),
     sthomNotionCache(),
     react(),
-    // sitemap(),
+    sitemap(),
   ],
   scopedStyleStrategy: "class",
   build: {
