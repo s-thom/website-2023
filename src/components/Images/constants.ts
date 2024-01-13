@@ -32,6 +32,11 @@ export interface ImageInfo {
   id: string;
   digest: string;
   formats: ImageFormatInfo[];
+  original: {
+    mimeType: string;
+    path: string;
+    width: number;
+  };
 }
 
 export const IMAGE_MANIFEST_FILENAME = "images.json";

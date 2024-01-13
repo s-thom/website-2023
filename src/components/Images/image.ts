@@ -187,6 +187,59 @@ async function convertImageForWidth(
   return Promise.all(formatPromises);
 }
 
+async function convertAndCacheWidth(
+  id: string,
+  width: number,
+  sourceData: ImageSourceData,
+) {
+  const key: ImageWidthCacheKey = `${id}_${width}`;
+  if (!IMAGE_WIDTHS_CACHE.has(key)) {
+    IMAGE_WIDTHS_CACHE.set(
+      key,
+      convertImageForWidth(id, sourceData, width).then((formats) => ({
+        width,
+        cacheOnly: false,
+        formats,
+      })),
+    );
+  }
+
+  const result = await IMAGE_WIDTHS_CACHE.get(key)!;
+  // If it has been written to the public directory already, then don't bother
+  if (!result.cacheOnly) {
+    return result;
+  }
+
+  // This flag needs to be set synchronously to avoid double copies.
+  // Even though the file technically hasn't been written yet, it will be so it's
+  // pretty safe to flip it here.
+  result.cacheOnly = false;
+
+  const copyPromises = result.formats.map(async (format) => {
+    const filename = getFilename(id, width, format.mimeType);
+    const cacheFilePath = join(CACHE_IMAGE_DIR, filename);
+    const publicFilePath = join(DEV_IMAGE_DIR, filename);
+
+    await writeQueue.add(async () => {
+      // We only need to copy the file if it doesn't already exist.
+      // The control flow is a bit weird, but it works ¯\_(ツ)_/¯
+      try {
+        const fileStat = await stat(publicFilePath);
+        if (fileStat.isFile()) {
+          return;
+        }
+
+        throw new Error("Must copy file");
+      } catch (err) {
+        await copyFile(cacheFilePath, publicFilePath);
+      }
+    });
+  });
+  await Promise.all(copyPromises);
+
+  return result;
+}
+
 export interface ImageSourceData {
   buffer: ArrayBuffer;
   mimeType: string;
@@ -257,59 +310,30 @@ export async function getImageInfo(
 
   const intrinsicWidth = (await sharp(sourceData.buffer).metadata()).width!;
   const allWidths = getWidthsForDensities(widths).filter(
-    (w) => w < intrinsicWidth,
+    (w) => w <= intrinsicWidth,
   );
-  allWidths.push(intrinsicWidth);
 
-  // Cache any values for later
-  const sizePromises = allWidths.map(async (width) => {
-    const key: ImageWidthCacheKey = `${id}_${width}`;
-    if (!IMAGE_WIDTHS_CACHE.has(key)) {
-      IMAGE_WIDTHS_CACHE.set(
-        key,
-        convertImageForWidth(id, sourceData, width).then((formats) => ({
-          width,
-          cacheOnly: false,
-          formats,
-        })),
-      );
-    }
+  // Convert image for all relevant sizes, using cache if possible
+  const sizePromises = allWidths.map((width) =>
+    convertAndCacheWidth(id, width, sourceData),
+  );
 
-    const result = await IMAGE_WIDTHS_CACHE.get(key)!;
-    // If it has been written to the public directory already, then don't bother
-    if (!result.cacheOnly) {
-      return result;
-    }
-
-    // This flag needs to be set synchronously to avoid double copies.
-    // Even though the file technically hasn't been written yet, it will be so it's
-    // pretty safe to flip it here.
-    result.cacheOnly = false;
-
-    const copyPromises = result.formats.map(async (format) => {
-      const filename = getFilename(id, width, format.mimeType);
-      const cacheFilePath = join(CACHE_IMAGE_DIR, filename);
-      const publicFilePath = join(DEV_IMAGE_DIR, filename);
-
-      await writeQueue.add(async () => {
-        // We only need to copy the file if it doesn't already exist.
-        // The control flow is a bit weird, but it works ¯\_(ツ)_/¯
-        try {
-          const fileStat = await stat(publicFilePath);
-          if (fileStat.isFile()) {
-            return;
-          }
-
-          throw new Error("Must copy file");
-        } catch (err) {
-          await copyFile(cacheFilePath, publicFilePath);
-        }
-      });
-    });
-    await Promise.all(copyPromises);
-
-    return result;
-  });
+  // Also save a copy of the original size for fallback.
+  // This does actually get re-processed, along with generating multiple formats.
+  // I just don't feel like rewriting this file _again_ just for this.
+  const originalSize = await convertAndCacheWidth(
+    id,
+    intrinsicWidth,
+    sourceData,
+  );
+  const originalSizeFormat = originalSize.formats.find(
+    (format) => format.mimeType === sourceData.mimeType,
+  );
+  if (!originalSizeFormat) {
+    throw new Error(
+      `Image conversion for ${id} did not save in original format`,
+    );
+  }
 
   // We get the results back as a list of sizes with formats, but we need it to
   // be a list of formats with sizes (as that's what the <source> element uses)
@@ -335,7 +359,16 @@ export async function getImageInfo(
     (a, z) => IMAGE_FORMAT_PRIORITIES[z.id] - IMAGE_FORMAT_PRIORITIES[a.id],
   );
 
-  const info = { id, digest, formats };
+  const info: ImageInfo = {
+    id,
+    digest,
+    formats,
+    original: {
+      mimeType: sourceData.mimeType,
+      width: intrinsicWidth,
+      path: originalSizeFormat.path,
+    },
+  };
   await addToManifest(id, info);
 
   return info;

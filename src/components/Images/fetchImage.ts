@@ -19,10 +19,16 @@ export function fetchImage(src: string): Promise<ImageInfo> {
 
     const promise = fetch(src).then(
       async (response) => {
-        const mimeType = response.headers.get("Content-Type");
+        let mimeType = response.headers.get("Content-Type");
         if (!mimeType) {
           throw new Error(`Image source ${src} did not have a content type`);
         }
+
+        // Normalise JPEG mime type to the correct one.
+        if (mimeType === "image/jpg") {
+          mimeType = "image/jpeg";
+        }
+
         const buffer = await response.arrayBuffer();
         return {
           buffer,

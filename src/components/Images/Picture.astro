@@ -27,9 +27,6 @@ const {
 
 const imageInfo = await getImageInfo(id, getImage, widths ?? []);
 const formats = imageInfo.formats.slice();
-const finalFormat = formats
-  .at(-1)!
-  .sizes.reduce((max, curr) => (max.width < curr.width ? curr : max));
 ---
 
 <picture {...rest}>
@@ -44,5 +41,10 @@ const finalFormat = formats
       return <source srcset={srcset} sizes={sizes} type={format.mimeType} />;
     })
   }
-  <img class={className} src={finalFormat.path} alt={alt} loading={loading} />
+  <img
+    class={className}
+    src={imageInfo.original.path}
+    alt={alt}
+    loading={loading}
+  />
 </picture>
