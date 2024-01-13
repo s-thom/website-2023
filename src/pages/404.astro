@@ -1,0 +1,33 @@
+---
+import PageLayout from "../layouts/PageLayout.astro";
+---
+
+<PageLayout
+  id="404"
+  meta={{
+    title: "404 - Stuart Thomson",
+    description: "Page not found",
+    url: "/404",
+  }}
+>
+  <div class="content">
+    <h1 class="title">404</h1>
+    <p class="subtitle">Page not found</p>
+    <div>Return to <a href="/">home page</a></div>
+  </div>
+</PageLayout>
+
+<style>
+  .content {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing);
+  }
+
+  .subtitle {
+    font-size: var(--size-step-2);
+  }
+</style>
