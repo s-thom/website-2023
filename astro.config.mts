@@ -5,6 +5,7 @@ import { defineConfig } from "astro/config";
 import sthomClientStickers from "./src/integrations/clientStickers";
 import sthomFavicon from "./src/integrations/favicon";
 import sthomImages from "./src/integrations/images";
+import sthomNotionCache from "./src/integrations/notionCache";
 import { IMAGE_OPTIMISATION_ALLOWED_DOMAINS } from "./src/lib/constants";
 
 function getSiteUrl() {
@@ -27,6 +28,7 @@ export default defineConfig({
     sthomClientStickers(),
     sthomImages(),
     sthomFavicon({ src: "./src/resources/profile-2023.jpg" }),
+    sthomNotionCache(),
     react(),
     // sitemap(),
   ],
