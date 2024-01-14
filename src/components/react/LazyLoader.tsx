@@ -1,7 +1,7 @@
 import { StrictMode, Suspense, lazy, useEffect, useState } from "react";
-import { type StickerAppProps } from "./StickerBook/components/StickerDragZones/StickerApp.tsx";
-import { type BlogNavUnlockProps } from "./StickerBook/unlocks/BlogNavUnlock.tsx";
-import { type PageViewUnlockProps } from "./StickerBook/unlocks/PageViewUnlock.tsx";
+import type { StickerAppProps } from "./StickerBook/components/StickerDragZones/StickerApp.tsx";
+import type { BlogNavUnlockProps } from "./StickerBook/unlocks/BlogNavUnlock.tsx";
+import type { PageViewUnlockProps } from "./StickerBook/unlocks/PageViewUnlock.tsx";
 
 // This file serves a weird purpose: being a generic React root while also lazily
 // loading everything that actually matters. This is almost certainly not a good

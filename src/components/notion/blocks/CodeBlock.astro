@@ -1,13 +1,29 @@
 ---
 import type { CodeBlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { highlightCode } from "../../../lib/shiki";
-import AboutLinks from "../overrides/code-blocks/AboutLinks.astro";
-import StickerBook from "../overrides/code-blocks/StickerBook.astro";
-import StickerBookFeatureToggle from "../overrides/code-blocks/StickerBookFeatureToggle.astro";
-import StickerBookFreeStickersUnlock from "../overrides/code-blocks/StickerBookFreeStickersUnlock.astro";
-import StickerBookRarityList from "../overrides/code-blocks/StickerBookRarityList.astro";
-import StickerBookUniqueUnlock from "../overrides/code-blocks/StickerBookUniqueUnlock.astro";
-import DefaultBlock from "./DefaultBlock.astro";
+
+const loadAboutLinks = () =>
+  import("../overrides/code-blocks/AboutLinks.astro").then((b) => b.default);
+const loadStickerBook = () =>
+  import("../overrides/code-blocks/StickerBook.astro").then((b) => b.default);
+const loadStickerBookFeatureToggle = () =>
+  import("../overrides/code-blocks/StickerBookFeatureToggle.astro").then(
+    (b) => b.default,
+  );
+const loadStickerBookFreeStickersUnlock = () =>
+  import("../overrides/code-blocks/StickerBookFreeStickersUnlock.astro").then(
+    (b) => b.default,
+  );
+const loadStickerBookRarityList = () =>
+  import("../overrides/code-blocks/StickerBookRarityList.astro").then(
+    (b) => b.default,
+  );
+const loadStickerBookUniqueUnlock = () =>
+  import("../overrides/code-blocks/StickerBookUniqueUnlock.astro").then(
+    (b) => b.default,
+  );
+const loadDefaultBlock = () =>
+  import("./DefaultBlock.astro").then((b) => b.default);
 
 export interface Props {
   block: CodeBlockObjectResponse;
@@ -21,25 +37,25 @@ let Component: any;
 if (result.type === "override") {
   switch (result.component) {
     case "AboutLinks":
-      Component = AboutLinks;
+      Component = await loadAboutLinks();
       break;
     case "StickerBook":
-      Component = StickerBook;
+      Component = await loadStickerBook();
       break;
     case "StickerBookFeatureToggle":
-      Component = StickerBookFeatureToggle;
+      Component = await loadStickerBookFeatureToggle();
       break;
     case "StickerBookFreeStickersUnlock":
-      Component = StickerBookFreeStickersUnlock;
+      Component = await loadStickerBookFreeStickersUnlock();
       break;
     case "StickerBookRarityList":
-      Component = StickerBookRarityList;
+      Component = await loadStickerBookRarityList();
       break;
     case "StickerBookUniqueUnlock":
-      Component = StickerBookUniqueUnlock;
+      Component = await loadStickerBookUniqueUnlock();
       break;
     default:
-      Component = DefaultBlock;
+      Component = await loadDefaultBlock();
   }
 }
 ---

@@ -1,26 +1,42 @@
 ---
 import type { BlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { getBlockChildren } from "../../../lib/notion/caches";
-import BulletedListItemBlock from "./BulletedListItemBlock.astro";
-import CalloutBlock from "./CalloutBlock.astro";
-import CodeBlock from "./CodeBlock.astro";
-import Column from "./Column.astro";
-import ColumnList from "./ColumnList.astro";
-import DefaultBlock from "./DefaultBlock.astro";
-import DividerBlock from "./DividerBlock.astro";
-import Heading1Block from "./Heading1Block.astro";
-import Heading2Block from "./Heading2Block.astro";
-import Heading3Block from "./Heading3Block.astro";
-import ImageBlock from "./ImageBlock.astro";
-import NumberedListItemBlock from "./NumberedListItemBlock.astro";
-import ParagraphBlock from "./ParagraphBlock.astro";
-import QuoteBlock from "./QuoteBlock.astro";
-import TableBlock from "./TableBlock.astro";
-import TableRowBlock from "./TableRowBlock.astro";
-import TodoBlock from "./TodoBlock.astro";
-import ToggleBlock from "./ToggleBlock.astro";
 import type { NotionOverrideableProps } from "./types";
 import NotionRenderer from "./NotionRenderer.astro";
+
+const loadBulletedListItemBlock = () =>
+  import("./BulletedListItemBlock.astro").then((b) => b.default);
+const loadCalloutBlock = () =>
+  import("./CalloutBlock.astro").then((b) => b.default);
+const loadCodeBlock = () => import("./CodeBlock.astro").then((b) => b.default);
+const loadColumn = () => import("./Column.astro").then((b) => b.default);
+const loadColumnList = () =>
+  import("./ColumnList.astro").then((b) => b.default);
+const loadDefaultBlock = () =>
+  import("./DefaultBlock.astro").then((b) => b.default);
+const loadDividerBlock = () =>
+  import("./DividerBlock.astro").then((b) => b.default);
+const loadHeading1Block = () =>
+  import("./Heading1Block.astro").then((b) => b.default);
+const loadHeading2Block = () =>
+  import("./Heading2Block.astro").then((b) => b.default);
+const loadHeading3Block = () =>
+  import("./Heading3Block.astro").then((b) => b.default);
+const loadImageBlock = () =>
+  import("./ImageBlock.astro").then((b) => b.default);
+const loadNumberedListItemBlock = () =>
+  import("./NumberedListItemBlock.astro").then((b) => b.default);
+const loadParagraphBlock = () =>
+  import("./ParagraphBlock.astro").then((b) => b.default);
+const loadQuoteBlock = () =>
+  import("./QuoteBlock.astro").then((b) => b.default);
+const loadTableBlock = () =>
+  import("./TableBlock.astro").then((b) => b.default);
+const loadTableRowBlock = () =>
+  import("./TableRowBlock.astro").then((b) => b.default);
+const loadTodoBlock = () => import("./TodoBlock.astro").then((b) => b.default);
+const loadToggleBlock = () =>
+  import("./ToggleBlock.astro").then((b) => b.default);
 
 export interface Props extends NotionOverrideableProps {
   block: BlockObjectResponse;
@@ -35,55 +51,55 @@ const children = block.has_children
 let Component: any;
 switch (block.type) {
   case "paragraph":
-    Component = ParagraphBlock;
+    Component = await loadParagraphBlock();
     break;
   case "heading_1":
-    Component = Heading1Block;
+    Component = await loadHeading1Block();
     break;
   case "heading_2":
-    Component = Heading2Block;
+    Component = await loadHeading2Block();
     break;
   case "heading_3":
-    Component = Heading3Block;
+    Component = await loadHeading3Block();
     break;
   case "callout":
-    Component = CalloutBlock;
+    Component = await loadCalloutBlock();
     break;
   case "code":
-    Component = CodeBlock;
+    Component = await loadCodeBlock();
     break;
   case "toggle":
-    Component = ToggleBlock;
+    Component = await loadToggleBlock();
     break;
   case "bulleted_list_item":
-    Component = BulletedListItemBlock;
+    Component = await loadBulletedListItemBlock();
     break;
   case "numbered_list_item":
-    Component = NumberedListItemBlock;
+    Component = await loadNumberedListItemBlock();
     break;
   case "image":
-    Component = ImageBlock;
+    Component = await loadImageBlock();
     break;
   case "quote":
-    Component = QuoteBlock;
+    Component = await loadQuoteBlock();
     break;
   case "divider":
-    Component = DividerBlock;
+    Component = await loadDividerBlock();
     break;
   case "column_list":
-    Component = ColumnList;
+    Component = await loadColumnList();
     break;
   case "column":
-    Component = Column;
+    Component = await loadColumn();
     break;
   case "to_do":
-    Component = TodoBlock;
+    Component = await loadTodoBlock();
     break;
   case "table":
-    Component = TableBlock;
+    Component = await loadTableBlock();
     break;
   case "table_row":
-    Component = TableRowBlock;
+    Component = await loadTableRowBlock();
     break;
   case "template":
   case "synced_block":
@@ -102,7 +118,7 @@ switch (block.type) {
   case "link_preview":
   case "unsupported":
   default:
-    Component = DefaultBlock;
+    Component = await loadDefaultBlock();
 }
 
 if (overrides[block.type]) {
