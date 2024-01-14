@@ -82,11 +82,14 @@ if (showReadingTime) {
         )
     }
     {
-      showCoverSource && coverSourceProperty && (
-        <div class="cover-source">
-          Cover image source: <NotionProperty property={coverSourceProperty} />
-        </div>
-      )
+      showCoverSource &&
+        coverSourceProperty &&
+        coverSourceProperty.rich_text.plain_text && (
+          <div class="cover-source">
+            Cover image source:{" "}
+            <NotionProperty property={coverSourceProperty} />
+          </div>
+        )
     }
   </div>
 </div>
