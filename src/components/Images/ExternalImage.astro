@@ -7,9 +7,9 @@ export interface Props extends ImageRequiredProps {
   src: string;
 }
 
-const { id, src, ...rest } = Astro.props;
+const { id, src, class: className, ...rest } = Astro.props;
 
 const getImage = () => fetchImage(src);
 ---
 
-<Picture id={id} getImage={getImage} {...rest} />
+<Picture id={id} getImage={getImage} class={className} {...rest} />
