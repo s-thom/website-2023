@@ -5,12 +5,28 @@ export interface PageMetaType {
   title: string;
   description?: string;
   url: string;
-  imageUrl?: string;
+  images?: {
+    url: string;
+    mimeType: string;
+    width: number;
+    height: number;
+  }[];
   rssUrl?: string;
   header?: {
     seed: string;
     maskType: MaskType;
     iconType: IconType;
+  };
+  publishedDate?: string;
+  modifiedDate?: string;
+  authors?: {
+    firstName: string;
+    lastName?: string;
+    url?: string;
+  }[];
+  article?: {
+    type: "article" | "blog";
+    tags?: string[];
   };
   noCrawl?: boolean;
 }
@@ -23,13 +39,68 @@ export interface Props {
 }
 
 const { meta } = Astro.props;
-const { title, description, url, imageUrl, rssUrl, noCrawl } = meta;
+const {
+  title,
+  description,
+  url,
+  images,
+  publishedDate,
+  modifiedDate,
+  authors,
+  article,
+  rssUrl,
+  noCrawl,
+} = meta;
 
 const canonicalURL = new URL(url, Astro.site);
 const sitemapURL = new URL("/sitemap.xml", Astro.site);
+
+const jsonLd: any = {
+  "@context": "http://schema.org",
+  "@type": "WebPage",
+  mainEntityOfPage: canonicalURL,
+  url: canonicalURL,
+  headline: title,
+};
+if (description) {
+  jsonLd.description = description;
+}
+if (publishedDate) {
+  jsonLd.datePublished = publishedDate;
+}
+if (modifiedDate) {
+  jsonLd.dateModified = modifiedDate;
+}
+if (article) {
+  switch (article.type) {
+    case "article":
+      jsonLd["@type"] = "NewsArticle";
+      break;
+    case "blog":
+      jsonLd["@type"] = "BlogPosting";
+      break;
+    default:
+  }
+}
+if (authors) {
+  jsonLd.author = authors.map((author) => ({
+    "@type": "Person",
+    name: [author.firstName, author.lastName].filter(Boolean).join(" "),
+  }));
+}
+if (images && images.length > 0) {
+  jsonLd.image = images.map((image) => ({
+    "@type": "ImageObject",
+    url: new URL(image.url, Astro.site),
+    encodingFormat: image.mimeType,
+    width: image.width,
+    height: image.height,
+  }));
+  jsonLd.thumbnailUrl = new URL(images[0].url, Astro.site);
+}
 ---
 
-<meta property="og:type" content="website" />
+<meta property="og:type" content={article ? "article" : "website"} />
 <meta property="og:site_name" content="Stuart Thomson" />
 
 <title>{title}</title>
@@ -53,16 +124,59 @@ const sitemapURL = new URL("/sitemap.xml", Astro.site);
 }
 
 {
-  imageUrl ? (
+  images && images.length > 0 ? (
     <>
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:image" content={imageUrl} />
-      <meta property="og:image" content={imageUrl} />
+      <meta name="twitter:image" content={images[0].url} />
+      {images.map((image) => (
+        <>
+          <meta property="og:image" content={image.url} />
+          <meta property="og:image:type" content={image.mimeType} />
+          <meta property="og:image:width" content={image.width.toString()} />
+          <meta property="og:image:height" content={image.height.toString()} />
+        </>
+      ))}
     </>
   ) : (
     <meta name="twitter:card" content="summary" />
   )
 }
+
+{
+  article && (
+    <>
+      {publishedDate && (
+        <meta property="article:published_time" content={publishedDate} />
+      )}
+      {modifiedDate && (
+        <meta property="article:modified_time" content={modifiedDate} />
+      )}
+      {authors &&
+        authors.map((author) => (
+          <>
+            {author.firstName && (
+              <meta
+                property="article:author:first_name"
+                content={author.firstName}
+              />
+            )}
+            {author.lastName && (
+              <meta
+                property="article:author:last_name"
+                content={author.lastName}
+              />
+            )}
+          </>
+        ))}
+      {article.tags &&
+        article.tags.map((tag) => (
+          <meta property="article:tag" content={tag} />
+        ))}
+    </>
+  )
+}
+
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
 {
   rssUrl && (

@@ -50,6 +50,9 @@ const pageTitle = richTextToUnformattedString(titleComponents);
 
 const iconTypeProperty = getPagePropertyByName(page, "Theme", "select");
 const iconType = (iconTypeProperty?.select?.name as IconType) ?? "none";
+
+const publishedProperty = getPagePropertyByName(page, "Published", "date");
+const editedProperty = getPagePropertyByName(page, "Edited", "date");
 ---
 
 <NotionPageLayout
@@ -57,6 +60,9 @@ const iconType = (iconTypeProperty?.select?.name as IconType) ?? "none";
     title: pageTitle,
     url: info.path,
     header: { seed: id, maskType: "waves", iconType },
+    authors: [{ firstName: "Stuart", lastName: "Thomson" }],
+    publishedDate: publishedProperty?.date?.start,
+    modifiedDate: editedProperty?.date?.start,
   }}
   breadcrumbs={[
     { name: "Home", url: "/" },
