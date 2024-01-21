@@ -9,6 +9,7 @@ import PageLayout from "../layouts/PageLayout.astro";
 import { ACTIVE_PROJECTS_COLLECTION_ID } from "../lib/constants";
 import { getFilter } from "../lib/notion/blog";
 import { queryDatabase } from "../lib/notion/caches";
+import { generateOgImage } from "../lib/og-images";
 
 const NUM_PROJECTS_TO_SHOW = 3;
 
@@ -23,6 +24,12 @@ const activeProjectItems = (await queryDatabase(
   ],
 )) as DatabaseObjectResponse[];
 const projectItemsToShow = activeProjectItems.slice(0, NUM_PROJECTS_TO_SHOW);
+
+const ogImage = await generateOgImage({
+  id: "home_og",
+  layout: "site",
+  title: "Home",
+});
 ---
 
 <PageLayout
@@ -33,6 +40,14 @@ const projectItemsToShow = activeProjectItems.slice(0, NUM_PROJECTS_TO_SHOW);
     description: "The website of Stuart Thomson",
     authors: [{ firstName: "Stuart", lastName: "Thomson" }],
     url: "/",
+    images: [
+      {
+        url: new URL(ogImage.path, Astro.site).toString(),
+        width: ogImage.width,
+        height: ogImage.height,
+        mimeType: ogImage.mimeType,
+      },
+    ],
   }}
 >
   <div class="site-header full-bleed" slot="site-header">

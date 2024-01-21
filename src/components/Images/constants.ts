@@ -1,7 +1,11 @@
 import { join } from "node:path";
 
 export interface ImageSizeInfo {
+  /** Path for browser to request image from */
   path: string;
+  /** Path of the image file during the build */
+  filePath: string;
+  /** Intrinsic width of the image */
   width: number;
 }
 
@@ -23,18 +27,30 @@ export const IMAGE_FORMAT_PRIORITIES: Record<ImageTypeIdentifier, number> = {
 };
 
 export interface ImageFormatInfo {
+  /** Type of image format. Useful when the same MIME type is used for multiple purposes. */
   id: ImageTypeIdentifier;
+  /** MIME type of image format */
   mimeType: string;
+  /** List of sizes this image has been generated for */
   sizes: ImageSizeInfo[];
 }
 
 export interface ImageInfo {
+  /** Unique ID of this image */
   id: string;
+  /** Hash of the image contents */
   digest: string;
+  /** List of formats, and their sizes, that have been generated for this image */
   formats: ImageFormatInfo[];
+  /** Information about the original image */
   original: {
+    /** MIME type of image */
     mimeType: string;
+    /** Path for browser to request image from */
     path: string;
+    /** Path of the image file during the build */
+    filePath: string;
+    /** Intrinsic width of the image */
     width: number;
   };
 }

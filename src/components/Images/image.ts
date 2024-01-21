@@ -17,7 +17,8 @@ import {
 import { addToManifest, getManifest, removeFromManifest } from "./manifest";
 
 // High-end phones now have densities even greater than 3.
-// That said, this will also provide clearer images for those who have zoomed in on desktop.
+// This isn't just for phones, higher densities will also provide clearer
+// images for those who have zoomed in on desktop.
 const DENSITIES = [1, 1.5, 2, 2.5, 3];
 
 const fetchQueue = new PQueue({ concurrency: 3, throwOnTimeout: true });
@@ -36,6 +37,7 @@ interface ImageWidthCacheFormat {
   id: ImageTypeIdentifier;
   mimeType: string;
   path: string;
+  filePath: string;
 }
 interface ImageWidthCacheValue {
   width: number;
@@ -54,10 +56,11 @@ const readManifestPromise = getManifest().then((manifest) => {
     for (const format of info.formats) {
       for (const size of format.sizes) {
         const key: ImageWidthCacheKey = `${id}_${size.width}`;
-        const formatEntry = {
+        const formatEntry: ImageWidthCacheFormat = {
           id: format.id,
           mimeType: format.mimeType,
           path: size.path,
+          filePath: size.filePath,
         };
 
         const entry = tempCache.get(key);
@@ -180,7 +183,12 @@ async function convertImageForWidth(
         await copyFile(publicFilePath, cacheFilePath);
       });
 
-      return { id: format, mimeType: formatMimeType, path: pathForBrowser };
+      return {
+        id: format,
+        mimeType: formatMimeType,
+        path: pathForBrowser,
+        filePath: publicFilePath,
+      };
     },
   );
 
@@ -343,12 +351,22 @@ export async function getImageInfo(
     for (const format of size.formats) {
       const existingFormat = formats.find((f) => f.id === format.id);
       if (existingFormat) {
-        existingFormat.sizes.push({ width: size.width, path: format.path });
+        existingFormat.sizes.push({
+          width: size.width,
+          path: format.path,
+          filePath: format.filePath,
+        });
       } else {
         formats.push({
           id: format.id,
           mimeType: format.mimeType,
-          sizes: [{ width: size.width, path: format.path }],
+          sizes: [
+            {
+              width: size.width,
+              path: format.path,
+              filePath: format.filePath,
+            },
+          ],
         });
       }
     }
@@ -367,6 +385,7 @@ export async function getImageInfo(
       mimeType: sourceData.mimeType,
       width: intrinsicWidth,
       path: originalSizeFormat.path,
+      filePath: originalSizeFormat.filePath,
     },
   };
   await addToManifest(id, info);

@@ -5,6 +5,8 @@ import BlogPageFooter from "../../components/notion/blog/BlogPageFooter.astro";
 import type { IconType } from "../../components/react/SvgMask";
 import NotionPageLayout from "../../layouts/NotionPageLayout.astro";
 import { getFilteredBlogItems } from "../../lib/notion/blog";
+import { generateOgImage } from "../../lib/og-images";
+import { getOgImageOptionsForNotionPage } from "../../lib/og-images/notion";
 import {
   getBlockChildren,
   getInfoForPage,
@@ -53,6 +55,10 @@ const iconType = (iconTypeProperty?.select?.name as IconType) ?? "none";
 
 const publishedProperty = getPagePropertyByName(page, "Published", "date");
 const editedProperty = getPagePropertyByName(page, "Edited", "date");
+
+const ogImageOptions = await getOgImageOptionsForNotionPage(page);
+ogImageOptions.layout = "blog";
+const ogImage = await generateOgImage(ogImageOptions);
 ---
 
 <NotionPageLayout
@@ -66,6 +72,14 @@ const editedProperty = getPagePropertyByName(page, "Edited", "date");
     article: { type: "blog" },
     publishedDate: publishedProperty?.date?.start,
     modifiedDate: editedProperty?.date?.start,
+    images: [
+      {
+        url: new URL(ogImage.path, Astro.site).toString(),
+        width: ogImage.width,
+        height: ogImage.height,
+        mimeType: ogImage.mimeType,
+      },
+    ],
   }}
   breadcrumbs={[
     { name: "Home", url: "/" },

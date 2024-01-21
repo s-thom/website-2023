@@ -7,7 +7,7 @@ import {
   type ImageInfo,
 } from "./constants";
 
-const MANIFEST_VERSION = 5;
+const MANIFEST_VERSION = 6;
 
 interface ManifestType {
   version: number;
