@@ -39,4 +39,12 @@ export default defineConfig({
   image: {
     domains: IMAGE_OPTIMISATION_ALLOWED_DOMAINS,
   },
+  vite: {
+    ssr: {
+      external: ["@resvg/resvg-js"],
+    },
+    optimizeDeps: {
+      exclude: ["@resvg/resvg-js"],
+    },
+  },
 });
