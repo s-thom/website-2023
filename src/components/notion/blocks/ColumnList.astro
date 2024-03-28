@@ -11,15 +11,3 @@ const { block } = Astro.props;
 <div class="column-list" data-block={block.id}>
   <slot />
 </div>
-
-<style>
-  .column-list {
-    display: flex;
-    gap: var(--spacing);
-  }
-
-  .column-list > :global(*) {
-    flex: 1 1 0;
-    width: 0;
-  }
-</style>

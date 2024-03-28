@@ -55,33 +55,3 @@ const imageClasses = clsx(
   }
   {shouldIncludeShade && <div class="shade" />}
 </div>
-
-<style>
-  .notion-backdrop {
-    display: contents;
-  }
-  .notion-backdrop > :global(*),
-  .notion-backdrop :global(.notion-backdrop-image) {
-    height: 100%;
-    width: 100%;
-    max-width: initial;
-    object-fit: cover;
-    object-position: center;
-  }
-
-  .notion-backdrop :global(.notion-backdrop-image.notion-backdrop-image-blur) {
-    filter: blur(2px);
-    transform: scale(
-      103%
-    ); /* Quick hack so that the blur's edges aren't visible */
-  }
-
-  .shade {
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    position: absolute;
-    background-color: rgba(0, 0, 0, 0.6);
-  }
-</style>

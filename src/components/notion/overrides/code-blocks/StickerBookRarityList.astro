@@ -27,21 +27,3 @@ import { StickerFrame } from "../../../react/StickerBook/components/StickerFrame
     </div>
   </StickerFrame>
 </div>
-
-<style>
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--spacing);
-  }
-
-  @media (min-width: 500px) {
-    .grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-
-  .grid :global(.description) {
-    min-height: var(--sticker-size);
-  }
-</style>

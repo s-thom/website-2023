@@ -7,11 +7,3 @@ const { class: className } = Astro.props;
 ---
 
 <div class:list={[className, "backdrop"]}></div>
-
-<style>
-  .backdrop {
-    background-color: var(--color-background-header);
-    width: 100%;
-    height: 100%;
-  }
-</style>

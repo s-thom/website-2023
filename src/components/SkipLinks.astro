@@ -18,28 +18,3 @@ const { links } = Astro.props;
     }
   </ul>
 </div>
-
-<style>
-  .skip-links {
-    text-align: center;
-    padding: var(--spacing);
-    grid-column: var(--area-full-bleed) !important;
-    background-color: var(--color-background-header);
-    color: var(--color-text-header);
-  }
-
-  .skip-links:not(:focus-within) {
-    clip: rect(0 0 0 0);
-    clip-path: inset(50%);
-    height: 1px;
-    overflow: hidden;
-    position: absolute;
-    white-space: nowrap;
-    width: 1px;
-  }
-
-  .skip-links :global(ul) {
-    list-style: none;
-    padding-left: 0 !important;
-  }
-</style>

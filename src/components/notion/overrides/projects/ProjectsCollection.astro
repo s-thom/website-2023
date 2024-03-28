@@ -42,24 +42,3 @@ const items = (await queryDatabase(
     ))
   }
 </div>
-
-<style>
-  .projects-collection {
-    display: grid;
-    gap: var(--spacing);
-    --num-tracks: 1;
-    grid-template-columns: repeat(var(--num-tracks), 1fr);
-  }
-
-  @media (min-width: 600px) {
-    .projects-collection {
-      --num-tracks: 2;
-    }
-  }
-
-  /* @media (min-width: 900px) {
-    .projects-collection {
-      --num-tracks: 3;
-    }
-  } */
-</style>
