@@ -1,6 +1,3 @@
-@layer reset, base, layout, theme;
-
 @import "./reset.css";
 @import "./typography.css";
-@import "./layout.css";
 @import "./theme.css";

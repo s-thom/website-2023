@@ -1,76 +1,116 @@
-@layer base {
-  :root {
-    --size-step-min1: clamp(0.8rem, calc(0.8rem + 0.14vw), 1rem);
-    --size-step-0: clamp(1rem, calc(0.96rem + 0.22vw), 1.13rem);
-    --size-step-point5: clamp(1.1rem, calc(1.1rem + 0.25vw), 1.3rem);
-    --size-step-1: clamp(1.25rem, calc(1.16rem + 0.43vw), 1.5rem);
-    --size-step-2: clamp(1.56rem, calc(1.41rem + 0.76vw), 2rem);
-    --size-step-3: clamp(1.95rem, calc(1.71rem + 1.24vw), 2.66rem);
-    --size-step-4: clamp(2.44rem, calc(2.05rem + 1.93vw), 3.55rem);
+:root {
+  --size-step-min1: clamp(0.8rem, calc(0.8rem + 0.14vw), 1rem);
+  --size-step-0: clamp(1rem, calc(0.96rem + 0.22vw), 1.13rem);
+  --size-step-point5: clamp(1.1rem, calc(1.1rem + 0.25vw), 1.3rem);
+  --size-step-1: clamp(1.25rem, calc(1.16rem + 0.43vw), 1.5rem);
+  --size-step-2: clamp(1.56rem, calc(1.41rem + 0.76vw), 2rem);
+  --size-step-3: clamp(1.95rem, calc(1.71rem + 1.24vw), 2.66rem);
+  --size-step-4: clamp(2.44rem, calc(2.05rem + 1.93vw), 3.55rem);
 
-    --font-family-body: Inter, Roboto, "Helvetica Neue", "Arial Nova",
-      "Nimbus Sans", Arial, system-ui, sans-serif;
-    --font-family-heading: Inter, Roboto, "Helvetica Neue", "Arial Nova",
-      "Nimbus Sans", Arial, system-ui, sans-serif;
-    --font-family-mono: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo,
-      Consolas, "DejaVu Sans Mono", monospace;
-  }
+  --font-family-body: Inter, Roboto, "Helvetica Neue", "Arial Nova",
+    "Nimbus Sans", Arial, system-ui, sans-serif;
+  --font-family-heading: Inter, Roboto, "Helvetica Neue", "Arial Nova",
+    "Nimbus Sans", Arial, system-ui, sans-serif;
+  --font-family-mono: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo,
+    Consolas, "DejaVu Sans Mono", monospace;
+}
 
-  body {
-    font-family: var(--font-family-body);
-    font-size: var(--size-step-0);
-  }
+body {
+  font-family: var(--font-family-body);
+  font-size: var(--size-step-0);
+}
 
-  h1,
-  h2,
-  h3,
-  h4 {
-    font-family: var(--font-family-heading);
-    font-weight: 400;
-    line-height: 1.1;
-    text-wrap: balance;
-  }
+:is(body main, body main article, body main article astro-island) {
+  display: contents;
 
-  h1 {
-    font-size: var(--size-step-4);
-    max-width: 20ch;
+  & > * {
+    grid-column: content-column;
   }
+}
 
-  h2 {
-    font-size: var(--size-step-3);
-    max-width: 28ch;
-  }
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-family-heading);
+  font-weight: 400;
+  line-height: 1.1;
+  text-wrap: balance;
+}
 
-  h3 {
-    font-size: var(--size-step-2);
-    max-width: 28ch;
-  }
+h1 {
+  font-size: var(--size-step-4);
+  max-width: 20ch;
+}
 
-  h4 {
-    font-size: var(--size-step-1);
-    max-width: 28ch;
-  }
+h2 {
+  font-size: var(--size-step-3);
+  max-width: 28ch;
+}
 
-  blockquote {
-    font-style: italic;
-    font-size: var(--size-step-1);
-  }
+h3 {
+  font-size: var(--size-step-2);
+  max-width: 28ch;
+}
 
-  .text-code,
-  code {
-    font-family: var(--font-family-mono);
-    font-weight: 370;
-  }
+h4 {
+  font-size: var(--size-step-1);
+  max-width: 28ch;
+}
 
-  b,
-  strong,
-  .text-bold {
-    font-weight: 700;
-  }
+blockquote {
+  max-width: 50ch;
+  padding-inline-start: 1em;
+  border-inline-start: 0.3em solid;
+  font-style: italic;
+  font-size: var(--size-step-1);
+}
 
-  i,
-  em,
-  .text-italic {
-    font-style: italic;
-  }
+.text-code,
+code {
+  font-family: var(--font-family-mono);
+  font-weight: 370;
+}
+
+b,
+strong,
+.text-bold {
+  font-weight: 700;
+}
+
+i,
+em,
+.text-italic {
+  font-style: italic;
+}
+
+.flow > * + *,
+.flow > * + astro-island > * {
+  margin-block-start: var(--flow-space, 1em);
+}
+
+:is(h1, h2, h3, blockquote) {
+  --flow-space: 1.5em;
+}
+
+:is(h1, h2, h3) + * {
+  --flow-space: 0.8em;
+}
+
+:is(li) + * {
+  --flow-space: 0.5em;
+}
+
+.tiny-flow > * {
+  --flow-space: 0.5em;
+}
+
+.lede {
+  font-style: italic;
+  font-size: var(--size-step-1);
+  max-width: 50ch;
+}
+
+.lede + * {
+  --flow-space: 2em;
 }
