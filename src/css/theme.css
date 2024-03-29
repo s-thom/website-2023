@@ -57,7 +57,13 @@
 
   --sticker-size: calc(var(--spacing) * 3);
 
-  color-scheme: light dark;
+  --big-box-spacing: calc(max(var(--spacing-half), 10vw));
+  --big-box-border-width: 3px;
+
+  --small-box-spacing: var(--spacing-half);
+  --small-box-border-width: 1px;
+
+  color-scheme: dark;
 }
 
 @media (min-width: 900px) {
@@ -84,7 +90,7 @@ a {
   text-underline-offset: 0.2ex;
 
   &:hover,
-  &:focus {
+  &:focus-within {
     text-decoration-color: var(--color-link-hover);
   }
 
@@ -93,11 +99,18 @@ a {
   }
 
   &:visited:hover,
-  &:visited:focus {
+  &:visited:focus-within {
     text-decoration-color: var(--color-link-visited-hover);
   }
 
   &:active {
     text-decoration-color: var(--color-link-active);
   }
+}
+
+.big-box {
+  position: relative;
+  margin: var(--big-box-spacing);
+  padding: var(--big-box-spacing);
+  border: var(--big-box-border-width) solid var(--color-text-header);
 }
