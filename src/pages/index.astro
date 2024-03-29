@@ -1,6 +1,5 @@
 ---
 import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
-import HeaderBackdropMask from "../components/HeaderBackdropMask.astro";
 import LocalImage from "../components/Images/LocalImage.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import ProjectsItem from "../components/notion/overrides/projects/ProjectsItem.astro";
@@ -51,15 +50,7 @@ const ogImage = await generateOgImage({
   }}
 >
   <div class="site-header full-bleed" slot="site-header">
-    <HeaderBackdropMask
-      class="site-header-mask"
-      id="home"
-      seed="home"
-      maskType="waves"
-      iconType="none"
-    >
-      <DefaultPageBackdrop class="site-header-backdrop" />
-    </HeaderBackdropMask>
+    <DefaultPageBackdrop class="site-header-backdrop" />
   </div>
 
   <div class="header">

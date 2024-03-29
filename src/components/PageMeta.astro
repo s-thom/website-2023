@@ -1,6 +1,4 @@
 ---
-import type { IconType, MaskType } from "./react/SvgMask/index.tsx";
-
 export interface PageMetaType {
   title: string;
   description?: string;
@@ -12,11 +10,6 @@ export interface PageMetaType {
     height: number;
   }[];
   rssUrl?: string;
-  header?: {
-    seed: string;
-    maskType: MaskType;
-    iconType: IconType;
-  };
   publishedDate?: string;
   modifiedDate?: string;
   authors?: {

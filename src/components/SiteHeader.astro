@@ -1,7 +1,5 @@
 ---
-import HeaderBackdropMask from "./HeaderBackdropMask.astro";
 import LocalImage from "./Images/LocalImage.astro";
-import type { PageMetaType } from "./PageMeta.astro";
 import DefaultPageBackdrop from "./site/DefaultPageBackdrop.astro";
 import DefaultPageHeader from "./site/DefaultPageHeader.astro";
 
@@ -13,10 +11,9 @@ export interface LinkInfo {
 export interface Props {
   navItems?: LinkInfo[];
   breadcrumbs?: LinkInfo[];
-  header?: PageMetaType["header"];
 }
 
-const { navItems, /* breadcrumbs, */ header } = Astro.props;
+const { navItems /* breadcrumbs, */ } = Astro.props;
 ---
 
 <div class="header-area">
@@ -73,17 +70,9 @@ const { navItems, /* breadcrumbs, */ header } = Astro.props;
     </div>
 
     <div class="backdrop-container">
-      <HeaderBackdropMask
-        id="header-mask"
-        class="header-mask"
-        seed={header?.seed ?? "default"}
-        maskType={header?.maskType ?? "none"}
-        iconType={header?.iconType ?? "none"}
-      >
-        <slot name="page-backdrop">
-          <DefaultPageBackdrop />
-        </slot>
-      </HeaderBackdropMask>
+      <slot name="page-backdrop">
+        <DefaultPageBackdrop />
+      </slot>
     </div>
   </div>
 </div>
