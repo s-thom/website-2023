@@ -16,9 +16,9 @@ export interface Props {
 const { navItems /* breadcrumbs, */ } = Astro.props;
 ---
 
-<div class="header-area big-box">
-  <div class="site-header-container">
-    <header class="site-header">
+<div class="header-area">
+  <div class="big-box flow">
+    <header>
       <a href="/" class="site-name">
         <LocalImage
           id="profile2023"
@@ -68,11 +68,11 @@ const { navItems /* breadcrumbs, */ } = Astro.props;
         <DefaultPageHeader />
       </slot>
     </div>
+  </div>
 
-    <div class="backdrop-container">
-      <slot name="page-backdrop">
-        <DefaultPageBackdrop />
-      </slot>
-    </div>
+  <div class="page-header-backdrop-container">
+    <slot name="page-backdrop">
+      <DefaultPageBackdrop />
+    </slot>
   </div>
 </div>

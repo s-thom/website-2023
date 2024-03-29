@@ -16,7 +16,9 @@ const SIZES_DEFAULT_UNSHADED = "100vw";
 export interface Props {
   page: DatabaseObjectResponse | PageObjectResponse;
   shade?: boolean;
+  blur?: boolean;
   widths: number[];
+  noIntrinsicWidth?: boolean;
   sizes: string;
   class?: string;
 }
@@ -24,7 +26,9 @@ export interface Props {
 const {
   page,
   shade,
+  blur,
   widths,
+  noIntrinsicWidth,
   sizes = shade ? SIZES_DEFAULT_SHADED : SIZES_DEFAULT_UNSHADED,
   class: className,
 } = Astro.props;
@@ -33,7 +37,7 @@ const shouldIncludeShade = !!(page.cover && shade);
 const imageClasses = clsx(
   className,
   "notion-backdrop-image",
-  shouldIncludeShade && "notion-backdrop-image-blur",
+  blur && "notion-backdrop-image-blur",
 );
 ---
 
@@ -46,6 +50,8 @@ const imageClasses = clsx(
         alt=""
         class={imageClasses}
         widths={widths}
+        densities={blur ? [1] : undefined}
+        noIntrinsicWidth={noIntrinsicWidth}
         sizes={sizes}
         loading="eager"
       />

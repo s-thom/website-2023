@@ -1,9 +1,17 @@
 ---
+import type { ImageFormatInfo } from "./constants";
 import { getImageInfo, type ImageSourceData } from "./image";
+
+// High-end phones now have densities even greater than 3.
+// This isn't just for phones, higher densities will also provide clearer
+// images for those who have zoomed in on desktop.
+const DENSITIES = [1, 1.5, 2, 2.5, 3];
 
 export interface ImageRequiredProps {
   alt: string;
   widths: number[];
+  densities?: number[];
+  noIntrinsicWidth?: boolean;
   sizes: string;
   loading: "eager" | "lazy";
   class?: string;
@@ -20,13 +28,28 @@ const {
   alt,
   class: className,
   widths,
+  densities,
+  noIntrinsicWidth,
   sizes,
   loading,
   ...rest
 } = Astro.props;
 
-const imageInfo = await getImageInfo(id, getImage, widths ?? []);
-const formats = imageInfo.formats.slice();
+const imageInfo = await getImageInfo(
+  id,
+  getImage,
+  widths ?? [],
+  densities ?? DENSITIES,
+);
+const formats = noIntrinsicWidth
+  ? imageInfo.formats.map<ImageFormatInfo>((format) => ({
+      id: format.id,
+      mimeType: format.mimeType,
+      sizes: format.sizes.filter(
+        (size) => size.width !== imageInfo.original.width,
+      ),
+    }))
+  : imageInfo.formats.slice();
 ---
 
 <picture {...rest}>

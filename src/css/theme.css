@@ -57,7 +57,11 @@
 
   --sticker-size: calc(var(--spacing) * 3);
 
-  --big-box-spacing: calc(max(var(--spacing-half), 10vw));
+  --big-box-color: var(--color-text);
+  --big-box-spacing: calc(max(var(--spacing), 10vw));
+  --big-box-spacing-small: calc(
+    clamp(var(--spacing), 5vw, calc(var(--spacing) * 3))
+  );
   --big-box-border-width: 3px;
 
   --small-box-spacing: var(--spacing);
@@ -133,9 +137,9 @@ a {
 
 .big-box {
   position: relative;
-  margin: var(--big-box-spacing);
-  padding: var(--big-box-spacing);
-  border: var(--big-box-border-width) solid var(--color-text-header);
+  margin: var(--big-box-spacing-small) var(--big-box-spacing);
+  padding: var(--big-box-spacing-small) var(--big-box-spacing);
+  border: var(--big-box-border-width) solid var(--big-box-color);
 }
 
 .small-box {
@@ -143,6 +147,100 @@ a {
   padding: var(--small-box-spacing);
   border: var(--small-box-border-width) solid var(--color-text);
 }
+
+/* #region Header */
+
+.header-area {
+  color: var(--color-text-header);
+  --big-box-color: var(--color-text-header);
+  position: relative;
+  display: flex;
+
+  > * {
+    flex-grow: 1;
+  }
+}
+
+.page-header-backdrop-container {
+  z-index: -1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.site-name,
+.nav-list {
+  display: flex;
+  gap: var(--spacing);
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.header-area .site-name,
+.header-area .nav-link {
+  text-decoration-style: -moz-none;
+  text-decoration-style: none;
+  text-decoration-thickness: 0;
+
+  &:focus-within,
+  &:hover,
+  &:active {
+    text-decoration-style: inherit;
+    text-decoration-thickness: inherit;
+  }
+}
+
+.profile-photo {
+  width: calc(var(--spacing) * 2);
+  height: calc(var(--spacing) * 2);
+  border-radius: 50%;
+}
+
+h1.site-name-heading {
+  font-size: var(--size-step-3) !important;
+}
+
+.notion-backdrop {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+
+  > *,
+  .notion-backdrop-image {
+    height: 100%;
+    width: 100%;
+    max-width: initial;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .notion-backdrop-image.notion-backdrop-image-blur {
+    filter: blur(16px);
+    transform: scale(
+      110%
+    ); /* Quick hack so that the blur's edges aren't visible */
+  }
+
+  .shade {
+    background-color: rgba(0, 0, 0, 0.6);
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+}
+
+.default-backdrop {
+  height: 100%;
+  width: 100%;
+  background-color: var(--color-background-header);
+}
+
+/* #endregion */
 
 /* #region Blocks */
 

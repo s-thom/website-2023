@@ -16,11 +16,6 @@ import {
 } from "./constants";
 import { addToManifest, getManifest, removeFromManifest } from "./manifest";
 
-// High-end phones now have densities even greater than 3.
-// This isn't just for phones, higher densities will also provide clearer
-// images for those who have zoomed in on desktop.
-const DENSITIES = [1, 1.5, 2, 2.5, 3];
-
 const fetchQueue = new PQueue({ concurrency: 3, throwOnTimeout: true });
 const convertQueue = new PQueue({ concurrency: 3, throwOnTimeout: true });
 const writeQueue = new PQueue({ concurrency: 3, throwOnTimeout: true });
@@ -88,9 +83,12 @@ const readManifestPromise = getManifest().then((manifest) => {
   }
 });
 
-function getWidthsForDensities(widths: number[]): number[] {
+function getWidthsForDensities(
+  widths: number[],
+  densities: number[],
+): number[] {
   const allMultiplied = widths.flatMap((width) =>
-    DENSITIES.map((density) => width * density),
+    densities.map((density) => width * density),
   );
 
   const deDuplicated = Array.from(new Set(allMultiplied));
@@ -269,6 +267,7 @@ export async function getImageInfo(
   id: string,
   getImage: () => Promise<ImageSourceData>,
   widths: number[],
+  densities: number[],
 ): Promise<ImageInfo> {
   // This function assumes that the app is running in a single-threaded
   // environment, which is at least true for local dev and static builds.
@@ -317,7 +316,7 @@ export async function getImageInfo(
   }
 
   const intrinsicWidth = (await sharp(sourceData.buffer).metadata()).width!;
-  const allWidths = getWidthsForDensities(widths).filter(
+  const allWidths = getWidthsForDensities(widths, densities).filter(
     (w) => w <= intrinsicWidth,
   );
 
