@@ -72,6 +72,10 @@ em,
   font-style: italic;
 }
 
+.text-strikethrough {
+  text-decoration: line-through;
+}
+
 .flow > * + *,
 .flow > * + astro-island > * {
   margin-block-start: var(--flow-space, 1em);

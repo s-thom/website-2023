@@ -3,10 +3,7 @@ import { type DatabaseObjectResponse } from "@notionhq/client/build/src/api-endp
 import { BLOG_PAGE_ID } from "../../../lib/constants";
 import { getFilteredBlogItems } from "../../../lib/notion/blog";
 import { getPage } from "../../../lib/notion/caches";
-import { getPagePropertyByName } from "../../../lib/notion/util";
-import LocalImage from "../../Images/LocalImage.astro";
 import { LazyLoader } from "../../react/LazyLoader.tsx";
-import NotionProperty from "../properties/NotionProperty.astro";
 import BlogListPageItem from "./BlogListPageItem.astro";
 
 export interface Props {
@@ -33,58 +30,15 @@ if (index !== -1) {
     prev = allBlogPages[index + 1];
   }
 }
-
-const publishedDateProperty = getPagePropertyByName(page, "Published", "date");
-const editedDateProperty = getPagePropertyByName(page, "Edited", "date");
-const tagsProperty = getPagePropertyByName(page, "Tags", "multi_select");
 ---
 
-<div class="blog-footer flow">
-  <div class="properties-box">
-    <div class="dates-list">
-      {
-        publishedDateProperty && publishedDateProperty.date !== null && (
-          <div>
-            Published: <NotionProperty property={publishedDateProperty} />
-          </div>
-        )
-      }
-      {
-        editedDateProperty && editedDateProperty.date !== null && (
-          <div>
-            Edited: <NotionProperty property={editedDateProperty} />
-          </div>
-        )
-      }
-    </div>
-
-    {
-      tagsProperty && (
-        <div>
-          <NotionProperty property={tagsProperty} />
-        </div>
-      )
-    }
-    <div class="author">
-      <LocalImage
-        id="profile2023"
-        resourcePath="profile-2023.jpg"
-        class="profile-photo"
-        alt="Stuart Thomson"
-        widths={[24]}
-        sizes="24px"
-        loading="lazy"
-      /> Written by <a href="/">Stuart Thomson</a>
-    </div>
-  </div>
-
-  <div class="links-box">
-    <div class="next">
+<div class="blog-footer">
+  <div class="links">
+    <div class="links-box next">
       {
         next ? (
           <BlogListPageItem page={next} showTitle>
             <Fragment slot="info-top">
-              <span>&nbsp;</span>
               <span class="pre-title">Next post</span>
             </Fragment>
           </BlogListPageItem>
@@ -97,12 +51,11 @@ const tagsProperty = getPagePropertyByName(page, "Tags", "multi_select");
         )
       }
     </div>
-    <div class="prev">
+    <div class="links-box prev">
       {
         prev ? (
           <BlogListPageItem page={prev} showTitle>
             <Fragment slot="info-top">
-              <span>&nbsp;</span>
               <span class="pre-title">Previous post</span>
             </Fragment>
           </BlogListPageItem>
@@ -115,13 +68,57 @@ const tagsProperty = getPagePropertyByName(page, "Tags", "multi_select");
         )
       }
     </div>
-    <div class="up">
+    <div class="links-box up">
       <BlogListPageItem page={blogHomePage as any} showTitle>
         <Fragment slot="info-top">
-          <span>&nbsp;</span>
           <span class="pre-title">More posts</span>
         </Fragment>
       </BlogListPageItem>
     </div>
   </div>
 </div>
+
+<style>
+  .blog-footer {
+    margin: var(--big-box-spacing-small) var(--big-box-spacing);
+  }
+
+  .links {
+    display: grid;
+    gap: var(--spacing);
+    grid-template-columns: repeat(1, 1fr);
+    grid-template-areas:
+      "next"
+      "prev"
+      "up";
+  }
+
+  .links-box {
+    position: relative;
+  }
+
+  .next {
+    grid-area: next;
+  }
+  .prev {
+    grid-area: prev;
+  }
+  .up {
+    grid-area: up;
+  }
+
+  @media (min-width: 900px) {
+    .links {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-areas:
+        "prev next"
+        "up up";
+    }
+  }
+
+  .pre-title {
+    align-self: flex-start;
+    font-size: var(--size-step-min1);
+    font-style: italic;
+  }
+</style>

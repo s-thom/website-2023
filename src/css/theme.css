@@ -161,7 +161,7 @@ a {
   }
 }
 
-.page-header-backdrop-container {
+.backdrop-container {
   z-index: -1;
   position: absolute;
   top: 0;
@@ -179,7 +179,8 @@ a {
 }
 
 .header-area .site-name,
-.header-area .nav-link {
+.header-area .nav-link,
+.page-item {
   text-decoration-style: -moz-none;
   text-decoration-style: none;
   text-decoration-thickness: 0;
@@ -333,5 +334,21 @@ h1.site-name-heading {
 .block-code .language-id {
   /* TODO: Figure out what to do with the language indicator */
   display: none;
+}
+
+.block-image {
+  margin-inline-start: auto;
+  margin-inline-end: auto;
+  width: fit-content;
+  max-width: calc(100% - (2 * var(--spacing-half)));
+  padding: var(--spacing-half);
+  overflow: hidden;
+}
+
+.block-image-caption {
+  margin-top: var(--spacing-half);
+  text-align: center;
+  font-style: italic;
+  color: var(--color-text-secondary);
 }
 /* #endregion */

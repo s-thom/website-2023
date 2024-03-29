@@ -2,30 +2,18 @@
 import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { getInfoForPage } from "../../../lib/notion/caches";
 import { getPageTitleComponents } from "../../../lib/notion/titles";
-import { getPagePropertyByName } from "../../../lib/notion/util";
 import NotionBackdrop from "../common/NotionBackdrop.astro";
-import NotionIcon from "../common/NotionIcon.astro";
 import RichText from "../common/RichText.astro";
-import NotionProperty from "../properties/NotionProperty.astro";
 
 export interface Props {
   page: DatabaseObjectResponse;
   showTitle?: boolean;
-  showIcon?: boolean;
-  showTags?: boolean;
 }
 
-const { page, showTitle, showIcon, showTags } = Astro.props;
+const { page, showTitle } = Astro.props;
 
 const info = await getInfoForPage(page.id);
 const titleComponents = getPageTitleComponents(page);
-
-const tagsProperty = getPagePropertyByName(page, "Tags", "multi_select") ?? {
-  id: "mock",
-  multi_select: [],
-  type: "multi_select",
-  object: "property_item",
-};
 ---
 
 <a href={info.path} class="page-item">
@@ -37,21 +25,8 @@ const tagsProperty = getPagePropertyByName(page, "Tags", "multi_select") ?? {
       shade
     />
   </div>
-  <div class="info">
+  <div class="info flow">
     <slot name="info-top" />
-    {
-      showIcon && page.icon && (
-        <NotionIcon
-          id={`${page.id}-icon`}
-          icon={page.icon}
-          class="icon"
-          alt=""
-          widths={[80]}
-          sizes="80px"
-          loading="eager"
-        />
-      )
-    }
     {
       showTitle && (
         <h3 class="title">
@@ -59,12 +34,22 @@ const tagsProperty = getPagePropertyByName(page, "Tags", "multi_select") ?? {
         </h3>
       )
     }
-    {
-      showTags && (
-        <div class="tags">
-          <NotionProperty property={tagsProperty} />
-        </div>
-      )
-    }
   </div>
 </a>
+
+<style>
+  .page-item {
+    position: relative;
+    display: block;
+    min-height: 50px;
+    height: 100%;
+  }
+
+  .info {
+    padding: var(--spacing);
+  }
+
+  .title {
+    margin: 0;
+  }
+</style>
