@@ -26,7 +26,7 @@ const items = (await queryDatabase(
 )) as DatabaseObjectResponse[];
 ---
 
-<div data-block={block.id} class="blog-collection small-bleed">
+<div data-block={block.id} class="blog-collection">
   {items.map((page) => <BlogListPageItem page={page} showTitle />)}
 </div>
 

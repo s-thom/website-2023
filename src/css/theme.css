@@ -115,7 +115,6 @@ a {
 .skip-links {
   text-align: center;
   padding: var(--spacing);
-  grid-column: var(--area-full-bleed) !important;
   background-color: var(--color-background-header);
   color: var(--color-text-header);
 }
