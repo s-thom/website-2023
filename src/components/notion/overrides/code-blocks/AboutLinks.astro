@@ -37,3 +37,26 @@ import { GithubIcon, LinkedinIcon, MailIcon } from "lucide-react";
     </a>
   </li>
 </ul>
+
+<style>
+  .links-list {
+    display: flex;
+    gap: var(--spacing);
+    justify-content: center;
+  }
+
+  .link-item {
+    display: flex;
+    line-height: 1em;
+    gap: var(--spacing);
+    align-items: center;
+
+    &:not(:last-child)::after {
+      content: "|";
+    }
+  }
+
+  .link {
+    display: inline-block;
+  }
+</style>
