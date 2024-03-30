@@ -58,6 +58,10 @@ blockquote {
 code {
   font-family: var(--font-family-mono);
   font-weight: 370;
+  padding: 0.2em;
+  background-color: var(--color-background-secondary);
+  border-radius: var(--border-radius);
+  font-size: 0.9em;
 }
 
 b,

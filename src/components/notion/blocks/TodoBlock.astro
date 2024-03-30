@@ -34,3 +34,18 @@ const { block } = Astro.props;
   </p>
   <slot />
 </li>
+
+<style>
+  .todo-item {
+    position: relative;
+  }
+
+  .todo-item-icon {
+    position: absolute;
+    left: -1em;
+    width: 1em;
+    height: 1em;
+    top: 0.25em;
+    padding: 0.1em 0.2em 0.1em 0;
+  }
+</style>

@@ -36,3 +36,78 @@ const { block } = Astro.props;
     <slot />
   </div>
 </div>
+
+<style>
+  .block-callout {
+    display: grid;
+    grid-template-columns:
+      [icon] 28px
+      [content] 1fr;
+    gap: var(--spacing-half);
+    padding: var(--spacing-half);
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--border-radius);
+  }
+
+  .block-callout-icon {
+    grid-column: icon;
+    font-size: 1em;
+    width: 1.5em;
+    height: 1.5em;
+  }
+
+  .block-callout-content {
+    overflow-x: auto;
+  }
+
+  .block-callout-default,
+  .block-callout-default_background {
+    border-color: var(--color-notion-default);
+    background-color: var(--color-notion-default-background);
+  }
+  .block-callout-gray,
+  .block-callout-gray_background {
+    border-color: var(--color-notion-gray);
+    background-color: var(--color-notion-gray-background);
+  }
+  .block-callout-brown,
+  .block-callout-brown_background {
+    border-color: var(--color-notion-brown);
+    background-color: var(--color-notion-brown-background);
+  }
+  .block-callout-orange,
+  .block-callout-orange_background {
+    border-color: var(--color-notion-orange);
+    background-color: var(--color-notion-orange-background);
+  }
+  .block-callout-yellow,
+  .block-callout-yellow_background {
+    border-color: var(--color-notion-yellow);
+    background-color: var(--color-notion-yellow-background);
+  }
+  .block-callout-green,
+  .block-callout-green_background {
+    border-color: var(--color-notion-green);
+    background-color: var(--color-notion-green-background);
+  }
+  .block-callout-blue,
+  .block-callout-blue_background {
+    border-color: var(--color-notion-blue);
+    background-color: var(--color-notion-blue-background);
+  }
+  .block-callout-purple,
+  .block-callout-purple_background {
+    border-color: var(--color-notion-purple);
+    background-color: var(--color-notion-purple-background);
+  }
+  .block-callout-pink,
+  .block-callout-pink_background {
+    border-color: var(--color-notion-pink);
+    background-color: var(--color-notion-pink-background);
+  }
+  .block-callout-red,
+  .block-callout-red_background {
+    border-color: var(--color-notion-red);
+    background-color: var(--color-notion-red-background);
+  }
+</style>

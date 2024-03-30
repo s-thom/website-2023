@@ -30,3 +30,21 @@ const captionPlain = richTextToUnformattedString(block.image.caption);
     ) : undefined
   }
 </figure>
+
+<style>
+  .block-image {
+    margin-inline-start: auto;
+    margin-inline-end: auto;
+    width: fit-content;
+    max-width: calc(100% - (2 * var(--spacing-half)));
+    padding: var(--spacing-half);
+    overflow: hidden;
+  }
+
+  .block-image-caption {
+    margin-top: var(--spacing-half);
+    text-align: center;
+    font-style: italic;
+    color: var(--color-text-secondary);
+  }
+</style>

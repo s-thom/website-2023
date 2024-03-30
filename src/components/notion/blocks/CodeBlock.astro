@@ -67,3 +67,22 @@ if (result.type === "override") {
     <code data-block={block.id} class="block-code" set:html={result.html} />
   )
 }
+
+<style>
+  .block-code {
+    display: block;
+    font-size: 0.9em;
+  }
+
+  .block-code > :global(pre) {
+    padding: var(--spacing);
+    border-radius: var(--border-radius);
+    overflow-x: auto;
+    color-scheme: dark;
+  }
+
+  .block-code :global(.language-id) {
+    /* TODO: Figure out what to do with the language indicator */
+    display: none;
+  }
+</style>

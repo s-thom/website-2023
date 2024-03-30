@@ -36,3 +36,22 @@ if (block.table.has_column_header) {
     <NotionRenderer blocks={bodyRows} overrides={overrides} />
   </tbody>
 </table>
+
+<style>
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    min-width: 100%;
+  }
+
+  table :global(th),
+  table :global(td) {
+    border: 1.5px solid var(--color-border);
+    padding: var(--spacing-half);
+  }
+
+  table :global(thead > tr > td),
+  table :global(th) {
+    background-color: var(--color-background-secondary);
+  }
+</style>

@@ -41,15 +41,6 @@ ol:not([class]) {
   padding-inline-start: 1em;
 }
 
-ol:is(ol) {
-  list-style: decimal;
-  margin-inline-start: 1.5rem;
-}
-
-ul:is(ul) {
-  list-style: circle;
-}
-
 /* Set core root defaults */
 html:focus-within {
   scroll-behavior: smooth;
