@@ -5,6 +5,7 @@
   --color-background: #181818;
   --color-background-secondary: #333333;
   --color-background-header: #00325f;
+  --color-background-error: #581914;
   --color-background-delete: oklch(30% 0.03 18);
   --color-border: #555555;
   --color-link: oklch(50% 0.185 258);

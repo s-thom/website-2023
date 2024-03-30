@@ -7,13 +7,9 @@ const { id, meta, class: className, noStickers } = Astro.props;
 ---
 
 <PageLayout id={id} meta={meta} class={className} noStickers={noStickers}>
-  <slot name="site-header" slot="site-header" />
-
   <div class="big-box standalone-page">
     <slot />
   </div>
-
-  <slot name="site-footer" slot="site-footer" />
 </PageLayout>
 
 <style>

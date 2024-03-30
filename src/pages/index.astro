@@ -1,6 +1,5 @@
 ---
 import LocalImage from "../components/Images/LocalImage.astro";
-import DefaultPageBackdrop from "../components/site/DefaultPageBackdrop.astro";
 import StandalonePageLayout from "../layouts/StandalonePageLayout.astro";
 import { generateOgImage } from "../lib/og-images";
 
@@ -28,8 +27,6 @@ const ogImage = await generateOgImage({
     ],
   }}
 >
-  <DefaultPageBackdrop slot="site-header" />
-
   <div class="header">
     <LocalImage
       id="profile2023"
@@ -45,7 +42,7 @@ const ogImage = await generateOgImage({
 
   <ul class="nav-list">
     <li>
-      <a href="/projects">Recent projects</a>
+      <a href="/projects">Projects</a>
     </li>
     <li>
       <a href="/blog">Blog</a>
@@ -57,6 +54,10 @@ const ogImage = await generateOgImage({
 </StandalonePageLayout>
 
 <style>
+  :root {
+    --color-background: var(--color-background-header);
+  }
+
   .header {
     display: flex;
     flex-direction: column;
