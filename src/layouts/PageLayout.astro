@@ -8,9 +8,10 @@ export interface Props {
   id: string;
   meta: PageMetaType;
   class?: string;
+  noStickers?: boolean;
 }
 
-const { id, meta, class: className } = Astro.props;
+const { id, meta, class: className, noStickers } = Astro.props;
 ---
 
 <MinimalLayout>
@@ -29,5 +30,13 @@ const { id, meta, class: className } = Astro.props;
 
   <slot name="site-footer" />
 
-  <LazyLoader type="sticker-app" props={{ pageId: id }} client:stickers={id} />
+  {
+    !noStickers && (
+      <LazyLoader
+        type="sticker-app"
+        props={{ pageId: id }}
+        client:stickers={id}
+      />
+    )
+  }
 </MinimalLayout>

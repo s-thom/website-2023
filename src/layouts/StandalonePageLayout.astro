@@ -1,0 +1,29 @@
+---
+import PageLayout, { type Props as PageLayoutProps } from "./PageLayout.astro";
+
+export interface Props extends PageLayoutProps {}
+
+const { id, meta, class: className, noStickers } = Astro.props;
+---
+
+<PageLayout id={id} meta={meta} class={className} noStickers={noStickers}>
+  <slot name="site-header" slot="site-header" />
+
+  <div class="big-box standalone-page">
+    <slot />
+  </div>
+
+  <slot name="site-footer" slot="site-footer" />
+</PageLayout>
+
+<style>
+  .standalone-page {
+    flex-grow: 1;
+    margin: var(--big-box-spacing);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing);
+    justify-content: center;
+    align-items: center;
+  }
+</style>

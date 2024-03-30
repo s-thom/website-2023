@@ -1,8 +1,8 @@
 ---
-import PageLayout from "../layouts/PageLayout.astro";
+import StandalonePageLayout from "../layouts/StandalonePageLayout.astro";
 ---
 
-<PageLayout
+<StandalonePageLayout
   id="404"
   meta={{
     title: "404 - Stuart Thomson",
@@ -10,10 +10,9 @@ import PageLayout from "../layouts/PageLayout.astro";
     url: "/404",
     noCrawl: true,
   }}
+  noStickers
 >
-  <div class="content">
-    <h1 class="title">404</h1>
-    <p class="subtitle">Page not found</p>
-    <div>Return to <a href="/">home page</a></div>
-  </div>
-</PageLayout>
+  <h1 class="title">404</h1>
+  <p class="subtitle">Page not found</p>
+  <div>Return to <a href="/">home page</a></div>
+</StandalonePageLayout>
