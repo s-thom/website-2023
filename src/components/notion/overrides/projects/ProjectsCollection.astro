@@ -32,7 +32,7 @@ const items = (await queryDatabase(
       <ProjectsItem
         page={page}
         widths={[250, 360, 540]}
-        sizes="(min-width: 600px) 360px, 100vw"
+        sizes="(min-width: 600px) 540px, 100vw"
         overrides={overrides}
         showImage
         showTitle
@@ -51,7 +51,7 @@ const items = (await queryDatabase(
     grid-template-columns: repeat(var(--num-tracks), 1fr);
   }
 
-  @media (min-width: 600px) {
+  @media (min-width: 900px) {
     .projects-collection {
       --num-tracks: 2;
     }

@@ -1,6 +1,6 @@
 ---
 import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
-import { GithubIcon } from "lucide-react";
+import { ExternalLinkIcon, GithubIcon } from "lucide-react";
 import { getBlockChildren } from "../../../../lib/notion/caches";
 import { getPageTitleComponents } from "../../../../lib/notion/titles";
 import {
@@ -45,43 +45,68 @@ const githubFragment =
   github && (richTextToUnformattedString(github.rich_text) || undefined);
 ---
 
-<div data-block={page.id} class:list={["projects-item", className]}>
+<div
+  data-block={page.id}
+  class:list={["projects-item", "small-box", className]}
+>
   {
     showImage && (
-      <div>
+      <div class="projects-item-image">
         <NotionBackdrop page={page} widths={widths} sizes={sizes} />
       </div>
     )
   }
   <div class="flow">
-    {
-      showTitle && (
-        <h3>
-          {url && url.url ? (
-            <a href={url.url} rel="external noreferrer">
-              <RichText components={titleComponents} />
-            </a>
-          ) : (
+    <h3 class={showTitle ? "" : "visually-hidden"}>
+      {
+        url && url.url ? (
+          <a href={url.url} rel="external noreferrer">
             <RichText components={titleComponents} />
-          )}
-        </h3>
-      )
-    }
+          </a>
+        ) : (
+          <RichText components={titleComponents} />
+        )
+      }
+    </h3>
+
     {
       showGitHub && githubFragment !== undefined && (
-        <div>
-          <a
-            href={`https://github.com/${githubFragment}`}
-            rel="enternal noreferrer"
-          >
-            <GithubIcon>
-              <title>{githubFragment} on GitHub</title>
-            </GithubIcon>
-          </a>
-        </div>
+        <ul class="icon-links-list">
+          {url && url.url && (
+            <li>
+              <a href={url.url} rel="external noreferrer" target="_blank">
+                <ExternalLinkIcon>
+                  <title>Open in new tab</title>
+                </ExternalLinkIcon>
+              </a>
+            </li>
+          )}
+          <li>
+            <a
+              href={`https://github.com/${githubFragment}`}
+              rel="enternal noreferrer"
+            >
+              <GithubIcon>
+                <title>{githubFragment} on GitHub</title>
+              </GithubIcon>
+            </a>
+          </li>
+        </ul>
       )
     }
-    <div></div>
     {showChildren && <NotionRenderer blocks={children} overrides={overrides} />}
   </div>
 </div>
+
+<style>
+  .projects-item-image {
+    margin: calc(var(--small-box-spacing) * -1);
+    margin-block-end: var(--small-box-spacing);
+    aspect-ratio: 2/1;
+  }
+
+  .icon-links-list {
+    display: flex;
+    gap: var(--spacing);
+  }
+</style>
