@@ -7,31 +7,31 @@ import type { StickerTypes } from "../types";
 import "./StickerUnlock.css";
 import { useAddUniqueSticker } from "./useAddUniqueSticker";
 
-const STICKER_TYPE: StickerTypes = "fire-heart";
+export interface StickerUnlockProps {
+  type: StickerTypes;
+  hideOnUnlock?: boolean;
+}
 
-export function StickerBookUniqueUnlock() {
+export function StickerUnlock({ type, hideOnUnlock }: StickerUnlockProps) {
   const isStickersEnabled = useStore((store) => store.enabled.stickers);
 
   const { addSticker, isUnlocked } = useAddUniqueSticker({
-    type: STICKER_TYPE,
+    type,
   });
 
   if (!isStickersEnabled) {
     return null;
   }
 
-  if (isUnlocked) {
+  if (hideOnUnlock && isUnlocked) {
     return null;
   }
 
   return (
     <StrictMode>
       <Suspense>
-        <div className="small-box sticker-unlock-box">
+        <div className="sticker-unlock-box">
           <div className="flow">
-            <p>
-              Since you've made it this far, have a bonus sticker on the house.
-            </p>
             <button
               className={clsx(
                 "sticker-unlock-button",
@@ -42,8 +42,8 @@ export function StickerBookUniqueUnlock() {
               disabled={isUnlocked}
               data-umami-event="sickers-sticker-book-unlock"
             >
-              <StickerFrame type={STICKER_TYPE}>
-                <Sticker type={STICKER_TYPE} animated={!isUnlocked} />
+              <StickerFrame type={type}>
+                <Sticker type={type} animated />
               </StickerFrame>
             </button>
           </div>

@@ -1,0 +1,13 @@
+---
+import { LazyLoader } from "../../../react/LazyLoader.tsx";
+import type { StickerTypes } from "../../../react/StickerBook/types";
+
+export interface Props {
+  type: StickerTypes;
+  hideOnUnlock?: boolean;
+}
+
+const { type, hideOnUnlock } = Astro.props;
+---
+
+<LazyLoader type="sticker-unlock" props={{ type, hideOnUnlock }} client:idle />

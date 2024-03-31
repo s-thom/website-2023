@@ -2,6 +2,7 @@ import { StrictMode, Suspense, lazy, useEffect, useState } from "react";
 import type { StickerAppProps } from "./StickerBook/components/StickerDragZones/StickerApp.tsx";
 import type { BlogNavUnlockProps } from "./StickerBook/unlocks/BlogNavUnlock.tsx";
 import type { PageViewUnlockProps } from "./StickerBook/unlocks/PageViewUnlock.tsx";
+import type { StickerUnlockProps } from "./StickerBook/unlocks/StickerUnlock.tsx";
 
 // This file serves a weird purpose: being a generic React root while also lazily
 // loading everything that actually matters. This is almost certainly not a good
@@ -54,6 +55,11 @@ const StickerBookUniqueUnlock = lazy(() =>
     }),
   ),
 );
+const StickerUnlock = lazy(() =>
+  import("./StickerBook/unlocks/StickerUnlock.tsx").then((module) => ({
+    default: module.StickerUnlock,
+  })),
+);
 
 interface ComponentPropsMap {
   "sticker-blog-nav-unlock": BlogNavUnlockProps;
@@ -62,6 +68,7 @@ interface ComponentPropsMap {
   "sticker-book-free-unlock": {};
   "sticker-book-unique-unlock": {};
   "sticker-feature-toggle": object;
+  "sticker-unlock": StickerUnlockProps;
   "sticker-app": StickerAppProps;
 }
 
@@ -87,6 +94,8 @@ function LazyLoaderSwitch({
       return <StickerBookFreeStickersUnlock {...props} />;
     case "sticker-book-unique-unlock":
       return <StickerBookUniqueUnlock {...props} />;
+    case "sticker-unlock":
+      return <StickerUnlock {...props} />;
     case "sticker-feature-toggle":
       return <FeatureToggle {...props} />;
     case "sticker-page-view-unlock":

@@ -57,6 +57,7 @@ type HighlightResult =
   | {
       type: "override";
       component: string;
+      props?: object;
     }
   | {
       type: "none";
@@ -87,7 +88,11 @@ export async function highlightCode(
 
     // Extra: marker for component override
     if (language === "override") {
-      return { type: "override", component: meta.component as string };
+      return {
+        type: "override",
+        component: meta.component as string,
+        props: meta.props as object | undefined,
+      };
     }
 
     try {
