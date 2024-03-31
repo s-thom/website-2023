@@ -1,47 +1,49 @@
 ---
-import { StickerFrame } from "../../../react/StickerBook/components/StickerFrame/index.tsx";
+
 ---
 
-<div class="grid">
-  <StickerFrame type="thumbs-up" showRarityLabel>
-    <div class="description">Found by reading pages on this site.</div>
-  </StickerFrame>
-  <StickerFrame type="fire" showRarityLabel>
-    <div class="description">
-      Also found by reading pages on this site, but you won't get as many.
-    </div>
-  </StickerFrame>
-  <StickerFrame type="rocket" showRarityLabel>
-    <div class="description">
-      Unused at the moment, but I know where I want to use them.
-    </div>
-  </StickerFrame>
-  <StickerFrame type="rainbow" showRarityLabel>
-    <div class="description">
-      Unused at the moment, but I wanted to complete the set of colours.
-    </div>
-  </StickerFrame>
-  <StickerFrame type="goose" showRarityLabel>
-    <div class="description">
-      Given by doing certain actions on the site. Each will only be given once.
-    </div>
-  </StickerFrame>
-</div>
+<ul class="rarity-list">
+  <li>
+    <span class="rarity rarity-common">Common</span>: Found by reading pages on
+    this site.
+  </li>
+  <li>
+    <span class="rarity rarity-uncommon">Uncommon</span>: Also found by reading
+    pages on this site, but you won't get as many.
+  </li>
+  <li>
+    <span class="rarity rarity-rare">Rare</span>: Found by reading specific
+    pages. Usually thematically relevant to the page. (Coming soon)
+  </li>
+  <li>
+    <span class="rarity rarity-legendary">Legendary</span>: Unused at the
+    moment, but I wanted to complete the set of colours.
+  </li>
+  <li>
+    <span class="rarity rarity-unique">Unique</span>: Given by doing certain
+    actions on the site. Each will only be given once.
+  </li>
+</ul>
 
 <style>
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--spacing);
+  .rarity-list {
+    list-style: circle;
+    padding-inline-start: 1em;
   }
 
-  @media (min-width: 500px) {
-    .grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
+  .rarity-common {
+    color: var(--color-sticker-common);
   }
-
-  .grid :global(.description) {
-    min-height: var(--sticker-size);
+  .rarity-uncommon {
+    color: var(--color-sticker-uncommon);
+  }
+  .rarity-rare {
+    color: var(--color-sticker-rare);
+  }
+  .rarity-legendary {
+    color: var(--color-sticker-legendary);
+  }
+  .rarity-unique {
+    color: var(--color-sticker-unique);
   }
 </style>

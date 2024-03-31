@@ -18,6 +18,7 @@ export function PanelButton({ onClick }: PanelButtonProps) {
     <div
       ref={setNodeRef}
       className={clsx(
+        "small-box",
         "sticker-panel-button",
         "sticker-drag-zone",
         "sticker-drag-zone-floating",

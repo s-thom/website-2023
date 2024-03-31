@@ -1,8 +1,4 @@
 .sticker-unlock-box {
-  background-color: var(--color-background-secondary);
-  border: 1.5px solid var(--color-border);
-  border-radius: var(--border-radius);
-  padding: var(--spacing);
   text-align: center;
   font-size: var(--size-step-min1);
   display: flex;

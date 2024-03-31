@@ -27,7 +27,7 @@ export function StickerBookUniqueUnlock() {
   return (
     <StrictMode>
       <Suspense>
-        <div className="sticker-unlock-box">
+        <div className="small-box sticker-unlock-box">
           <div className="flow">
             <p>
               Since you've made it this far, have a bonus sticker on the house.

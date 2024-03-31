@@ -2,13 +2,10 @@
   padding: var(--spacing-half);
   background-color: var(--color-background);
   transition: background-color var(--transition-duration) ease-in-out;
-  border: 1.5px solid var(--color-border);
-  box-shadow: 0px 2px 4px 3px rgba(0 0 0 / 0.1);
-  border-radius: var(--border-radius);
 }
 
 .sticker-drag-zone-floating {
-  position: fixed;
+  position: fixed !important;
   bottom: var(--spacing-half);
   right: var(--spacing-half);
   z-index: 999;
@@ -65,6 +62,7 @@
   transition: opacity ease-in-out 0.2s;
   opacity: 0;
   pointer-events: none;
+  padding: var(--spacing-half) !important;
 }
 
 .sticker-panel-button-has-stickers {
@@ -74,8 +72,9 @@
 
 .sticker-panel-icon-button {
   background-color: transparent;
-  color: var(--color-border);
-  transition: color var(--transition-duration) ease-in-out;
+  color: var(--color-text);
+  opacity: 0.5;
+  transition: opacity var(--transition-duration) ease-in-out;
   border: none;
   justify-self: end;
   grid-column: 2;
@@ -85,7 +84,7 @@
 }
 
 .sticker-panel-icon-button:hover {
-  color: var(--color-text);
+  opacity: 1;
 }
 
 .panel-button-preview {

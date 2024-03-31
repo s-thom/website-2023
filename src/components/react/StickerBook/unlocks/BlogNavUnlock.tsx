@@ -29,7 +29,7 @@ export function BlogNavUnlock({ stickerType }: BlogNavUnlockProps) {
   return (
     <StrictMode>
       <Suspense>
-        <div className="sticker-unlock-box">
+        <div className="small-box sticker-unlock-box">
           <div className="flow">
             <p>
               {isUnlocked
