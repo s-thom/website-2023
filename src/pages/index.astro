@@ -1,4 +1,5 @@
 ---
+import { GithubIcon, MailIcon, LinkedinIcon } from "lucide-react";
 import LocalImage from "../components/Images/LocalImage.astro";
 import StandalonePageLayout from "../layouts/StandalonePageLayout.astro";
 import { generateOgImage } from "../lib/og-images";
@@ -49,6 +50,38 @@ const ogImage = await generateOgImage({
     </li>
     <li>
       <a href="/about">About</a>
+    </li>
+  </ul>
+  <ul class="nav-list">
+    <li>
+      <a
+        href="https://github.com/s-thom"
+        aria-label="GitHub"
+        rel="nofollow noopener noreferrer"
+        target="_blank"
+      >
+        <GithubIcon width={32} />
+      </a>
+    </li>
+    <li>
+      <a
+        href="mailto:me@sthom.kiwi"
+        aria-label="Email"
+        rel="nofollow noopener noreferrer"
+        target="_blank"
+      >
+        <MailIcon width={32} />
+      </a>
+    </li>
+    <li>
+      <a
+        href="https://www.linkedin.com/in/s-thom/"
+        aria-label="LinkedIn"
+        rel="nofollow noopener noreferrer"
+        target="_blank"
+      >
+        <LinkedinIcon width={32} />
+      </a>
     </li>
   </ul>
 </StandalonePageLayout>
