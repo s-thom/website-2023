@@ -28,62 +28,94 @@ const ogImage = await generateOgImage({
     ],
   }}
 >
-  <div class="header">
-    <LocalImage
-      id="profile2023"
-      resourcePath="profile-2023.jpg"
-      class="profile-photo"
-      alt="Stuart Thomson"
-      widths={[72, 80, 96]}
-      sizes="(min-width: 900px) 96px, (min-width: 600px) 80px, 72px"
-      loading="eager"
-    />
-    <h1>Stuart Thomson</h1>
-  </div>
+  <div class="container">
+    <div class="header">
+      <div class="site-name">
+        <LocalImage
+          id="profile2023"
+          resourcePath="profile-2023.jpg"
+          class="profile-photo"
+          alt="Stuart Thomson"
+          widths={[64]}
+          sizes="64px"
+          loading="eager"
+        />
+        <h1 class="site-name-heading">Stuart Thomson</h1>
+      </div>
+      <h2 class="tagline">
+        <a href="/software-developer">Software Developer</a>
+         |
+        <a href="/human-being">Human Being</a>
+      </h2>
+    </div>
 
-  <ul class="nav-list">
-    <li>
-      <a href="/projects">Projects</a>
-    </li>
-    <li>
-      <a href="/blog">Blog</a>
-    </li>
-    <li>
-      <a href="/about">About</a>
-    </li>
-  </ul>
-  <ul class="nav-list">
-    <li>
-      <a
-        href="https://github.com/s-thom"
-        aria-label="GitHub"
-        rel="nofollow noopener noreferrer"
-        target="_blank"
-      >
-        <GithubIcon width={32} />
-      </a>
-    </li>
-    <li>
-      <a
-        href="mailto:me@sthom.kiwi"
-        aria-label="Email"
-        rel="nofollow noopener noreferrer"
-        target="_blank"
-      >
-        <MailIcon width={32} />
-      </a>
-    </li>
-    <li>
-      <a
-        href="https://www.linkedin.com/in/s-thom/"
-        aria-label="LinkedIn"
-        rel="nofollow noopener noreferrer"
-        target="_blank"
-      >
-        <LinkedinIcon width={32} />
-      </a>
-    </li>
-  </ul>
+    <div class="flow">
+      <p>Hi, it's me.</p>
+      <p>
+        Most of the time people just look at this page and then continue with
+        whatever else they were doing. A few have a look at the <a
+          href="/projects">projects I've worked on recently</a
+        > and then leave.
+      </p>
+      <p>
+        I don't really mind, this website is more just a thing I update every
+        once in a while. Not every part of the web needs to have a constant
+        focus on <em>retention</em>, <em>bounce rates</em>, and <em
+          >conversions</em
+        >.
+      </p>
+      <p>
+        No, this is just my little corner of the internet, here to be read or
+        ignored at your leisure.
+      </p>
+    </div>
+
+    <div class="links">
+      <ul class="nav-list">
+        <li>
+          <a href="/projects">Projects</a>
+        </li>
+        <li>
+          <a href="/blog">Blog</a>
+        </li>
+        <li>
+          <a href="/about">About</a>
+        </li>
+      </ul>
+      <ul class="nav-list">
+        <li>
+          <a
+            href="https://github.com/s-thom"
+            aria-label="GitHub"
+            rel="nofollow noopener noreferrer"
+            target="_blank"
+          >
+            <GithubIcon width={32} />
+          </a>
+        </li>
+        <li>
+          <a
+            href="mailto:me@sthom.kiwi"
+            aria-label="Email"
+            rel="nofollow noopener noreferrer"
+            target="_blank"
+          >
+            <MailIcon width={32} />
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://www.linkedin.com/in/s-thom/"
+            aria-label="LinkedIn"
+            rel="nofollow noopener noreferrer"
+            target="_blank"
+          >
+            <LinkedinIcon width={32} />
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
 </StandalonePageLayout>
 
 <style>
@@ -91,32 +123,50 @@ const ogImage = await generateOgImage({
     background-color: var(--color-background-header);
   }
 
+  .container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 4);
+    justify-content: center;
+    align-items: center;
+  }
+
   .header {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  @media (min-width: 900px) {
+    .header {
+      align-items: flex-end;
+      text-align: end;
+    }
+
+    .site-name-heading {
+      font-size: var(--size-step-4) !important;
+    }
+
+    .profile-photo {
+      width: 64px;
+      height: 64px;
+    }
+  }
+
+  .tagline {
+    font-size: var(--size-step-0) !important;
+  }
+
+  .links {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: var(--spacing);
     text-align: center;
-  }
-
-  .profile-photo {
-    width: 72px;
-    height: 72px;
-    border-radius: 50%;
-  }
-
-  @media (min-width: 600px) {
-    .profile-photo {
-      width: 80px;
-      height: 80px;
-    }
-  }
-
-  @media (min-width: 900px) {
-    .profile-photo {
-      width: 96px;
-      height: 96px;
-    }
   }
 </style>

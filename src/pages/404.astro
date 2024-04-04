@@ -12,13 +12,24 @@ import StandalonePageLayout from "../layouts/StandalonePageLayout.astro";
   }}
   noStickers
 >
-  <h1 class="title">404</h1>
-  <p class="subtitle">Page not found</p>
-  <div>Return to <a href="/">home page</a></div>
+  <div class="container">
+    <h1 class="title">404</h1>
+    <p class="subtitle">Page not found</p>
+    <div>Return to <a href="/">home page</a></div>
+  </div>
 </StandalonePageLayout>
 
 <style>
-  :root {
-    --color-background: var(--color-background-error);
+  body {
+    background-color: var(--color-background-error);
+  }
+
+  .container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing);
+    justify-content: center;
+    align-items: center;
   }
 </style>

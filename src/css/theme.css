@@ -183,8 +183,25 @@ a {
 .nav-list {
   display: flex;
   gap: var(--spacing);
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
+}
+
+.site-name {
+  flex-direction: column;
+  text-align: center;
+}
+
+@media (min-width: 600px) {
+  .site-name {
+    justify-content: flex-end;
+    flex-direction: row;
+    text-align: end;
+  }
+
+  .nav-list {
+    justify-content: flex-end;
+  }
 }
 
 .header-area .site-name,
@@ -203,17 +220,9 @@ a {
 }
 
 .profile-photo {
-  width: 32px;
-  height: 32px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
-}
-
-@media (min-width: 900px) {
-  .profile-photo {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-  }
 }
 
 h1.site-name-heading {
