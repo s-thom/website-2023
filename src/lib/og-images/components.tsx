@@ -2,7 +2,14 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import pMemoize from "p-memoize";
 import type { GenerateOgImageOptions } from ".";
-import { OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH } from "./constants";
+import {
+  OG_IMAGE_HEIGHT,
+  OG_IMAGE_WIDTH,
+  OG_SAFE_HEIGHT,
+  OG_SAFE_WIDTH,
+} from "./constants";
+
+const BIG_BOX_PADDING_AMOUNT = 50;
 
 const ADD_DEBUG_BOXES = false;
 
@@ -18,15 +25,19 @@ function toChildren(...children: any[]) {
   return children.filter(Boolean).flatMap((c) => c);
 }
 
-async function SiteContent() {
-  const profileImageUrl = await getProfileImageUrl();
-
+function BigBox({ children }: React.PropsWithChildren) {
   return (
     <div
       style={{
         position: "absolute",
-        width: OG_IMAGE_WIDTH,
-        height: OG_IMAGE_HEIGHT,
+        top: (OG_IMAGE_HEIGHT - OG_SAFE_HEIGHT) / 2,
+        left: (OG_IMAGE_WIDTH - OG_SAFE_WIDTH) / 2,
+        width: OG_SAFE_WIDTH,
+        height: OG_SAFE_HEIGHT,
+        padding: BIG_BOX_PADDING_AMOUNT,
+        borderWidth: 3,
+        borderColor: "#ffffff",
+        borderStyle: "solid",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -34,10 +45,20 @@ async function SiteContent() {
         color: "#ffffff",
       }}
     >
+      {children}
+    </div>
+  );
+}
+
+async function SiteContent() {
+  const profileImageUrl = await getProfileImageUrl();
+
+  return (
+    <BigBox>
       <img
         src={profileImageUrl}
-        width={256}
-        height={256}
+        width={128}
+        height={128}
         style={{ borderRadius: "50%", marginBottom: "32px" }}
       />
       <h1 style={{ fontSize: "56px", margin: "16px", lineHeight: "56px" }}>
@@ -46,7 +67,7 @@ async function SiteContent() {
       <p style={{ fontSize: "32px", margin: "8px", lineHeight: "32px" }}>
         Software Developer | Human Being
       </p>
-    </div>
+    </BigBox>
   );
 }
 
@@ -54,33 +75,38 @@ async function PageContent(title: string) {
   const profileImageUrl = await getProfileImageUrl();
 
   return (
-    <div
-      style={{
-        position: "absolute",
-        width: 800,
-        height: 500,
-        top: (OG_IMAGE_HEIGHT - 500) / 2,
-        left: (OG_IMAGE_WIDTH - 800) / 2,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "flex-start",
-        justifyContent: "space-between",
-        color: "#ffffff",
-      }}
-    >
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <img
-          src={profileImageUrl}
-          width={76}
-          height={76}
-          style={{ borderRadius: "50%", marginRight: "32px" }}
-        />
-        <h1 style={{ fontSize: "48px", margin: 0 }}>Stuart Thomson</h1>
+    <BigBox>
+      <div
+        style={{
+          flexGrow: 1,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "space-between",
+          color: "#ffffff",
+        }}
+      >
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+          }}
+        >
+          <img
+            src={profileImageUrl}
+            width={76}
+            height={76}
+            style={{ borderRadius: "50%", marginRight: "32px" }}
+          />
+          <h1 style={{ fontSize: "48px", margin: 0 }}>Stuart Thomson</h1>
+        </div>
+        <h2 style={{ fontSize: "64px", alignSelf: "flex-end", margin: 16 }}>
+          {title}
+        </h2>
       </div>
-      <h2 style={{ fontSize: "64px", alignSelf: "flex-end", margin: 16 }}>
-        {title}
-      </h2>
-    </div>
+    </BigBox>
   );
 }
 
@@ -94,7 +120,7 @@ async function Background(
           position: "absolute",
           width: OG_IMAGE_WIDTH,
           height: OG_IMAGE_HEIGHT,
-          backgroundColor: "#002355",
+          backgroundColor: "#181818",
         }}
       />
     );
@@ -121,7 +147,7 @@ async function Background(
         position: "absolute",
         width: OG_IMAGE_WIDTH,
         height: OG_IMAGE_HEIGHT,
-        backgroundColor: "rgba(0,0,0,0.6)",
+        backgroundColor: "rgba(0,0,0,0.8)",
       }}
     />,
   );
