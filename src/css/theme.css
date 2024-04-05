@@ -3,9 +3,9 @@
   --color-text-secondary: #808080;
   --color-text-header: #ffffff;
   --color-background: #181818;
-  --color-background-secondary: #333333;
-  --color-background-header: #00325f;
-  --color-background-error: #581914;
+  --color-background-secondary: #3a3a3a;
+  --color-background-header: #1d3966;
+  --color-background-error: #5f2526;
   --color-background-delete: oklch(30% 0.03 18);
   --color-border: #555555;
   --color-link: oklch(50% 0.185 258);
@@ -275,8 +275,6 @@ h1.site-name-heading {
     height: 100%;
     width: 100%;
     background: var(--color-background-header);
-    background-size: cover;
-    background-position: center;
   }
 }
 
