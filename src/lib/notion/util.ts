@@ -14,6 +14,26 @@ export function richTextToUnformattedString(
     .join("");
 }
 
+export function toProperUuid(str: string): string {
+  const lower = str.toLowerCase();
+  if (
+    lower.match(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/,
+    )
+  ) {
+    return lower;
+  }
+
+  const segmentsMatch = lower.match(
+    /^([0-9a-f]{8})([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{12})$/,
+  );
+  if (!segmentsMatch) {
+    throw new Error(`${str} is not like a UUID`);
+  }
+
+  return `${segmentsMatch[1]}-${segmentsMatch[2]}-${segmentsMatch[3]}-${segmentsMatch[4]}-${segmentsMatch[5]}`;
+}
+
 export function normalizeTitle(title?: string | null): string {
   // https://github.com/NotionX/react-notion-x/blob/master/packages/notion-utils/src/normalize-title.ts
   return (title || "")

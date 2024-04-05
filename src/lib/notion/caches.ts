@@ -140,32 +140,58 @@ export function queryDatabase(
 
 async function getAllPagesInner(root: string): Promise<PageObjectResponse[]> {
   // These are used for both pages and databases
-  const allPagesQueue = new PQueue({ concurrency: 4 });
-  const processed = new Set<string>();
+  const toProcessQueue = new PQueue({ concurrency: 4 });
+  const processedIds = new Set<string>();
 
-  IGNORE_FROM_ALL.forEach((ignored) => processed.add(ignored));
+  IGNORE_FROM_ALL.forEach((ignored) => processedIds.add(ignored));
 
   function enqueuePage(id: string, parentPath: string) {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    allPagesQueue.add(() => processPage(id, parentPath), {
+    toProcessQueue.add(() => processPage(id, parentPath), {
+      throwOnTimeout: true,
+    });
+  }
+
+  function enqueueBlock(id: string, parentPath: string) {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    toProcessQueue.add(() => processBlock(id, parentPath), {
       throwOnTimeout: true,
     });
   }
 
   function enqueueDatabase(id: string, parentPath: string) {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    allPagesQueue.add(() => processDatabase(id, parentPath), {
+    toProcessQueue.add(() => processDatabase(id, parentPath), {
       throwOnTimeout: true,
+    });
+  }
+
+  async function processBlockChildren(id: string, parentPath: string) {
+    const children = await getBlockChildren(id);
+    children.forEach((child) => {
+      switch (child.type) {
+        case "child_page":
+        case "link_to_page":
+          enqueuePage(child.id, parentPath);
+          break;
+        case "child_database":
+          enqueueDatabase(child.id, parentPath);
+          break;
+        default:
+          if (child.has_children) {
+            enqueueBlock(child.id, parentPath);
+          }
+      }
     });
   }
 
   async function processPage(id: string, parentPath: string) {
     // Ensure we don't have duplicates running
-    if (processed.has(id)) {
+    if (processedIds.has(id)) {
       return;
     }
     // And prevent any new duplicates
-    processed.add(id);
+    processedIds.add(id);
 
     // Ensure page is in cache
     const page = await getPage(id);
@@ -181,25 +207,27 @@ async function getAllPagesInner(root: string): Promise<PageObjectResponse[]> {
       isListed: isPageListed(page),
     });
 
-    const children = await getBlockChildren(id);
-    const directChildPages = children.filter(
-      (child) => child.type === "child_page" || child.type === "link_to_page",
-    );
-    directChildPages.forEach((child) => enqueuePage(child.id, path));
+    await processBlockChildren(id, path);
+  }
 
-    const databases = children.filter(
-      (child) => child.type === "child_database",
-    );
-    databases.forEach((database) => enqueueDatabase(database.id, path));
+  async function processBlock(id: string, parentPath: string) {
+    // Ensure we don't have duplicates running
+    if (processedIds.has(id)) {
+      return;
+    }
+    // And prevent any new duplicates
+    processedIds.add(id);
+
+    await processBlockChildren(id, parentPath);
   }
 
   async function processDatabase(id: string, parentPath: string) {
     // Ensure we don't have duplicates running
-    if (processed.has(id)) {
+    if (processedIds.has(id)) {
       return;
     }
     // And prevent any new duplicates
-    processed.add(id);
+    processedIds.add(id);
 
     const path = PAGE_PATH_PREFIX_OVERRIDES[id] ?? parentPath;
 
@@ -209,7 +237,7 @@ async function getAllPagesInner(root: string): Promise<PageObjectResponse[]> {
 
   // Start everything off
   enqueuePage(root, "/");
-  await allPagesQueue.onIdle();
+  await toProcessQueue.onIdle();
 
   // Post-processing
   // At this point we can expect that all relevant pages have been cached.

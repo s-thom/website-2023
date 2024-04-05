@@ -4,6 +4,7 @@ import { getBlock, getInfoForPage } from "../../../lib/notion/caches";
 import {
   normalizeTitle,
   richTextToUnformattedString,
+  toProperUuid,
 } from "../../../lib/notion/util";
 
 export interface Props {
@@ -24,7 +25,7 @@ const componentsWithResolvedLinks = await Promise.all(
     // Links to other pages/blocks in Notion are always of the form `/<pageid>[#<blockid>]`, where
     // the IDs are lower dase without hyphens
     const notionIdsMatch = component.text.link.url.match(
-      /^\/([0-9a-f]{32})(?:#([0-9a-f]{32}))$/,
+      /^\/([0-9a-f]{32})(?:#([0-9a-f]{32}))?$/,
     );
     if (!notionIdsMatch) {
       return component;
@@ -33,12 +34,14 @@ const componentsWithResolvedLinks = await Promise.all(
     // We have a UUID-like URL it seems, so let's grab the page and the block (if there's a fragment)
     const [, pageId, blockId] = notionIdsMatch;
 
-    const info = await getInfoForPage(pageId);
+    const pageIdUuid = toProperUuid(pageId);
+    const info = await getInfoForPage(pageIdUuid);
 
     let hash = "";
 
     if (blockId) {
-      const block = await getBlock(blockId);
+      const blockIdUuid = toProperUuid(blockId);
+      const block = await getBlock(blockIdUuid);
       let title: string | undefined;
       switch (block.type) {
         case "heading_1":
