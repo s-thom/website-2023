@@ -1,14 +1,33 @@
 ---
-import { GithubIcon, MailIcon, LinkedinIcon } from "lucide-react";
+import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import LocalImage from "../components/Images/LocalImage.astro";
+import AboutLinks from "../components/notion/overrides/code-blocks/AboutLinks.astro";
+import ProjectsItem from "../components/notion/overrides/projects/ProjectsItem.astro";
 import StandalonePageLayout from "../layouts/StandalonePageLayout.astro";
+import { ACTIVE_PROJECTS_COLLECTION_ID } from "../lib/constants";
+import { getFilter } from "../lib/notion/blog";
+import { queryDatabase } from "../lib/notion/requests";
 import { generateOgImage } from "../lib/og-images";
+
+const NUM_PROJECTS_TO_SHOW = 3;
 
 const ogImage = await generateOgImage({
   id: "home_og",
   layout: "site",
   title: "Home",
 });
+
+const activeProjectItems = (await queryDatabase(
+  ACTIVE_PROJECTS_COLLECTION_ID,
+  getFilter({ allowUnlisted: import.meta.env.DEV }),
+  [
+    {
+      property: "Sorting",
+      direction: "descending",
+    },
+  ],
+)) as DatabaseObjectResponse[];
+const projectItemsToShow = activeProjectItems.slice(0, NUM_PROJECTS_TO_SHOW);
 ---
 
 <StandalonePageLayout
@@ -52,20 +71,7 @@ const ogImage = await generateOgImage({
     <div class="flow">
       <p>Hi, it's me.</p>
       <p>
-        Most of the time people just look at this page and then continue with
-        whatever else they were doing. A few have a look at the <a
-          href="/projects">projects I've worked on recently</a
-        > and then leave.
-      </p>
-      <p>
-        I don't really mind, this website is more just a thing I update every
-        once in a while. Not every part of the web needs to have a constant
-        focus on <em>retention</em>, <em>bounce rates</em>, and <em
-          >conversions</em
-        >.
-      </p>
-      <p>
-        No, this is just my little corner of the internet, here to be read or
+        This is just my little corner of the internet, here to be read or
         ignored at your leisure.
       </p>
     </div>
@@ -82,38 +88,30 @@ const ogImage = await generateOgImage({
           <a href="/about">About</a>
         </li>
       </ul>
-      <ul class="nav-list">
-        <li>
-          <a
-            href="https://github.com/s-thom"
-            aria-label="GitHub"
-            rel="nofollow noopener noreferrer"
-            target="_blank"
-          >
-            <GithubIcon width={32} />
-          </a>
-        </li>
-        <li>
-          <a
-            href="mailto:me@sthom.kiwi"
-            aria-label="Email"
-            rel="nofollow noopener noreferrer"
-            target="_blank"
-          >
-            <MailIcon width={32} />
-          </a>
-        </li>
-        <li>
-          <a
-            href="https://www.linkedin.com/in/s-thom/"
-            aria-label="LinkedIn"
-            rel="nofollow noopener noreferrer"
-            target="_blank"
-          >
-            <LinkedinIcon width={32} />
-          </a>
-        </li>
-      </ul>
+
+      <AboutLinks />
+    </div>
+
+    <div class="flow">
+      <h3 class="visually-hidden"><a href="/projects">Recent projects</a></h3>
+      <div class="projects-list">
+        {
+          projectItemsToShow.map((item) => (
+            <ProjectsItem
+              class="project-card"
+              page={item}
+              widths={[240, 360]}
+              sizes="(min-width: 600px) 360px, 240px"
+              overrides={{}}
+              showImage
+              showTitle
+            />
+          ))
+        }
+        <div class="small-box see-more">
+          <a href="/projects">See more...</a>
+        </div>
+      </div>
     </div>
   </div>
 </StandalonePageLayout>
@@ -168,5 +166,34 @@ const ogImage = await generateOgImage({
     align-items: center;
     gap: var(--spacing);
     text-align: center;
+  }
+
+  .projects-list {
+    display: grid;
+    gap: var(--spacing);
+    grid-template-columns: 1fr;
+
+    & > :global(.project-card) {
+      width: 100%;
+      max-width: 240px;
+    }
+  }
+
+  @media (min-width: 500px) {
+    .projects-list > :global(.project-card) {
+      max-width: 360px;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .projects-list {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .see-more {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 </style>
