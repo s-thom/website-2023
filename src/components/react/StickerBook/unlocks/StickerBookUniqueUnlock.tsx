@@ -1,16 +1,16 @@
 import clsx from "clsx";
 import { StrictMode, Suspense } from "react";
-import { useStore } from "../../store/index";
+import { useStickers } from "../../hooks/useStickers";
 import { Sticker } from "../components/Sticker/Sticker.tsx";
 import { StickerFrame } from "../components/StickerFrame/index.tsx";
-import type { StickerTypes } from "../types";
+import type { StickerTypes } from "../../../../stickers/types";
 import "./StickerUnlock.css";
 import { useAddUniqueSticker } from "./useAddUniqueSticker";
 
 const STICKER_TYPE: StickerTypes = "fire-heart";
 
 export function StickerBookUniqueUnlock() {
-  const isStickersEnabled = useStore((store) => store.enabled.stickers);
+  const { enabled: isStickersEnabled } = useStickers();
 
   const { addSticker, isUnlocked } = useAddUniqueSticker({
     type: STICKER_TYPE,

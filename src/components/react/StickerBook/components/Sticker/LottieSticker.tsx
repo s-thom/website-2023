@@ -11,10 +11,9 @@ import {
   useState,
   type PointerEvent,
 } from "react";
+import { STICKER_TYPE_MAP } from "../../../../../stickers/data";
+import type { StickerTypes } from "../../../../../stickers/types";
 import { isBrowser } from "../../../../../util";
-import { useStore } from "../../../store";
-import { STICKER_TYPE_MAP } from "../../data";
-import type { StickerTypes } from "../../types";
 
 const useIsomorphicLayoutEffect = isBrowser ? useLayoutEffect : useEffect;
 
@@ -55,8 +54,6 @@ export function LottieSticker({ type, animated }: LottieStickerProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [animation, setAnimation] = useState<AnimationItem>();
   const [isHovering, setIsHovering] = useState<boolean>(false);
-
-  const animationFrequency = useStore((state) => state.animationFrequency);
 
   const play = useCallback(() => {
     if (animated && animation) {
@@ -132,34 +129,13 @@ export function LottieSticker({ type, animated }: LottieStickerProps) {
       stop();
       return;
     }
-    if (animationFrequency === "never") {
-      stop();
-      return;
-    }
-    if (animationFrequency === "always") {
-      play();
-      return;
-    }
-    if (animationFrequency === "hover") {
-      if (isHovering) {
-        play();
-      } else {
-        stop();
-      }
-      // eslint-disable-next-line no-useless-return
-      return;
-    }
 
-    // TODO: Add a "sometimes" which plays randomly
-  }, [
-    animated,
-    animation,
-    animationFrequency,
-    data.initialFrame,
-    isHovering,
-    play,
-    stop,
-  ]);
+    if (isHovering) {
+      play();
+    } else {
+      stop();
+    }
+  }, [animated, animation, data.initialFrame, isHovering, play, stop]);
 
   return (
     <>

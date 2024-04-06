@@ -1,7 +1,7 @@
 import { Suspense } from "react";
+import { STICKER_TYPES_BY_RARITY } from "../../../../stickers/data";
 import { arrayRandom, range } from "../../../../util";
-import { useStore } from "../../store";
-import { STICKER_TYPES_BY_RARITY } from "../data";
+import { useStickers } from "../../hooks/useStickers";
 import "./StickerBookFreeStickersUnlock.css";
 import { addSticker } from "./util";
 
@@ -10,7 +10,7 @@ const UNCOMMONS_TO_ADD = 2;
 const RARES_TO_ADD = 0;
 
 export function StickerBookFreeStickersUnlock() {
-  const isStickersEnabled = useStore((store) => store.enabled.stickers);
+  const { enabled: isStickersEnabled } = useStickers();
 
   function addMoreStickers() {
     range(COMMONS_TO_ADD).forEach(() =>

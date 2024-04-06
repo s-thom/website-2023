@@ -1,6 +1,6 @@
 import clsx from "clsx";
-import { STICKER_TYPE_MAP } from "../../data";
-import type { StickerTypes } from "../../types";
+import { STICKER_TYPE_MAP } from "../../../../../stickers/data";
+import type { StickerTypes } from "../../../../../stickers/types";
 import "./StickerFrame.css";
 
 export interface StickerFrameProps extends React.PropsWithChildren {

@@ -1,9 +1,12 @@
-import type { AddStickerEvent } from "./components/react/StickerBook/types";
+import type {
+  AddStickerEventData,
+  StickersChangedEventData,
+} from "./stickers/types";
 import type { SlidersInitialisedEvent } from "./lib/shaders/sliders";
 
 declare global {
   interface WindowEventMap {
-    addsticker: AddStickerEvent;
+    addsticker: CustomEvent<AddStickerEventData>;
     slidersinitialised: SlidersInitialisedEvent;
   }
 }

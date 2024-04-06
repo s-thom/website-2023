@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { type ReactNode } from "react";
-import { STICKER_TYPE_MAP } from "../../data";
-import type { StickerTypes } from "../../types";
+import { STICKER_TYPE_MAP } from "../../../../../stickers/data";
+import type { StickerTypes } from "../../../../../stickers/types";
 import { LottieSticker, getLottieData } from "./LottieSticker.tsx";
 import "./Sticker.css";
 

@@ -1,10 +1,10 @@
 import { Suspense } from "react";
-import { useStore } from "../../../store";
+import { toggleStickersEnabled } from "../../../../../stickers/store";
+import { useStickers } from "../../../hooks/useStickers";
 import "./FeatureToggle.css";
 
 export function FeatureToggle() {
-  const isStickersEnabled = useStore((store) => store.enabled.stickers);
-  const toggleFeature = useStore((store) => store.toggleFeature);
+  const { enabled } = useStickers();
 
   return (
     <Suspense>
@@ -18,14 +18,14 @@ export function FeatureToggle() {
       <div>
         <button
           type="button"
-          onClick={() => toggleFeature("stickers")}
+          onClick={() => toggleStickersEnabled(!enabled)}
           suppressHydrationWarning
           className="stickers-toggle-button"
           data-umami-event={`stickers-toggle-${
-            isStickersEnabled ? "disabled" : "enabled"
+            enabled ? "disabled" : "enabled"
           }`}
         >
-          {isStickersEnabled ? "Disable stickers" : "Enable stickers"}
+          {enabled ? "Disable stickers" : "Enable stickers"}
         </button>
       </div>
     </Suspense>

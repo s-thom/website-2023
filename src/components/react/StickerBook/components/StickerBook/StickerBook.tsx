@@ -1,14 +1,13 @@
 import { useMemo } from "react";
-import { useStore } from "../../../store";
-import { STICKER_TYPE_MAP } from "../../data";
-import { RARITY_RANK, type StickerInfo } from "../../types";
+import { useStickers } from "../../../hooks/useStickers";
+import { STICKER_TYPE_MAP } from "../../../../../stickers/data";
+import { RARITY_RANK, type StickerInfo } from "../../../../../stickers/types";
 import { Sticker } from "../Sticker/Sticker.tsx";
 import { StickerFrame } from "../StickerFrame/index.tsx";
 import "./StickerBook.css";
 
 export function StickerBook() {
-  const isStickersEnabled = useStore((store) => store.enabled.stickers);
-  const stickers = useStore((store) => store.stickers);
+  const { enabled: isStickersEnabled, stickers } = useStickers();
 
   const firstStickersOfType = useMemo(() => {
     const map = new Map<keyof typeof STICKER_TYPE_MAP, StickerInfo[]>();

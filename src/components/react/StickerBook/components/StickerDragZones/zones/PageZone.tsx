@@ -1,6 +1,6 @@
 import { useDroppable } from "@dnd-kit/core";
 import clsx from "clsx";
-import type { StickerInfo } from "../../../types";
+import type { StickerInfo } from "../../../../../../stickers/types";
 import { MovableStickerWrapper } from "../../Sticker/MovableStickerWrapper.tsx";
 
 export interface PageZoneProps {

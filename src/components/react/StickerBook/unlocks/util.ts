@@ -1,7 +1,10 @@
-import { AddStickerEvent, type StickerTypes } from "../types";
+import type {
+  AddStickerEventData,
+  StickerTypes,
+} from "../../../../stickers/types";
 
 export function addSticker(type: StickerTypes, pageId?: string) {
-  const event = new AddStickerEvent("addsticker", {
+  const event = new CustomEvent<AddStickerEventData>("addsticker", {
     detail: { type, pageId },
   });
   window.dispatchEvent(event);

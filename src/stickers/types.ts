@@ -1,33 +1,3 @@
-export type StickerRarity =
-  | "common"
-  | "uncommon"
-  | "rare"
-  | "legendary"
-  | "unique";
-
-export const RARITY_RANK: Record<StickerRarity, number> = {
-  common: 0,
-  uncommon: 1,
-  rare: 2,
-  legendary: 3,
-  unique: 4,
-};
-
-interface BaseStickerData {
-  name: string;
-  description?: string;
-  unlockedBy?: string;
-  rarity: StickerRarity;
-}
-
-export interface LottieStickerData extends BaseStickerData {
-  type: "lottie";
-  url: string;
-  initialFrame: number;
-}
-
-export type StickerData = LottieStickerData;
-
 export const ORDERED_STICKER_TYPES = [
   // Emoji series
   "thumbs-up",
@@ -63,6 +33,36 @@ export const ORDERED_STICKER_TYPES = [
 
 export type StickerTypes = (typeof ORDERED_STICKER_TYPES)[number];
 
+export type StickerRarity =
+  | "common"
+  | "uncommon"
+  | "rare"
+  | "legendary"
+  | "unique";
+
+export const RARITY_RANK: Record<StickerRarity, number> = {
+  common: 0,
+  uncommon: 1,
+  rare: 2,
+  legendary: 3,
+  unique: 4,
+};
+
+interface BaseStickerData {
+  name: string;
+  description?: string;
+  unlockedBy?: string;
+  rarity: StickerRarity;
+}
+
+export interface LottieStickerData extends BaseStickerData {
+  type: "lottie";
+  url: string;
+  initialFrame: number;
+}
+
+export type StickerData = LottieStickerData;
+
 export interface Vec2 {
   x: number;
   y: number;
@@ -79,6 +79,11 @@ export interface CenterPosition {
 
 export type StickerPosition = NonePosition | CenterPosition;
 
+export interface StickerStoreValue {
+  enabled: boolean;
+  stickers: StickerInfo[];
+}
+
 export interface StickerInfo {
   id: string;
   type: StickerTypes;
@@ -93,4 +98,6 @@ export interface AddStickerEventData {
   pageId?: string;
 }
 
-export const AddStickerEvent = CustomEvent<AddStickerEventData>;
+export interface StickersChangedEventData {
+  state: StickerStoreValue;
+}

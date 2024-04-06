@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
-import { useStore } from "../../store";
-import { type StickerTypes } from "../types";
+import { type StickerTypes } from "../../../../stickers/types";
+import { useStickers } from "../../hooks/useStickers";
 import { addSticker as sendAddStickerEvent } from "./util";
 
 export interface UseAddUniqueStickerOptions {
@@ -12,7 +12,7 @@ export function useAddUniqueSticker({
   pageId,
   type,
 }: UseAddUniqueStickerOptions) {
-  const stickers = useStore((store) => store.stickers);
+  const { stickers } = useStickers();
   const isUnlocked = useMemo(
     () => !!stickers.find((sticker) => sticker.type === type),
     [stickers, type],

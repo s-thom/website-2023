@@ -1,9 +1,9 @@
 import clsx from "clsx";
 import { StrictMode, Suspense } from "react";
-import { useStore } from "../../store";
+import { useStickers } from "../../hooks/useStickers";
 import { Sticker } from "../components/Sticker/Sticker.tsx";
 import { StickerFrame } from "../components/StickerFrame/index.tsx";
-import type { StickerTypes } from "../types";
+import type { StickerTypes } from "../../../../stickers/types";
 import "./StickerUnlock.css";
 import { useAddUniqueSticker } from "./useAddUniqueSticker";
 
@@ -12,7 +12,7 @@ export interface BlogNavUnlockProps {
 }
 
 export function BlogNavUnlock({ stickerType }: BlogNavUnlockProps) {
-  const isStickersEnabled = useStore((store) => store.enabled.stickers);
+  const { enabled: isStickersEnabled } = useStickers();
 
   const { addSticker, isUnlocked, isRecentlyUnlocked } = useAddUniqueSticker({
     type: stickerType,

@@ -1,7 +1,7 @@
 import { useDroppable } from "@dnd-kit/core";
 import clsx from "clsx";
 import { BookHeartIcon, Trash2Icon } from "lucide-react";
-import { useStore } from "../../../../store";
+import { useStickers } from "../../../../hooks/useStickers";
 import { PanelButtonPreview } from "./PanelButtonPreview.tsx";
 
 export interface PanelButtonProps {
@@ -9,7 +9,7 @@ export interface PanelButtonProps {
 }
 
 export function PanelButton({ onClick }: PanelButtonProps) {
-  const stickers = useStore((store) => store.stickers);
+  const { stickers } = useStickers();
   const { isOver, setNodeRef } = useDroppable({
     id: "panel",
   });

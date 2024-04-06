@@ -1,8 +1,8 @@
 import { useDraggable } from "@dnd-kit/core";
 import clsx from "clsx";
 import { useCallback, useEffect, useRef } from "react";
-import { positionToPageCoords } from "../../coordinates";
-import type { StickerInfo } from "../../types";
+import { positionToPageCoords } from "../../../../../stickers/coordinates";
+import type { StickerInfo } from "../../../../../stickers/types";
 import { Sticker } from "./Sticker.tsx";
 
 export interface MovableStickerWrapperProps {

@@ -1,11 +1,13 @@
 import type { DndContext, DragCancelEvent, DragEndEvent } from "@dnd-kit/core";
 import { useCallback, useMemo, useState } from "react";
-import { useStore } from "../../../store";
+import { sendEvent } from "../../../../../lib/analytics";
 import {
   pageCoordsToPosition,
   screenCoordsToPageCoords,
-} from "../../coordinates";
-import { STICKER_TYPE_MAP } from "../../data";
+} from "../../../../../stickers/coordinates";
+import { STICKER_TYPE_MAP } from "../../../../../stickers/data";
+import { placeOnPage, removeFromPage } from "../../../../../stickers/store";
+import { useStickers } from "../../../hooks/useStickers";
 
 function sendEvent(type: string, data: { [key: string]: string | number }) {
   // @ts-ignore
@@ -16,9 +18,7 @@ function sendEvent(type: string, data: { [key: string]: string | number }) {
 }
 
 export function useDragState(pageId: string) {
-  const stickers = useStore((state) => state.stickers);
-  const placeOnPage = useStore((state) => state.placeOnPage);
-  const removeFromPage = useStore((state) => state.removeFromPage);
+  const { stickers } = useStickers();
 
   const [dragId, setDragId] = useState<string>();
 
@@ -62,7 +62,7 @@ export function useDragState(pageId: string) {
         });
       }
     },
-    [draggingSticker, pageId, placeOnPage, removeFromPage],
+    [draggingSticker, pageId],
   );
 
   const handleDragCancel = useCallback(

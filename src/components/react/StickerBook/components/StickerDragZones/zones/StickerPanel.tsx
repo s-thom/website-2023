@@ -2,8 +2,8 @@ import { useDroppable } from "@dnd-kit/core";
 import clsx from "clsx";
 import { InfoIcon, XIcon } from "lucide-react";
 import { useMemo } from "react";
-import { STICKER_TYPE_MAP, sortStickerTypes } from "../../../data";
-import type { StickerInfo } from "../../../types";
+import { STICKER_TYPE_MAP, sortStickerTypes } from "../../../../../../stickers/data";
+import type { StickerInfo } from "../../../../../../stickers/types";
 import { MovableStickerWrapper } from "../../Sticker/MovableStickerWrapper.tsx";
 
 export interface StickerPanelProps {

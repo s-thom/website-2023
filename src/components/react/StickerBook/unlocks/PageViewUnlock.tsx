@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
+import { STICKER_TYPES_BY_RARITY } from "../../../../stickers/data";
+import type { StickerTypes } from "../../../../stickers/types";
 import { arrayRandom, range } from "../../../../util";
-import { useStore } from "../../store";
-import { STICKER_TYPES_BY_RARITY } from "../data";
-import type { StickerTypes } from "../types";
+import { useStickers } from "../../hooks/useStickers";
 import { addSticker } from "./util";
 
 const MIN_STICKER_UNLOCKS_ON_PAGE = 1;
@@ -25,7 +25,7 @@ export function PageViewUnlock({
   pageId,
   specialStickerType,
 }: PageViewUnlockProps) {
-  const stickers = useStore((store) => store.stickers);
+  const { stickers } = useStickers();
   const stickersUnlockedOnPage = useMemo(
     () => stickers.filter((sticker) => sticker.unlockPageId === pageId),
     [pageId, stickers],

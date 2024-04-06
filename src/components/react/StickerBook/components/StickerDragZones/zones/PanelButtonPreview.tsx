@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { useStore } from "../../../../store/index";
-import { canAddSticker } from "../../../../store/reducers/stickers";
-import type { AddStickerEvent, StickerTypes } from "../../../types";
+import { canAddSticker } from "../../../../../../stickers/store";
+import type { AddStickerEventData, StickerTypes } from "../../../../../../stickers/types";
 import { Sticker, loadSticker } from "../../Sticker/Sticker.tsx";
 
 // This is actually larger than the real animation time, but it provides a
@@ -12,8 +11,6 @@ export function PanelButtonPreview() {
   // This file turned out to have some complexities. I did manage to anticipate
   // them so I knew what I needed to write, but that doesn't prevent there from
   // being a lot of code that's pretty tightly linked with itself.
-
-  const stickers = useStore((store) => store.stickers);
 
   // Types that are still having their data loaded
   const [pendingPromises, setPendingPromises] = useState<
@@ -64,17 +61,8 @@ export function PanelButtonPreview() {
 
   // Add stickers when sticker is added
   useEffect(() => {
-    function onAddStickerEvent(event: InstanceType<typeof AddStickerEvent>) {
-      if (
-        canAddSticker(stickers, {
-          id: "fake",
-          type: event.detail.type,
-          unlockPageId: undefined,
-          unlockTime: Date.now(),
-          zone: undefined,
-          position: { type: "none" },
-        })
-      ) {
+    function onAddStickerEvent(event: CustomEvent< AddStickerEventData>) {
+      if (canAddSticker(event.detail.type)) {
         enqueueSticker(event.detail.type);
       }
     }
@@ -84,7 +72,7 @@ export function PanelButtonPreview() {
     return () => {
       window.removeEventListener("addsticker", onAddStickerEvent);
     };
-  }, [enqueueSticker, stickers]);
+  }, [enqueueSticker]);
 
   // Clear stickers after animation time has elapsed
   useEffect(() => {

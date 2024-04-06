@@ -1,6 +1,6 @@
 import { DndContext, DragOverlay } from "@dnd-kit/core";
 import { useState } from "react";
-import { useStore } from "../../../store";
+import { useStickers } from "../../../hooks/useStickers";
 import { Sticker } from "../Sticker/Sticker.tsx";
 import "./StickerApp.css";
 import { useDragState } from "./useDragState.tsx";
@@ -14,7 +14,7 @@ export interface StickerAppProps {
 }
 
 export function StickerApp({ pageId }: StickerAppProps) {
-  const isStickersEnabled = useStore((store) => store.enabled.stickers);
+  const { enabled: isStickersEnabled } = useStickers();
 
   const {
     draggingSticker,

@@ -1,14 +1,12 @@
 import { useEffect } from "react";
 import { v4 as uuid } from "uuid";
-import { useStore } from "../../../store";
-import { pageCoordsToPosition } from "../../coordinates";
-import { AddStickerEvent } from "../../types";
+import { pageCoordsToPosition } from "../../../../../stickers/coordinates";
+import { addSticker } from "../../../../../stickers/store";
+import type { AddStickerEventData } from "../../../../../stickers/types";
 
 export function useStickerEventListeners() {
-  const addSticker = useStore((store) => store.addSticker);
-
   useEffect(() => {
-    function onAddStickerEvent(event: InstanceType<typeof AddStickerEvent>) {
+    function onAddStickerEvent(event: CustomEvent<AddStickerEventData>) {
       addSticker({
         id: uuid(),
         type: event.detail.type,
@@ -24,5 +22,5 @@ export function useStickerEventListeners() {
     return () => {
       window.removeEventListener("addsticker", onAddStickerEvent);
     };
-  }, [addSticker]);
+  }, []);
 }
