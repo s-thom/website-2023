@@ -44,6 +44,13 @@ export const STICKER_TYPE_MAP: Record<StickerTypes, StickerData> = {
     url: "/static/lottie/dragon.json",
     initialFrame: 60,
   },
+  earth: {
+    type: "lottie",
+    rarity: "rare",
+    name: "Earth",
+    url: "/static/lottie/earth.json",
+    initialFrame: 0,
+  },
   fire: {
     type: "lottie",
     rarity: "uncommon",

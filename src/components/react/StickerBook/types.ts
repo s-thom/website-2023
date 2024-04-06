@@ -44,6 +44,7 @@ export const ORDERED_STICKER_TYPES = [
   "party-popper",
   "light-bulb",
   "rocket",
+  "earth",
 
   // Unused so far
   "turtle",
