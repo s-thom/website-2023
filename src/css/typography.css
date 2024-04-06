@@ -44,11 +44,11 @@ h4 {
 }
 
 blockquote {
-  max-width: 50ch;
+  max-width: 80ch;
   padding-inline-start: 1em;
   border-inline-start: 0.3em solid;
   font-style: italic;
-  font-size: var(--size-step-1);
+  font-size: var(--size-step-0);
 }
 
 .text-code,
