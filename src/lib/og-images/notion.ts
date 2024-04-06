@@ -28,6 +28,7 @@ async function getCoverImageFilePath(
     `${page.id}-cover`,
     () => fetchImage(url),
     [],
+    [1],
   );
   return {
     filePath: imageInfo.original.filePath,
