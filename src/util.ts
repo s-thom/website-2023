@@ -18,4 +18,12 @@ export function range(length: number): number[] {
   return [...Array(length)].map((_, i) => i);
 }
 
+export function clone<T>(value: T): T {
+  if (typeof structuredClone !== "undefined") {
+    return structuredClone(value);
+  }
+
+  return JSON.parse(JSON.stringify(value));
+}
+
 export const isBrowser = "window" in globalThis;

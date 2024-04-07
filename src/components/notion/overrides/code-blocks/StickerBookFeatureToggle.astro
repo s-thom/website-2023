@@ -1,5 +1,61 @@
 ---
-import { LazyLoader } from "../../../react/LazyLoader.tsx";
+
 ---
 
-<LazyLoader type="sticker-feature-toggle" props={{}} client:idle />
+<noscript>
+  <p class="stickers-toggle-noscript">
+    You have Javascript disabled, which means this button won't work. It also
+    means the stickers won't work, so I guess there's no problem here?
+  </p>
+</noscript>
+<div>
+  <button
+    type="button"
+    class="stickers-toggle-button"
+    data-umami-event="stickers-toggle-disabled"
+  >
+    Disable stickers
+  </button>
+</div>
+
+<style>
+  .stickers-toggle-noscript {
+    color: var(--color-text-secondary);
+    font-style: italic;
+    font-size: var(--size-step-min1);
+  }
+
+  .stickers-toggle-button {
+    display: block;
+    margin: 0 auto;
+  }
+</style>
+
+<script>
+  import {
+    addStickerStoreListener,
+    getStickerStore,
+    toggleStickersEnabled,
+  } from "../../../../stickers/store";
+
+  document
+    .querySelectorAll<HTMLButtonElement>("button.stickers-toggle-button")
+    .forEach((button) => {
+      let { enabled } = getStickerStore();
+
+      function updateButton() {
+        button.dataset.umamiEvent = `stickers-toggle-${
+          enabled ? "disabled" : "enabled"
+        }`;
+        button.textContent = enabled ? "Disable stickers" : "Enable stickers";
+      }
+
+      button.addEventListener("click", () => toggleStickersEnabled());
+
+      addStickerStoreListener((value) => {
+        enabled = value.enabled;
+        updateButton();
+      });
+      updateButton();
+    });
+</script>

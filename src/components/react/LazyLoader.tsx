@@ -16,11 +16,6 @@ const BlogNavUnlock = lazy(() =>
     default: module.BlogNavUnlock,
   })),
 );
-const FeatureToggle = lazy(() =>
-  import("./StickerBook/components/FeatureToggle/index.tsx").then((module) => ({
-    default: module.FeatureToggle,
-  })),
-);
 const StickerApp = lazy(() =>
   import("./StickerBook/components/StickerDragZones/StickerApp.tsx").then(
     (module) => ({
@@ -89,8 +84,6 @@ function LazyLoaderSwitch({
       return <StickerBookUniqueUnlock {...props} />;
     case "sticker-unlock":
       return <StickerUnlock {...props} />;
-    case "sticker-feature-toggle":
-      return <FeatureToggle {...props} />;
     default:
       // eslint-disable-next-line no-console
       console.error(`Unknown component type ${type}`);

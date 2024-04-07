@@ -1,3 +1,4 @@
+import { clone } from "../util";
 import { STICKER_TYPE_MAP } from "./data";
 import type { StickerInfo, StickerStoreValue, StickerTypes } from "./types";
 
@@ -90,7 +91,7 @@ export function canAddSticker(type: StickerTypes): boolean {
 }
 
 export function addSticker(sticker: StickerInfo): StickerInfo[] {
-  const store = getStickerStore();
+  const store = clone(getStickerStore());
 
   if (canAddSticker(sticker.type)) {
     store.stickers.push(sticker);
@@ -105,7 +106,7 @@ export function placeOnPage(
   pageId: string | undefined,
   position: StickerInfo["position"],
 ): StickerInfo[] {
-  const store = getStickerStore();
+  const store = clone(getStickerStore());
 
   const sticker = store.stickers.find((s) => s.id === stickerId);
   if (!sticker) {
@@ -120,7 +121,7 @@ export function placeOnPage(
 }
 
 export function removeFromPage(stickerId: string): StickerInfo[] {
-  const store = getStickerStore();
+  const store = clone(getStickerStore());
 
   const sticker = store.stickers.find((s) => s.id === stickerId);
   if (!sticker) {
@@ -135,7 +136,7 @@ export function removeFromPage(stickerId: string): StickerInfo[] {
 }
 
 export function toggleStickersEnabled(value?: boolean): boolean {
-  const store = getStickerStore();
+  const store = clone(getStickerStore());
 
   store.enabled = value ?? !store.enabled;
 
