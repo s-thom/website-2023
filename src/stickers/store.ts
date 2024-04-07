@@ -56,6 +56,7 @@ let currentStickerStoreValue = readStickerStoreFromStorage();
 window.addEventListener("storage", (event) => {
   if (event.storageArea === localStorage && event.key === STICKER_STORE_KEY) {
     currentStickerStoreValue = readStickerStoreFromStorage();
+    sendValueToListeners(currentStickerStoreValue);
   }
 });
 
