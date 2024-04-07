@@ -15,6 +15,7 @@ import NotionTableOfContents from "../components/notion/common/NotionTableOfCont
 import { LazyLoader } from "../components/react/LazyLoader.tsx";
 import type { StickerTypes } from "../components/react/StickerBook/types";
 import { getPagePropertyByName } from "../lib/notion/util";
+import type { StickerTypes } from "../stickers/types";
 import PageWithHeaderLayout from "./PageWithHeaderLayout.astro";
 import type { BlockInfo } from "../integrations/notion-loader/api";
 
@@ -62,7 +63,11 @@ if (showTableOfContents) {
   id={page.id}
   meta={meta}
   breadcrumbs={breadcrumbs}
-  allowPageViewStickerUnlocks={shouldGiveStickers}
+  stickers={{
+    enabled: true,
+    unlockOnScroll: shouldGiveStickers,
+    special: shouldGiveStickers ? specialSticker : undefined,
+  }}
 >
   <SkipLinks links={skipLinks} slot="skip-links" />
 

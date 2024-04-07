@@ -1,0 +1,19 @@
+---
+import type { PageStickerData } from "../stickers/bootstrap";
+
+export interface Props extends PageStickerData {}
+
+const { pageId, enabled, unlockOnScroll = true, special } = Astro.props;
+---
+
+<script
+  is:inline
+  id="sticker-data"
+  type="application/json"
+  set:html={JSON.stringify({ pageId, enabled, unlockOnScroll, special })}
+/>
+<script>
+  import { bootstrap } from "../stickers/bootstrap.ts";
+
+  bootstrap();
+</script>

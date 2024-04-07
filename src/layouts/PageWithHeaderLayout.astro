@@ -3,19 +3,24 @@ import type { PageMetaType } from "../components/PageMeta.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import type { LinkInfo } from "../components/SiteHeader.astro";
 import SiteHeader from "../components/SiteHeader.astro";
+import type { StickerTypes } from "../stickers/types";
 import PageLayout from "./PageLayout.astro";
 
 export interface Props {
   id: string;
-  allowPageViewStickerUnlocks?: boolean;
   meta: PageMetaType;
   breadcrumbs?: LinkInfo[];
+  stickers: {
+    enabled: boolean;
+    unlockOnScroll?: boolean;
+    special?: StickerTypes;
+  };
 }
 
-const { id, meta, breadcrumbs } = Astro.props;
+const { id, meta, breadcrumbs, stickers } = Astro.props;
 ---
 
-<PageLayout id={id} meta={meta}>
+<PageLayout id={id} meta={meta} stickers={stickers}>
   <slot name="head" slot="head" />
   <slot name="skip-links" slot="skip-links" />
   <slot name="site-sidebar" slot="site-sidebar" />

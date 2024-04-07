@@ -1,24 +1,36 @@
 ---
 import PageMeta, { type PageMetaType } from "../components/PageMeta.astro";
+import StickersHead from "../components/StickersHead.astro";
 import { LazyLoader } from "../components/react/LazyLoader.tsx";
 import { Panel } from "../components/react/Panel/index.tsx";
 import SettingsInitialLoader from "../components/site/SettingsInitialLoader.astro";
 import Web3IsAScam from "../components/site/Web3IsAScam.astro";
 import "../css/index.css";
+import type { StickerTypes } from "../stickers/types";
 import MinimalLayout from "./MinimalLayout.astro";
 
 export interface Props {
   id: string;
   meta: PageMetaType;
-  noStickers?: boolean;
+  stickers: {
+    enabled: boolean;
+    unlockOnScroll?: boolean;
+    special?: StickerTypes;
+  };
 }
 
-const { id, meta, noStickers } = Astro.props;
+const { id, meta, stickers } = Astro.props;
 ---
 
 <MinimalLayout>
   <Fragment slot="head">
     <PageMeta meta={meta} />
+    <StickersHead
+      pageId={id}
+      enabled={stickers.enabled}
+      unlockOnScroll={stickers.unlockOnScroll}
+      special={stickers.special}
+    />
     <slot name="head" />
     <Web3IsAScam />
     <SettingsInitialLoader />
@@ -34,7 +46,7 @@ const { id, meta, noStickers } = Astro.props;
   <slot name="site-footer" />
 
   {
-    !noStickers && (
+    stickers.enabled && (
       <LazyLoader
         type="sticker-app"
         props={{ pageId: id }}

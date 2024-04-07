@@ -3,10 +3,10 @@ import PageLayout, { type Props as PageLayoutProps } from "./PageLayout.astro";
 
 export interface Props extends PageLayoutProps {}
 
-const { id, meta, noStickers } = Astro.props;
+const { id, meta, stickers } = Astro.props;
 ---
 
-<PageLayout id={id} meta={meta} noStickers={noStickers}>
+<PageLayout id={id} meta={meta} stickers={stickers}>
   <div class="standalone-page">
     <slot />
   </div>

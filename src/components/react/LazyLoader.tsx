@@ -1,7 +1,6 @@
 import { StrictMode, Suspense, lazy, useEffect, useState } from "react";
 import type { StickerAppProps } from "./StickerBook/components/StickerDragZones/StickerApp.tsx";
 import type { BlogNavUnlockProps } from "./StickerBook/unlocks/BlogNavUnlock.tsx";
-import type { PageViewUnlockProps } from "./StickerBook/unlocks/PageViewUnlock.tsx";
 import type { StickerUnlockProps } from "./StickerBook/unlocks/StickerUnlock.tsx";
 
 // This file serves a weird purpose: being a generic React root while also lazily
@@ -20,11 +19,6 @@ const BlogNavUnlock = lazy(() =>
 const FeatureToggle = lazy(() =>
   import("./StickerBook/components/FeatureToggle/index.tsx").then((module) => ({
     default: module.FeatureToggle,
-  })),
-);
-const PageViewUnlock = lazy(() =>
-  import("./StickerBook/unlocks/PageViewUnlock.tsx").then((module) => ({
-    default: module.PageViewUnlock,
   })),
 );
 const StickerApp = lazy(() =>
@@ -63,7 +57,6 @@ const StickerUnlock = lazy(() =>
 
 interface ComponentPropsMap {
   "sticker-blog-nav-unlock": BlogNavUnlockProps;
-  "sticker-page-view-unlock": PageViewUnlockProps;
   "sticker-book": {};
   "sticker-book-free-unlock": {};
   "sticker-book-unique-unlock": {};
@@ -98,8 +91,6 @@ function LazyLoaderSwitch({
       return <StickerUnlock {...props} />;
     case "sticker-feature-toggle":
       return <FeatureToggle {...props} />;
-    case "sticker-page-view-unlock":
-      return <PageViewUnlock {...props} />;
     default:
       // eslint-disable-next-line no-console
       console.error(`Unknown component type ${type}`);
