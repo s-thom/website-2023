@@ -97,7 +97,3 @@ export interface AddStickerEventData {
   type: StickerTypes;
   pageId?: string;
 }
-
-export interface StickersChangedEventData {
-  state: StickerStoreValue;
-}

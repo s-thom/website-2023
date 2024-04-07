@@ -1,8 +1,5 @@
-import type {
-  AddStickerEventData,
-  StickersChangedEventData,
-} from "./stickers/types";
 import type { SlidersInitialisedEvent } from "./lib/shaders/sliders";
+import type { AddStickerEventData } from "./stickers/types";
 
 declare global {
   interface WindowEventMap {

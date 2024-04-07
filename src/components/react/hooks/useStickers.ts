@@ -1,20 +1,15 @@
-import { useEffect, useState } from "react";
-import { getStickerStore } from "../../../stickers/store";
-import type { StickerInfo, StickerStoreValue } from "../../../stickers/types";
-
-export interface UseStickersValue {
-  enabled: boolean;
-  stickers: StickerInfo[];
-}
+import { useSyncExternalStore } from "react";
+import {
+  addStickerStoreListener,
+  getStickerStore,
+} from "../../../stickers/store";
+import type { StickerStoreValue } from "../../../stickers/types";
 
 export function useStickers(): StickerStoreValue {
-  const [store, setStore] = useState(() => getStickerStore());
+  const value = useSyncExternalStore<StickerStoreValue>(
+    addStickerStoreListener,
+    () => getStickerStore(),
+  );
 
-  useEffect(() => {
-    window.addEventListener("stickerschanged", (event) =>
-      setStore(event.detail.state),
-    );
-  }, []);
-
-  return store;
+  return value;
 }

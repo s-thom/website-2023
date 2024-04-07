@@ -1,10 +1,5 @@
 import { STICKER_TYPE_MAP } from "./data";
-import type {
-  StickerInfo,
-  StickerStoreValue,
-  StickerTypes,
-  StickersChangedEventData,
-} from "./types";
+import type { StickerInfo, StickerStoreValue, StickerTypes } from "./types";
 
 const INITIAL_VALUE: StickerStoreValue = {
   enabled: true,
@@ -12,7 +7,35 @@ const INITIAL_VALUE: StickerStoreValue = {
 };
 const STICKER_STORE_KEY = "sthom-website-stickers";
 
-export function getStickerStore(): StickerStoreValue {
+type Listener<T> = (value: T) => void;
+
+const listeners: Listener<StickerStoreValue>[] = [];
+
+export function addStickerStoreListener(
+  listener: Listener<StickerStoreValue>,
+): () => void {
+  listeners.push(listener);
+
+  return () => {
+    const index = listeners.indexOf(listener);
+    if (index > -1) {
+      listeners.splice(index, 1);
+    }
+  };
+}
+
+function sendValueToListeners(value: StickerStoreValue): void {
+  listeners.forEach((listener) => {
+    try {
+      listener(value);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error("Error in state listener", err);
+    }
+  });
+}
+
+function readStickerStoreFromStorage(): StickerStoreValue {
   const valueString = localStorage.getItem(STICKER_STORE_KEY);
   if (!valueString) {
     return INITIAL_VALUE;
@@ -22,15 +45,28 @@ export function getStickerStore(): StickerStoreValue {
   return value;
 }
 
-export function setStickerStore(value: StickerStoreValue) {
-  // Fire event to listeners. Used to update state in React components
-  const event = new CustomEvent<StickersChangedEventData>("stickerschanged", {
-    detail: { state: value },
-  });
-  window.dispatchEvent(event);
-
+function writeStickerStoreToStorage(value: StickerStoreValue): void {
   const valueString = JSON.stringify(value);
   localStorage.setItem(STICKER_STORE_KEY, valueString);
+}
+
+let currentStickerStoreValue = readStickerStoreFromStorage();
+
+// Update this tab's value when another tab has a change
+window.addEventListener("storage", (event) => {
+  if (event.storageArea === localStorage && event.key === STICKER_STORE_KEY) {
+    currentStickerStoreValue = readStickerStoreFromStorage();
+  }
+});
+
+export function getStickerStore(): StickerStoreValue {
+  return currentStickerStoreValue;
+}
+
+export function setStickerStore(value: StickerStoreValue) {
+  currentStickerStoreValue = value;
+  writeStickerStoreToStorage(value);
+  sendValueToListeners(value);
 }
 
 export function canAddSticker(type: StickerTypes): boolean {
