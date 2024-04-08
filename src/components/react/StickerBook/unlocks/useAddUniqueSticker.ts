@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
+import { sendAddStickerEvent } from "../../../../stickers/events";
 import { type StickerTypes } from "../../../../stickers/types";
 import { useStickers } from "../../hooks/useStickers";
-import { addSticker as sendAddStickerEvent } from "./util";
 
 export interface UseAddUniqueStickerOptions {
   type: StickerTypes | "none";

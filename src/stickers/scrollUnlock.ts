@@ -4,7 +4,7 @@ import { pageCoordsToPosition } from "./coordinates";
 import { STICKER_TYPES_BY_RARITY, STICKER_TYPE_MAP } from "./data";
 import { addSticker } from "./functions";
 import { addStickerStoreListener, getStickerStore } from "./store";
-import type { StickerTypes } from "./types";
+import type { AddStickerEventData, StickerTypes } from "./types";
 
 const MIN_STICKER_UNLOCKS_ON_PAGE = 1;
 const MAX_STICKER_UNLOCKS_ON_PAGE = 5;
@@ -29,12 +29,12 @@ export class ScrollUnlockHandler {
     this.special = special;
   }
 
-  private giveSticker(type: StickerTypes) {
+  private giveSticker(type: StickerTypes, pageId?: string) {
     const newSticker = {
       id: uuid(),
       type,
       unlockTime: Date.now(),
-      unlockPageId: this.pageId,
+      unlockPageId: pageId ?? this.pageId,
       zone: undefined,
       position: pageCoordsToPosition({ x: 0, y: 0 }),
     };
@@ -134,13 +134,28 @@ export class ScrollUnlockHandler {
     this.onScroll();
   }
 
+  private onAddStickerEvent(event: CustomEvent<AddStickerEventData>) {
+    this.giveSticker(event.detail.type, event.detail.pageId);
+
+    addSticker({
+      id: uuid(),
+      type: event.detail.type,
+      unlockTime: Date.now(),
+      unlockPageId: event.detail.pageId,
+      zone: undefined,
+      position: pageCoordsToPosition({ x: 0, y: 0 }),
+    });
+  }
+
   start() {
     const onResize = this.onResize.bind(this);
     const onScroll = this.onScroll.bind(this);
+    const onAddStickerEvent = this.onAddStickerEvent.bind(this);
 
     function subscribe() {
       window.addEventListener("resize", onResize);
       window.addEventListener("scrollend", onScroll);
+      window.addEventListener("addsticker", onAddStickerEvent);
 
       onResize();
     }
@@ -148,6 +163,7 @@ export class ScrollUnlockHandler {
     function unsubscribe() {
       window.removeEventListener("resize", onResize);
       window.removeEventListener("scrollend", onScroll);
+      window.removeEventListener("addsticker", onAddStickerEvent);
     }
 
     addStickerStoreListener<boolean>(

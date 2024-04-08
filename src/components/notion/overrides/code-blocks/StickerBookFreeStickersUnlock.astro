@@ -1,5 +1,52 @@
 ---
-import { LazyLoader } from "../../../react/LazyLoader.tsx";
+
 ---
 
-<LazyLoader type="sticker-book-free-unlock" props={{}} client:idle />
+<div>
+  <button
+    type="button"
+    class="sticker-book-free-stickers-button"
+    data-hello-world="Hello world!"
+    data-umami-event="stickers-free-stickers"
+  >
+    Give me more stickers
+  </button>
+</div>
+
+<script>
+  import { arrayRandom, range } from "../../../../util";
+  import { sendAddStickerEvent } from "../../../../stickers/events";
+  import { STICKER_TYPES_BY_RARITY } from "../../../../stickers/data";
+  import { addStickerStoreListener } from "../../../../stickers/store";
+
+  const COMMONS_TO_ADD = 5;
+  const UNCOMMONS_TO_ADD = 2;
+  const RARES_TO_ADD = 0;
+
+  function addMoreStickers() {
+    range(COMMONS_TO_ADD).forEach(() =>
+      sendAddStickerEvent(arrayRandom(STICKER_TYPES_BY_RARITY.common)),
+    );
+    range(UNCOMMONS_TO_ADD).forEach(() =>
+      sendAddStickerEvent(arrayRandom(STICKER_TYPES_BY_RARITY.uncommon)),
+    );
+    range(RARES_TO_ADD).forEach(() =>
+      sendAddStickerEvent(arrayRandom(STICKER_TYPES_BY_RARITY.rare)),
+    );
+  }
+
+  document
+    .querySelectorAll<HTMLButtonElement>(
+      "button.sticker-book-free-stickers-button",
+    )
+    .forEach((button) => {
+      button.addEventListener("click", addMoreStickers);
+
+      addStickerStoreListener<boolean>(
+        (enabled) => {
+          button.classList.toggle("fully-hidden", !enabled);
+        },
+        (value) => value.enabled,
+      );
+    });
+</script>

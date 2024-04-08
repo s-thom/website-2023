@@ -1,9 +1,9 @@
 import { Suspense } from "react";
 import { STICKER_TYPES_BY_RARITY } from "../../../../stickers/data";
+import { sendAddStickerEvent } from "../../../../stickers/events";
 import { arrayRandom, range } from "../../../../util";
 import { useStickers } from "../../hooks/useStickers";
 import "./StickerBookFreeStickersUnlock.css";
-import { addSticker } from "./util";
 
 const COMMONS_TO_ADD = 5;
 const UNCOMMONS_TO_ADD = 2;
@@ -14,13 +14,13 @@ export function StickerBookFreeStickersUnlock() {
 
   function addMoreStickers() {
     range(COMMONS_TO_ADD).forEach(() =>
-      addSticker(arrayRandom(STICKER_TYPES_BY_RARITY.common)),
+      sendAddStickerEvent(arrayRandom(STICKER_TYPES_BY_RARITY.common)),
     );
     range(UNCOMMONS_TO_ADD).forEach(() =>
-      addSticker(arrayRandom(STICKER_TYPES_BY_RARITY.uncommon)),
+      sendAddStickerEvent(arrayRandom(STICKER_TYPES_BY_RARITY.uncommon)),
     );
     range(RARES_TO_ADD).forEach(() =>
-      addSticker(arrayRandom(STICKER_TYPES_BY_RARITY.rare)),
+      sendAddStickerEvent(arrayRandom(STICKER_TYPES_BY_RARITY.rare)),
     );
   }
 

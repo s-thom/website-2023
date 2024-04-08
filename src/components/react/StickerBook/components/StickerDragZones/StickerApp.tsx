@@ -4,7 +4,6 @@ import { useStickers } from "../../../hooks/useStickers";
 import { Sticker } from "../Sticker/Sticker.tsx";
 import "./StickerApp.css";
 import { useDragState } from "./useDragState.tsx";
-import { useStickerEventListeners } from "./useStickerEventListeners";
 import { PageZone } from "./zones/PageZone.tsx";
 import { PanelButton } from "./zones/PanelButton.tsx";
 import { StickerPanel } from "./zones/StickerPanel.tsx";
@@ -27,7 +26,6 @@ export function StickerApp({ pageId }: StickerAppProps) {
   } = useDragState(pageId);
 
   const [isPanelOpen, setIsPanelOpen] = useState(false);
-  useStickerEventListeners();
 
   if (!isStickersEnabled) {
     return null;
