@@ -1,8 +1,7 @@
 import { clone } from "../util";
 import { STICKER_TYPE_MAP } from "./data";
+import { getStickerStore, setStickerStore } from "./store";
 import type { StickerInfo, StickerTypes } from "./types";
-import { getStickerStore, setStickerStore } from './store';
-
 
 export function canAddSticker(type: StickerTypes): boolean {
   const { stickers } = getStickerStore();
@@ -24,20 +23,23 @@ export function canAddSticker(type: StickerTypes): boolean {
 }
 
 export function addSticker(sticker: StickerInfo): StickerInfo[] {
-  const store = clone(getStickerStore());
+  const store = getStickerStore();
+  const stickers = [...store.stickers];
 
   if (canAddSticker(sticker.type)) {
-    store.stickers.push(sticker);
+    stickers.push(sticker);
   }
 
-  setStickerStore(store);
+  const copy = { ...store };
+  copy.stickers = stickers;
+  setStickerStore(copy);
   return store.stickers;
 }
 
 export function placeOnPage(
   stickerId: string,
   pageId: string | undefined,
-  position: StickerInfo["position"]
+  position: StickerInfo["position"],
 ): StickerInfo[] {
   const store = clone(getStickerStore());
 
@@ -69,10 +71,10 @@ export function removeFromPage(stickerId: string): StickerInfo[] {
 }
 
 export function toggleStickersEnabled(value?: boolean): boolean {
-  const store = clone(getStickerStore());
+  const store = getStickerStore();
 
-  store.enabled = value ?? !store.enabled;
-
-  setStickerStore(store);
+  const copy = { ...store };
+  copy.enabled = value ?? !store.enabled;
+  setStickerStore(copy);
   return store.enabled;
 }

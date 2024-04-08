@@ -6,18 +6,24 @@
   <button
     type="button"
     class="sticker-book-free-stickers-button"
-    data-hello-world="Hello world!"
     data-umami-event="stickers-free-stickers"
   >
     Give me more stickers
   </button>
 </div>
 
+<style>
+  .sticker-book-free-stickers-button {
+    display: block;
+    margin: 0 auto;
+  }
+</style>
+
 <script>
-  import { arrayRandom, range } from "../../../../util";
-  import { sendAddStickerEvent } from "../../../../stickers/events";
-  import { STICKER_TYPES_BY_RARITY } from "../../../../stickers/data";
-  import { addStickerStoreListener } from "../../../../stickers/store";
+  import { arrayRandom, range } from "../../util";
+  import { sendAddStickerEvent } from "../../stickers/events";
+  import { STICKER_TYPES_BY_RARITY } from "../../stickers/data";
+  import { addStickerStoreListener } from "../../stickers/store";
 
   const COMMONS_TO_ADD = 5;
   const UNCOMMONS_TO_ADD = 2;

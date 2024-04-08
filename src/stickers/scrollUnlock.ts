@@ -20,13 +20,20 @@ export class ScrollUnlockHandler {
 
   private readonly special: StickerTypes | undefined;
 
+  private readonly unlockOnScroll: boolean;
+
   private thresholds: ScrollThresholdData[] = [];
 
   private highestScrollProgress = 0;
 
-  constructor(pageId: string, special: StickerTypes | undefined) {
+  constructor(
+    pageId: string,
+    unlockOnScroll: boolean,
+    special: StickerTypes | undefined,
+  ) {
     this.pageId = pageId;
     this.special = special;
+    this.unlockOnScroll = unlockOnScroll;
   }
 
   private giveSticker(type: StickerTypes, pageId?: string) {
@@ -136,15 +143,6 @@ export class ScrollUnlockHandler {
 
   private onAddStickerEvent(event: CustomEvent<AddStickerEventData>) {
     this.giveSticker(event.detail.type, event.detail.pageId);
-
-    addSticker({
-      id: uuid(),
-      type: event.detail.type,
-      unlockTime: Date.now(),
-      unlockPageId: event.detail.pageId,
-      zone: undefined,
-      position: pageCoordsToPosition({ x: 0, y: 0 }),
-    });
   }
 
   start() {
@@ -152,19 +150,23 @@ export class ScrollUnlockHandler {
     const onScroll = this.onScroll.bind(this);
     const onAddStickerEvent = this.onAddStickerEvent.bind(this);
 
-    function subscribe() {
-      window.addEventListener("resize", onResize);
-      window.addEventListener("scrollend", onScroll);
+    const subscribe = () => {
+      if (this.unlockOnScroll) {
+        window.addEventListener("resize", onResize);
+        window.addEventListener("scrollend", onScroll);
+      }
       window.addEventListener("addsticker", onAddStickerEvent);
 
       onResize();
-    }
+    };
 
-    function unsubscribe() {
-      window.removeEventListener("resize", onResize);
-      window.removeEventListener("scrollend", onScroll);
+    const unsubscribe = () => {
+      if (this.unlockOnScroll) {
+        window.removeEventListener("resize", onResize);
+        window.removeEventListener("scrollend", onScroll);
+      }
       window.removeEventListener("addsticker", onAddStickerEvent);
-    }
+    };
 
     addStickerStoreListener<boolean>(
       (enabled) => {

@@ -1,0 +1,103 @@
+---
+import type { StickerTypes } from "../../stickers/types";
+
+export interface Props {
+  type: StickerTypes;
+  hideOnUnlock?: boolean;
+  class?: string;
+}
+
+const { type, hideOnUnlock, class: className } = Astro.props;
+---
+
+<div
+  class:list={["sticker-unlock-box", "fully-hidden", className]}
+  data-type={type}
+  data-hide-on-unlock={hideOnUnlock}
+>
+  <div class="flow">
+    <slot name="before" />
+    <div class="sticker-unlock-box-container"></div>
+    <slot name="after" />
+  </div>
+</div>
+
+<style>
+  .sticker-unlock-box {
+    text-align: center;
+    font-size: var(--size-step-min1);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-half);
+    height: 100%;
+  }
+
+  & :global(.sticker-unlock-button) {
+    border: none;
+    padding: 0;
+    background-color: transparent;
+    transition:
+      transform var(--transition-duration) ease-in-out,
+      filter var(--transition-duration) ease-in-out,
+      opacity var(--transition-duration) ease-in-out;
+    filter: grayscale(0);
+    opacity: 1;
+
+    &:not(.claimed):hover {
+      transform: scale(1.02);
+    }
+  }
+
+  & :global(.sticker-unlock-claimed) {
+    filter: grayscale(1);
+    opacity: 0.5;
+  }
+</style>
+
+<script>
+  import { createStickerElement } from "../../stickers/elements/stickers";
+  import { createStickerFrame } from "../../stickers/elements/stickerFrame";
+  import { sendAddStickerEvent } from "../../stickers/events";
+  import { addStickerStoreListener } from "../../stickers/store";
+  import type { StickerTypes } from "../../stickers/types";
+  import { STICKER_TYPE_MAP } from "../../stickers/data";
+
+  document
+    .querySelectorAll<HTMLDivElement>("div.sticker-unlock-box")
+    .forEach((element) => {
+      const type = element.dataset.type as StickerTypes;
+      const hideOnUnlock = element.dataset.hideOnUnlock === "";
+
+      const container = element.querySelector(
+        "div.sticker-unlock-box-container",
+      )!;
+
+      const data = STICKER_TYPE_MAP[type];
+
+      const button = document.createElement("button");
+      button.type = "button";
+      button.classList.add("sticker-unlock-button");
+      button.dataset.umamiEvent = "sickers-sticker-book-unlock";
+      button.addEventListener("click", () => sendAddStickerEvent(type));
+      container.appendChild(button);
+
+      const sticker = createStickerElement(type);
+      const frame = createStickerFrame(sticker, { rarity: data.rarity });
+
+      button.appendChild(frame);
+
+      addStickerStoreListener((value) => {
+        const isUnlocked = !!value.stickers.find(
+          (sticker) => sticker.type === type,
+        );
+        const shouldHide =
+          !value.enabled ||
+          (hideOnUnlock &&
+            !!value.stickers.find((sticker) => sticker.type === type));
+
+        element.classList.toggle("fully-hidden", shouldHide);
+        button.classList.toggle("sticker-unlock-claimed", isUnlocked);
+        button.disabled = isUnlocked;
+      });
+    });
+</script>

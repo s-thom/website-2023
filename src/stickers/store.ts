@@ -50,6 +50,8 @@ function sendToListener(listener: Listener<any>, value: StickerStoreValue) {
   try {
     const newValue = listener.mapper(value);
     if (newValue !== listener.lastValue) {
+      // eslint-disable-next-line no-param-reassign
+      listener.lastValue = newValue;
       listener.handler(newValue);
     }
   } catch (err) {

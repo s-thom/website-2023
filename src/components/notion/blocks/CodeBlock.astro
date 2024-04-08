@@ -18,23 +18,19 @@ const loadShaderPlayground = () =>
     (b) => b.default,
   );
 const loadStickerBookFeatureToggle = () =>
-  import("../overrides/code-blocks/StickerBookFeatureToggle.astro").then(
+  import("../../stickers/StickerBookFeatureToggle.astro").then(
     (b) => b.default,
   );
 const loadStickerBookFreeStickersUnlock = () =>
-  import("../overrides/code-blocks/StickerBookFreeStickersUnlock.astro").then(
+  import("../../stickers/StickerBookFreeStickersUnlock.astro").then(
     (b) => b.default,
   );
 const loadStickerBookRarityList = () =>
-  import("../overrides/code-blocks/StickerBookRarityList.astro").then(
-    (b) => b.default,
-  );
+  import("../../stickers/StickerBookRarityList.astro").then((b) => b.default);
 const loadStickerBookUniqueUnlock = () =>
-  import("../overrides/code-blocks/StickerBookUniqueUnlock.astro").then(
-    (b) => b.default,
-  );
+  import("../../stickers/StickerBookUniqueUnlock.astro").then((b) => b.default);
 const loadStickerUnlock = () =>
-  import("../overrides/code-blocks/StickerUnlock.astro").then((b) => b.default);
+  import("../../stickers/StickerUnlock.astro").then((b) => b.default);
 const loadRawHTML = () =>
   import("../overrides/code-blocks/RawHTML.astro").then((b) => b.default);
 const loadDefaultBlock = () =>

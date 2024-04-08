@@ -9,12 +9,14 @@ export interface PageStickerData {
 }
 
 function startStickerApp(data: PageStickerData) {
-  if (data.unlockOnScroll) {
-    import("./scrollUnlock").then(({ ScrollUnlockHandler }) => {
-      const handler = new ScrollUnlockHandler(data.pageId, data.special);
-      handler.start();
-    });
-  }
+  import("./scrollUnlock").then(({ ScrollUnlockHandler }) => {
+    const handler = new ScrollUnlockHandler(
+      data.pageId,
+      data.unlockOnScroll ?? false,
+      data.special,
+    );
+    handler.start();
+  });
 }
 
 export function bootstrap() {

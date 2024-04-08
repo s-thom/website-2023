@@ -126,7 +126,7 @@ textarea:not([rows]) {
 }
 
 .fully-hidden {
-  display: none;
+  display: none !important;
 }
 
 .visually-hidden {

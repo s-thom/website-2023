@@ -2,7 +2,9 @@
 import { type DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { getCollection } from "astro:content";
 import { BLOG_PAGE_ID } from "../../../lib/constants";
-import { LazyLoader } from "../../react/LazyLoader.tsx";
+import { getFilteredBlogItems } from "../../../lib/notion/blog";
+import { getPage } from "../../../lib/notion/caches";
+import StickerUnlock from "../../stickers/StickerUnlock.astro";
 import BlogListPageItem from "./BlogListPageItem.astro";
 
 export interface Props {
@@ -49,11 +51,12 @@ if (index !== -1) {
             </Fragment>
           </BlogListPageItem>
         ) : (
-          <LazyLoader
-            type="sticker-blog-nav-unlock"
-            props={{ stickerType: "glowing-star" }}
-            client:idle
-          />
+          <StickerUnlock type="glowing-star" class="small-box">
+            <p slot="before">
+              You've reached the end of this blog! While you wait for me to
+              write more words, have a sticker for your collection.
+            </p>
+          </StickerUnlock>
         )
       }
     </div>
@@ -70,11 +73,12 @@ if (index !== -1) {
             </Fragment>
           </BlogListPageItem>
         ) : (
-          <LazyLoader
-            type="sticker-blog-nav-unlock"
-            props={{ stickerType: "chequered-flag" }}
-            client:idle
-          />
+          <StickerUnlock type="chequered-flag" class="small-box">
+            <p slot="before">
+              You've reached the end of this blog! While you wait for me to
+              write more words, have a sticker for your collection.
+            </p>
+          </StickerUnlock>
         )
       }
     </div>
