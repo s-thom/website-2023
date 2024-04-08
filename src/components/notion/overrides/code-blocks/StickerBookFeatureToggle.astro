@@ -52,10 +52,13 @@
 
       button.addEventListener("click", () => toggleStickersEnabled());
 
-      addStickerStoreListener((value) => {
-        enabled = value.enabled;
-        updateButton();
-      });
+      addStickerStoreListener<boolean>(
+        (newEnabled) => {
+          enabled = newEnabled;
+          updateButton();
+        },
+        (value) => value.enabled,
+      );
       updateButton();
     });
 </script>

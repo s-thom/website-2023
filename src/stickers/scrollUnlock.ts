@@ -2,7 +2,7 @@ import { v4 as uuid } from "uuid";
 import { arrayRandom, range } from "../util";
 import { pageCoordsToPosition } from "./coordinates";
 import { STICKER_TYPES_BY_RARITY, STICKER_TYPE_MAP } from "./data";
-import { addSticker, getStickerStore } from "./store";
+import { addSticker, addStickerStoreListener, getStickerStore } from "./store";
 import type { StickerTypes } from "./types";
 
 const MIN_STICKER_UNLOCKS_ON_PAGE = 1;
@@ -129,14 +129,40 @@ export class ScrollUnlockHandler {
 
     this.thresholds = allThresholds;
 
-    // Trigger onScroll just in case any stickers need t obe given out based on the resize.
+    // Trigger onScroll just in case any stickers need to be given out based on the resize.
     this.onScroll();
   }
 
   start() {
-    window.addEventListener("resize", () => this.onResize());
-    window.addEventListener("scrollend", () => this.onScroll());
+    const onResize = this.onResize.bind(this);
+    const onScroll = this.onScroll.bind(this);
 
-    this.onResize();
+    function subscribe() {
+      window.addEventListener("resize", onResize);
+      window.addEventListener("scrollend", onScroll);
+
+      onResize();
+    }
+
+    function unsubscribe() {
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("scrollend", onScroll);
+    }
+
+    addStickerStoreListener<boolean>(
+      (enabled) => {
+        if (enabled) {
+          subscribe();
+        } else {
+          unsubscribe();
+        }
+      },
+      (value) => value.enabled,
+    );
+
+    const { enabled } = getStickerStore();
+    if (enabled) {
+      subscribe();
+    }
   }
 }

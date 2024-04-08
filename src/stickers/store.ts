@@ -8,13 +8,33 @@ const INITIAL_VALUE: StickerStoreValue = {
 };
 const STICKER_STORE_KEY = "sthom-website-stickers";
 
-type Listener<T> = (value: T) => void;
+type StickerStoreHandler<T> = (value: T) => void;
+type StickerStoreMapper<T> = (value: StickerStoreValue) => T;
+type Listener<T> = {
+  handler: StickerStoreHandler<T>;
+  mapper: StickerStoreMapper<T>;
+  lastValue: T;
+};
+const DEFAULT_MAPPER: StickerStoreMapper<StickerStoreValue> = (value) => value;
 
-const listeners: Listener<StickerStoreValue>[] = [];
+const listeners: Listener<any>[] = [];
 
 export function addStickerStoreListener(
-  listener: Listener<StickerStoreValue>,
+  handler: StickerStoreHandler<StickerStoreValue>,
+): () => void;
+export function addStickerStoreListener<T>(
+  handler: StickerStoreHandler<T>,
+  mapper: StickerStoreMapper<T>,
+): () => void;
+export function addStickerStoreListener<T>(
+  handler: StickerStoreHandler<T>,
+  mapper?: StickerStoreMapper<T>,
 ): () => void {
+  const listener: Listener<T> = {
+    handler,
+    mapper: mapper ?? (DEFAULT_MAPPER as StickerStoreMapper<T>),
+    lastValue: {} as any, // Must be any unique value, doesn't matter what it is at this stage
+  };
   listeners.push(listener);
 
   return () => {
@@ -28,7 +48,10 @@ export function addStickerStoreListener(
 function sendValueToListeners(value: StickerStoreValue): void {
   listeners.forEach((listener) => {
     try {
-      listener(value);
+      const newValue = listener.mapper(value);
+      if (newValue !== listener.lastValue) {
+        listener.handler(newValue);
+      }
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error("Error in state listener", err);
