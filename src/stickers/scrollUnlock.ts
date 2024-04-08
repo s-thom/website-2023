@@ -2,7 +2,8 @@ import { v4 as uuid } from "uuid";
 import { arrayRandom, range } from "../util";
 import { pageCoordsToPosition } from "./coordinates";
 import { STICKER_TYPES_BY_RARITY, STICKER_TYPE_MAP } from "./data";
-import { addSticker, addStickerStoreListener, getStickerStore } from "./store";
+import { addSticker } from "./functions";
+import { addStickerStoreListener, getStickerStore } from "./store";
 import type { StickerTypes } from "./types";
 
 const MIN_STICKER_UNLOCKS_ON_PAGE = 1;
@@ -159,10 +160,5 @@ export class ScrollUnlockHandler {
       },
       (value) => value.enabled,
     );
-
-    const { enabled } = getStickerStore();
-    if (enabled) {
-      subscribe();
-    }
   }
 }

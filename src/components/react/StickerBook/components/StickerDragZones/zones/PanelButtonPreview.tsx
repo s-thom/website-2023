@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
-import { canAddSticker } from "../../../../../../stickers/store";
-import type { AddStickerEventData, StickerTypes } from "../../../../../../stickers/types";
+import { canAddSticker } from "../../../../../../stickers/functions";
+import type {
+  AddStickerEventData,
+  StickerTypes,
+} from "../../../../../../stickers/types";
 import { Sticker, loadSticker } from "../../Sticker/Sticker.tsx";
 
 // This is actually larger than the real animation time, but it provides a
@@ -61,7 +64,7 @@ export function PanelButtonPreview() {
 
   // Add stickers when sticker is added
   useEffect(() => {
-    function onAddStickerEvent(event: CustomEvent< AddStickerEventData>) {
+    function onAddStickerEvent(event: CustomEvent<AddStickerEventData>) {
       if (canAddSticker(event.detail.type)) {
         enqueueSticker(event.detail.type);
       }

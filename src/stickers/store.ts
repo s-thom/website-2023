@@ -1,6 +1,4 @@
-import { clone } from "../util";
-import { STICKER_TYPE_MAP } from "./data";
-import type { StickerInfo, StickerStoreValue, StickerTypes } from "./types";
+import type { StickerStoreValue } from "./types";
 
 const INITIAL_VALUE: StickerStoreValue = {
   enabled: true,
@@ -37,6 +35,9 @@ export function addStickerStoreListener<T>(
   };
   listeners.push(listener);
 
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
+  sendToListener(listener, getStickerStore());
+
   return () => {
     const index = listeners.indexOf(listener);
     if (index > -1) {
@@ -45,17 +46,21 @@ export function addStickerStoreListener<T>(
   };
 }
 
+function sendToListener(listener: Listener<any>, value: StickerStoreValue) {
+  try {
+    const newValue = listener.mapper(value);
+    if (newValue !== listener.lastValue) {
+      listener.handler(newValue);
+    }
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error("Error in state listener", err);
+  }
+}
+
 function sendValueToListeners(value: StickerStoreValue): void {
   listeners.forEach((listener) => {
-    try {
-      const newValue = listener.mapper(value);
-      if (newValue !== listener.lastValue) {
-        listener.handler(newValue);
-      }
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error("Error in state listener", err);
-    }
+    sendToListener(listener, value);
   });
 }
 
@@ -92,77 +97,4 @@ export function setStickerStore(value: StickerStoreValue) {
   currentStickerStoreValue = value;
   writeStickerStoreToStorage(value);
   sendValueToListeners(value);
-}
-
-export function canAddSticker(type: StickerTypes): boolean {
-  const { stickers } = getStickerStore();
-
-  // Ensure this is a valid sticker
-  if (!(type in STICKER_TYPE_MAP)) {
-    return false;
-  }
-
-  // Unique stickers can only be earned once, hence the name
-  const stickerData = STICKER_TYPE_MAP[type];
-  if (stickerData.rarity === "unique") {
-    if (stickers.find((curr) => curr.type === type)) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
-export function addSticker(sticker: StickerInfo): StickerInfo[] {
-  const store = clone(getStickerStore());
-
-  if (canAddSticker(sticker.type)) {
-    store.stickers.push(sticker);
-  }
-
-  setStickerStore(store);
-  return store.stickers;
-}
-
-export function placeOnPage(
-  stickerId: string,
-  pageId: string | undefined,
-  position: StickerInfo["position"],
-): StickerInfo[] {
-  const store = clone(getStickerStore());
-
-  const sticker = store.stickers.find((s) => s.id === stickerId);
-  if (!sticker) {
-    return store.stickers;
-  }
-
-  sticker.zone = pageId;
-  sticker.position = position;
-
-  setStickerStore(store);
-  return store.stickers;
-}
-
-export function removeFromPage(stickerId: string): StickerInfo[] {
-  const store = clone(getStickerStore());
-
-  const sticker = store.stickers.find((s) => s.id === stickerId);
-  if (!sticker) {
-    return store.stickers;
-  }
-
-  sticker.zone = undefined;
-  sticker.position = { type: "none" };
-
-  setStickerStore(store);
-  return store.stickers;
-}
-
-export function toggleStickersEnabled(value?: boolean): boolean {
-  const store = clone(getStickerStore());
-
-  store.enabled = value ?? !store.enabled;
-
-  setStickerStore(store);
-  return store.enabled;
 }

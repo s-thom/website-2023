@@ -32,33 +32,26 @@
 </style>
 
 <script>
-  import {
-    addStickerStoreListener,
-    getStickerStore,
-    toggleStickersEnabled,
-  } from "../../../../stickers/store";
+  import { toggleStickersEnabled } from "../../../../stickers/functions";
+  import { addStickerStoreListener } from "../../../../stickers/store";
 
   document
     .querySelectorAll<HTMLButtonElement>("button.stickers-toggle-button")
     .forEach((button) => {
-      let { enabled } = getStickerStore();
-
-      function updateButton() {
-        button.dataset.umamiEvent = `stickers-toggle-${
-          enabled ? "disabled" : "enabled"
-        }`;
-        button.textContent = enabled ? "Disable stickers" : "Enable stickers";
-      }
-
       button.addEventListener("click", () => toggleStickersEnabled());
 
+      function updateButton(isEnabled: boolean) {
+        button.dataset.umamiEvent = `stickers-toggle-${
+          isEnabled ? "disabled" : "enabled"
+        }`;
+        button.textContent = isEnabled ? "Disable stickers" : "Enable stickers";
+      }
+
       addStickerStoreListener<boolean>(
-        (newEnabled) => {
-          enabled = newEnabled;
-          updateButton();
+        (enabled) => {
+          updateButton(enabled);
         },
         (value) => value.enabled,
       );
-      updateButton();
     });
 </script>

@@ -6,7 +6,7 @@ import {
   screenCoordsToPageCoords,
 } from "../../../../../stickers/coordinates";
 import { STICKER_TYPE_MAP } from "../../../../../stickers/data";
-import { placeOnPage, removeFromPage } from "../../../../../stickers/store";
+import { placeOnPage, removeFromPage } from "../../../../../stickers/functions";
 import { useStickers } from "../../../hooks/useStickers";
 
 function sendEvent(type: string, data: { [key: string]: string | number }) {
