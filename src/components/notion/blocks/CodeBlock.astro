@@ -24,6 +24,8 @@ const loadStickerBookUniqueUnlock = () =>
   );
 const loadStickerUnlock = () =>
   import("../overrides/code-blocks/StickerUnlock.astro").then((b) => b.default);
+const loadRawHTML = () =>
+  import("../overrides/code-blocks/RawHTML.astro").then((b) => b.default);
 const loadDefaultBlock = () =>
   import("./DefaultBlock.astro").then((b) => b.default);
 
@@ -59,13 +61,20 @@ if (result.type === "override") {
     case "StickerUnlock":
       Component = await loadStickerUnlock();
       break;
+    case "RawHTML":
+      Component = await loadRawHTML();
+      break;
     default:
       Component = await loadDefaultBlock();
   }
 }
 ---
 
-{result.type === "override" && <Component block={block} {...result.props} />}
+{
+  result.type === "override" && (
+    <Component block={block} content={result.content} {...result.props} />
+  )
+}
 
 {
   result.type === "html" && (
