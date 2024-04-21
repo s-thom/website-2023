@@ -1,5 +1,7 @@
 import clsx from "clsx";
-import lottie, { type AnimationItem } from "lottie-web";
+import lottie, {
+  type AnimationItem,
+} from "lottie-web/build/player/lottie_light";
 import { MoreHorizontalIcon } from "lucide-react";
 import {
   useCallback,
