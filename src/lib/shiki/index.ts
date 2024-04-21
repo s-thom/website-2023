@@ -25,7 +25,15 @@ function doShikiTwoSlash(
   let html: string;
 
   if (doesLanguageSupportTwoSlash(language)) {
-    const twoslash = runTwoSlash(code, language, {});
+    let twoslash;
+    let twoslashError: unknown;
+    try {
+      twoslash = runTwoSlash(code, language, {});
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err);
+      twoslashError = err;
+    }
 
     html = renderCodeToHTML(
       twoslash ? twoslash.code : code,
@@ -35,6 +43,10 @@ function doShikiTwoSlash(
       highlighter as any,
       twoslash,
     );
+
+    if (import.meta.env.DEV && twoslashError) {
+      html += `<pre style="border:3px solid red">${twoslashError instanceof Error ? twoslashError.stack : twoslashError}</pre>`;
+    }
   } else {
     html = renderCodeToHTML(
       code,
@@ -58,6 +70,7 @@ type HighlightResult =
       type: "override";
       component: string;
       props?: object;
+      content?: string;
     }
   | {
       type: "none";
@@ -92,6 +105,7 @@ export async function highlightCode(
         type: "override",
         component: meta.component as string,
         props: meta.props as object | undefined,
+        content: code,
       };
     }
 
