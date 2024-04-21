@@ -15,6 +15,7 @@ export interface ImageRequiredProps {
   sizes: string;
   loading: "eager" | "lazy";
   class?: string;
+  linkToOriginal?: boolean;
 }
 
 export interface Props extends ImageRequiredProps {
@@ -32,6 +33,7 @@ const {
   noIntrinsicWidth,
   sizes,
   loading,
+  linkToOriginal,
   ...rest
 } = Astro.props;
 
@@ -52,22 +54,58 @@ const formats = noIntrinsicWidth
   : imageInfo.formats.slice();
 ---
 
-<picture {...rest}>
-  {
-    formats.map((format) => {
-      const srcset = format.sizes
-        .slice()
-        .sort((a, z) => a.width - z.width)
-        .map((size) => `${size.path} ${size.width}w`)
-        .join(", ");
+{
+  linkToOriginal ? (
+    <a class="picture-link" href={imageInfo.original.path} target="_blank">
+      <picture {...rest}>
+        {formats.map((format) => {
+          const srcset = format.sizes
+            .slice()
+            .sort((a, z) => a.width - z.width)
+            .map((size) => `${size.path} ${size.width}w`)
+            .join(", ");
 
-      return <source srcset={srcset} sizes={sizes} type={format.mimeType} />;
-    })
+          return (
+            <source srcset={srcset} sizes={sizes} type={format.mimeType} />
+          );
+        })}
+        <img
+          class:list={[className, "picture-image"]}
+          src={imageInfo.original.path}
+          alt={alt}
+          loading={loading}
+        />
+      </picture>
+    </a>
+  ) : (
+    <picture {...rest}>
+      {formats.map((format) => {
+        const srcset = format.sizes
+          .slice()
+          .sort((a, z) => a.width - z.width)
+          .map((size) => `${size.path} ${size.width}w`)
+          .join(", ");
+
+        return <source srcset={srcset} sizes={sizes} type={format.mimeType} />;
+      })}
+      <img
+        class={className}
+        src={imageInfo.original.path}
+        alt={alt}
+        loading={loading}
+      />
+    </picture>
+  )
+}
+
+<style>
+  .picture-link {
+    display: block;
+    padding: 0;
+    text-decoration: none;
   }
-  <img
-    class={className}
-    src={imageInfo.original.path}
-    alt={alt}
-    loading={loading}
-  />
-</picture>
+
+  .picture-image {
+    margin: 0 auto;
+  }
+</style>

@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/no-unresolved
 import react from "@astrojs/react";
+// eslint-disable-next-line import/no-unresolved
 import sitemap from "@astrojs/sitemap";
 import { defineConfig } from "astro/config";
 import sthomClientStickers from "./src/integrations/clientStickers";
