@@ -14,21 +14,19 @@ const { block } = Astro.props;
   class={`small-box block-callout block-callout-${block.callout.color}`}
   data-block={block.id}
 >
-  <div>
-    {
-      block.callout.icon && (
-        <NotionIcon
-          id={`${block.id}_icon`}
-          class="block-callout-icon"
-          icon={block.callout.icon}
-          alt=""
-          widths={[32]}
-          sizes="32px"
-          loading="lazy"
-        />
-      )
-    }
-  </div>
+  {
+    block.callout.icon && (
+      <NotionIcon
+        id={`${block.id}_icon`}
+        class="block-callout-icon"
+        icon={block.callout.icon}
+        alt=""
+        widths={[32]}
+        sizes="32px"
+        loading="lazy"
+      />
+    )
+  }
   <div class="flow block-callout-content">
     <p>
       <RichText components={block.callout.rich_text} />
@@ -40,13 +38,20 @@ const { block } = Astro.props;
 <style>
   .block-callout {
     display: grid;
-    grid-template-columns:
-      [icon] 28px
-      [content] 1fr;
     gap: var(--spacing-half);
     padding: var(--spacing-half);
     border: 1.5px solid var(--color-border);
     border-radius: var(--border-radius);
+    margin-inline: calc(var(--spacing) * -1);
+  }
+
+  @media (min-width: 600px) {
+    .block-callout {
+      grid-template-columns:
+        [icon] 28px
+        [content] 1fr;
+      margin-inline: 0;
+    }
   }
 
   .block-callout-icon {
@@ -54,9 +59,11 @@ const { block } = Astro.props;
     font-size: 1em;
     width: 1.5em;
     height: 1.5em;
+    margin: 0 auto;
   }
 
   .block-callout-content {
+    grid-column: content;
     overflow-x: auto;
   }
 
