@@ -1,0 +1,27 @@
+---
+
+---
+
+<script>
+  // Only download Javascript for feature if required
+  let loaded = false;
+  const web3IsAScam = () =>
+    loaded
+      ? Promise.resolve()
+      : import("../../lib/web3IsAScam").then((m) => {
+          loaded = true;
+          m.web3IsAScam();
+        });
+
+  if (
+    "etherium" in window ||
+    localStorage.getItem("simulate-hell") === "true"
+  ) {
+    web3IsAScam();
+  } else {
+    window.addEventListener("eip6963:announceProvider", web3IsAScam);
+    window.addEventListener("wallet-standard:register-wallet", web3IsAScam);
+    window.dispatchEvent(new Event("eip6963:requestProvider"));
+    window.dispatchEvent(new Event("wallet-standard:app-ready"));
+  }
+</script>
