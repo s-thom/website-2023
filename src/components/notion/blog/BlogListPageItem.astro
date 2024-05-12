@@ -20,9 +20,10 @@ const titleComponents = getPageTitleComponents(page);
   <div class="backdrop-container">
     <NotionBackdrop
       page={page}
-      widths={[360, 720, 540]}
+      widths={[360]}
       sizes="(min-width: 900) 540px, 100vw"
       shade
+      blur
     />
   </div>
   <div class="info flow">
@@ -51,5 +52,6 @@ const titleComponents = getPageTitleComponents(page);
 
   .title {
     margin: 0;
+    color: var(--color-text-header);
   }
 </style>
