@@ -6,9 +6,12 @@ import type {
 import DevOnly from "../components/DevOnly.astro";
 import type { PageMetaType } from "../components/PageMeta.astro";
 import type { LinkInfo } from "../components/SiteHeader.astro";
-import SkipLinks from "../components/SkipLinks.astro";
+import SkipLinks, {
+  type Props as SkipLinksProps,
+} from "../components/SkipLinks.astro";
 import NotionPageHeader from "../components/notion/NotionPageHeader.astro";
 import NotionBackdrop from "../components/notion/common/NotionBackdrop.astro";
+import NotionTableOfContents from "../components/notion/common/NotionTableOfContents.astro";
 import { LazyLoader } from "../components/react/LazyLoader.tsx";
 import type { StickerTypes } from "../components/react/StickerBook/types";
 import { getPagePropertyByName } from "../lib/notion/util";
@@ -21,6 +24,7 @@ export interface Props {
   showCoverSource?: boolean;
   showReadingTime?: boolean;
   showPublishEditDates?: boolean;
+  showTableOfContents?: boolean;
 }
 
 const {
@@ -30,6 +34,7 @@ const {
   showCoverSource,
   showReadingTime,
   showPublishEditDates,
+  showTableOfContents,
 } = Astro.props;
 
 const giveStickersProperty = getPagePropertyByName(
@@ -41,6 +46,13 @@ const specialSticker = giveStickersProperty
   ? (giveStickersProperty.select?.name as StickerTypes | "none" | undefined)
   : "none";
 const shouldGiveStickers = specialSticker !== "none";
+
+const skipLinks: SkipLinksProps["links"] = [
+  { name: "Content", url: "#content" },
+];
+if (showTableOfContents) {
+  skipLinks.unshift({ name: "Table of Contents", url: "#table-of-contents" });
+}
 ---
 
 <PageWithHeaderLayout
@@ -49,7 +61,7 @@ const shouldGiveStickers = specialSticker !== "none";
   breadcrumbs={breadcrumbs}
   allowPageViewStickerUnlocks={shouldGiveStickers}
 >
-  <SkipLinks links={[{ name: "Content", url: "#content" }]} slot="skip-links" />
+  <SkipLinks links={skipLinks} slot="skip-links" />
 
   <NotionPageHeader
     page={page}
@@ -72,11 +84,20 @@ const shouldGiveStickers = specialSticker !== "none";
   <DevOnly>
     <div id="DEV-notion-page-id" style={{ display: "none" }}>{page.id}</div>
   </DevOnly>
+
   <article class="flow big-box" id="content">
     <slot />
   </article>
 
-  <slot name="page-footer" />
+  {
+    showTableOfContents && (
+      <aside class="flow sidebar-box" slot="site-sidebar">
+        <NotionTableOfContents page={page} />
+      </aside>
+    )
+  }
+
+  <slot name="page-footer" slot="page-footer" />
 
   {
     shouldGiveStickers && (

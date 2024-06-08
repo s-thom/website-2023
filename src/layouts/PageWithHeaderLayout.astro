@@ -18,6 +18,7 @@ const { id, meta, breadcrumbs } = Astro.props;
 <PageLayout id={id} meta={meta}>
   <slot name="head" slot="head" />
   <slot name="skip-links" slot="skip-links" />
+  <slot name="site-sidebar" slot="site-sidebar" />
 
   <SiteHeader
     slot="site-header"
@@ -34,5 +35,6 @@ const { id, meta, breadcrumbs } = Astro.props;
 
   <slot />
 
+  <slot name="page-footer" slot="page-footer" />
   <SiteFooter slot="site-footer" />
 </PageLayout>

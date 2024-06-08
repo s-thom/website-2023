@@ -1,0 +1,109 @@
+---
+import type {
+  DatabaseObjectResponse,
+  PageObjectResponse,
+} from "@notionhq/client/build/src/api-endpoints";
+import { getBlockChildren } from "../../../lib/notion/caches";
+import {
+  normalizeTitle,
+  richTextToUnformattedString,
+} from "../../../lib/notion/util";
+
+export interface Props {
+  page: DatabaseObjectResponse | PageObjectResponse;
+}
+
+type Heading = {
+  title: string;
+  hash: string;
+  children: Heading[];
+};
+
+const { page } = Astro.props;
+
+const children = await getBlockChildren(page.id);
+const headings = children.reduce<Heading[]>((acc, block) => {
+  let array: Heading[];
+  let title = "";
+
+  switch (block.type) {
+    case "heading_1":
+      array = acc;
+      title = richTextToUnformattedString(block.heading_1.rich_text);
+      break;
+    case "heading_2":
+      array = acc.at(-1)?.children ?? acc;
+      title = richTextToUnformattedString(block.heading_2.rich_text);
+      break;
+    case "heading_3":
+      array = acc.at(-1)?.children.at(-1)?.children ?? acc;
+      title = richTextToUnformattedString(block.heading_3.rich_text);
+      break;
+    default:
+      return acc;
+  }
+
+  array.push({
+    title,
+    hash: normalizeTitle(title),
+    children: [],
+  });
+
+  return acc;
+}, []);
+---
+
+<nav class="toc flow" id="table-of-contents">
+  <h2 class="toc-heading">Table of Contents</h2>
+  {
+    headings.length > 0 ? (
+      <ul class="toc-list flow">
+        {headings.map((h1) => (
+          <li>
+            <a href={`#${h1.hash}`}>{h1.title}</a>
+            <ul class="toc-list flow">
+              {h1.children.map((h2) => (
+                <li>
+                  <a href={`#${h2.hash}`}>{h2.title}</a>
+                  <ul class="toc-list flow">
+                    {h2.children.map((h3) => (
+                      <li>
+                        <a href={`#${h3.hash}`}>{h3.title}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ul>
+    ) : null
+  }
+</nav>
+
+<style>
+  .toc {
+    position: sticky;
+    top: var(--spacing);
+  }
+
+  @media (min-width: 1200px) {
+    .toc {
+      position: sticky;
+      top: var(--spacing);
+    }
+  }
+
+  .toc-heading {
+    font-size: var(--size-step-2);
+  }
+
+  .toc-list {
+    margin-top: var(--flow-space, 1em);
+  }
+
+  .toc-list:is(.toc-list .toc-list) {
+    margin-inline-start: var(--spacing);
+  }
+</style>

@@ -26,10 +26,15 @@ const { id, meta, class: className, noStickers } = Astro.props;
 
   <slot name="site-header" />
 
-  <main class={className}>
-    <slot />
-  </main>
+  <div class="sidebar-layout big-box-margin">
+    <main class={className}>
+      <slot />
+    </main>
 
+    <slot name="site-sidebar" />
+  </div>
+
+  <slot name="page-footer" />
   <slot name="site-footer" />
 
   {

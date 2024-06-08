@@ -67,6 +67,8 @@
   --small-box-spacing: var(--spacing);
   --small-box-border-width: 2px;
 
+  --sidebar-width: 350px;
+
   color-scheme: light dark;
 }
 
@@ -148,6 +150,44 @@ main {
   display: contents;
 }
 
+.sidebar-layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing);
+}
+
+@media (min-width: 1200px) {
+  .sidebar-layout {
+    flex-direction: row;
+
+    main > * {
+      width: 100%;
+    }
+
+    &:has(main + aside) {
+      aside {
+        width: var(--sidebar-width);
+      }
+
+      main > * {
+        width: calc(100% - var(--spacing) - var(--sidebar-width));
+      }
+    }
+  }
+}
+
+@media (min-width: 1200px) and (max-width: 1599px) {
+  body:has(.sidebar-box) {
+    --big-box-spacing: calc(max(var(--spacing), 5vw));
+  }
+}
+
+@media (min-width: 1600px) and (max-width: 1919px) {
+  body:has(.sidebar-box) {
+    --big-box-spacing: calc(max(var(--spacing), 7vw));
+  }
+}
+
 a {
   color: currentColor;
   text-decoration-color: var(--color-link);
@@ -197,15 +237,24 @@ a {
 
 .big-box {
   position: relative;
-  margin: var(--big-box-spacing-small) var(--big-box-spacing);
   padding: var(--big-box-spacing-small) var(--big-box-spacing);
   border: var(--big-box-border-width) solid var(--big-box-color);
+}
+
+.big-box-margin {
+  margin: var(--big-box-spacing-small) var(--big-box-spacing);
 }
 
 .small-box {
   position: relative;
   padding: var(--small-box-spacing);
   border: var(--small-box-border-width) solid var(--color-text);
+}
+
+.sidebar-box {
+  position: relative;
+  padding: var(--small-box-spacing);
+  border: var(--big-box-border-width) solid var(--big-box-color);
 }
 
 /* #region Header */
