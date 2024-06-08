@@ -46,7 +46,7 @@ const {
 } = meta;
 
 const canonicalURL = new URL(url, Astro.site);
-const sitemapURL = new URL("/sitemap.xml", Astro.site);
+const sitemapURL = new URL("/sitemap-index.xml", Astro.site);
 
 const jsonLd: any = {
   "@context": "http://schema.org",
