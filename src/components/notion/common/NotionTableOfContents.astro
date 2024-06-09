@@ -13,61 +13,84 @@ export interface Props {
   page: DatabaseObjectResponse | PageObjectResponse;
 }
 
-type Heading = {
+export interface HeadingData {
+  type: "heading_1" | "heading_2" | "heading_3";
   title: string;
   hash: string;
-  children: Heading[];
-};
+  children: HeadingData[];
+}
 
 const { page } = Astro.props;
 
 const children = await getBlockChildren(page.id);
-const headings = children.reduce<Heading[]>((acc, block) => {
-  let array: Heading[];
+
+const headings = children.reduce<HeadingData[]>((array, block) => {
   let title = "";
 
   switch (block.type) {
     case "heading_1":
-      array = acc;
       title = richTextToUnformattedString(block.heading_1.rich_text);
       break;
     case "heading_2":
-      array = acc.at(-1)?.children ?? acc;
       title = richTextToUnformattedString(block.heading_2.rich_text);
       break;
     case "heading_3":
-      array = acc.at(-1)?.children.at(-1)?.children ?? acc;
       title = richTextToUnformattedString(block.heading_3.rich_text);
+      break;
+    default:
+      return array;
+  }
+
+  array.push({
+    type: block.type,
+    title,
+    hash: normalizeTitle(title),
+    children: [],
+  });
+  return array;
+}, []);
+const hierarchical = headings.reduce<HeadingData[]>((acc, heading) => {
+  let childArray: HeadingData[];
+
+  switch (heading.type) {
+    case "heading_1":
+      childArray = acc;
+      break;
+    case "heading_2":
+      childArray = acc.at(-1)?.children ?? acc;
+      break;
+    case "heading_3":
+      childArray = acc.at(-1)?.children.at(-1)?.children ?? acc;
       break;
     default:
       return acc;
   }
 
-  array.push({
-    title,
-    hash: normalizeTitle(title),
-    children: [],
-  });
+  childArray.push(heading);
 
   return acc;
 }, []);
 ---
 
-<nav class="toc flow" id="table-of-contents">
+<nav
+  class="toc flow"
+  id="table-of-contents"
+  data-headings={JSON.stringify(headings)}
+>
   <h2 class="toc-heading">Table of Contents</h2>
   {
-    headings.length > 0 ? (
+    hierarchical.length > 0 ? (
       <ul class="toc-list flow">
-        {headings.map((h1) => (
-          <li>
+        {hierarchical.map((h1) => (
+          <li data-hash={h1.hash}>
             <a href={`#${h1.hash}`}>{h1.title}</a>
             <ul class="toc-list flow">
               {h1.children.map((h2) => (
-                <li>
+                <li data-hash={h2.hash}>
                   <a href={`#${h2.hash}`}>{h2.title}</a>
                   <ul class="toc-list flow">
                     {h2.children.map((h3) => (
-                      <li>
+                      <li data-hash={h3.hash}>
                         <a href={`#${h3.hash}`}>{h3.title}</a>
                       </li>
                     ))}
@@ -96,14 +119,96 @@ const headings = children.reduce<Heading[]>((acc, block) => {
   }
 
   .toc-heading {
-    font-size: var(--size-step-2);
+    font-size: var(--size-step-1);
   }
 
   .toc-list {
     margin-top: var(--flow-space, 1em);
   }
 
-  .toc-list:is(.toc-list .toc-list) {
+  .toc-list {
     margin-inline-start: var(--spacing);
   }
+
+  .toc-list li {
+    list-style: disc;
+
+    &::marker {
+      content: " ";
+    }
+
+    &:not(:has(li a:is(:hover, :focus-within))):has(
+        a:is(:hover, :focus-within)
+      ) {
+      &::marker {
+        content: "» ";
+      }
+    }
+
+    &.current {
+      &::marker {
+        content: "» ";
+        color: var(--color-link);
+      }
+    }
+  }
 </style>
+
+<script>
+  import type { HeadingData } from "./NotionTableOfContents.astro";
+
+  const tocContainer = document.getElementById("table-of-contents")!;
+  const headings: HeadingData[] = JSON.parse(tocContainer.dataset.headings!);
+  const navItems =
+    tocContainer.querySelectorAll<HTMLLIElement>("li[data-hash]");
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      let highestIntersecting = -1;
+      let lowestNotIntersecting = Infinity;
+
+      for (const entry of entries) {
+        const headingIndex = headings.findIndex(
+          (heading) => heading.hash === entry.target.id,
+        );
+        if (headingIndex > -1) {
+          if (entry.isIntersecting) {
+            highestIntersecting = Math.max(headingIndex, highestIntersecting);
+          } else {
+            lowestNotIntersecting = Math.min(
+              headingIndex,
+              lowestNotIntersecting,
+            );
+          }
+        }
+      }
+
+      let currentHeadingIndex =
+        highestIntersecting > -1
+          ? highestIntersecting
+          : lowestNotIntersecting - 1;
+
+      currentHeadingIndex = Math.max(0, currentHeadingIndex);
+
+      if (currentHeadingIndex > -1) {
+        const headingData = headings[currentHeadingIndex];
+        for (const li of navItems) {
+          li.classList.toggle("current", li.dataset.hash === headingData.hash);
+        }
+      }
+    },
+    {
+      root: null,
+      // NOT TODO: handle pages taller than 1,000,000px
+      rootMargin: "1000000px 0% -50% 0%",
+      threshold: 0,
+    },
+  );
+
+  headings.forEach((heading) => {
+    const element = document.getElementById(heading.hash);
+    if (element) {
+      observer.observe(element);
+    }
+  });
+</script>

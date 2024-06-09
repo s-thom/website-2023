@@ -253,7 +253,7 @@ a {
 
 .sidebar-box {
   position: relative;
-  padding: var(--small-box-spacing);
+  padding: var(--big-box-spacing-small) var(--small-box-spacing);
   border: var(--big-box-border-width) solid var(--big-box-color);
 }
 
