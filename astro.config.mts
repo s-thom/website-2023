@@ -36,7 +36,9 @@ export default defineConfig({
   scopedStyleStrategy: "class",
   build: {
     assets: "static/build",
+    format: "file",
   },
+  trailingSlash: "never",
   image: {
     domains: IMAGE_OPTIMISATION_ALLOWED_DOMAINS,
   },
