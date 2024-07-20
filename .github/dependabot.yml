@@ -4,17 +4,11 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "18:00"
-      timezone: "Pacific/Auckland"
+      interval: "monthly"
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "18:00"
-      timezone: "Pacific/Auckland"
+      interval: "monthly"
     groups:
       all:
         patterns:
