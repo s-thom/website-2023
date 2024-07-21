@@ -17,7 +17,7 @@ const { navItems /* breadcrumbs, */ } = Astro.props;
 ---
 
 <div class="header-area">
-  <div class="big-box big-box-margin flow">
+  <div class="big-box big-box-margin flow header-content">
     <header>
       <a href="/" class="site-name">
         <LocalImage
@@ -74,6 +74,7 @@ const { navItems /* breadcrumbs, */ } = Astro.props;
     <slot name="page-backdrop">
       <DefaultPageBackdrop />
     </slot>
+    <canvas class="header-canvas"></canvas>
   </div>
 </div>
 
@@ -81,4 +82,107 @@ const { navItems /* breadcrumbs, */ } = Astro.props;
   .site-name-heading {
     word-break: break-word;
   }
+
+  .header-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+  }
 </style>
+
+<script>
+  import {
+    createProgramInfo,
+    resizeCanvasToDisplaySize,
+    setBuffersAndAttributes,
+    setUniforms,
+    drawBufferInfo,
+    createBufferInfoFromArrays,
+  } from "twgl.js";
+
+  var vertexShaderSource = `#version 300 es
+    in vec4 position;
+
+    void main() {
+      gl_Position = position;
+    }
+`;
+
+  var fragmentShaderSource = `#version 300 es
+    precision highp float;
+
+    uniform float uTime;
+    uniform vec2 uResolution;
+    uniform vec2 uContentRect;
+
+    out vec4 outColor;
+
+    void main() {
+      vec2 uv = gl_FragCoord.xy / uResolution;
+
+      vec2 gap = (uResolution - uContentRect) / vec2(2, 2);
+
+      if (all(greaterThan(gl_FragCoord.xy, gap)) && all(lessThan(gl_FragCoord.xy, gap + uContentRect))) {
+        outColor = vec4(0, 0, 0, 0);
+        return;
+      }
+
+      outColor = vec4(1, 1, 1, 0.3);
+    }
+`;
+
+  document
+    .querySelectorAll<HTMLDivElement>(".header-area")
+    .forEach((header) => {
+      const canvas = header.querySelector<HTMLCanvasElement>(
+        "canvas.header-canvas",
+      );
+      const headerContent =
+        header.querySelector<HTMLDivElement>("div.header-content");
+      if (!canvas || !headerContent) {
+        return;
+      }
+
+      const gl = canvas.getContext("webgl2", { premultipliedAlpha: false });
+      if (!gl) {
+        canvas.classList.add("fully-hidden");
+        return;
+      }
+
+      const programInfo = createProgramInfo(gl, [
+        vertexShaderSource,
+        fragmentShaderSource,
+      ]);
+
+      const arrays = {
+        // Cover the entire canvas with a single quad
+        position: [-1, -1, 0, 1, -1, 0, -1, 1, 0, -1, 1, 0, 1, -1, 0, 1, 1, 0],
+      };
+      const bufferInfo = createBufferInfoFromArrays(gl, arrays);
+
+      const render = (time: DOMHighResTimeStamp) => {
+        resizeCanvasToDisplaySize(gl.canvas as HTMLCanvasElement);
+        gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+        const contentRect = headerContent.getBoundingClientRect();
+
+        const uniforms = {
+          uTime: time * 0.001,
+          uResolution: [gl.canvas.width, gl.canvas.height],
+          uContentRect: [contentRect.width, contentRect.height],
+        };
+
+        gl.useProgram(programInfo.program);
+        setBuffersAndAttributes(gl, programInfo, bufferInfo);
+        setUniforms(programInfo, uniforms);
+        drawBufferInfo(gl, bufferInfo);
+
+        requestAnimationFrame(render);
+      };
+      requestAnimationFrame(render);
+    });
+</script>
