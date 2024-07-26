@@ -285,11 +285,23 @@ a {
   gap: var(--spacing);
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+}
+
+.nav-list {
+  margin-top: var(--spacing);
+  gap: var(--spacing-half);
 }
 
 .site-name {
-  flex-direction: column;
   text-align: center;
+}
+
+@media (min-width: 400px) {
+  .nav-list {
+    flex-direction: row;
+    gap: var(--spacing);
+  }
 }
 
 @media (min-width: 600px) {
@@ -300,6 +312,7 @@ a {
   }
 
   .nav-list {
+    margin-top: 0;
     justify-content: flex-end;
   }
 }
