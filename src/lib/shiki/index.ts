@@ -1,70 +1,14 @@
 import type { CodeBlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import parse from "fenceparser";
-import {
-  createShikiHighlighter,
-  renderCodeToHTML,
-  runTwoSlash,
-} from "shiki-twoslash";
+import type { BundledLanguage, SpecialLanguage } from "shiki";
 import { richTextToUnformattedString } from "../notion/util";
-import { doesLanguageSupportTwoSlash, languageMap } from "./languageMap";
-import { syntaxTheme } from "./theme";
+import { languageMap } from "./languageMap";
 
-// TODO: Get the type properly
-type Highlighter = any;
-
-const highlighterPromise = createShikiHighlighter({
-  theme: syntaxTheme as any,
-});
-
-function doShikiTwoSlash(
-  highlighter: Highlighter,
-  code: string,
-  language: string,
-  meta: Record<string, any>,
-): string {
-  let html: string;
-
-  if (doesLanguageSupportTwoSlash(language)) {
-    let twoslash;
-    let twoslashError: unknown;
-    try {
-      twoslash = runTwoSlash(code, language, {});
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error(err);
-      twoslashError = err;
-    }
-
-    html = renderCodeToHTML(
-      twoslash ? twoslash.code : code,
-      language,
-      meta,
-      { themeName: syntaxTheme.name },
-      highlighter as any,
-      twoslash,
-    );
-
-    if (import.meta.env.DEV && twoslashError) {
-      html += `<pre style="border:3px solid red">${twoslashError instanceof Error ? twoslashError.stack : twoslashError}</pre>`;
-    }
-  } else {
-    html = renderCodeToHTML(
-      code,
-      language,
-      meta,
-      { themeName: syntaxTheme.name },
-      highlighter as any,
-      undefined,
-    );
-  }
-
-  return html;
-}
-
-type HighlightResult =
+type CodeBlockContentInfo =
   | {
-      type: "html";
-      html: string;
+      type: "code";
+      code: string;
+      language: BundledLanguage | SpecialLanguage;
     }
   | {
       type: "override";
@@ -76,9 +20,9 @@ type HighlightResult =
       type: "none";
     };
 
-export async function highlightCode(
+export function getCodeBlockContentInfo(
   block: CodeBlockObjectResponse,
-): Promise<HighlightResult> {
+): CodeBlockContentInfo {
   const blockLanguage = block.code.language;
   const blockContent = richTextToUnformattedString(block.code.rich_text);
 
@@ -95,8 +39,10 @@ export async function highlightCode(
       [, notionLanguage, metaString, code] = match;
     }
 
-    const language = languageMap[notionLanguage] ?? notionLanguage ?? "tsx";
-    const highlighter = await highlighterPromise;
+    const language =
+      languageMap[notionLanguage as keyof typeof languageMap] ??
+      notionLanguage ??
+      "tsx";
     const meta = metaString ? parse(metaString) : {};
 
     // Extra: marker for component override
@@ -109,23 +55,11 @@ export async function highlightCode(
       };
     }
 
-    try {
-      const html = doShikiTwoSlash(highlighter, code, language, meta);
-
-      return { type: "html", html };
-    } catch (err: unknown) {
-      // eslint-disable-next-line no-console
-      console.error(err);
-      if (import.meta.env.DEV && err instanceof Error) {
-        return { type: "html", html: `<pre>${err.stack}</pre>` };
-      }
-
-      const plaintext = doShikiTwoSlash(highlighter, code, "", meta);
-      return {
-        type: "html",
-        html: `${plaintext}<!-- Error while highlighting, displaying as plain text -->`,
-      };
-    }
+    return {
+      type: "code",
+      code,
+      language: language as BundledLanguage | SpecialLanguage,
+    };
   }
 
   // eslint-disable-next-line no-console

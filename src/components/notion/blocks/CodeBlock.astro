@@ -1,6 +1,17 @@
 ---
 import type { CodeBlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
-import { highlightCode } from "../../../lib/shiki";
+import {
+  transformerNotationDiff,
+  transformerNotationErrorLevel,
+  transformerNotationFocus,
+  transformerNotationHighlight,
+  transformerNotationWordHighlight,
+  transformerRemoveNotationEscape,
+  transformerRenderWhitespace,
+} from "@shikijs/transformers";
+import { Code } from "astro:components";
+import { getCodeBlockContentInfo } from "../../../lib/shiki";
+import { syntaxTheme } from "../../../lib/shiki/theme";
 
 const loadAboutLinks = () =>
   import("../overrides/code-blocks/AboutLinks.astro").then((b) => b.default);
@@ -35,11 +46,11 @@ export interface Props {
 
 const { block } = Astro.props;
 
-const result = await highlightCode(block);
+const info = getCodeBlockContentInfo(block);
 
 let Component: any;
-if (result.type === "override") {
-  switch (result.component) {
+if (info.type === "override") {
+  switch (info.component) {
     case "AboutLinks":
       Component = await loadAboutLinks();
       break;
@@ -71,32 +82,92 @@ if (result.type === "override") {
 ---
 
 {
-  result.type === "override" && (
-    <Component block={block} content={result.content} {...result.props} />
+  info.type === "override" && (
+    <Component block={block} content={info.content} {...info.props} />
   )
 }
 
 {
-  result.type === "html" && (
-    <code data-block={block.id} class="block-code" set:html={result.html} />
+  info.type === "code" && (
+    <div class="block-code" data-block={block.id}>
+      <Code
+        class="code-block"
+        code={info.code}
+        lang={info.language}
+        theme={syntaxTheme}
+        transformers={[
+          transformerNotationDiff(),
+          transformerNotationHighlight(),
+          transformerNotationWordHighlight(),
+          transformerNotationFocus(),
+          transformerNotationErrorLevel(),
+          transformerRenderWhitespace(),
+          transformerRemoveNotationEscape(),
+        ]}
+      />
+    </div>
   )
 }
 
 <style>
   .block-code {
-    display: block;
+    display: flex;
     font-size: 0.9em;
   }
 
-  .block-code > :global(pre) {
+  .code-block {
+    display: block;
+    flex-grow: 1;
     padding: var(--spacing);
     border-radius: var(--border-radius);
     overflow-x: auto;
     color-scheme: dark;
-  }
 
-  .block-code :global(.language-id) {
-    /* TODO: Figure out what to do with the language indicator */
-    display: none;
+    &:global(.has-diff) :global(.line.remove) {
+      margin: 0 calc(var(--spacing) * -1);
+      background-color: #ff000033;
+    }
+
+    &:global(.has-diff) :global(.line.add) {
+      margin: 0 calc(var(--spacing) * -1);
+      background-color: #9ccc2c33;
+    }
+
+    &:global(.has-highlighted) :global(.line.highlighted) {
+      margin: 0 calc(var(--spacing) * -1);
+      background-color: #80cbc420;
+    }
+
+    &:global(.has-highlighted) :global(.line.highlighted.error) {
+      margin: 0 calc(var(--spacing) * -1);
+      background-color: #e454541b;
+    }
+
+    &:global(.has-highlighted) :global(.line.highlighted.warning) {
+      margin: 0 calc(var(--spacing) * -1);
+      background-color: #ff942f1b;
+    }
+
+    /* :global(.tab),
+    :global(.space) {
+      position: relative;
+      opacity: 0;
+
+      &::before {
+        position: absolute;
+      }
+
+      &::selection {
+        opacity: 0.3;
+      }
+    }
+
+    :global(.tab)::before {
+      content: "⇥";
+    }
+
+    :global(.space)::before {
+      content: "·";
+    } */
   }
 </style>

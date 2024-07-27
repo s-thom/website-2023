@@ -23,6 +23,7 @@
     "@fontsource/roboto": "^5.0.13",
     "@notionhq/client": "^2.2.15",
     "@resvg/resvg-js": "^2.6.2",
+    "@shikijs/transformers": "^1.12.0",
     "@types/react-dom": "^18.3.0",
     "astro": "^4.12.2",
     "clsx": "^2.1.1",
@@ -40,7 +41,6 @@
     "satori": "^0.10.14",
     "seedrandom": "^3.0.5",
     "sharp": "^0.33.4",
-    "shiki-twoslash": "^3.1.2",
     "typescript": "^5.5.4",
     "uuid": "^10.0.0",
     "zustand": "^4.5.4"
