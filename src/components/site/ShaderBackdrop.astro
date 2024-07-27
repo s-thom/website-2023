@@ -8,7 +8,7 @@ const { hasBigBoxExclusion } = Astro.props;
 
 <div class="shader-backdrop">
   <canvas class="shader-backdrop-canvas"></canvas>
-  {hasBigBoxExclusion && <div class="shader-backdrop-box big-box-margin" />}
+  {hasBigBoxExclusion && <div class="shader-backdrop-box-size" />}
 </div>
 
 <style>
@@ -22,7 +22,11 @@ const { hasBigBoxExclusion } = Astro.props;
     height: 100%;
     width: 100%;
   }
-  .shader-backdrop-box {
+  .shader-backdrop-box-size {
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    width: calc(100% - (var(--big-box-spacing) * 2));
     height: calc(100% - (var(--big-box-spacing-small) * 2));
   }
 </style>
@@ -48,8 +52,8 @@ const { hasBigBoxExclusion } = Astro.props;
       if (!canvas) {
         return;
       }
-      const headerContent = backdropArea.querySelector<HTMLDivElement>(
-        "div.shader-backdrop-box",
+      const bigBoxExclusionZone = backdropArea.querySelector<HTMLDivElement>(
+        "div.shader-backdrop-box-size",
       );
 
       const gl = canvas.getContext("webgl2", { premultipliedAlpha: false });
@@ -70,8 +74,8 @@ const { hasBigBoxExclusion } = Astro.props;
         resizeCanvasToDisplaySize(gl.canvas as HTMLCanvasElement);
         gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
-        const contentRect = headerContent
-          ? headerContent.getBoundingClientRect()
+        const contentRect = bigBoxExclusionZone
+          ? bigBoxExclusionZone.getBoundingClientRect()
           : { width: 0, height: 0 };
 
         const uniforms = {
