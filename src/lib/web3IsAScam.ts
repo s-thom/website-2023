@@ -1,3 +1,5 @@
+import { sendEvent } from "./analytics";
+
 const MS_TO_DESTRUCTION = 5 * 60 * 1000;
 const MAX_CHARS_TO_REMOVE_PER_ELEMENT = 3;
 
@@ -123,6 +125,7 @@ function getCharactersPerMs() {
 }
 
 export function web3IsAScam() {
+  sendEvent("web3IsAScam", {});
   addBanner();
   const numToRemovePerMs = getCharactersPerMs();
   let lastTimestamp = performance.now();
