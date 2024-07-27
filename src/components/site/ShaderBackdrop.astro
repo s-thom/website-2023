@@ -36,38 +36,8 @@ const { hasBigBoxExclusion } = Astro.props;
     drawBufferInfo,
     createBufferInfoFromArrays,
   } from "twgl.js";
-
-  var vertexShaderSource = `#version 300 es
-    in vec4 position;
-
-    void main() {
-      gl_Position = position;
-    }
-`;
-
-  var fragmentShaderSource = `#version 300 es
-    precision highp float;
-
-    uniform float uTime;
-    uniform vec2 uResolution;
-    uniform vec2 uContentRect;
-
-    out vec4 outColor;
-
-    void main() {
-      vec2 uv = gl_FragCoord.xy / uResolution;
-
-      vec2 gap = (uResolution - uContentRect) / vec2(2, 2);
-
-      // Big Box exclusion zone
-      if (all(greaterThan(gl_FragCoord.xy, gap)) && all(lessThan(gl_FragCoord.xy, gap + uContentRect))) {
-        outColor = vec4(0, 0, 0, 0);
-        return;
-      }
-
-      outColor = vec4(1, 1, 1, 0.3);
-    }
-`;
+  import vert from "../../lib/shaders/backdrop.vert";
+  import frag from "../../lib/shaders/backdrop.frag";
 
   document
     .querySelectorAll<HTMLDivElement>(".shader-backdrop")
@@ -88,10 +58,7 @@ const { hasBigBoxExclusion } = Astro.props;
         return;
       }
 
-      const programInfo = createProgramInfo(gl, [
-        vertexShaderSource,
-        fragmentShaderSource,
-      ]);
+      const programInfo = createProgramInfo(gl, [vert, frag]);
 
       const arrays = {
         // Cover the entire canvas with a single quad
