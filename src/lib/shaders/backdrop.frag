@@ -6,6 +6,11 @@ uniform float uTime;
 uniform vec2 uResolution;
 uniform vec2 uContentRect;
 
+uniform bool uTexturesLoaded;
+uniform sampler2D uTextureBackdrop;
+
+in vec2 vTextureCoord;
+
 out vec4 outColor;
 
 void main() {
@@ -19,5 +24,9 @@ void main() {
     return;
   }
 
-  outColor = vec4(1, 1, 1, 0.3);
+  vec2 baseTexturePos = vec2(vTextureCoord.x, 1.0 - vTextureCoord.y);
+
+  outColor = texture(uTextureBackdrop, baseTexturePos);
+
+  // outColor = vec4(1, 1, 1, 0.3);
 }

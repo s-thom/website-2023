@@ -1,12 +1,13 @@
 ---
 export interface Props {
   hasBigBoxExclusion?: boolean;
+  imageUrl?: string;
 }
 
-const { hasBigBoxExclusion } = Astro.props;
+const { hasBigBoxExclusion, imageUrl } = Astro.props;
 ---
 
-<div class="shader-backdrop">
+<div class="shader-backdrop" data-image-url={imageUrl}>
   <canvas class="shader-backdrop-canvas"></canvas>
   {hasBigBoxExclusion && <div class="shader-backdrop-box-size" />}
 </div>
@@ -39,6 +40,8 @@ const { hasBigBoxExclusion } = Astro.props;
     setUniforms,
     drawBufferInfo,
     createBufferInfoFromArrays,
+    createTextures,
+    type TextureOptions,
   } from "twgl.js";
   import vert from "../../lib/shaders/backdrop.vert";
   import frag from "../../lib/shaders/backdrop.frag";
@@ -66,9 +69,44 @@ const { hasBigBoxExclusion } = Astro.props;
 
       const arrays = {
         // Cover the entire canvas with a single quad
-        position: [-1, -1, 0, 1, -1, 0, -1, 1, 0, -1, 1, 0, 1, -1, 0, 1, 1, 0],
+        aPosition: [-1, -1, 0, 1, -1, 0, -1, 1, 0, -1, 1, 0, 1, -1, 0, 1, 1, 0],
+        aTextureCoord: {
+          numComponents: 2,
+          data: [0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0],
+        },
       };
       const bufferInfo = createBufferInfoFromArrays(gl, arrays);
+
+      const texturesSrc: { [key: string]: TextureOptions } = {
+        // Default to 1x1 white square
+        backdrop: {
+          mag: gl.NEAREST,
+          min: gl.LINEAR,
+          src: [255, 255, 255, 255],
+        },
+      };
+      const backdropImageUrl = backdropArea.dataset.imageUrl ?? undefined;
+      if (backdropImageUrl) {
+        texturesSrc.remote = { src: backdropImageUrl };
+      }
+
+      let texturesLoaded = false;
+      const textures = createTextures(gl, texturesSrc, (err) => {
+        if (err) {
+          console.error(
+            "Error loading textures for backdrop shader, falling back to untextured mode.",
+            err,
+          );
+          return;
+        }
+
+        texturesLoaded = true;
+
+        if (textures.remote) {
+          // Overwrite default with loaded image
+          textures.backdrop = textures.remote;
+        }
+      });
 
       const render = (time: DOMHighResTimeStamp) => {
         resizeCanvasToDisplaySize(gl.canvas as HTMLCanvasElement);
@@ -82,6 +120,8 @@ const { hasBigBoxExclusion } = Astro.props;
           uTime: time * 0.001,
           uResolution: [gl.canvas.width, gl.canvas.height],
           uContentRect: [contentRect.width, contentRect.height],
+          uTexturesLoaded: texturesLoaded,
+          uTextureBackdrop: textures.backdrop,
         };
 
         gl.useProgram(programInfo.program);
