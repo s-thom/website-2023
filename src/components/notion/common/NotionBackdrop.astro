@@ -4,8 +4,10 @@ import type {
   PageObjectResponse,
 } from "@notionhq/client/build/src/api-endpoints";
 import clsx from "clsx";
+import { getNotionImageInfo } from "../../../lib/notion/image";
+import { DEFAULT_IMAGE_DENSITIES } from "../../Images/constants";
+import Picture from "../../Images/Picture.astro";
 import DefaultPageBackdrop from "../../site/DefaultPageBackdrop.astro";
-import NotionImage from "./NotionImage.astro";
 import ShaderBackdrop from "../../site/ShaderBackdrop.astro";
 
 // The backdrop images are always blurred, so we can afford to load lower
@@ -42,18 +44,24 @@ const imageClasses = clsx(
   "notion-backdrop-image",
   blur && "notion-backdrop-image-blur",
 );
+
+const imageInfo = page.cover
+  ? await getNotionImageInfo(
+      `${page.id}-cover`,
+      page.cover,
+      widths,
+      blur ? [1] : DEFAULT_IMAGE_DENSITIES,
+    )
+  : undefined;
 ---
 
 <div class="notion-backdrop">
   {
-    page.cover ? (
-      <NotionImage
-        id={`${page.id}-cover`}
-        image={page.cover}
+    imageInfo ? (
+      <Picture
+        imageInfo={imageInfo}
         alt=""
         class={imageClasses}
-        widths={widths}
-        densities={blur ? [1] : undefined}
         noIntrinsicWidth={noIntrinsicWidth}
         sizes={sizes}
         loading="eager"
@@ -63,5 +71,9 @@ const imageClasses = clsx(
     )
   }
   {shouldIncludeShade && <div class="shade" />}
-  {fancy && <ShaderBackdrop hasBigBoxExclusion />}
+  {
+    fancy && (
+      <ShaderBackdrop hasBigBoxExclusion imageUrl={imageInfo?.original.path} />
+    )
+  }
 </div>

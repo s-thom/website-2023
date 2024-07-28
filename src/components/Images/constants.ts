@@ -1,5 +1,10 @@
 import { join } from "node:path";
 
+// High-end phones now have densities even greater than 3.
+// This isn't just for phones, higher densities will also provide clearer
+// images for those who have zoomed in on desktop.
+export const DEFAULT_IMAGE_DENSITIES = [1, 1.5, 2, 2.5, 3];
+
 export interface ImageSizeInfo {
   /** Path for browser to request image from */
   path: string;

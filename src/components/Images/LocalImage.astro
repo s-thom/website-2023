@@ -1,15 +1,25 @@
 ---
 import Picture, { type ImageRequiredProps } from "./Picture.astro";
+import { DEFAULT_IMAGE_DENSITIES } from "./constants";
 import { readImage } from "./fetchImage";
+import { getImageInfo } from "./image";
 
 export interface Props extends ImageRequiredProps {
   id: string;
   resourcePath: string;
+  widths: number[];
+  densities?: number[];
 }
 
-const { id, resourcePath, ...rest } = Astro.props;
+const { id, resourcePath, widths, densities, ...rest } = Astro.props;
 
 const getImage = () => readImage(resourcePath);
+const imageInfo = await getImageInfo(
+  id,
+  getImage,
+  widths,
+  densities ?? DEFAULT_IMAGE_DENSITIES,
+);
 ---
 
-<Picture id={id} getImage={getImage} {...rest} />
+<Picture imageInfo={imageInfo} {...rest} />

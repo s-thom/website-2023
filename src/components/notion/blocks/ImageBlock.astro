@@ -1,8 +1,11 @@
 ---
 import type { ImageBlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import { getNotionImageInfo } from "../../../lib/notion/image";
 import { richTextToUnformattedString } from "../../../lib/notion/util";
-import NotionImage from "../common/NotionImage.astro";
+import DevOnly from "../../DevOnly.astro";
+import { DEFAULT_IMAGE_DENSITIES } from "../../Images/constants";
 import RichText from "../common/RichText.astro";
+import Picture from "../../Images/Picture.astro";
 
 export interface Props {
   block: ImageBlockObjectResponse;
@@ -11,18 +14,33 @@ export interface Props {
 const { block } = Astro.props;
 
 const captionPlain = richTextToUnformattedString(block.image.caption);
+
+const imageInfo = await getNotionImageInfo(
+  block.id,
+  block.image,
+  [360, 540, 720],
+  DEFAULT_IMAGE_DENSITIES,
+);
 ---
 
 <figure data-block={block.id} class="block-image">
-  <NotionImage
-    id={block.id}
-    image={block.image}
-    alt={captionPlain}
-    widths={[360, 540, 720]}
-    sizes="(min-width: 750px) 720px,  100vw"
-    loading="eager"
-    linkToOriginal
-  />
+  {
+    imageInfo ? (
+      <a class="picture-link" href={imageInfo.original.path} target="_blank">
+        <Picture
+          imageInfo={imageInfo}
+          alt={captionPlain}
+          sizes="(min-width: 750px) 720px,  100vw"
+          loading="eager"
+          linkToOriginal
+        />
+      </a>
+    ) : (
+      <DevOnly>
+        image block {block.id} has unsupported image type {block.image.type}
+      </DevOnly>
+    )
+  }
   {
     block.image.caption.length > 0 ? (
       <figcaption class="block-image-caption">
