@@ -1,13 +1,14 @@
 ---
 export interface Props {
   hasBigBoxExclusion?: boolean;
+  shade?: boolean;
   imageUrl?: string;
 }
 
-const { hasBigBoxExclusion, imageUrl } = Astro.props;
+const { hasBigBoxExclusion, shade, imageUrl } = Astro.props;
 ---
 
-<div class="shader-backdrop" data-image-url={imageUrl}>
+<div class="shader-backdrop" data-image-url={imageUrl} data-shade={shade}>
   <canvas class="shader-backdrop-canvas"></canvas>
   {hasBigBoxExclusion && <div class="shader-backdrop-box-size" />}
 </div>
@@ -70,10 +71,6 @@ const { hasBigBoxExclusion, imageUrl } = Astro.props;
       const arrays = {
         // Cover the entire canvas with a single quad
         aPosition: [-1, -1, 0, 1, -1, 0, -1, 1, 0, -1, 1, 0, 1, -1, 0, 1, 1, 0],
-        aTextureCoord: {
-          numComponents: 2,
-          data: [0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0],
-        },
       };
       const bufferInfo = createBufferInfoFromArrays(gl, arrays);
 
@@ -82,10 +79,11 @@ const { hasBigBoxExclusion, imageUrl } = Astro.props;
         backdrop: {
           mag: gl.NEAREST,
           min: gl.LINEAR,
-          src: [255, 255, 255, 255],
+          src: [255, 255, 255, 0],
         },
       };
       const backdropImageUrl = backdropArea.dataset.imageUrl ?? undefined;
+      const hasShade = "shade" in backdropArea.dataset;
       if (backdropImageUrl) {
         texturesSrc.remote = { src: backdropImageUrl };
       }
@@ -120,6 +118,7 @@ const { hasBigBoxExclusion, imageUrl } = Astro.props;
           uTime: time * 0.001,
           uResolution: [gl.canvas.width, gl.canvas.height],
           uContentRect: [contentRect.width, contentRect.height],
+          uHasShade: hasShade,
           uTexturesLoaded: texturesLoaded,
           uTextureBackdrop: textures.backdrop,
         };

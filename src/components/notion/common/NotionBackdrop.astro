@@ -73,7 +73,11 @@ const imageInfo = page.cover
   {shouldIncludeShade && <div class="shade" />}
   {
     fancy && (
-      <ShaderBackdrop hasBigBoxExclusion imageUrl={imageInfo?.original.path} />
+      <ShaderBackdrop
+        hasBigBoxExclusion
+        imageUrl={imageInfo?.original.path}
+        shade={shade}
+      />
     )
   }
 </div>
