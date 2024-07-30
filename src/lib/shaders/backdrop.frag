@@ -10,6 +10,11 @@ uniform vec2 uContentRect;
 
 uniform bool uHasCutout;
 uniform float uImageScale;
+uniform vec2 uTexRandSin;
+uniform vec2 uTexRandPosMult;
+uniform vec2 uTexRandMult;
+uniform float uImageOverlayBlack;
+uniform float uImageOverlayWhite;
 
 uniform bool uHasShade;
 
@@ -37,10 +42,12 @@ void main() {
   vec2 scaledPx = (((gl_FragCoord.xy - halfRes) * minTexSizeRatio) / (texSizeRatio * uImageScale)) + halfRes;
   vec2 scaledTexCoord = scaledPx / uResolution;
 
-  vec4 texColor = texture(uTextureBackdrop, flipY(scaledTexCoord));
+  vec2 sinedTexCoord = scaledTexCoord + vec2(sin((uTime * uTexRandSin.x) + (gl_FragCoord.x * uTexRandPosMult.x)) * uTexRandMult.x, sin((uTime * uTexRandSin.y) + (gl_FragCoord.y * uTexRandPosMult.y)) * uTexRandMult.y);
 
-  vec4 darkened = mix(texColor, vec4(0, 0, 0, 1), uHasShade ? 0.6f : 0.0f);
-  vec4 lightened = mix(darkened, vec4(1, 1, 1, 1), 0.3f);
+  vec4 texColor = texture(uTextureBackdrop, flipY(sinedTexCoord));
+
+  vec4 darkened = mix(texColor, vec4(0, 0, 0, 1), uHasShade ? uImageOverlayBlack : 0.0f);
+  vec4 lightened = mix(darkened, vec4(1, 1, 1, 1), uImageOverlayWhite);
 
   outColor = lightened;
 }
