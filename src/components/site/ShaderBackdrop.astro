@@ -46,6 +46,31 @@ const { hasBigBoxExclusion, shade, imageUrl } = Astro.props;
   } from "twgl.js";
   import vert from "../../lib/shaders/backdrop.vert";
   import frag from "../../lib/shaders/backdrop.frag";
+  import type {
+    SlidersOptionsMap,
+    SlidersInitialisedEvent,
+  } from "../../lib/shaders/sliders";
+
+  const debugUniforms: SlidersOptionsMap = {
+    uHasCutout: {
+      type: "boolean",
+      value: true,
+    },
+    uImageScale: {
+      type: "float",
+      min: 0.01,
+      max: 2,
+      value: 1.1,
+      step: 0.01,
+    },
+  };
+
+  window.addEventListener(
+    "slidersinitialised",
+    (event: InstanceType<typeof SlidersInitialisedEvent>) => {
+      event.detail.registerSliders("backdrop", debugUniforms);
+    },
+  );
 
   document
     .querySelectorAll<HTMLDivElement>(".shader-backdrop")
@@ -114,7 +139,7 @@ const { hasBigBoxExclusion, shade, imageUrl } = Astro.props;
           ? bigBoxExclusionZone.getBoundingClientRect()
           : { width: 0, height: 0 };
 
-        const uniforms = {
+        const uniforms: { [key: string]: any } = {
           uTime: time * 0.001,
           uResolution: [gl.canvas.width, gl.canvas.height],
           uContentRect: [contentRect.width, contentRect.height],
@@ -122,6 +147,9 @@ const { hasBigBoxExclusion, shade, imageUrl } = Astro.props;
           uTexturesLoaded: texturesLoaded,
           uTextureBackdrop: textures.backdrop,
         };
+        for (const [key, value] of Object.entries(debugUniforms)) {
+          uniforms[key] = value.value;
+        }
 
         gl.useProgram(programInfo.program);
         setBuffersAndAttributes(gl, programInfo, bufferInfo);

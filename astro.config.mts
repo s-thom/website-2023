@@ -9,6 +9,7 @@ import sthomClientStickers from "./src/integrations/clientStickers";
 import sthomFavicon from "./src/integrations/favicon";
 import sthomImages from "./src/integrations/images";
 import sthomNotionCache from "./src/integrations/notionCache";
+import sthomSliders from "./src/integrations/sliders";
 import { IMAGE_OPTIMISATION_ALLOWED_DOMAINS } from "./src/lib/constants";
 
 function getSiteUrl() {
@@ -32,6 +33,7 @@ export default defineConfig({
     sthomImages(),
     sthomFavicon({ src: "./src/resources/profile-2023.jpg" }),
     sthomNotionCache(),
+    sthomSliders(),
     react(),
     sitemap(),
   ],

@@ -8,19 +8,20 @@ uniform float uTime;
 uniform vec2 uResolution;
 uniform vec2 uContentRect;
 
+uniform bool uHasCutout;
+uniform float uImageScale;
+
 uniform bool uHasShade;
 
 uniform bool uTexturesLoaded;
 uniform sampler2D uTextureBackdrop;
-
-const float cssScale = 1.1f;
 
 out vec4 outColor;
 
 void main() {
   // Big Box exclusion zone
   vec2 gap = (uResolution - uContentRect) / vec2(2);
-  if(all(greaterThan(gl_FragCoord.xy, gap)) && all(lessThan(gl_FragCoord.xy, gap + uContentRect))) {
+  if(uHasCutout && all(greaterThan(gl_FragCoord.xy, gap)) && all(lessThan(gl_FragCoord.xy, gap + uContentRect))) {
     outColor = vec4(0);
     return;
   }
@@ -33,7 +34,7 @@ void main() {
   vec2 texSizeRatio = texSize / uResolution;
   float minTexSizeRatio = min(texSizeRatio.x, texSizeRatio.y);
 
-  vec2 scaledPx = (((gl_FragCoord.xy - halfRes) * minTexSizeRatio) / (texSizeRatio * cssScale)) + halfRes;
+  vec2 scaledPx = (((gl_FragCoord.xy - halfRes) * minTexSizeRatio) / (texSizeRatio * uImageScale)) + halfRes;
   vec2 scaledTexCoord = scaledPx / uResolution;
 
   vec4 texColor = texture(uTextureBackdrop, flipY(scaledTexCoord));
