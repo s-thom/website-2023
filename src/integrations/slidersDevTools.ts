@@ -71,6 +71,7 @@ const notionCacheDevTools: DevToolbarApp = {
                         .addBinding(rgbContainer, "rgb", {
                           label: key,
                           picker: "inline",
+                          color: { type: "float" },
                         })
                         .on("change", (ev) => {
                           option.value = [ev.value.r, ev.value.g, ev.value.b];
@@ -90,6 +91,7 @@ const notionCacheDevTools: DevToolbarApp = {
                         .addBinding(rgbaContainer, "rgba", {
                           label: key,
                           picker: "inline",
+                          color: { type: "float" },
                         })
                         .on("change", (ev) => {
                           option.value = [

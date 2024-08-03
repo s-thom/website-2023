@@ -52,64 +52,62 @@ const { hasBigBoxExclusion, shade, imageUrl } = Astro.props;
   } from "../../lib/shaders/sliders";
 
   const debugUniforms: SlidersOptionsMap = {
-    uHasCutout: {
-      type: "boolean",
-      value: false,
-    },
     uImageScale: {
       type: "float",
-      value: 1.1,
+      value: 1,
       min: 0.01,
       max: 2,
       step: 0.01,
     },
-    // uImageOverlayBlack: {
-    //   type: "float",
-    //   value: 0.6,
-    //   min: 0,
-    //   max: 1,
-    //   step: 0.01,
-    // },
-    // uImageOverlayWhite: {
-    //   type: "float",
-    //   value: 0.3,
-    //   min: 0,
-    //   max: 1,
-    //   step: 0.01,
-    // },
-    balatro_time_scale: {
+    uBalatroTimeScale: {
       type: "float",
-      value: 1,
+      value: 0.35,
       min: 0,
       max: 5,
       step: 0.01,
     },
-    balatro_paint_factor: {
+    uBalatroPaintFactor: {
+      type: "float",
+      value: 0.33,
+      min: 0,
+      max: 1,
+      step: 0.001,
+    },
+    uBalatroPaintIterations: {
+      type: "int",
+      value: 4,
+      min: 0,
+      max: 10,
+    },
+    uForceColorMode: {
+      type: "boolean",
+      value: false,
+    },
+    uColor1: {
+      type: "rgba",
+      value: [1, 0, 0, 1],
+    },
+    uColor2: {
+      type: "rgba",
+      value: [0, 1, 0, 1],
+    },
+    uColor3: {
+      type: "rgba",
+      value: [0, 0, 1, 1],
+    },
+    uColorMix1: {
       type: "float",
       value: 1,
       min: 0,
       max: 1,
       step: 0.001,
     },
-    balatro_paint_iterations: {
-      type: "int",
+    uColorMix2: {
+      type: "float",
       value: 5,
       min: 0,
       max: 10,
-    },
-    spin_rotation: {
-      type: "float",
-      value: 2.72,
-      min: -100,
-      max: 100,
-      step: 0.01,
-    },
-    spin_amount: {
-      type: "float",
-      value: 0.36,
-      min: 0,
-      max: 2,
-      step: 0.01,
+      step: 0.001,
     },
   };
 
@@ -156,12 +154,16 @@ const { hasBigBoxExclusion, shade, imageUrl } = Astro.props;
         },
       };
       const backdropImageUrl = backdropArea.dataset.imageUrl ?? undefined;
-      const hasShade = "shade" in backdropArea.dataset;
-      if (backdropImageUrl) {
-        texturesSrc.remote = { src: backdropImageUrl };
+      const hasBackgroundImage = !!backdropImageUrl;
+      if (hasBackgroundImage) {
+        texturesSrc.backdrop = { src: backdropImageUrl };
+      } else {
+        // Add more iterations to paint effect
+        debugUniforms.uBalatroPaintIterations.value = 9;
       }
 
-      let texturesLoaded = false;
+      // Set ready when there's no background image
+      let isReady = !hasBackgroundImage;
       const textures = createTextures(gl, texturesSrc, (err) => {
         if (err) {
           console.error(
@@ -171,28 +173,18 @@ const { hasBigBoxExclusion, shade, imageUrl } = Astro.props;
           return;
         }
 
-        texturesLoaded = true;
-
-        if (textures.remote) {
-          // Overwrite default with loaded image
-          textures.backdrop = textures.remote;
-        }
+        isReady = true;
       });
 
       const render = (time: DOMHighResTimeStamp) => {
         resizeCanvasToDisplaySize(gl.canvas as HTMLCanvasElement);
         gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
-        const contentRect = bigBoxExclusionZone
-          ? bigBoxExclusionZone.getBoundingClientRect()
-          : { width: 0, height: 0 };
-
         const uniforms: { [key: string]: any } = {
+          uReady: isReady,
           uTime: time * 0.001,
           uResolution: [gl.canvas.width, gl.canvas.height],
-          uContentRect: [contentRect.width, contentRect.height],
-          uHasShade: hasShade,
-          uTexturesLoaded: texturesLoaded,
+          uUseBackdropImage: hasBackgroundImage,
           uTextureBackdrop: textures.backdrop,
         };
         for (const [key, value] of Object.entries(debugUniforms)) {
