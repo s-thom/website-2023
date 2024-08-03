@@ -55,5 +55,9 @@ const imageInfo = page.cover
       <DefaultPageBackdrop class={className} />
     )
   }
-  {shader?.enabled && <ShaderBackdrop imageUrl={imageInfo?.original.path} />}
+  {
+    shader?.enabled && (
+      <ShaderBackdrop id={page.id} imageUrl={imageInfo?.original.path} />
+    )
+  }
 </div>

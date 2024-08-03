@@ -1,13 +1,19 @@
 ---
 export interface Props {
+  id: string;
   shade?: boolean;
   imageUrl?: string;
 }
 
-const { shade, imageUrl } = Astro.props;
+const { id, shade, imageUrl } = Astro.props;
 ---
 
-<div class="shader-backdrop" data-image-url={imageUrl} data-shade={shade}>
+<div
+  class="shader-backdrop"
+  id={`backdrop-${id}`}
+  data-image-url={imageUrl}
+  data-shade={shade}
+>
   <canvas class="shader-backdrop-canvas"></canvas>
 </div>
 
@@ -42,73 +48,6 @@ const { shade, imageUrl } = Astro.props;
     SlidersInitialisedEvent,
   } from "../../lib/shaders/sliders";
 
-  const debugUniforms: SlidersOptionsMap = {
-    uImageScale: {
-      type: "float",
-      value: 1,
-      min: 0.01,
-      max: 2,
-      step: 0.01,
-    },
-    uBalatroTimeScale: {
-      type: "float",
-      value: 0.35,
-      min: 0,
-      max: 5,
-      step: 0.01,
-    },
-    uBalatroPaintFactor: {
-      type: "float",
-      value: 0.33,
-      min: 0,
-      max: 1,
-      step: 0.001,
-    },
-    uBalatroPaintIterations: {
-      type: "int",
-      value: 4,
-      min: 0,
-      max: 10,
-    },
-    uForceColorMode: {
-      type: "boolean",
-      value: false,
-    },
-    uColor1: {
-      type: "rgba",
-      value: [1, 0, 0, 1],
-    },
-    uColor2: {
-      type: "rgba",
-      value: [0, 1, 0, 1],
-    },
-    uColor3: {
-      type: "rgba",
-      value: [0, 0, 1, 1],
-    },
-    uColorMix1: {
-      type: "float",
-      value: 1,
-      min: 0,
-      max: 1,
-      step: 0.001,
-    },
-    uColorMix2: {
-      type: "float",
-      value: 5,
-      min: 0,
-      max: 10,
-      step: 0.001,
-    },
-  };
-
-  window.addEventListener(
-    "slidersinitialised",
-    (event: InstanceType<typeof SlidersInitialisedEvent>) => {
-      event.detail.registerSliders("backdrop", debugUniforms);
-    },
-  );
-
   document
     .querySelectorAll<HTMLDivElement>(".shader-backdrop")
     .forEach((backdropArea) => {
@@ -118,6 +57,73 @@ const { shade, imageUrl } = Astro.props;
       if (!canvas) {
         return;
       }
+
+      const editableUniforms: SlidersOptionsMap = {
+        uImageScale: {
+          type: "float",
+          value: 1,
+          min: 0.01,
+          max: 2,
+          step: 0.01,
+        },
+        uBalatroTimeScale: {
+          type: "float",
+          value: 0.15,
+          min: 0,
+          max: 5,
+          step: 0.01,
+        },
+        uBalatroPaintFactor: {
+          type: "float",
+          value: 0.33,
+          min: 0,
+          max: 1,
+          step: 0.001,
+        },
+        uBalatroPaintIterations: {
+          type: "int",
+          value: 4,
+          min: 0,
+          max: 10,
+        },
+        uForceColorMode: {
+          type: "boolean",
+          value: false,
+        },
+        uColor1: {
+          type: "rgba",
+          value: [1, 0, 0, 1],
+        },
+        uColor2: {
+          type: "rgba",
+          value: [0, 1, 0, 1],
+        },
+        uColor3: {
+          type: "rgba",
+          value: [0, 0, 1, 1],
+        },
+        uColorMix1: {
+          type: "float",
+          value: 1,
+          min: 0,
+          max: 1,
+          step: 0.001,
+        },
+        uColorMix2: {
+          type: "float",
+          value: 5,
+          min: 0,
+          max: 10,
+          step: 0.001,
+        },
+      };
+
+      window.addEventListener(
+        "slidersinitialised",
+        (event: InstanceType<typeof SlidersInitialisedEvent>) => {
+          event.detail.registerSliders(backdropArea.id, editableUniforms);
+        },
+      );
 
       const gl = canvas.getContext("webgl2", { premultipliedAlpha: false });
       if (!gl) {
@@ -147,7 +153,7 @@ const { shade, imageUrl } = Astro.props;
         texturesSrc.backdrop = { src: backdropImageUrl };
       } else {
         // Add more iterations to paint effect
-        debugUniforms.uBalatroPaintIterations.value = 9;
+        editableUniforms.uBalatroPaintIterations.value = 9;
       }
 
       // Set ready when there's no background image
@@ -175,7 +181,7 @@ const { shade, imageUrl } = Astro.props;
           uUseBackdropImage: hasBackgroundImage,
           uTextureBackdrop: textures.backdrop,
         };
-        for (const [key, value] of Object.entries(debugUniforms)) {
+        for (const [key, value] of Object.entries(editableUniforms)) {
           uniforms[key] = value.value;
         }
 
