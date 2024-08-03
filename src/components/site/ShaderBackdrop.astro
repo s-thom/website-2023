@@ -1,16 +1,14 @@
 ---
 export interface Props {
-  hasBigBoxExclusion?: boolean;
   shade?: boolean;
   imageUrl?: string;
 }
 
-const { hasBigBoxExclusion, shade, imageUrl } = Astro.props;
+const { shade, imageUrl } = Astro.props;
 ---
 
 <div class="shader-backdrop" data-image-url={imageUrl} data-shade={shade}>
   <canvas class="shader-backdrop-canvas"></canvas>
-  {hasBigBoxExclusion && <div class="shader-backdrop-box-size" />}
 </div>
 
 <style>
@@ -23,13 +21,6 @@ const { hasBigBoxExclusion, shade, imageUrl } = Astro.props;
     right: 0;
     height: 100%;
     width: 100%;
-  }
-  .shader-backdrop-box-size {
-    pointer-events: none;
-    opacity: 0;
-    visibility: hidden;
-    width: calc(100% - (var(--big-box-spacing) * 2));
-    height: calc(100% - (var(--big-box-spacing-small) * 2));
   }
 </style>
 
@@ -127,9 +118,6 @@ const { hasBigBoxExclusion, shade, imageUrl } = Astro.props;
       if (!canvas) {
         return;
       }
-      const bigBoxExclusionZone = backdropArea.querySelector<HTMLDivElement>(
-        "div.shader-backdrop-box-size",
-      );
 
       const gl = canvas.getContext("webgl2", { premultipliedAlpha: false });
       if (!gl) {

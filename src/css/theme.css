@@ -357,13 +357,6 @@ h1.site-name-heading {
     object-position: center;
   }
 
-  .notion-backdrop-image.notion-backdrop-image-blur {
-    filter: blur(16px);
-    transform: scale(
-      110%
-    ); /* Quick hack so that the blur's edges aren't visible */
-  }
-
   .shade {
     background-color: rgba(0, 0, 0, 0.6);
     position: absolute;

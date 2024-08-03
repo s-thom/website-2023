@@ -11,13 +11,22 @@ export interface LinkInfo {
 export interface Props {
   navItems?: LinkInfo[];
   breadcrumbs?: LinkInfo[];
+  shouldBlur?: boolean;
 }
 
-const { navItems /* breadcrumbs, */ } = Astro.props;
+const { navItems /* breadcrumbs, */, shouldBlur } = Astro.props;
 ---
 
 <div class="header-area">
-  <div class="big-box big-box-margin flow header-content">
+  <div
+    class:list={[
+      "big-box",
+      "big-box-margin",
+      "flow",
+      "header-content",
+      shouldBlur && "header-content-blur",
+    ]}
+  >
     <header>
       <a href="/" class="site-name">
         <LocalImage
@@ -80,5 +89,8 @@ const { navItems /* breadcrumbs, */ } = Astro.props;
 <style>
   .site-name-heading {
     word-break: break-word;
+  }
+  .header-content-blur {
+    backdrop-filter: brightness(40%) saturate(80%) blur(10px);
   }
 </style>

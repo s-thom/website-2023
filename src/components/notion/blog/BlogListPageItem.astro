@@ -22,8 +22,6 @@ const titleComponents = getPageTitleComponents(page);
       page={page}
       widths={[360]}
       sizes="(min-width: 900) 540px, 100vw"
-      shade
-      blur
     />
   </div>
   <div class="info flow">
@@ -47,7 +45,9 @@ const titleComponents = getPageTitleComponents(page);
   }
 
   .info {
+    height: 100%;
     padding: var(--spacing);
+    backdrop-filter: brightness(40%) saturate(80%) blur(10px);
   }
 
   .title {
