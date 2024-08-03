@@ -50,6 +50,14 @@ const notionCacheDevTools: DevToolbarApp = {
                         step: option.step ?? 1,
                       });
                       break;
+                    case "int":
+                      folder.addBinding(option, "value", {
+                        label: key,
+                        min: option.min ?? 0,
+                        max: option.max ?? 100,
+                        step: 1,
+                      });
+                      break;
                     case "rgb":
                       // eslint-disable-next-line no-case-declarations
                       const rgbContainer = {

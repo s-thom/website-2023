@@ -14,6 +14,12 @@ export interface FloatOption extends BaseOption<number> {
   step?: number;
 }
 
+export interface IntOption extends BaseOption<number> {
+  type: "int";
+  min?: number;
+  max?: number;
+}
+
 export interface StringOption extends BaseOption<string> {
   type: "string";
 }
@@ -38,6 +44,7 @@ export interface ColorRgbAOption
 export type AllOptions =
   | BooleanOption
   | FloatOption
+  | IntOption
   | StringOption
   | Vec2Option
   | ColorRgbOption
