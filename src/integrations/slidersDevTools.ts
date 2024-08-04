@@ -40,11 +40,15 @@ const notionCacheDevTools: DevToolbarApp = {
                   switch (option.type) {
                     case "boolean":
                     case "string":
-                      folder.addBinding(option, "value", { label: key });
+                      folder.addBinding(option, "value", {
+                        label: key,
+                        readonly: option.readonly,
+                      });
                       break;
                     case "float":
                       folder.addBinding(option, "value", {
                         label: key,
+                        readonly: option.readonly,
                         min: option.min ?? 0,
                         max: option.max ?? 100,
                         step: option.step ?? 1,
@@ -53,6 +57,7 @@ const notionCacheDevTools: DevToolbarApp = {
                     case "int":
                       folder.addBinding(option, "value", {
                         label: key,
+                        readonly: option.readonly,
                         min: option.min ?? 0,
                         max: option.max ?? 100,
                         step: 1,
@@ -70,6 +75,7 @@ const notionCacheDevTools: DevToolbarApp = {
                       folder
                         .addBinding(rgbContainer, "rgb", {
                           label: key,
+                          readonly: option.readonly,
                           picker: "inline",
                           color: { type: "float" },
                         })
@@ -90,6 +96,7 @@ const notionCacheDevTools: DevToolbarApp = {
                       folder
                         .addBinding(rgbaContainer, "rgba", {
                           label: key,
+                          readonly: option.readonly,
                           picker: "inline",
                           color: { type: "float" },
                         })
@@ -113,6 +120,7 @@ const notionCacheDevTools: DevToolbarApp = {
                       folder
                         .addBinding(vec2Container, "vec2", {
                           label: key,
+                          readonly: option.readonly ?? (false as any),
                           picker: "inline",
                           x: {
                             min: option.min ?? -100,

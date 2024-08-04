@@ -47,6 +47,10 @@ const { id, shade, imageUrl } = Astro.props;
     SlidersOptionsMap,
     SlidersInitialisedEvent,
   } from "../../lib/shaders/sliders";
+  import { range } from "../../util";
+
+  const initalPaintFactor = 0.15;
+  const maxPaintFactor = 0.45;
 
   document
     .querySelectorAll<HTMLDivElement>(".shader-backdrop")
@@ -55,6 +59,12 @@ const { id, shade, imageUrl } = Astro.props;
         "canvas.shader-backdrop-canvas",
       );
       if (!canvas) {
+        return;
+      }
+
+      const gl = canvas.getContext("webgl2", { premultipliedAlpha: false });
+      if (!gl) {
+        canvas.classList.add("fully-hidden");
         return;
       }
 
@@ -68,14 +78,22 @@ const { id, shade, imageUrl } = Astro.props;
         },
         uBalatroTimeScale: {
           type: "float",
-          value: 0.15,
+          value: 0.2,
           min: 0,
           max: 5,
           step: 0.01,
         },
         uBalatroPaintFactor: {
           type: "float",
-          value: 0.33,
+          value: 1,
+          readonly: true,
+          min: 0,
+          max: 1,
+          step: 0.001,
+        },
+        uBalatroPaintFactorMult: {
+          type: "float",
+          value: 1,
           min: 0,
           max: 1,
           step: 0.001,
@@ -125,12 +143,6 @@ const { id, shade, imageUrl } = Astro.props;
         },
       );
 
-      const gl = canvas.getContext("webgl2", { premultipliedAlpha: false });
-      if (!gl) {
-        canvas.classList.add("fully-hidden");
-        return;
-      }
-
       const programInfo = createProgramInfo(gl, [vert, frag]);
 
       const arrays = {
@@ -170,9 +182,40 @@ const { id, shade, imageUrl } = Astro.props;
         isReady = true;
       });
 
+      let canvasIntersectionRatio = 1;
+      let observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.target === canvas) {
+              canvasIntersectionRatio = entry.intersectionRatio;
+            }
+          }
+        },
+        {
+          // Fire callback on many changes. Should be smooth enough.
+          threshold: range(101).map((n) => n / 100),
+        },
+      );
+      observer.observe(canvas);
+
       const render = (time: DOMHighResTimeStamp) => {
+        requestAnimationFrame(render);
+
+        // No point in rendering if it's off-screen.
+        // Would be better to stop the loop, but I can't be bothered.
+        if (canvasIntersectionRatio === 0) {
+          return;
+        }
+
         resizeCanvasToDisplaySize(gl.canvas as HTMLCanvasElement);
         gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+        // Calculate paint factor
+        editableUniforms.uBalatroPaintFactor.value =
+          ((1 - canvasIntersectionRatio) *
+            (maxPaintFactor - initalPaintFactor) +
+            initalPaintFactor) *
+          (editableUniforms.uBalatroPaintFactorMult.value as number);
 
         const uniforms: { [key: string]: any } = {
           uReady: isReady,
@@ -189,8 +232,6 @@ const { id, shade, imageUrl } = Astro.props;
         setBuffersAndAttributes(gl, programInfo, bufferInfo);
         setUniforms(programInfo, uniforms);
         drawBufferInfo(gl, bufferInfo);
-
-        requestAnimationFrame(render);
       };
       requestAnimationFrame(render);
     });

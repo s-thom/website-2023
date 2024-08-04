@@ -1,6 +1,7 @@
 export interface BaseOption<T> {
   type: unknown;
   value: T;
+  readonly?: boolean;
 }
 
 export interface BooleanOption extends BaseOption<boolean> {
