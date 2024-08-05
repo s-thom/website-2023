@@ -43,6 +43,7 @@ const { id, shade, imageUrl } = Astro.props;
   } from "twgl.js";
   import vert from "../../lib/shaders/backdrop.vert";
   import frag from "../../lib/shaders/backdrop.frag";
+  import { Interpolate, easeInOutCubic } from "../../lib/shaders/interpolate";
   import type {
     SlidersOptionsMap,
     SlidersInitialisedEvent,
@@ -180,6 +181,7 @@ const { id, shade, imageUrl } = Astro.props;
         }
 
         isReady = true;
+        interpolator.setTarget(1, 10000);
       });
 
       let isRenderLoopActive = true;
@@ -203,6 +205,11 @@ const { id, shade, imageUrl } = Astro.props;
       );
       observer.observe(canvas);
 
+      const interpolator = new Interpolate(
+        easeInOutCubic,
+        hasBackgroundImage ? 0 : 1,
+      );
+
       function render(time: DOMHighResTimeStamp) {
         if (!gl) {
           isRenderLoopActive = false;
@@ -222,7 +229,8 @@ const { id, shade, imageUrl } = Astro.props;
           ((1 - canvasIntersectionRatio) *
             (MAX_PAINT_FACTOR - MIN_PAINT_FACTOR) +
             MIN_PAINT_FACTOR) *
-          (editableUniforms.uBalatroPaintFactorMult.value as number);
+          (editableUniforms.uBalatroPaintFactorMult.value as number) *
+          interpolator.getValue();
 
         const uniforms: { [key: string]: any } = {
           uReady: isReady,
