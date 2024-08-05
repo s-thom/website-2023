@@ -4,7 +4,7 @@
   --color-text-header: #ffffff;
   --color-background: #f8f8f8;
   --color-background-secondary: #dddddd;
-  --color-background-header: #002355;
+  --color-background-header: #152041;
   --color-background-delete: oklch(95% 0.013 18);
   --color-border: #aaaaaa;
   --color-link: oklch(60% 0.185 258);
@@ -79,7 +79,7 @@
     --color-text-header: #ffffff;
     --color-background: #181818;
     --color-background-secondary: #3a3a3a;
-    --color-background-header: #1d3966;
+    --color-background-header: #152041;
     --color-background-error: #5f2526;
     --color-background-delete: oklch(30% 0.03 18);
     --color-border: #555555;
