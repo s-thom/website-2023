@@ -49,8 +49,8 @@ const { id, shade, imageUrl } = Astro.props;
   } from "../../lib/shaders/sliders";
   import { range } from "../../util";
 
-  const initalPaintFactor = 0.15;
-  const maxPaintFactor = 0.45;
+  const MIN_PAINT_FACTOR = 0.15;
+  const MAX_PAINT_FACTOR = 0.45;
 
   document
     .querySelectorAll<HTMLDivElement>(".shader-backdrop")
@@ -182,12 +182,17 @@ const { id, shade, imageUrl } = Astro.props;
         isReady = true;
       });
 
+      let isRenderLoopActive = true;
       let canvasIntersectionRatio = 1;
       let observer = new IntersectionObserver(
         (entries) => {
           for (const entry of entries) {
             if (entry.target === canvas) {
               canvasIntersectionRatio = entry.intersectionRatio;
+
+              if (canvasIntersectionRatio > 0 && !isRenderLoopActive) {
+                requestAnimationFrame(render);
+              }
             }
           }
         },
@@ -198,12 +203,14 @@ const { id, shade, imageUrl } = Astro.props;
       );
       observer.observe(canvas);
 
-      const render = (time: DOMHighResTimeStamp) => {
-        requestAnimationFrame(render);
+      function render(time: DOMHighResTimeStamp) {
+        if (!gl) {
+          isRenderLoopActive = false;
+          return;
+        }
 
-        // No point in rendering if it's off-screen.
-        // Would be better to stop the loop, but I can't be bothered.
         if (canvasIntersectionRatio === 0) {
+          isRenderLoopActive = false;
           return;
         }
 
@@ -213,8 +220,8 @@ const { id, shade, imageUrl } = Astro.props;
         // Calculate paint factor
         editableUniforms.uBalatroPaintFactor.value =
           ((1 - canvasIntersectionRatio) *
-            (maxPaintFactor - initalPaintFactor) +
-            initalPaintFactor) *
+            (MAX_PAINT_FACTOR - MIN_PAINT_FACTOR) +
+            MIN_PAINT_FACTOR) *
           (editableUniforms.uBalatroPaintFactorMult.value as number);
 
         const uniforms: { [key: string]: any } = {
@@ -232,7 +239,10 @@ const { id, shade, imageUrl } = Astro.props;
         setBuffersAndAttributes(gl, programInfo, bufferInfo);
         setUniforms(programInfo, uniforms);
         drawBufferInfo(gl, bufferInfo);
-      };
+
+        requestAnimationFrame(render);
+      }
+
       requestAnimationFrame(render);
     });
 </script>
