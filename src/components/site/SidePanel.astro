@@ -1,0 +1,67 @@
+---
+export interface Props {
+  label: string;
+  class?: string;
+  handleClass?: string;
+}
+
+const { class: className, handleClass, label } = Astro.props;
+---
+
+<div class="side-panel">
+  <button
+    type="button"
+    class:list={["handle", handleClass]}
+    aria-label={`Toggle ${label}`}
+  >
+    <slot name="handle">«</slot>
+  </button>
+  <div class:list={["content", className]}>
+    <slot />
+  </div>
+</div>
+
+<style>
+  .side-panel {
+    border: var(--big-box-border-width) solid var(--big-box-color);
+    position: fixed;
+    inset-block-start: var(--spacing);
+    inset-inline-start: 100%;
+    transform: translateX(0%);
+    transition: transform 0.3s ease-in-out;
+    backdrop-filter: brightness(40%) saturate(80%) blur(10px);
+    z-index: 2;
+    .settings-content {
+    }
+
+    &.open {
+      transform: translateX(calc(-100% - var(--spacing)));
+    }
+  }
+
+  .handle {
+    position: absolute;
+    inset-inline-start: 0;
+    transform: translateX(calc(-100% - var(--big-box-border-width)))
+      translateY(calc(var(--big-box-border-width) * -1));
+    width: calc(var(--spacing) * 2.5);
+    height: calc(var(--spacing) * 2.5);
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: var(--big-box-border-width) solid var(--big-box-color);
+    border-inline-end: none;
+    background-color: transparent;
+    backdrop-filter: brightness(40%) saturate(80%) blur(10px);
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLDivElement>(".side-panel").forEach((panel) => {
+    const button = panel.querySelector<HTMLButtonElement>("button.handle")!;
+    button.addEventListener("click", () => {
+      panel.classList.toggle("open");
+    });
+  });
+</script>

@@ -194,7 +194,7 @@ const { id, shade, imageUrl } = Astro.props;
       subscribeToOption("motion", (value) => {
         prefersReducedMotion = value === "reduced";
         if (isReady) {
-          interpolator.setTarget(prefersReducedMotion ? 0 : 1, 2000);
+          interpolator.setTarget(prefersReducedMotion ? 0 : 1, 1000);
         }
       });
 

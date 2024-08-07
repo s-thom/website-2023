@@ -34,6 +34,7 @@ export class Interpolate {
   }
 
   setTarget(value: number, durationMs: number): void {
+    this.initialValue = this.getValue();
     this.goalValue = value;
     this.goalDuration = durationMs;
     this.initialTime = performance.now();

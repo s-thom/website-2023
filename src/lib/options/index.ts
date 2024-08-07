@@ -1,12 +1,12 @@
 const PREFERENCES_STORAGE_KEY = "sthom-preferences";
 
-type Options = {
+export type Options = {
   theme: "light" | "dark";
   motion: "reduced" | "no-preference";
   stickers: "on" | "off";
 };
 
-type OptionListener<V> = (value: V) => void;
+type OptionListener<V> = (value: V, valueWithAuto: V | "auto") => void;
 
 type OptionResult<V> = {
   value: V;
@@ -46,7 +46,7 @@ function setStorageState(options: Partial<Options>): void {
 function notifyListeners<V>(result: OptionResult<V>): void {
   for (const listener of result.listeners) {
     try {
-      listener(result.value);
+      listener(result.value, result.isAuto ? "auto" : result.value);
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error("Error during options listener", { err });
@@ -56,7 +56,9 @@ function notifyListeners<V>(result: OptionResult<V>): void {
 
 function getInitialState(): OptionsState {
   const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
-  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion)");
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  );
 
   const storedState: Partial<Options> = getStorageState();
 
@@ -64,20 +66,20 @@ function getInitialState(): OptionsState {
     theme: {
       value: storedState.theme ?? themeMatchToValue(prefersDark.matches),
       autoValue: themeMatchToValue(prefersDark.matches),
-      isAuto: "theme" in storedState,
+      isAuto: !("theme" in storedState),
       listeners: [],
     },
     motion: {
       value:
         storedState.motion ?? motionMatchToValue(prefersReducedMotion.matches),
-      autoValue: motionMatchToValue(prefersDark.matches),
-      isAuto: "motion" in storedState,
+      autoValue: motionMatchToValue(prefersReducedMotion.matches),
+      isAuto: !("motion" in storedState),
       listeners: [],
     },
     stickers: {
       value: storedState.stickers ?? "on",
       autoValue: "on",
-      isAuto: "stickers" in storedState,
+      isAuto: !("stickers" in storedState),
       listeners: [],
     },
   };
@@ -146,10 +148,18 @@ export function getOptionValue<K extends keyof Options>(key: K): Options[K] {
   return STATE[key].value;
 }
 
+export function getOptionValueWithAuto<K extends keyof Options>(
+  key: K,
+): Options[K] | "auto" {
+  const option = STATE[key];
+  return option.isAuto ? "auto" : option.value;
+}
+
 export function setOptionValue<K extends keyof Options>(
   key: K,
   value: Options[K] | "auto",
 ): void {
+  const stored = getStorageState();
   const option = STATE[key];
 
   if (value === "auto") {
@@ -157,6 +167,9 @@ export function setOptionValue<K extends keyof Options>(
     option.value = option.autoValue;
 
     notifyListeners(option as any);
+
+    delete stored[key];
+    setStorageState(stored);
     return;
   }
 
@@ -164,6 +177,8 @@ export function setOptionValue<K extends keyof Options>(
   option.value = value;
 
   notifyListeners(option);
+  stored[key] = value;
+  setStorageState(stored);
 }
 
 export function subscribeToOption<K extends keyof Options>(
