@@ -31,8 +31,8 @@ const { class: className, handleClass, label } = Astro.props;
     transition: transform 0.3s ease-in-out;
     backdrop-filter: brightness(40%) saturate(80%) blur(10px);
     z-index: 2;
-    .settings-content {
-    }
+    color: var(--color-text-header);
+    --big-box-color: var(--color-text-header);
 
     &.open {
       transform: translateX(calc(-100% - var(--spacing)));
@@ -54,6 +54,7 @@ const { class: className, handleClass, label } = Astro.props;
     border-inline-end: none;
     background-color: transparent;
     backdrop-filter: brightness(40%) saturate(80%) blur(10px);
+    color: inherit;
   }
 </style>
 

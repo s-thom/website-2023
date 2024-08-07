@@ -2,6 +2,7 @@
   --color-text: #333333;
   --color-text-secondary: #606060;
   --color-text-header: #ffffff;
+  --color-text-header-negative: #333333;
   --color-background: #f8f8f8;
   --color-background-secondary: #dddddd;
   --color-background-header: #152041;
@@ -77,6 +78,7 @@
     --color-text: #f8f8f8;
     --color-text-secondary: #808080;
     --color-text-header: #ffffff;
+    --color-text-header-negative: #181818;
     --color-background: #181818;
     --color-background-secondary: #3a3a3a;
     --color-background-header: #152041;
@@ -134,6 +136,107 @@
   :root {
     --sticker-size: calc(var(--spacing) * 5);
   }
+}
+
+:root[data-theme="light"] {
+  --color-text: #333333;
+  --color-text-secondary: #606060;
+  --color-text-header: #ffffff;
+  --color-text-header-negative: #333333;
+  --color-background: #f8f8f8;
+  --color-background-secondary: #dddddd;
+  --color-background-header: #152041;
+  --color-background-delete: oklch(95% 0.013 18);
+  --color-border: #aaaaaa;
+  --color-link: oklch(60% 0.185 258);
+  --color-link-hover: oklch(65% 0.14 258);
+  --color-link-active: oklch(60% 0.185 20);
+  --color-link-visited: oklch(60% 0.185 304);
+  --color-link-visited-hover: oklch(65% 0.185 304);
+
+  --color-notion-default: oklch(45% 0 0);
+  --color-notion-default-background: oklch(92% 0 0);
+  --color-notion-gray: oklch(45% 0 0);
+  --color-notion-gray-background: oklch(92% 0 0);
+  --color-notion-brown: oklch(45% 0.08 255);
+  --color-notion-brown-background: oklch(92% 0.03 255);
+  --color-notion-orange: oklch(45% 0.08 40);
+  --color-notion-orange-background: oklch(92% 0.03 40);
+  --color-notion-yellow: oklch(45% 0.08 95);
+  --color-notion-yellow-background: oklch(92% 0.03 95);
+  --color-notion-green: oklch(45% 0.08 155);
+  --color-notion-green-background: oklch(92% 0.03 155);
+  --color-notion-blue: oklch(45% 0.08 255);
+  --color-notion-blue-background: oklch(92% 0.03 255);
+  --color-notion-purple: oklch(45% 0.08 300);
+  --color-notion-purple-background: oklch(92% 0.03 300);
+  --color-notion-pink: oklch(45% 0.08 341);
+  --color-notion-pink-background: oklch(92% 0.03 341);
+  --color-notion-red: oklch(45% 0.08 23);
+  --color-notion-red-background: oklch(92% 0.03 23);
+
+  --color-sticker-common: oklch(80% 0 0);
+  --color-sticker-common-background: oklch(92% 0 0);
+  --color-sticker-uncommon: oklch(60% 0.15 153);
+  --color-sticker-uncommon-background: oklch(92% 0.03 153);
+  --color-sticker-rare: oklch(63.68% 0.175 250);
+  --color-sticker-rare-background: oklch(92% 0.03 250);
+  --color-sticker-legendary: oklch(60% 0.25 340);
+  --color-sticker-legendary-background: oklch(92% 0.03 340);
+  --color-sticker-unique: oklch(82% 0.175 99);
+  --color-sticker-unique-background: oklch(92% 0.03 99);
+  --color-sticker-frame-shiny: #ffffff66;
+}
+
+:root[data-theme="dark"] {
+  --color-text: #f8f8f8;
+  --color-text-secondary: #808080;
+  --color-text-header: #ffffff;
+  --color-text-header-negative: #181818;
+  --color-background: #181818;
+  --color-background-secondary: #3a3a3a;
+  --color-background-header: #152041;
+  --color-background-error: #5f2526;
+  --color-background-delete: oklch(30% 0.03 18);
+  --color-border: #555555;
+  --color-link: oklch(50% 0.185 258);
+  --color-link-hover: oklch(55% 0.14 258);
+  --color-link-active: oklch(50% 0.185 20);
+  --color-link-visited: oklch(50% 0.185 304);
+  --color-link-visited-hover: oklch(55% 0.185 304);
+
+  --color-notion-default: oklch(38% 0 0);
+  --color-notion-default-background: oklch(30% 0 0);
+  --color-notion-gray: oklch(38% 0 0);
+  --color-notion-gray-background: oklch(30% 0 0);
+  --color-notion-brown: oklch(38% 0.08 255);
+  --color-notion-brown-background: oklch(30% 0.03 255);
+  --color-notion-orange: oklch(38% 0.08 40);
+  --color-notion-orange-background: oklch(30% 0.03 40);
+  --color-notion-yellow: oklch(38% 0.08 95);
+  --color-notion-yellow-background: oklch(30% 0.03 95);
+  --color-notion-green: oklch(38% 0.08 155);
+  --color-notion-green-background: oklch(30% 0.03 155);
+  --color-notion-blue: oklch(38% 0.08 255);
+  --color-notion-blue-background: oklch(30% 0.03 255);
+  --color-notion-purple: oklch(38% 0.08 300);
+  --color-notion-purple-background: oklch(30% 0.03 300);
+  --color-notion-pink: oklch(38% 0.08 341);
+  --color-notion-pink-background: oklch(30% 0.03 341);
+  --color-notion-red: oklch(38% 0.08 23);
+  --color-notion-red-background: oklch(30% 0.03 23);
+
+  --color-sticker-common: oklch(60% 0 0);
+  --color-sticker-common-background: oklch(30% 0 0);
+  --color-sticker-uncommon: oklch(50% 0.15 153);
+  --color-sticker-uncommon-background: oklch(30% 0.03 153);
+  --color-sticker-rare: oklch(63.68% 0.175 250);
+  --color-sticker-rare-background: oklch(30% 0.03 250);
+  --color-sticker-legendary: oklch(50% 0.25 340);
+  --color-sticker-legendary-background: oklch(30% 0.03 340);
+  --color-sticker-unique: oklch(70% 0.175 99);
+  --color-sticker-unique-background: oklch(30% 0.03 99);
+  --color-sticker-frame-shiny: #ffffff11;
 }
 
 body {

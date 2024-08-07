@@ -56,7 +56,7 @@ export interface Props {}
       }
       input:checked + label {
         background-color: var(--big-box-color);
-        color: var(--color-background);
+        color: var(--color-text-header-negative);
       }
     }
   </style>
@@ -90,13 +90,13 @@ export interface Props {}
           subscribeToOption(key, (_, value) => selectOption(panel, key, value));
           const value = getOptionValueWithAuto(key);
           selectOption(panel, key, value);
-          document.body.dataset[key] = value;
+          document.documentElement.dataset[key] = value;
         }
 
         panel.querySelectorAll("input").forEach((input) => {
           input.addEventListener("change", () => {
             setOptionValue(input.name as any, input.value as any);
-            document.body.dataset[input.name] = input.value;
+            document.documentElement.dataset[input.name] = input.value;
           });
         });
       });
