@@ -11,6 +11,23 @@
     "Nimbus Sans", Arial, system-ui, sans-serif;
   --font-family-mono: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo,
     Consolas, "DejaVu Sans Mono", monospace;
+  font-family: var(--font-family-body);
+}
+
+[data-font="serif"] {
+  --font-family-body: Charter, "Bitstream Charter", "Sitka Text", Cambria, serif;
+  font-family: var(--font-family-body);
+}
+
+[data-font="sans-serif"] {
+  --font-family-body: Inter, Roboto, "Helvetica Neue", "Arial Nova",
+    "Nimbus Sans", Arial, system-ui, sans-serif;
+  font-family: var(--font-family-body);
+}
+
+[data-font="comic-sans"] {
+  --font-family-body: "Comic Sans MS", "Brush Script MT", cursive;
+  font-family: var(--font-family-body);
 }
 
 body {

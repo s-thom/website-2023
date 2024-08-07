@@ -4,9 +4,10 @@ export interface Props {}
 
 <div class="settings-content flow">
   <h2>Preferences</h2>
-  <div>
+  <div class="flow">
     <h3>Theme</h3>
     <p>Change how the website looks.</p>
+    <h4>Light/Dark mode</h4>
     <div class="input-container">
       <input type="radio" name="theme" id="theme-light" value="light" />
       <label for="theme-light">Light</label>
@@ -15,8 +16,17 @@ export interface Props {}
       <input type="radio" name="theme" id="theme-auto" value="auto" />
       <label for="theme-auto">System default</label>
     </div>
+    <h4>Font</h4>
+    <div class="input-container">
+      <input type="radio" name="font" id="font-serif" value="serif" />
+      <label for="font-serif" data-font="serif">Serif</label>
+      <input type="radio" name="font" id="font-sans-serif" value="sans-serif" />
+      <label for="font-sans-serif" data-font="sans-serif">Sans-serif</label>
+      <input type="radio" name="font" id="font-comic-sans" value="comic-sans" />
+      <label for="font-comic-sans" data-font="comic-sans">Comic Sans</label>
+    </div>
   </div>
-  <div>
+  <div class="flow">
     <h3>Motion</h3>
     <p>Enable or disable animated effects.</p>
     <div class="input-container">
@@ -69,7 +79,7 @@ export interface Props {}
     } from "../../lib/options";
     import type { Options } from "../../lib/options/index.ts";
 
-    const options: (keyof Options)[] = ["theme", "motion"];
+    const options: (keyof Options)[] = ["theme", "motion", "font"];
 
     function selectOption(
       panel: HTMLElement,

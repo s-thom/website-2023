@@ -4,6 +4,7 @@ export type Options = {
   theme: "light" | "dark";
   motion: "reduced" | "no-preference";
   stickers: "on" | "off";
+  font: "serif" | "sans-serif" | "comic-sans";
 };
 
 type OptionListener<V> = (value: V, valueWithAuto: V | "auto") => void;
@@ -80,6 +81,12 @@ function getInitialState(): OptionsState {
       value: storedState.stickers ?? "on",
       autoValue: "on",
       isAuto: !("stickers" in storedState),
+      listeners: [],
+    },
+    font: {
+      value: storedState.font ?? "sans-serif",
+      autoValue: "sans-serif",
+      isAuto: !("font" in storedState),
       listeners: [],
     },
   };

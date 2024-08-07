@@ -138,7 +138,7 @@
   }
 }
 
-:root[data-theme="light"] {
+[data-theme="light"] {
   --color-text: #333333;
   --color-text-secondary: #606060;
   --color-text-header: #ffffff;
@@ -188,7 +188,7 @@
   --color-sticker-frame-shiny: #ffffff66;
 }
 
-:root[data-theme="dark"] {
+[data-theme="dark"] {
   --color-text: #f8f8f8;
   --color-text-secondary: #808080;
   --color-text-header: #ffffff;
