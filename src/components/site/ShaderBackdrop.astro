@@ -49,6 +49,7 @@ const { id, shade, imageUrl } = Astro.props;
     SlidersInitialisedEvent,
   } from "../../lib/shaders/sliders";
   import { range } from "../../util";
+  import { getOptionValue, subscribeToOption } from "../../lib/options";
 
   const MIN_PAINT_FACTOR = 0.15;
   const MAX_PAINT_FACTOR = 0.45;
@@ -169,6 +170,12 @@ const { id, shade, imageUrl } = Astro.props;
         editableUniforms.uBalatroPaintIterations.value = 9;
       }
 
+      let prefersReducedMotion = getOptionValue("motion") === "reduced";
+      const interpolator = new Interpolate(
+        easeInOutCubic,
+        hasBackgroundImage || prefersReducedMotion ? 0 : 1,
+      );
+
       // Set ready when there's no background image
       let isReady = !hasBackgroundImage;
       const textures = createTextures(gl, texturesSrc, (err) => {
@@ -181,7 +188,14 @@ const { id, shade, imageUrl } = Astro.props;
         }
 
         isReady = true;
-        interpolator.setTarget(1, 10000);
+        interpolator.setTarget(prefersReducedMotion ? 0 : 1, 10000);
+      });
+
+      subscribeToOption("motion", (value) => {
+        prefersReducedMotion = value === "reduced";
+        if (isReady) {
+          interpolator.setTarget(prefersReducedMotion ? 0 : 1, 2000);
+        }
       });
 
       let isRenderLoopActive = true;
@@ -204,11 +218,6 @@ const { id, shade, imageUrl } = Astro.props;
         },
       );
       observer.observe(canvas);
-
-      const interpolator = new Interpolate(
-        easeInOutCubic,
-        hasBackgroundImage ? 0 : 1,
-      );
 
       function render(time: DOMHighResTimeStamp) {
         if (!gl) {
