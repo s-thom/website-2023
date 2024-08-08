@@ -22,10 +22,19 @@ const { class: className, handleClass, label } = Astro.props;
 </div>
 
 <style>
+  :root {
+    --side-panel-spacing: 8px;
+  }
+
   .side-panel {
+    width: calc(
+      100vw - ((2 * var(--side-panel-spacing)) + (var(--spacing) * 2.5))
+    );
+    min-width: 250px;
+    max-width: 400px;
     border: var(--big-box-border-width) solid var(--big-box-color);
     position: fixed;
-    inset-block-start: var(--spacing);
+    inset-block-start: var(--side-panel-spacing);
     inset-inline-start: 100%;
     transform: translateX(0%);
     transition: transform 0.3s ease-in-out;
@@ -35,7 +44,7 @@ const { class: className, handleClass, label } = Astro.props;
     --big-box-color: var(--color-text-header);
 
     &.open {
-      transform: translateX(calc(-100% - var(--spacing)));
+      transform: translateX(calc(-100% - var(--side-panel-spacing)));
     }
   }
 

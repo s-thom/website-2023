@@ -2,46 +2,40 @@
 export interface Props {}
 ---
 
-<div class="settings-content flow">
-  <h2>Preferences</h2>
-  <div class="flow">
-    <h3>Theme</h3>
-    <p>Change how the website looks.</p>
-    <h4>Light/Dark mode</h4>
-    <div class="input-container">
-      <input type="radio" name="theme" id="theme-light" value="light" />
-      <label for="theme-light">Light</label>
-      <input type="radio" name="theme" id="theme-dark" value="dark" />
-      <label for="theme-dark">Dark</label>
-      <input type="radio" name="theme" id="theme-auto" value="auto" />
-      <label for="theme-auto">System default</label>
-    </div>
-    <h4>Font</h4>
-    <div class="input-container">
-      <input type="radio" name="font" id="font-serif" value="serif" />
-      <label for="font-serif" data-font="serif">Serif</label>
-      <input type="radio" name="font" id="font-sans-serif" value="sans-serif" />
-      <label for="font-sans-serif" data-font="sans-serif">Sans-serif</label>
-      <input type="radio" name="font" id="font-comic-sans" value="comic-sans" />
-      <label for="font-comic-sans" data-font="comic-sans">Comic Sans</label>
-    </div>
+<div class="settings-content">
+  <h2 class="settings-heading">Preferences</h2>
+  <h3 class="settings-setting-heading">Theme</h3>
+  <div class="input-container">
+    <input type="radio" name="theme" id="theme-light" value="light" />
+    <label for="theme-light">Light</label>
+    <input type="radio" name="theme" id="theme-dark" value="dark" />
+    <label for="theme-dark">Dark</label>
+    <input type="radio" name="theme" id="theme-auto" value="auto" />
+    <label for="theme-auto">System default</label>
   </div>
-  <div class="flow">
-    <h3>Motion</h3>
-    <p>Enable or disable animated effects.</p>
-    <div class="input-container">
-      <input type="radio" name="motion" id="motion-reduced" value="reduced" />
-      <label for="motion-reduced">Reduced motion</label>
-      <input
-        type="radio"
-        name="motion"
-        id="motion-no-preference"
-        value="no-preference"
-      />
-      <label for="motion-no-preference">Force motion</label>
-      <input type="radio" name="motion" id="motion-auto" value="auto" />
-      <label for="motion-auto">System default</label>
-    </div>
+  <h3 class="settings-setting-heading">Font</h3>
+  <div class="input-container">
+    <input type="radio" name="font" id="font-serif" value="serif" />
+    <label for="font-serif" data-font="serif">Serif</label>
+    <input type="radio" name="font" id="font-sans-serif" value="sans-serif" />
+    <label for="font-sans-serif" data-font="sans-serif">Sans-serif</label>
+    <input type="radio" name="font" id="font-comic-sans" value="comic-sans" />
+    <label for="font-comic-sans" data-font="comic-sans">Comic Sans</label>
+  </div>
+  <h3 class="settings-setting-heading">Motion</h3>
+  <p>Enable or disable animated effects.</p>
+  <div class="input-container">
+    <input type="radio" name="motion" id="motion-reduced" value="reduced" />
+    <label for="motion-reduced">Reduced</label>
+    <input
+      type="radio"
+      name="motion"
+      id="motion-no-preference"
+      value="no-preference"
+    />
+    <label for="motion-no-preference">On</label>
+    <input type="radio" name="motion" id="motion-auto" value="auto" />
+    <label for="motion-auto">System default</label>
   </div>
 
   <style>
@@ -49,15 +43,24 @@ export interface Props {}
       margin: var(--spacing);
     }
 
+    .settings-heading {
+    }
+
+    .settings-setting-heading {
+      margin-block-start: var(--spacing);
+    }
+
     .input-container {
       display: flex;
-      gap: var(--spacing);
+      flex-wrap: wrap;
+      gap: var(--spacing-half);
 
       input {
         display: none;
       }
 
       label {
+        flex-basis: 40%;
         flex-grow: 1;
         border: var(--big-box-border-width) solid var(--big-box-color);
         color: var(--big-box-color);
