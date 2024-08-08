@@ -7,31 +7,29 @@ precision highp float;
 uniform float uTime;
 uniform vec2 uResolution;
 
-uniform float uImageScale;
-
 uniform bool uReady;
 
-uniform bool uForceColorMode;
 uniform bool uUseBackdropImage;
 uniform sampler2D uTextureBackdrop;
 
 out vec4 outColor;
 
-uniform highp float uBalatroTimeScale;
-uniform highp float uBalatroPaintFactor;
+uniform float uBalatroPaintFactor;
 uniform int uBalatroPaintIterations;
-uniform highp vec4 uColor1;
-uniform highp vec4 uColor2;
-uniform highp vec4 uColor3;
-uniform highp float uColorMix1;
-uniform highp float uColorMix2;
+
+const float IMAGE_SCALE = 1.0f;
+const float COLOR_MIX_1 = 1.0f;
+const float COLOR_MIX_2 = 5.0f;
+const vec4 COLOR_1 = vec4(0.28f, 0.28f, 0.28f, 1.0f);
+const vec4 COLOR_2 = vec4(0.0f, 0.03f, 0.21f, 1.0f);
+const vec4 COLOR_3 = vec4(0.0f, 0.14f, 0.33f, 1.0f);
 
 vec2 balatroPaintWarp(vec2 areaResolution, vec2 areaXY, float time) {
   highp vec2 uv = areaXY / areaResolution;
 
 	//Now add the paint effect to the swirled UV
   // uv *= 30.f;
-  float speed = uBalatroTimeScale * time;
+  float speed = 0.2f * time;
   highp vec2 uv2 = vec2(uv.x + uv.y);
   highp vec2 uv3 = vec2(uv);
 
@@ -47,13 +45,13 @@ vec2 balatroPaintWarp(vec2 areaResolution, vec2 areaXY, float time) {
 
 vec4 balatroColorLookup(vec2 uv) {
   	//Make the paint amount range from 0 - 2
-  highp float contrastModifier = (0.25f * uColorMix1 + 0.5f * uColorMix2 + 1.2f);
+  highp float contrastModifier = (0.25f * COLOR_MIX_1 + 0.5f * COLOR_MIX_2 + 1.2f);
   highp float paintLookupScale = min(2.f, max(0.f, length(uv) * (0.035f) * contrastModifier));
   highp float mixCol1 = max(0.f, 1.f - contrastModifier * abs(1.f - paintLookupScale));
   highp float mixCol2 = max(0.f, 1.f - contrastModifier * abs(paintLookupScale));
   highp float mixCol3 = 1.f - min(1.f, mixCol1 + mixCol2);
 
-  highp vec4 resultColor = (0.3f / uColorMix1) * uColor1 + (1.f - 0.3f / uColorMix1) * (uColor1 * mixCol1 + uColor2 * mixCol2 + vec4(mixCol3 * uColor3.rgb, mixCol3 * uColor1.a));
+  highp vec4 resultColor = (0.3f / COLOR_MIX_1) * COLOR_1 + (1.f - 0.3f / COLOR_MIX_1) * (COLOR_1 * mixCol1 + COLOR_2 * mixCol2 + vec4(mixCol3 * COLOR_3.rgb, mixCol3 * COLOR_1.a));
   return resultColor;
 }
 
@@ -68,12 +66,12 @@ void main() {
   vec2 texSize = vec2(textureSize(uTextureBackdrop, 0));
   vec2 texSizeRatio = texSize / uResolution;
   float minTexSizeRatio = min(texSizeRatio.x, texSizeRatio.y);
-  vec2 scaledPx = (((gl_FragCoord.xy - halfRes) * minTexSizeRatio) / (texSizeRatio * uImageScale)) + halfRes;
+  vec2 scaledPx = (((gl_FragCoord.xy - halfRes) * minTexSizeRatio) / (texSizeRatio * IMAGE_SCALE)) + halfRes;
 
   vec2 warpedUv = balatroPaintWarp(texSize, scaledPx * texSizeRatio, uTime);
 
   vec4 baseColor;
-  if(uUseBackdropImage && !uForceColorMode) {
+  if(uUseBackdropImage) {
     baseColor = texture(uTextureBackdrop, flipY(warpedUv));
   } else {
     baseColor = balatroColorLookup(warpedUv);

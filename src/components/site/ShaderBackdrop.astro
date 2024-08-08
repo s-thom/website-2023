@@ -70,73 +70,7 @@ const { id, shade, imageUrl } = Astro.props;
         return;
       }
 
-      const editableUniforms: SlidersOptionsMap = {
-        uImageScale: {
-          type: "float",
-          value: 1,
-          min: 0.01,
-          max: 2,
-          step: 0.01,
-        },
-        uBalatroTimeScale: {
-          type: "float",
-          value: 0.2,
-          min: 0,
-          max: 5,
-          step: 0.01,
-        },
-        uBalatroPaintFactor: {
-          type: "float",
-          value: 1,
-          readonly: true,
-          min: 0,
-          max: 1,
-          step: 0.001,
-        },
-        uBalatroPaintFactorMult: {
-          type: "float",
-          value: 1,
-          min: 0,
-          max: 1,
-          step: 0.001,
-        },
-        uBalatroPaintIterations: {
-          type: "int",
-          value: 4,
-          min: 0,
-          max: 10,
-        },
-        uForceColorMode: {
-          type: "boolean",
-          value: false,
-        },
-        uColor1: {
-          type: "rgba",
-          value: [0.28, 0.28, 0.28, 1],
-        },
-        uColor2: {
-          type: "rgba",
-          value: [0, 0.03, 0.21, 1],
-        },
-        uColor3: {
-          type: "rgba",
-          value: [0, 0.14, 0.33, 1],
-        },
-        uColorMix1: {
-          type: "float",
-          value: 1,
-          min: 0,
-          max: 1,
-          step: 0.001,
-        },
-        uColorMix2: {
-          type: "float",
-          value: 5,
-          min: 0,
-          max: 10,
-          step: 0.001,
-        },
-      };
+      const editableUniforms: SlidersOptionsMap = {};
 
       window.addEventListener(
         "slidersinitialised",
@@ -163,11 +97,12 @@ const { id, shade, imageUrl } = Astro.props;
       };
       const backdropImageUrl = backdropArea.dataset.imageUrl ?? undefined;
       const hasBackgroundImage = !!backdropImageUrl;
+      let paintIterations = 4;
       if (hasBackgroundImage) {
         texturesSrc.backdrop = { src: backdropImageUrl };
       } else {
         // Add more iterations to paint effect
-        editableUniforms.uBalatroPaintIterations.value = 9;
+        paintIterations = 9;
       }
 
       let prefersReducedMotion = getOptionValue("motion") === "reduced";
@@ -234,11 +169,10 @@ const { id, shade, imageUrl } = Astro.props;
         gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
         // Calculate paint factor
-        editableUniforms.uBalatroPaintFactor.value =
+        const paintFactor =
           ((1 - canvasIntersectionRatio) *
             (MAX_PAINT_FACTOR - MIN_PAINT_FACTOR) +
             MIN_PAINT_FACTOR) *
-          (editableUniforms.uBalatroPaintFactorMult.value as number) *
           interpolator.getValue();
 
         const uniforms: { [key: string]: any } = {
@@ -247,6 +181,8 @@ const { id, shade, imageUrl } = Astro.props;
           uResolution: [gl.canvas.width, gl.canvas.height],
           uUseBackdropImage: hasBackgroundImage,
           uTextureBackdrop: textures.backdrop,
+          uBalatroPaintIterations: paintIterations,
+          uBalatroPaintFactor: paintFactor,
         };
         for (const [key, value] of Object.entries(editableUniforms)) {
           uniforms[key] = value.value;
