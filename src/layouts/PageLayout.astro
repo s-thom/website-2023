@@ -2,6 +2,7 @@
 import { Settings2Icon } from "lucide-react";
 import PageMeta, { type PageMetaType } from "../components/PageMeta.astro";
 import { LazyLoader } from "../components/react/LazyLoader.tsx";
+import SettingsInitialLoader from "../components/site/SettingsInitialLoader.astro";
 import SettingsPanel from "../components/site/SettingsPanelContent.astro";
 import SidePanel from "../components/site/SidePanel.astro";
 import Web3IsAScam from "../components/site/Web3IsAScam.astro";
@@ -23,6 +24,7 @@ const { id, meta, class: className, noStickers } = Astro.props;
     <PageMeta meta={meta} />
     <slot name="head" />
     <Web3IsAScam />
+    <SettingsInitialLoader />
   </Fragment>
 
   <slot name="skip-links" />
