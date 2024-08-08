@@ -6,35 +6,102 @@ export interface Props {}
   <h2 class="settings-heading">Preferences</h2>
   <h3 class="settings-setting-heading">Theme</h3>
   <div class="input-container">
-    <input type="radio" name="theme" id="theme-light" value="light" />
+    <input
+      type="radio"
+      name="theme"
+      id="theme-light"
+      value="light"
+      data-umami-event="theme"
+      data-umami-event-theme="light"
+    />
     <label for="theme-light">Light</label>
-    <input type="radio" name="theme" id="theme-dark" value="dark" />
+    <input
+      type="radio"
+      name="theme"
+      id="theme-dark"
+      value="dark"
+      data-umami-event="theme"
+      data-umami-event-theme="dark"
+    />
     <label for="theme-dark">Dark</label>
-    <input type="radio" name="theme" id="theme-auto" value="auto" />
+    <input
+      type="radio"
+      name="theme"
+      id="theme-auto"
+      value="auto"
+      data-umami-event="theme"
+      data-umami-event-theme="auto"
+    />
     <label for="theme-auto">System default</label>
   </div>
   <h3 class="settings-setting-heading">Font</h3>
   <div class="input-container">
-    <input type="radio" name="font" id="font-serif" value="serif" />
+    <input
+      type="radio"
+      name="font"
+      id="font-serif"
+      value="serif"
+      data-umami-event="font"
+      data-umami-event-font="serif"
+    />
     <label for="font-serif" data-font="serif">Serif</label>
-    <input type="radio" name="font" id="font-sans-serif" value="sans-serif" />
+    <input
+      type="radio"
+      name="font"
+      id="font-sans-serif"
+      value="sans-serif"
+      data-umami-event="font"
+      data-umami-event-font="sans-serif"
+    />
     <label for="font-sans-serif" data-font="sans-serif">Sans-serif</label>
-    <input type="radio" name="font" id="font-comic-sans" value="comic-sans" />
+    <input
+      type="radio"
+      name="font"
+      id="font-comic-sans"
+      value="comic-sans"
+      data-umami-event="font"
+      data-umami-event-font="comic-sans"
+    />
     <label for="font-comic-sans" data-font="comic-sans">Comic Sans</label>
+    <input
+      type="radio"
+      name="font"
+      id="font-auto"
+      value="auto"
+      data-umami-event="font"
+      data-umami-event-font="auto"
+    />
+    <label for="font-auto" data-font="auto">Page default</label>
   </div>
   <h3 class="settings-setting-heading">Motion</h3>
   <p>Enable or disable animated effects.</p>
   <div class="input-container">
-    <input type="radio" name="motion" id="motion-reduced" value="reduced" />
+    <input
+      type="radio"
+      name="motion"
+      id="motion-reduced"
+      value="reduced"
+      data-umami-event="motion"
+      data-umami-event-motion="reduced"
+    />
     <label for="motion-reduced">Reduced</label>
     <input
       type="radio"
       name="motion"
       id="motion-no-preference"
       value="no-preference"
+      data-umami-event="motion"
+      data-umami-event-motion="no-preference"
     />
     <label for="motion-no-preference">On</label>
-    <input type="radio" name="motion" id="motion-auto" value="auto" />
+    <input
+      type="radio"
+      name="motion"
+      id="motion-auto"
+      value="auto"
+      data-umami-event="motion"
+      data-umami-event-motion="auto"
+    />
     <label for="motion-auto">System default</label>
   </div>
 

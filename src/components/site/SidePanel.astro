@@ -1,14 +1,16 @@
 ---
 export interface Props {
   label: string;
+  id?: string;
   class?: string;
   handleClass?: string;
+  contentClass?: string;
 }
 
-const { class: className, handleClass, label } = Astro.props;
+const { id, class: className, handleClass, contentClass, label } = Astro.props;
 ---
 
-<div class="side-panel">
+<div class:list={["side-panel", className]} id={id}>
   <button
     type="button"
     class:list={["handle", handleClass]}
@@ -16,7 +18,7 @@ const { class: className, handleClass, label } = Astro.props;
   >
     <slot name="handle">«</slot>
   </button>
-  <div class:list={["content", className]}>
+  <div class:list={["content", contentClass]}>
     <slot />
   </div>
 </div>

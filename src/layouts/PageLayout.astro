@@ -29,11 +29,6 @@ const { id, meta, class: className, noStickers } = Astro.props;
 
   <slot name="skip-links" />
 
-  <SidePanel label="Preferences">
-    <Settings2Icon slot="handle" />
-    <SettingsPanel />
-  </SidePanel>
-
   <slot name="site-header" />
 
   <div class="sidebar-layout big-box-margin">
@@ -56,4 +51,9 @@ const { id, meta, class: className, noStickers } = Astro.props;
       />
     )
   }
+
+  <SidePanel label="Preferences" id="preferences">
+    <Settings2Icon slot="handle" />
+    <SettingsPanel />
+  </SidePanel>
 </MinimalLayout>
