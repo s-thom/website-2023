@@ -85,7 +85,7 @@ if (showTableOfContents) {
     <div id="DEV-notion-page-id" style={{ display: "none" }}>{page.id}</div>
   </DevOnly>
 
-  <article class="flow big-box" id="content">
+  <article class="content flow" id="content">
     <slot />
   </article>
 
@@ -109,3 +109,16 @@ if (showTableOfContents) {
     )
   }
 </PageWithHeaderLayout>
+
+<style>
+  .content {
+    border: var(--big-box-border-width) solid var(--big-box-color);
+    padding: var(--big-box-spacing-small);
+  }
+
+  @media (min-width: 600px) {
+    .content {
+      padding: var(--big-box-spacing-small) var(--big-box-spacing);
+    }
+  }
+</style>

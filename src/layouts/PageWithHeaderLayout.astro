@@ -49,6 +49,12 @@ const { id, meta, breadcrumbs } = Astro.props;
 <style>
   .sidebar-layout {
     flex-grow: 1;
-    padding: var(--big-box-spacing-small) var(--big-box-spacing);
+    padding: var(--big-box-spacing-small);
+  }
+
+  @media (min-width: 600px) {
+    .sidebar-layout {
+      padding: var(--big-box-spacing-small) var(--big-box-spacing);
+    }
   }
 </style>

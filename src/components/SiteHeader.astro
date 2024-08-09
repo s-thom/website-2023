@@ -19,13 +19,7 @@ const { navItems /* breadcrumbs, */, shouldBlur } = Astro.props;
 
 <div class="header-area">
   <div
-    class:list={[
-      "big-box",
-      "big-box-margin",
-      "flow",
-      "header-content",
-      shouldBlur && "header-content-blur",
-    ]}
+    class:list={["flow", "header-content", shouldBlur && "header-content-blur"]}
   >
     <header>
       <a href="/" class="site-name">
@@ -87,6 +81,30 @@ const { navItems /* breadcrumbs, */, shouldBlur } = Astro.props;
 </div>
 
 <style>
+  .header-area {
+    color: var(--color-text-header);
+    --big-box-color: var(--color-text-header);
+    position: relative;
+    display: flex;
+
+    > :global(*) {
+      flex-grow: 1;
+    }
+  }
+
+  .header-content {
+    border: var(--big-box-border-width) solid var(--big-box-color);
+    margin: var(--big-box-spacing-small);
+    padding: var(--big-box-spacing-small);
+  }
+
+  @media (min-width: 600px) {
+    .header-content {
+      margin: var(--big-box-spacing-small) var(--big-box-spacing);
+      padding: var(--big-box-spacing-small) var(--big-box-spacing);
+    }
+  }
+
   .site-name-heading {
     word-break: break-word;
   }

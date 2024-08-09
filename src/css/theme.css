@@ -362,17 +362,6 @@ a {
 
 /* #region Header */
 
-.header-area {
-  color: var(--color-text-header);
-  --big-box-color: var(--color-text-header);
-  position: relative;
-  display: flex;
-
-  > * {
-    flex-grow: 1;
-  }
-}
-
 .backdrop-container {
   z-index: -1;
   position: absolute;
@@ -388,7 +377,7 @@ a {
   gap: var(--spacing);
   justify-content: center;
   align-items: center;
-  flex-direction: column;
+  flex-direction: row;
 }
 
 .nav-list {
@@ -397,6 +386,7 @@ a {
 }
 
 .site-name {
+  flex-direction: column;
   text-align: center;
 }
 

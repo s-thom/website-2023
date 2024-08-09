@@ -200,4 +200,18 @@ if (info.type === "override") {
       content: "·";
     } */
   }
+
+  .block-callout {
+    display: grid;
+    gap: var(--spacing-half);
+    padding: var(--spacing);
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--border-radius);
+  }
+
+  @media (min-width: 600px) {
+    .code-block {
+      margin-inline: 0;
+    }
+  }
 </style>
