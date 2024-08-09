@@ -119,10 +119,39 @@ if (info.type === "override") {
   .code-block {
     display: block;
     flex-grow: 1;
-    padding: var(--spacing);
+    margin-inline: calc(var(--spacing) * -1);
     border-radius: var(--border-radius);
     overflow-x: auto;
     color-scheme: dark;
+
+    background:
+      linear-gradient(90deg, #252526 30%, transparent) left center,
+      linear-gradient(90deg, transparent, #252526 70%) right center,
+      radial-gradient(
+          farthest-side at 0 50%,
+          rgba(0, 0, 0, 0.25),
+          rgba(0, 0, 0, 0)
+        )
+        left center,
+      radial-gradient(
+          farthest-side at 100% 50%,
+          rgba(0, 0, 0, 0.25),
+          rgba(0, 0, 0, 0)
+        )
+        right center;
+    background-repeat: no-repeat;
+    background-size:
+      48px 100%,
+      48px 100%,
+      var(--spacing) 150%,
+      var(--spacing) 150%;
+    background-attachment: local, local, scroll, scroll;
+
+    > :global(code) {
+      display: block;
+      width: fit-content;
+      padding: var(--spacing);
+    }
 
     &:global(.has-diff) :global(.line.remove) {
       margin: 0 calc(var(--spacing) * -1);
