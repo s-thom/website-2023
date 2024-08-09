@@ -3,20 +3,31 @@ import PageLayout, { type Props as PageLayoutProps } from "./PageLayout.astro";
 
 export interface Props extends PageLayoutProps {}
 
-const { id, meta, class: className, noStickers } = Astro.props;
+const { id, meta, noStickers } = Astro.props;
 ---
 
-<PageLayout id={id} meta={meta} class={className} noStickers={noStickers}>
-  <div class="big-box big-box-margin standalone-page">
+<PageLayout id={id} meta={meta} noStickers={noStickers}>
+  <div class="standalone-page">
     <slot />
   </div>
 </PageLayout>
 
 <style>
   .standalone-page {
+    position: relative;
     flex-grow: 1;
     margin: var(--big-box-spacing);
     display: flex;
     flex-direction: column;
+    border: var(--big-box-border-width) solid var(--big-box-color);
+    margin: var(--big-box-spacing-small);
+    padding: var(--big-box-spacing-small);
+  }
+
+  @media (min-width: 600px) {
+    .standalone-page {
+      margin: var(--big-box-spacing-small) var(--big-box-spacing);
+      padding: var(--big-box-spacing-small) var(--big-box-spacing);
+    }
   }
 </style>

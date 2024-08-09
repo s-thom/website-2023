@@ -12,11 +12,10 @@ import MinimalLayout from "./MinimalLayout.astro";
 export interface Props {
   id: string;
   meta: PageMetaType;
-  class?: string;
   noStickers?: boolean;
 }
 
-const { id, meta, class: className, noStickers } = Astro.props;
+const { id, meta, noStickers } = Astro.props;
 ---
 
 <MinimalLayout>
@@ -31,13 +30,7 @@ const { id, meta, class: className, noStickers } = Astro.props;
 
   <slot name="site-header" />
 
-  <div class="sidebar-layout big-box-margin">
-    <main class={className}>
-      <slot />
-    </main>
-
-    <slot name="site-sidebar" />
-  </div>
+  <slot />
 
   <slot name="page-footer" />
   <slot name="site-footer" />

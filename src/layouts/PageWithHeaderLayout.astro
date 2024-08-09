@@ -34,8 +34,21 @@ const { id, meta, breadcrumbs } = Astro.props;
     <slot name="page-backdrop" slot="page-backdrop" />
   </SiteHeader>
 
-  <slot />
+  <div class="sidebar-layout">
+    <main>
+      <slot />
+    </main>
+
+    <slot name="site-sidebar" />
+  </div>
 
   <slot name="page-footer" slot="page-footer" />
   <SiteFooter slot="site-footer" />
 </PageLayout>
+
+<style>
+  .sidebar-layout {
+    flex-grow: 1;
+    padding: var(--big-box-spacing-small) var(--big-box-spacing);
+  }
+</style>
