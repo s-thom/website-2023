@@ -15,6 +15,10 @@
 
   if (
     "etherium" in window ||
+    "web3" in window ||
+    "solana" in window ||
+    "wallets" in window ||
+    "wallets" in window.navigator ||
     localStorage.getItem("simulate-hell") === "true"
   ) {
     web3IsAScam();
