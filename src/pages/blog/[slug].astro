@@ -39,7 +39,8 @@ export async function getStaticPaths() {
   return paths;
 }
 
-const id = await getPageIdFromPath(join("/", Astro.url.pathname));
+const pagePath = Astro.url.pathname.replace(/\.html$/, "");
+const id = await getPageIdFromPath(join("/", pagePath));
 
 const [page, blocks] = await Promise.all([getPage(id), getBlockChildren(id)]);
 const overrides = await getComponentOverrides(id);
