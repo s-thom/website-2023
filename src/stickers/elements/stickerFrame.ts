@@ -1,5 +1,6 @@
+import clsx from "clsx/lite";
+import { h } from "../../lib/h";
 import type { StickerRarity } from "../types";
-import { el } from "./el";
 import "./stickerFrame.css";
 
 export interface StickerFrameProps {
@@ -28,35 +29,51 @@ export function createStickerFrame(
 
   const shouldHaveBorder = hideFrameOnCommon ? rarity !== "common" : true;
 
-  const container = el(
+  const container = h(
     "div",
     {
-      classes: [
+      className: clsx(
         "sticker-frame",
         className,
         shouldHaveBorder && `sticker-frame-${rarity}`,
-      ],
+      ),
     },
     [
       showRarityLabel &&
-        el("span", { classes: ["sticker-frame-rarity"], textContent: rarity }),
+        h(
+          "span",
+          { className: "sticker-frame-rarity", textContent: rarity },
+          [],
+        ),
       child,
       Boolean(name || description || unlockedBy) &&
-        el("div", { classes: ["sticker-frame-info", "flow"] }, [
+        h("div", { className: "sticker-frame-info flow" }, [
           name &&
-            el("span", { classes: ["sticker-frame-name"], textContent: name }),
+            h(
+              "span",
+              { className: "sticker-frame-name", textContent: name },
+              [],
+            ),
           description &&
-            el("span", {
-              classes: ["sticker-frame-description"],
-              textContent: description,
-            }),
+            h(
+              "span",
+              {
+                className: "sticker-frame-description",
+                textContent: description,
+              },
+              [],
+            ),
           unlockedBy &&
-            el("span", { classes: ["sticker-frame-unlockedBy"] }, [
+            h("span", { className: "sticker-frame-unlockedBy" }, [
               document.createTextNode("Unlocked by: "),
-              el("span", {
-                classes: ["sticker-frame-description"],
-                textContent: unlockedBy,
-              }),
+              h(
+                "span",
+                {
+                  className: "sticker-frame-description",
+                  textContent: unlockedBy,
+                },
+                [],
+              ),
             ]),
         ]),
     ],

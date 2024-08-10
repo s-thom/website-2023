@@ -10,7 +10,7 @@ const EVENT_NAME_REGEX = /^on(.*)(capture)?$/;
 export function h<Tag extends keyof HTMLElementTagNameMap>(
   tag: Tag,
   attributes: Partial<HTMLAttrMap<Tag>>,
-  children: Node[] | string,
+  children: (Node | null | undefined | false | "" | 0)[] | string,
 ): HTMLElementTagNameMap[Tag] {
   const element = document.createElement(tag);
 
@@ -40,6 +40,9 @@ export function h<Tag extends keyof HTMLElementTagNameMap>(
     element.textContent = children;
   } else {
     for (const child of children) {
+      if (!child) {
+        break;
+      }
       element.appendChild(child);
     }
   }
