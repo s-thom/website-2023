@@ -5,5 +5,6 @@
     "jsxImportSource": "react",
     "plugins": [{ "name": "@astrojs/ts-plugin" }],
     "types": ["vite-plugin-glsl/ext"]
-  }
+  },
+  "exclude": ["./dist"]
 }

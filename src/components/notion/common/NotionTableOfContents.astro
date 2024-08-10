@@ -158,58 +158,63 @@ const hierarchical = headings.reduce<HeadingData[]>((acc, heading) => {
 <script>
   import type { HeadingData } from "./NotionTableOfContents.astro";
 
-  const tocContainer = document.getElementById("table-of-contents")!;
-  const headings: HeadingData[] = JSON.parse(tocContainer.dataset.headings!);
-  const navItems =
-    tocContainer.querySelectorAll<HTMLLIElement>("li[data-hash]");
+  const tocContainer = document.getElementById("table-of-contents");
+  if (tocContainer) {
+    const headings: HeadingData[] = JSON.parse(tocContainer.dataset.headings!);
+    const navItems =
+      tocContainer.querySelectorAll<HTMLLIElement>("li[data-hash]");
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      let highestIntersecting = -1;
-      let lowestNotIntersecting = Infinity;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        let highestIntersecting = -1;
+        let lowestNotIntersecting = Infinity;
 
-      for (const entry of entries) {
-        const headingIndex = headings.findIndex(
-          (heading) => heading.hash === entry.target.id,
-        );
-        if (headingIndex > -1) {
-          if (entry.isIntersecting) {
-            highestIntersecting = Math.max(headingIndex, highestIntersecting);
-          } else {
-            lowestNotIntersecting = Math.min(
-              headingIndex,
-              lowestNotIntersecting,
+        for (const entry of entries) {
+          const headingIndex = headings.findIndex(
+            (heading) => heading.hash === entry.target.id,
+          );
+          if (headingIndex > -1) {
+            if (entry.isIntersecting) {
+              highestIntersecting = Math.max(headingIndex, highestIntersecting);
+            } else {
+              lowestNotIntersecting = Math.min(
+                headingIndex,
+                lowestNotIntersecting,
+              );
+            }
+          }
+        }
+
+        let currentHeadingIndex =
+          highestIntersecting > -1
+            ? highestIntersecting
+            : lowestNotIntersecting - 1;
+
+        currentHeadingIndex = Math.max(0, currentHeadingIndex);
+
+        if (currentHeadingIndex > -1) {
+          const headingData = headings[currentHeadingIndex];
+          for (const li of navItems) {
+            li.classList.toggle(
+              "current",
+              li.dataset.hash === headingData.hash,
             );
           }
         }
+      },
+      {
+        root: null,
+        // NOT TODO: handle pages taller than 1,000,000px
+        rootMargin: "1000000px 0% -50% 0%",
+        threshold: 0,
+      },
+    );
+
+    headings.forEach((heading) => {
+      const element = document.getElementById(heading.hash);
+      if (element) {
+        observer.observe(element);
       }
-
-      let currentHeadingIndex =
-        highestIntersecting > -1
-          ? highestIntersecting
-          : lowestNotIntersecting - 1;
-
-      currentHeadingIndex = Math.max(0, currentHeadingIndex);
-
-      if (currentHeadingIndex > -1) {
-        const headingData = headings[currentHeadingIndex];
-        for (const li of navItems) {
-          li.classList.toggle("current", li.dataset.hash === headingData.hash);
-        }
-      }
-    },
-    {
-      root: null,
-      // NOT TODO: handle pages taller than 1,000,000px
-      rootMargin: "1000000px 0% -50% 0%",
-      threshold: 0,
-    },
-  );
-
-  headings.forEach((heading) => {
-    const element = document.getElementById(heading.hash);
-    if (element) {
-      observer.observe(element);
-    }
-  });
+    });
+  }
 </script>

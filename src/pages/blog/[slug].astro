@@ -1,16 +1,15 @@
 ---
 import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import { join } from "node:path/posix";
 import NotionRenderer from "../../components/notion/blocks/NotionRenderer.astro";
 import BlogPageFooter from "../../components/notion/blog/BlogPageFooter.astro";
 import NotionPageLayout from "../../layouts/NotionPageLayout.astro";
 import { getFilteredBlogItems } from "../../lib/notion/blog";
-import { generateOgImage } from "../../lib/og-images";
-import { getOgImageOptionsForNotionPage } from "../../lib/og-images/notion";
 import {
   getBlockChildren,
   getInfoForPage,
   getPage,
-  getPageIdFromSlug,
+  getPageIdFromPath,
 } from "../../lib/notion/caches";
 import { getComponentOverrides } from "../../lib/notion/overrides";
 import { getPageTitleComponents } from "../../lib/notion/titles";
@@ -18,6 +17,8 @@ import {
   getPagePropertyByName,
   richTextToUnformattedString,
 } from "../../lib/notion/util";
+import { generateOgImage } from "../../lib/og-images";
+import { getOgImageOptionsForNotionPage } from "../../lib/og-images/notion";
 
 export async function getStaticPaths() {
   const results = await getFilteredBlogItems({
@@ -38,9 +39,7 @@ export async function getStaticPaths() {
   return paths;
 }
 
-const { slug } = Astro.params;
-
-const id = await getPageIdFromSlug(slug!);
+const id = await getPageIdFromPath(join("/", Astro.url.pathname));
 
 const [page, blocks] = await Promise.all([getPage(id), getBlockChildren(id)]);
 const overrides = await getComponentOverrides(id);
