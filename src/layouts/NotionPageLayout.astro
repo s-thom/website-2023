@@ -12,8 +12,6 @@ import SkipLinks, {
 import NotionPageHeader from "../components/notion/NotionPageHeader.astro";
 import NotionBackdrop from "../components/notion/common/NotionBackdrop.astro";
 import NotionTableOfContents from "../components/notion/common/NotionTableOfContents.astro";
-import { LazyLoader } from "../components/react/LazyLoader.tsx";
-import type { StickerTypes } from "../components/react/StickerBook/types";
 import { getPagePropertyByName } from "../lib/notion/util";
 import type { StickerTypes } from "../stickers/types";
 import PageWithHeaderLayout from "./PageWithHeaderLayout.astro";
@@ -106,16 +104,6 @@ if (showTableOfContents) {
   }
 
   <slot name="page-footer" slot="page-footer" />
-
-  {
-    shouldGiveStickers && (
-      <LazyLoader
-        type="sticker-page-view-unlock"
-        props={{ pageId: page.id, specialStickerType: specialSticker }}
-        client:idle
-      />
-    )
-  }
 </PageWithHeaderLayout>
 
 <style>
