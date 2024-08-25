@@ -1,0 +1,83 @@
+:root {
+  --side-panel-spacing: 8px;
+}
+
+.side-panel {
+  display: none;
+  width: calc(
+    100vw - ((2 * var(--side-panel-spacing)) + (var(--spacing) * 2.5))
+  );
+  min-width: 250px;
+  max-width: 400px;
+  border: var(--big-box-border-width) solid var(--big-box-color);
+  position: fixed;
+  inset-block-start: var(--side-panel-spacing);
+  inset-inline-start: 100%;
+  transform: translateX(0%);
+  transition: transform 0.3s ease-in-out;
+  backdrop-filter: brightness(40%) saturate(80%) blur(10px);
+  z-index: 2;
+  color: var(--color-text-header);
+  --big-box-color: var(--color-text-header);
+
+  &.open {
+    transform: translateX(calc(-100% - var(--side-panel-spacing)));
+  }
+}
+
+[data-has-js] .side-panel {
+  display: block;
+}
+
+.side-panel-handle {
+  position: absolute;
+  --handle-index: 0;
+  inset-inline-start: 0;
+  inset-block-start: calc(
+    ((var(--spacing) * 2.5) + var(--side-panel-spacing)) * var(--handle-index)
+  );
+  transform: translateX(calc(-100% - var(--big-box-border-width)))
+    translateY(calc(var(--big-box-border-width) * -1));
+  width: calc(var(--spacing) * 2.5);
+  height: calc(var(--spacing) * 2.5);
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: var(--big-box-border-width) solid var(--big-box-color);
+  border-inline-end: none;
+  background-color: transparent;
+  backdrop-filter: brightness(40%) saturate(80%) blur(10px);
+  color: inherit;
+}
+
+.settings-content {
+  margin: var(--spacing);
+}
+
+.settings-setting-heading {
+  margin-block-start: var(--spacing);
+}
+
+.input-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-half);
+
+  input {
+    display: none;
+  }
+
+  label {
+    flex-basis: 40%;
+    flex-grow: 1;
+    border: var(--big-box-border-width) solid var(--big-box-color);
+    color: var(--big-box-color);
+    text-align: center;
+    padding: var(--spacing-half);
+  }
+  input:checked + label {
+    background-color: var(--big-box-color);
+    color: var(--color-text-header-negative);
+  }
+}

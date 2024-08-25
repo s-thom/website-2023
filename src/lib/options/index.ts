@@ -1,10 +1,38 @@
+/* eslint-disable no-param-reassign */
 const PREFERENCES_STORAGE_KEY = "sthom-preferences";
+
+function memo<K, V>(fn: (key: K) => V): (key: K) => V {
+  // Need to initialise to some unique value to ensure first run populates cache
+  let lastKey: K | object = {};
+  let value: V;
+
+  return function memoInner(key) {
+    if (lastKey !== key) {
+      value = fn(key);
+      lastKey = key;
+    }
+
+    // We know that value has a value here.
+    return value!;
+  };
+}
 
 export type Options = {
   theme: "light" | "dark";
   motion: "reduced" | "no-preference";
   stickers: "on" | "off";
   font: "serif" | "sans-serif" | "comic-sans";
+};
+
+export type OptionsWithAuto = {
+  [Key in keyof Options]: Options[Key] | "auto";
+};
+
+const DEFAULT_OPTIONS: Options = {
+  theme: "light",
+  font: "sans-serif",
+  motion: "no-preference",
+  stickers: "on",
 };
 
 type OptionListener<V> = (value: V, valueWithAuto: V | "auto") => void;
@@ -17,13 +45,6 @@ type OptionResult<V> = {
 };
 
 type OptionsState = { [Key in keyof Options]: OptionResult<Options[Key]> };
-
-function themeMatchToValue(matches: boolean): Options["theme"] {
-  return matches ? "dark" : "light";
-}
-function motionMatchToValue(matches: boolean): Options["motion"] {
-  return matches ? "reduced" : "no-preference";
-}
 
 function getStorageState(): Partial<Options> {
   const storedValue = window.localStorage.getItem(PREFERENCES_STORAGE_KEY);
@@ -55,144 +76,168 @@ function notifyListeners<V>(result: OptionResult<V>): void {
   }
 }
 
-function getInitialState(): OptionsState {
-  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
-  const prefersReducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)",
-  );
+// eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle
+let __state_singleton: OptionsState;
+function getState(): OptionsState {
+  if (!__state_singleton) {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    __state_singleton = getInitialState();
+  }
 
-  const storedState: Partial<Options> = getStorageState();
-
-  const options: OptionsState = {
-    theme: {
-      value: storedState.theme ?? themeMatchToValue(prefersDark.matches),
-      autoValue: themeMatchToValue(prefersDark.matches),
-      isAuto: !("theme" in storedState),
-      listeners: [],
-    },
-    motion: {
-      value:
-        storedState.motion ?? motionMatchToValue(prefersReducedMotion.matches),
-      autoValue: motionMatchToValue(prefersReducedMotion.matches),
-      isAuto: !("motion" in storedState),
-      listeners: [],
-    },
-    stickers: {
-      value: storedState.stickers ?? "on",
-      autoValue: "on",
-      isAuto: !("stickers" in storedState),
-      listeners: [],
-    },
-    font: {
-      value: storedState.font ?? "sans-serif",
-      autoValue: "sans-serif",
-      isAuto: !("font" in storedState),
-      listeners: [],
-    },
-  };
-
-  prefersDark.addEventListener("change", (event) => {
-    const value = themeMatchToValue(event.matches);
-    options.theme.autoValue = value;
-
-    if (options.theme.isAuto) {
-      options.theme.value = value;
-
-      notifyListeners(options.theme);
-    } else {
-      const stored = getStorageState();
-      stored.theme = value;
-      setStorageState(stored);
-    }
-  });
-
-  prefersReducedMotion.addEventListener("change", (event) => {
-    const value = motionMatchToValue(event.matches);
-    options.motion.autoValue = value;
-
-    if (options.motion.isAuto) {
-      options.motion.value = value;
-
-      notifyListeners(options.motion);
-    } else {
-      const stored = getStorageState();
-      stored.motion = value;
-      setStorageState(stored);
-    }
-  });
-
-  window.addEventListener("storage", (event) => {
-    if (
-      event.storageArea === window.localStorage &&
-      event.key === PREFERENCES_STORAGE_KEY &&
-      event.newValue != null
-    ) {
-      const parsed = JSON.parse(event.newValue) as Partial<Options>;
-
-      for (const k of Object.keys(options)) {
-        const key = k as keyof typeof options;
-        const option = options[key];
-
-        if (key in parsed && parsed[key] != null) {
-          option.value = parsed[key];
-          option.isAuto = false;
-          notifyListeners(option as any);
-        } else if (!option.isAuto) {
-          option.isAuto = true;
-          option.value = option.autoValue;
-          notifyListeners(option as any);
-        }
-      }
-    }
-  });
-
-  return options;
+  return __state_singleton;
 }
 
-const STATE: OptionsState = getInitialState();
-
-export function getOptionValue<K extends keyof Options>(key: K): Options[K] {
-  return STATE[key].value;
-}
-
-export function getOptionValueWithAuto<K extends keyof Options>(
+function mergeState<K extends keyof Options>(
   key: K,
-): Options[K] | "auto" {
-  const option = STATE[key];
-  return option.isAuto ? "auto" : option.value;
+  result: OptionResult<Options[K]>,
+) {
+  __state_singleton = { ...getState(), [key]: result };
+
+  notifyListeners(result);
+
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
+  setStorageState(getOptions());
 }
 
 export function setOptionValue<K extends keyof Options>(
   key: K,
-  value: Options[K] | "auto",
-): void {
-  const stored = getStorageState();
-  const option = STATE[key];
+  value: OptionsWithAuto[K],
+) {
+  const prevState = getState();
+  const prevResult = prevState[key];
 
-  if (value === "auto") {
-    option.isAuto = true;
-    option.value = option.autoValue;
+  const newResult: OptionResult<Options[K]> = {
+    value: value === "auto" ? prevResult.autoValue : (value as Options[K]),
+    autoValue: prevResult.autoValue,
+    isAuto: value === "auto",
+    listeners: prevResult.listeners,
+  };
 
-    notifyListeners(option as any);
+  mergeState(key, newResult);
+}
 
-    delete stored[key];
-    setStorageState(stored);
-    return;
+function updateStateAuto<K extends keyof Options>(
+  key: K,
+  autoValue: Options[K],
+) {
+  const prevState = getState();
+  const prevResult = prevState[key];
+
+  const newResult: OptionResult<Options[K]> = {
+    value: prevResult.isAuto ? autoValue : prevResult.value,
+    autoValue,
+    isAuto: prevResult.isAuto,
+    listeners: prevResult.listeners,
+  };
+
+  mergeState(key, newResult);
+}
+
+function mapMediaQueryMatch(
+  key: keyof Options,
+  b: boolean,
+): Options[typeof key] {
+  switch (key) {
+    case "theme":
+      return b ? "dark" : "light";
+    case "motion":
+      return b ? "reduced" : "no-preference";
+    case "stickers":
+    case "font":
+    default:
+      throw new Error(`No mapping for media query related to ${key}`);
+  }
+}
+
+function subscribeToMedia(
+  query: string,
+  key: keyof OptionsState,
+  initialState: OptionsState,
+) {
+  const match = window.matchMedia(query);
+  const initialValue = mapMediaQueryMatch(key, match.matches);
+  // This is the only time where mutation is allowed.
+  initialState[key].autoValue = initialValue;
+  if (initialState[key].isAuto) {
+    initialState[key].value = initialValue;
+  }
+  // End mutation
+
+  match.addEventListener("change", (event) => {
+    const value = mapMediaQueryMatch(key, event.matches);
+    updateStateAuto(key, value);
+  });
+}
+
+function getInitialState(): OptionsState {
+  const isBrowser = "window" in globalThis;
+
+  const storedState: Partial<Options> = isBrowser ? getStorageState() : {};
+
+  const state = Object.fromEntries(
+    Object.entries(DEFAULT_OPTIONS).map(([k, defaultValue]) => {
+      const key = k as keyof Options;
+      return [
+        key,
+        {
+          value: storedState[key] ?? defaultValue,
+          autoValue: defaultValue,
+          isAuto: !(key in storedState),
+          listeners: [],
+        },
+      ];
+    }),
+  ) as unknown as OptionsState;
+
+  if (!isBrowser) {
+    return state;
   }
 
-  option.isAuto = false;
-  option.value = value;
+  subscribeToMedia("(prefers-color-scheme: dark)", "theme", state);
+  subscribeToMedia("(prefers-reduced-motion: reduce)", "motion", state);
 
-  notifyListeners(option);
-  stored[key] = value;
-  setStorageState(stored);
+  return state;
+}
+
+const memoGetOptions = memo<OptionsState, Options>(
+  (state) =>
+    Object.fromEntries(
+      Object.entries(state).map(([key, option]) => [key, option.value]),
+    ) as Options,
+);
+const memoGetOptionsAuto = memo<OptionsState, OptionsWithAuto>(
+  (state) =>
+    Object.fromEntries(
+      Object.entries(state).map(([key, option]) => [
+        key,
+        option.isAuto ? "auto" : option.value,
+      ]),
+    ) as OptionsWithAuto,
+);
+
+export function getOptionValue<K extends keyof Options>(key: K): Options[K] {
+  const state = getState();
+  const options = memoGetOptions(state);
+  return options[key];
+}
+
+export function getOptions(): Options {
+  const state = getState();
+  const options = memoGetOptions(state);
+  return options;
+}
+
+export function getOptionsWithAuto(): OptionsWithAuto {
+  const state = getState();
+  const options = memoGetOptionsAuto(state);
+  return options;
 }
 
 export function subscribeToOption<K extends keyof Options>(
   key: K,
   fn: OptionListener<Options[K]>,
 ): () => void {
-  const { listeners } = STATE[key];
+  const { listeners } = getState()[key];
 
   listeners.push(fn);
 
@@ -200,6 +245,22 @@ export function subscribeToOption<K extends keyof Options>(
     const index = listeners.indexOf(fn);
     if (index > -1) {
       listeners.splice(index, 1);
+    }
+  };
+}
+
+export function subscribeToOptions(fn: () => void): () => void {
+  const subscriptionCallback = () => {
+    fn();
+  };
+
+  const unsubscriptionCallbacks = Object.keys(getState()).map((key) =>
+    subscribeToOption(key as keyof Options, subscriptionCallback),
+  );
+
+  return () => {
+    for (const cb of unsubscriptionCallbacks) {
+      cb();
     }
   };
 }

@@ -1,10 +1,8 @@
 ---
-import { Settings2Icon } from "lucide-react";
 import PageMeta, { type PageMetaType } from "../components/PageMeta.astro";
 import { LazyLoader } from "../components/react/LazyLoader.tsx";
+import { Panel } from "../components/react/Panel/index.tsx";
 import SettingsInitialLoader from "../components/site/SettingsInitialLoader.astro";
-import SettingsPanel from "../components/site/SettingsPanelContent.astro";
-import SidePanel from "../components/site/SidePanel.astro";
 import Web3IsAScam from "../components/site/Web3IsAScam.astro";
 import "../css/index.css";
 import MinimalLayout from "./MinimalLayout.astro";
@@ -45,8 +43,5 @@ const { id, meta, noStickers } = Astro.props;
     )
   }
 
-  <SidePanel label="Preferences" id="preferences">
-    <Settings2Icon slot="handle" />
-    <SettingsPanel />
-  </SidePanel>
+  <Panel client:idle />
 </MinimalLayout>
