@@ -31,25 +31,16 @@ const { id, shade, imageUrl } = Astro.props;
 </style>
 
 <script>
-  import {
-    createProgramInfo,
-    resizeCanvasToDisplaySize,
-    setBuffersAndAttributes,
-    setUniforms,
-    drawBufferInfo,
-    createBufferInfoFromArrays,
-    createTextures,
-    type TextureOptions,
-  } from "twgl.js";
-  import vert from "../../lib/shaders/backdrop.vert";
-  import frag from "../../lib/shaders/backdrop.frag";
+  import { getOptionValue, subscribeToOption } from "../../lib/options";
+  import fragment from "../../lib/shaders/backdrop.frag";
+  import vertex from "../../lib/shaders/backdrop.vert";
   import { Interpolate, easeInOutCubic } from "../../lib/shaders/interpolate";
+  import { setupShader } from "../../lib/shaders/setup";
   import type {
-    SlidersOptionsMap,
     SlidersInitialisedEvent,
+    SlidersOptionsMap,
   } from "../../lib/shaders/sliders";
   import { range } from "../../util";
-  import { getOptionValue, subscribeToOption } from "../../lib/options";
 
   const MIN_PAINT_FACTOR = 0.15;
   const MAX_PAINT_FACTOR = 0.45;
@@ -60,18 +51,12 @@ const { id, shade, imageUrl } = Astro.props;
       const canvas = backdropArea.querySelector<HTMLCanvasElement>(
         "canvas.shader-backdrop-canvas",
       );
+
       if (!canvas) {
         return;
       }
 
-      const gl = canvas.getContext("webgl2", { premultipliedAlpha: false });
-      if (!gl) {
-        canvas.classList.add("fully-hidden");
-        return;
-      }
-
       const editableUniforms: SlidersOptionsMap = {};
-
       window.addEventListener(
         "slidersinitialised",
         (event: InstanceType<typeof SlidersInitialisedEvent>) => {
@@ -79,123 +64,61 @@ const { id, shade, imageUrl } = Astro.props;
         },
       );
 
-      const programInfo = createProgramInfo(gl, [vert, frag]);
+      const uniforms: Record<string, unknown> = {};
 
-      const arrays = {
-        // Cover the entire canvas with a single quad
-        aPosition: [-1, -1, 0, 1, -1, 0, -1, 1, 0, -1, 1, 0, 1, -1, 0, 1, 1, 0],
-      };
-      const bufferInfo = createBufferInfoFromArrays(gl, arrays);
+      const backgroundUrl = backdropArea.dataset.imageUrl;
+      const hasBackground = backgroundUrl !== undefined;
 
-      const texturesSrc: { [key: string]: TextureOptions } = {
-        // Default to 1x1 white square
-        backdrop: {
-          mag: gl.NEAREST,
-          min: gl.LINEAR,
-          src: [255, 255, 255, 0],
-        },
-      };
-      const backdropImageUrl = backdropArea.dataset.imageUrl ?? undefined;
-      const hasBackgroundImage = !!backdropImageUrl;
-      let paintIterations = 4;
-      if (hasBackgroundImage) {
-        texturesSrc.backdrop = { src: backdropImageUrl };
-      } else {
-        // Add more iterations to paint effect
-        paintIterations = 9;
-      }
+      uniforms.uUseBackdropImage = hasBackground;
+      uniforms.uBalatroPaintIterations = hasBackground ? 4 : 9;
 
       let prefersReducedMotion = getOptionValue("motion") === "reduced";
       const interpolator = new Interpolate(
         easeInOutCubic,
-        hasBackgroundImage || prefersReducedMotion ? 0 : 1,
+        hasBackground || prefersReducedMotion ? 0 : 1,
       );
-
-      // Set ready when there's no background image
-      let isReady = !hasBackgroundImage;
-      const textures = createTextures(gl, texturesSrc, (err) => {
-        if (err) {
-          console.error(
-            "Error loading textures for backdrop shader, falling back to untextured mode.",
-            err,
-          );
-          return;
-        }
-
-        isReady = true;
-        interpolator.setTarget(prefersReducedMotion ? 0 : 1, 10000);
-      });
-
       subscribeToOption("motion", (value) => {
         prefersReducedMotion = value === "reduced";
-        if (isReady) {
-          interpolator.setTarget(prefersReducedMotion ? 0 : 1, 1000);
-        }
+        interpolator.setTarget(prefersReducedMotion ? 0 : 1, 1000);
       });
 
-      let isRenderLoopActive = true;
+      // Intersection observer for changing multiplier during scroll
       let canvasIntersectionRatio = 1;
-      let observer = new IntersectionObserver(
+      const observer = new IntersectionObserver(
         (entries) => {
           for (const entry of entries) {
             if (entry.target === canvas) {
               canvasIntersectionRatio = entry.intersectionRatio;
-
-              if (canvasIntersectionRatio > 0 && !isRenderLoopActive) {
-                requestAnimationFrame(render);
-              }
             }
           }
         },
         {
-          // Fire callback on many changes. Should be smooth enough.
+          // Fire callback on many changes. 100 should be smooth enough.
           threshold: range(101).map((n) => n / 100),
         },
       );
       observer.observe(canvas);
 
-      function render(time: DOMHighResTimeStamp) {
-        if (!gl) {
-          isRenderLoopActive = false;
-          return;
-        }
+      const { start } = setupShader({
+        canvas,
+        shaders: { vertex, fragment },
+        uniforms,
+        onFrame: (time) => {
+          uniforms.uBalatroPaintFactor =
+            ((1 - canvasIntersectionRatio) *
+              (MAX_PAINT_FACTOR - MIN_PAINT_FACTOR) +
+              MIN_PAINT_FACTOR) *
+            interpolator.getValue();
+        },
+        textures: hasBackground ? [{ src: backgroundUrl }] : undefined,
+        onTexturesReady: () => {
+          interpolator.setTarget(prefersReducedMotion ? 0 : 1, 10_000);
+          start();
+        },
+      });
 
-        if (canvasIntersectionRatio === 0) {
-          isRenderLoopActive = false;
-          return;
-        }
-
-        resizeCanvasToDisplaySize(gl.canvas as HTMLCanvasElement);
-        gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-
-        // Calculate paint factor
-        const paintFactor =
-          ((1 - canvasIntersectionRatio) *
-            (MAX_PAINT_FACTOR - MIN_PAINT_FACTOR) +
-            MIN_PAINT_FACTOR) *
-          interpolator.getValue();
-
-        const uniforms: { [key: string]: any } = {
-          uReady: isReady,
-          uTime: time * 0.001,
-          uResolution: [gl.canvas.width, gl.canvas.height],
-          uUseBackdropImage: hasBackgroundImage,
-          uTextureBackdrop: textures.backdrop,
-          uBalatroPaintIterations: paintIterations,
-          uBalatroPaintFactor: paintFactor,
-        };
-        for (const [key, value] of Object.entries(editableUniforms)) {
-          uniforms[key] = value.value;
-        }
-
-        gl.useProgram(programInfo.program);
-        setBuffersAndAttributes(gl, programInfo, bufferInfo);
-        setUniforms(programInfo, uniforms);
-        drawBufferInfo(gl, bufferInfo);
-
-        requestAnimationFrame(render);
+      if (!hasBackground) {
+        start();
       }
-
-      requestAnimationFrame(render);
     });
 </script>

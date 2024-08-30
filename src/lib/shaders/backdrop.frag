@@ -4,16 +4,13 @@ precision highp float;
 
 #define flipY(v2) vec2(v2.x, 1.0 - v2.y)
 
-uniform float uTime;
-uniform vec2 uResolution;
-
-uniform bool uReady;
-
-uniform bool uUseBackdropImage;
-uniform sampler2D uTextureBackdrop;
+uniform float iTime;
+uniform vec3 iResolution;
+uniform sampler2D iChannel1;
 
 out vec4 outColor;
 
+uniform bool uUseBackdropImage;
 uniform float uBalatroPaintFactor;
 uniform int uBalatroPaintIterations;
 
@@ -56,23 +53,18 @@ vec4 balatroColorLookup(vec2 uv) {
 }
 
 void main() {
-  if(!uReady) {
-    outColor = vec4(0);
-    return;
-  }
+  vec2 halfRes = iResolution.xy / 2.0f;
 
-  vec2 halfRes = uResolution / 2.0f;
-
-  vec2 texSize = vec2(textureSize(uTextureBackdrop, 0));
-  vec2 texSizeRatio = texSize / uResolution;
+  vec2 texSize = vec2(textureSize(iChannel1, 0));
+  vec2 texSizeRatio = texSize / iResolution.xy;
   float minTexSizeRatio = min(texSizeRatio.x, texSizeRatio.y);
   vec2 scaledPx = (((gl_FragCoord.xy - halfRes) * minTexSizeRatio) / (texSizeRatio * IMAGE_SCALE)) + halfRes;
 
-  vec2 warpedUv = balatroPaintWarp(texSize, scaledPx * texSizeRatio, uTime);
+  vec2 warpedUv = balatroPaintWarp(texSize, scaledPx * texSizeRatio, iTime);
 
   vec4 baseColor;
   if(uUseBackdropImage) {
-    baseColor = texture(uTextureBackdrop, flipY(warpedUv));
+    baseColor = texture(iChannel1, flipY(warpedUv));
   } else {
     baseColor = balatroColorLookup(warpedUv);
   }
