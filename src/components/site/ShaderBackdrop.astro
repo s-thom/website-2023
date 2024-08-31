@@ -1,18 +1,28 @@
 ---
+import seedrandom from "seedrandom";
+
 export interface Props {
   id: string;
-  shade?: boolean;
   imageUrl?: string;
 }
 
-const { id, shade, imageUrl } = Astro.props;
+const { id, imageUrl } = Astro.props;
+
+let offset = [0, 0];
+let scale = 1;
+if (imageUrl) {
+  const random = seedrandom(id);
+  offset = [Math.floor(random() * 21) - 10, Math.floor(random() * 21) - 10];
+  scale = random() * 2 + 1;
+}
 ---
 
 <div
   class="shader-backdrop"
   id={`backdrop-${id}`}
   data-image-url={imageUrl}
-  data-shade={shade}
+  data-offset={JSON.stringify(offset)}
+  data-warp-scale={JSON.stringify(scale)}
 >
   <canvas class="shader-backdrop-canvas"></canvas>
 </div>
@@ -71,6 +81,12 @@ const { id, shade, imageUrl } = Astro.props;
 
       uniforms.uUseBackdropImage = hasBackground;
       uniforms.uBalatroPaintIterations = hasBackground ? 4 : 9;
+      uniforms.uOffset = backdropArea.dataset.offset
+        ? JSON.parse(backdropArea.dataset.offset)
+        : [0, 0];
+      uniforms.uWarpScale = backdropArea.dataset.warpScale
+        ? JSON.parse(backdropArea.dataset.warpScale)
+        : 1;
 
       let prefersReducedMotion = getOptionValue("motion") === "reduced";
       const interpolator = new Interpolate(

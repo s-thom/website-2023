@@ -13,6 +13,8 @@ out vec4 outColor;
 uniform bool uUseBackdropImage;
 uniform float uBalatroPaintFactor;
 uniform int uBalatroPaintIterations;
+uniform vec2 uOffset;
+uniform float uWarpScale;
 
 const float IMAGE_SCALE = 1.0f;
 const float COLOR_MIX_1 = 1.0f;
@@ -22,13 +24,13 @@ const vec4 COLOR_2 = vec4(0.0f, 0.03f, 0.21f, 1.0f);
 const vec4 COLOR_3 = vec4(0.0f, 0.14f, 0.33f, 1.0f);
 
 vec2 balatroPaintWarp(vec2 areaResolution, vec2 areaXY, float time) {
-  highp vec2 uv = areaXY / areaResolution;
+  highp vec2 uv = (areaXY / areaResolution) - uOffset;
 
 	//Now add the paint effect to the swirled UV
   // uv *= 30.f;
-  float speed = 0.2f * time;
+  float speed = 0.2f * time * (((uWarpScale - 1.f) / 2.f) + 1.f);
+  highp vec2 uv3 = vec2(uv) * uWarpScale;
   highp vec2 uv2 = vec2(uv.x + uv.y);
-  highp vec2 uv3 = vec2(uv);
 
   for(int i = 0; i < uBalatroPaintIterations; i++) {
     uv2 += sin(max(uv3.x, uv3.y)) + uv3;
@@ -36,7 +38,7 @@ vec2 balatroPaintWarp(vec2 areaResolution, vec2 areaXY, float time) {
     uv3 -= 1.0f * cos(uv3.x + uv3.y) - 1.0f * sin(uv3.x * 0.711f - uv3.y);
   }
 
-  uv = mix(uv, uv3, uBalatroPaintFactor);
+  uv = mix(uv, uv3 / uWarpScale, uBalatroPaintFactor);
   return uv;
 }
 
