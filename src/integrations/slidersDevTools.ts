@@ -1,7 +1,10 @@
 import { type DevToolbarApp } from "astro";
 import { Pane } from "tweakpane";
 import { h } from "../lib/h";
-import type { SlidersInitialisedEventData } from "../lib/shaders/sliders";
+import {
+  addOptionsToPanel,
+  type SlidersInitialisedEventData,
+} from "../lib/shaders/sliders";
 
 const ICON_SVG =
   '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" x2="14" y1="4" y2="4"/><line x1="10" x2="3" y1="4" y2="4"/><line x1="21" x2="12" y1="12" y2="12"/><line x1="8" x2="3" y1="12" y2="12"/><line x1="21" x2="16" y1="20" y2="20"/><line x1="12" x2="3" y1="20" y2="20"/><line x1="14" x2="14" y1="2" y2="6"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="16" x2="16" y1="18" y2="22"/></svg>';
@@ -35,113 +38,7 @@ const notionCacheDevTools: DevToolbarApp = {
             detail: {
               registerSliders(id, options) {
                 const folder = pane.addFolder({ title: id });
-
-                for (const [key, option] of Object.entries(options)) {
-                  switch (option.type) {
-                    case "boolean":
-                    case "string":
-                      folder.addBinding(option, "value", {
-                        label: key,
-                        readonly: option.readonly,
-                      });
-                      break;
-                    case "float":
-                      folder.addBinding(option, "value", {
-                        label: key,
-                        readonly: option.readonly,
-                        min: option.min ?? 0,
-                        max: option.max ?? 100,
-                        step: option.step ?? 1,
-                      });
-                      break;
-                    case "int":
-                      folder.addBinding(option, "value", {
-                        label: key,
-                        readonly: option.readonly,
-                        min: option.min ?? 0,
-                        max: option.max ?? 100,
-                        step: 1,
-                      });
-                      break;
-                    case "rgb":
-                      // eslint-disable-next-line no-case-declarations
-                      const rgbContainer = {
-                        rgb: {
-                          r: option.value[0],
-                          g: option.value[1],
-                          b: option.value[2],
-                        },
-                      };
-                      folder
-                        .addBinding(rgbContainer, "rgb", {
-                          label: key,
-                          readonly: option.readonly,
-                          picker: "inline",
-                          color: { type: "float" },
-                        })
-                        .on("change", (ev) => {
-                          option.value = [ev.value.r, ev.value.g, ev.value.b];
-                        });
-                      break;
-                    case "rgba":
-                      // eslint-disable-next-line no-case-declarations
-                      const rgbaContainer = {
-                        rgba: {
-                          r: option.value[0],
-                          g: option.value[1],
-                          b: option.value[2],
-                          a: option.value[3],
-                        },
-                      };
-                      folder
-                        .addBinding(rgbaContainer, "rgba", {
-                          label: key,
-                          readonly: option.readonly,
-                          picker: "inline",
-                          color: { type: "float" },
-                        })
-                        .on("change", (ev) => {
-                          option.value = [
-                            ev.value.r,
-                            ev.value.g,
-                            ev.value.b,
-                            ev.value.a,
-                          ];
-                        });
-                      break;
-                    case "vec2":
-                      // eslint-disable-next-line no-case-declarations
-                      const vec2Container = {
-                        vec2: {
-                          x: option.value[0],
-                          y: option.value[1],
-                        },
-                      };
-                      folder
-                        .addBinding(vec2Container, "vec2", {
-                          label: key,
-                          readonly: option.readonly ?? (false as any),
-                          picker: "inline",
-                          x: {
-                            min: option.min ?? -100,
-                            max: option.max ?? 100,
-                            step: option.step ?? 0.01,
-                          },
-                          y: {
-                            min: option.min ?? -100,
-                            max: option.max ?? 100,
-                            step: option.step ?? 0.01,
-                            inverted: option.invertY,
-                          },
-                        })
-                        .on("change", (ev) => {
-                          option.value = [ev.value.x, ev.value.y];
-                        });
-                      break;
-                    default:
-                      throw new Error(`Unsupported option type for ${key}`);
-                  }
-                }
+                addOptionsToPanel(folder, options);
               },
             },
           },
