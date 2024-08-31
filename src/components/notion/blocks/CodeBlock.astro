@@ -17,6 +17,10 @@ const loadAboutLinks = () =>
   import("../overrides/code-blocks/AboutLinks.astro").then((b) => b.default);
 const loadStickerBook = () =>
   import("../overrides/code-blocks/StickerBook.astro").then((b) => b.default);
+const loadShaderPlayground = () =>
+  import("../overrides/code-blocks/ShaderPlayground.astro").then(
+    (b) => b.default,
+  );
 const loadStickerBookFeatureToggle = () =>
   import("../overrides/code-blocks/StickerBookFeatureToggle.astro").then(
     (b) => b.default,
@@ -56,6 +60,9 @@ if (info.type === "override") {
       break;
     case "StickerBook":
       Component = await loadStickerBook();
+      break;
+    case "ShaderPlayground":
+      Component = await loadShaderPlayground();
       break;
     case "StickerBookFeatureToggle":
       Component = await loadStickerBookFeatureToggle();

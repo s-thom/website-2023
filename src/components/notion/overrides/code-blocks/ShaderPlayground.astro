@@ -1,0 +1,62 @@
+---
+import type { CodeBlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+
+export interface Props {
+  block: CodeBlockObjectResponse;
+  content: string;
+}
+
+const { block, content } = Astro.props;
+
+function parseSections(input: string): Record<string, string> {
+  const sections = input.split(/---\s*/).filter(Boolean);
+  const result: Record<string, string> = {};
+
+  for (let i = 0; i < sections.length; i += 2) {
+    const key = sections[i].trim();
+    const value = sections[i + 1]?.trim() ?? "";
+    result[key] = value;
+  }
+
+  return result;
+}
+
+const sections = parseSections(content);
+if (!(sections.vertex && sections.fragment)) {
+  throw new Error(
+    `Shader playground does not have the required fields: ${content}`,
+  );
+}
+---
+
+<canvas
+  id={`canvas-${block.id}`}
+  class="shader-playground-canvas"
+  data-block={block.id}
+  data-vertex={sections.vertex}
+  data-fragment={sections.fragment}></canvas>
+
+<style>
+  .shader-playground-canvas {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+  }
+</style>
+
+<script>
+  import { setupShader } from "../../../../lib/shaders/setup";
+
+  document
+    .querySelectorAll<HTMLCanvasElement>(".shader-playground-canvas")
+    .forEach((canvas) => {
+      const { start } = setupShader({
+        canvas,
+        shaders: {
+          vertex: canvas.dataset.vertex!,
+          fragment: canvas.dataset.fragment!,
+        },
+      });
+
+      start();
+    });
+</script>
