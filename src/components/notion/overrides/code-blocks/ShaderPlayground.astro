@@ -1,5 +1,6 @@
 ---
 import type { CodeBlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import type { TextureOptions } from "twgl.js";
 
 export interface Props {
   block: CodeBlockObjectResponse;
@@ -27,6 +28,13 @@ if (!(sections.vertex && sections.fragment)) {
     `Shader playground does not have the required fields: ${content}`,
   );
 }
+
+let textureOptions: TextureOptions[] | undefined;
+if (sections.textures) {
+  textureOptions = sections.textures
+    .split(/\r?\n/)
+    .map((url) => ({ src: url.trim() }));
+}
 ---
 
 <div class="shader-playground" data-block={block.id}>
@@ -35,6 +43,7 @@ if (!(sections.vertex && sections.fragment)) {
     class="shader-playground-canvas"
     data-vertex={sections.vertex}
     data-fragment={sections.fragment}
+    data-textures={JSON.stringify(textureOptions)}
     data-options={sections.options}></canvas>
 </div>
 
@@ -53,6 +62,7 @@ if (!(sections.vertex && sections.fragment)) {
     addOptionsToPanel,
     type SlidersOptionsMap,
   } from "../../../../lib/shaders/sliders";
+  import type { TextureOptions } from "twgl.js";
 
   // #region CSS
   // Copied from final JS bundle, but original source is at https://github.com/cocopon/tweakpane/tree/main/packages/tweakpane/src/main/sass
@@ -80,6 +90,11 @@ if (!(sections.vertex && sections.fragment)) {
         addOptionsToPanel(pane, options);
       }
 
+      let textures: TextureOptions[] | undefined;
+      if (canvas.dataset.textures) {
+        textures = JSON.parse(canvas.dataset.textures);
+      }
+
       const uniforms: Record<string, unknown> = {};
       const { start } = setupShader({
         canvas,
@@ -93,8 +108,14 @@ if (!(sections.vertex && sections.fragment)) {
             uniforms[key] = option.value;
           }
         },
+        textures,
+        onTexturesReady: () => {
+          start();
+        },
       });
 
-      start();
+      if (!textures) {
+        start();
+      }
     });
 </script>
