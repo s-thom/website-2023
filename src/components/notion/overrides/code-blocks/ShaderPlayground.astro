@@ -9,6 +9,26 @@ export interface Props {
 
 const { block, content } = Astro.props;
 
+const DEFAULT_VERTEX = `#version 300 es
+
+in vec4 aPosition;
+
+void main() {
+  gl_Position = aPosition;
+}`;
+const DEFAULT_FRAGMENT = `#version 300 es
+precision highp float;
+
+uniform vec3 iResolution;
+
+out vec4 ret_col;
+
+void main() {
+  vec2 uv = gl_FragCoord.xy / iResolution.xy;
+
+  ret_col = vec4(uv, 0, 1);
+}`;
+
 function parseSections(input: string): Record<string, string> {
   const sections = input.split(/---\s*/).filter(Boolean);
   const result: Record<string, string> = {};
@@ -23,11 +43,6 @@ function parseSections(input: string): Record<string, string> {
 }
 
 const sections = parseSections(content);
-if (!(sections.vertex && sections.fragment)) {
-  throw new Error(
-    `Shader playground does not have the required fields: ${content}`,
-  );
-}
 
 let textureOptions: TextureOptions[] | undefined;
 if (sections.textures) {
@@ -41,9 +56,9 @@ if (sections.textures) {
   <canvas
     id={`canvas-${block.id}`}
     class="shader-playground-canvas"
-    data-vertex={sections.vertex}
-    data-fragment={sections.fragment}
-    data-textures={JSON.stringify(textureOptions)}
+    data-vertex={sections.vertex ?? DEFAULT_VERTEX}
+    data-fragment={sections.fragment ?? DEFAULT_FRAGMENT}
+    data-textures={textureOptions && JSON.stringify(textureOptions)}
     data-options={sections.options}></canvas>
 </div>
 
