@@ -43,8 +43,9 @@ const notionCacheDevTools: DevToolbarApp = {
     yesNotion.appendChild(actionsParagraph);
 
     const actionsLink = document.createElement("a");
-    actionsLink.rel = "external";
+    actionsLink.rel = "external noreferrer";
     actionsLink.href = "https://notion.so#Unknown";
+    actionsLink.target = "_blank";
     actionsParagraph.appendChild(actionsLink);
     const actionsLinkButton = document.createElement(
       "astro-dev-toolbar-button",
