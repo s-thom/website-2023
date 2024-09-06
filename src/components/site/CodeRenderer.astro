@@ -1,0 +1,139 @@
+---
+import {
+  transformerNotationDiff,
+  transformerNotationErrorLevel,
+  transformerNotationFocus,
+  transformerNotationHighlight,
+  transformerNotationWordHighlight,
+  transformerRemoveNotationEscape,
+  transformerRenderWhitespace,
+} from "@shikijs/transformers";
+import { Code } from "astro:components";
+import { syntaxTheme } from "../../lib/shiki/theme";
+
+export interface Props {
+  code: string;
+  language: Parameters<typeof Code>[0]["lang"];
+}
+
+const { code, language } = Astro.props;
+---
+
+<Code
+  class="code-block"
+  code={code}
+  lang={language}
+  theme={syntaxTheme}
+  transformers={[
+    transformerNotationDiff(),
+    transformerNotationHighlight(),
+    transformerNotationWordHighlight(),
+    transformerNotationFocus(),
+    transformerNotationErrorLevel(),
+    transformerRenderWhitespace(),
+    transformerRemoveNotationEscape(),
+  ]}
+  tabindex={undefined}
+/>
+
+<style>
+  .code-block {
+    display: block;
+    font-size: 0.9em;
+    flex-grow: 1;
+    margin-inline: calc(var(--spacing) * -1);
+    border-radius: var(--border-radius);
+    overflow-x: auto;
+    color-scheme: dark;
+
+    background:
+      linear-gradient(90deg, #252526 30%, transparent) left center,
+      linear-gradient(90deg, transparent, #252526 70%) right center,
+      radial-gradient(
+          farthest-side at 0 50%,
+          rgba(0, 0, 0, 0.25),
+          rgba(0, 0, 0, 0)
+        )
+        left center,
+      radial-gradient(
+          farthest-side at 100% 50%,
+          rgba(0, 0, 0, 0.25),
+          rgba(0, 0, 0, 0)
+        )
+        right center;
+    background-repeat: no-repeat;
+    background-size:
+      48px 100%,
+      48px 100%,
+      var(--spacing) 150%,
+      var(--spacing) 150%;
+    background-attachment: local, local, scroll, scroll;
+
+    > :global(code) {
+      display: block;
+      width: fit-content;
+      padding: var(--spacing);
+    }
+
+    &:global(.has-diff) :global(.line.remove) {
+      margin: 0 calc(var(--spacing) * -1);
+      background-color: #ff000033;
+    }
+
+    &:global(.has-diff) :global(.line.add) {
+      margin: 0 calc(var(--spacing) * -1);
+      background-color: #9ccc2c33;
+    }
+
+    &:global(.has-highlighted) :global(.line.highlighted) {
+      margin: 0 calc(var(--spacing) * -1);
+      background-color: #80cbc420;
+    }
+
+    &:global(.has-highlighted) :global(.line.highlighted.error) {
+      margin: 0 calc(var(--spacing) * -1);
+      background-color: #e454541b;
+    }
+
+    &:global(.has-highlighted) :global(.line.highlighted.warning) {
+      margin: 0 calc(var(--spacing) * -1);
+      background-color: #ff942f1b;
+    }
+
+    /* :global(.tab),
+    :global(.space) {
+      position: relative;
+      opacity: 0;
+
+      &::before {
+        position: absolute;
+      }
+
+      &::selection {
+        opacity: 0.3;
+      }
+    }
+
+    :global(.tab)::before {
+      content: "⇥";
+    }
+
+    :global(.space)::before {
+      content: "·";
+    } */
+  }
+
+  .block-callout {
+    display: grid;
+    gap: var(--spacing-half);
+    padding: var(--spacing);
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--border-radius);
+  }
+
+  @media (min-width: 600px) {
+    .code-block {
+      margin-inline: 0;
+    }
+  }
+</style>

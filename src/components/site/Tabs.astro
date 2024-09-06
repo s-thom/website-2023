@@ -1,0 +1,210 @@
+---
+export interface Props {
+  id: string;
+}
+
+const { id } = Astro.props;
+---
+
+<div class="tabs-container">
+  <div class="tabs" role="tablist">
+    {
+      Astro.slots.has("tab1") && (
+        <button
+          class="tab"
+          id={`${id}-tab1`}
+          role="tab"
+          tabindex="0"
+          aria-controls={`${id}-panel1`}
+          aria-selected={true}
+        >
+          <slot name="tab1" />
+        </button>
+      )
+    }
+    {
+      Astro.slots.has("tab2") && (
+        <button
+          class="tab"
+          id={`${id}-tab1`}
+          role="tab"
+          tabindex="-1"
+          aria-controls={`${id}-panel2`}
+          aria-selected={false}
+        >
+          <slot name="tab2" />
+        </button>
+      )
+    }
+    {
+      Astro.slots.has("tab3") && (
+        <button
+          class="tab"
+          id={`${id}-tab1`}
+          role="tab"
+          tabindex="-1"
+          aria-controls={`${id}-panel3`}
+          aria-selected={false}
+        >
+          <slot name="tab3" />
+        </button>
+      )
+    }
+  </div>
+  <div class="panels">
+    {
+      Astro.slots.has("panel1") && (
+        <div
+          class="panel"
+          id={`${id}-panel1`}
+          role="tabpanel"
+          tabindex="0"
+          aria-labelledby={`${id}-tab1`}
+          hidden={false}
+        >
+          <slot name="panel1" />
+        </div>
+      )
+    }
+    {
+      Astro.slots.has("panel2") && (
+        <div
+          class="panel"
+          id={`${id}-panel2`}
+          role="tabpanel"
+          tabindex="-1"
+          aria-labelledby={`${id}-tab2`}
+          hidden={true}
+        >
+          <slot name="panel2" />
+        </div>
+      )
+    }
+    {
+      Astro.slots.has("panel3") && (
+        <div
+          class="panel"
+          id={`${id}-panel3`}
+          role="tabpanel"
+          tabindex="-1"
+          aria-labelledby={`${id}-tab3`}
+          hidden={true}
+        >
+          <slot slot="panel3" />
+        </div>
+      )
+    }
+  </div>
+</div>
+
+<style>
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: var(--spacing-half);
+  }
+
+  .tab {
+    padding-inline: var(--spacing-half);
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    transition-duration: 100ms;
+    transition-timing-function: ease-out;
+    transition-property: border-color, background-color;
+
+    &:hover,
+    &:focus-within {
+      border-color: var(--color-text);
+    }
+
+    &[aria-selected="true"] {
+      background-color: var(--color-background-secondary);
+      border-color: var(--color-link);
+    }
+  }
+</style>
+
+<script>
+  // Adapted from https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/tab_role
+  // Thanks to the authors for having a solid example of how to make this work.
+  // This site is better because of you.
+  // https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/tab_role/contributors.txt
+
+  document
+    .querySelectorAll<HTMLDivElement>('.tabs-container .tabs[role="tablist"]')
+    .forEach((tabList) => {
+      const tabs = tabList.querySelectorAll<HTMLButtonElement>(
+        ':scope > [role="tab"]',
+      );
+
+      // Add a click event handler to each tab
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", changeTabs);
+      });
+
+      // Enable arrow navigation between tabs in the tab list
+      let tabFocus = 0;
+
+      tabList.addEventListener("keydown", (e: KeyboardEvent) => {
+        // Move right
+        if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+          tabs[tabFocus].setAttribute("tabindex", "-1");
+          if (e.key === "ArrowRight") {
+            tabFocus++;
+            // If we're at the end, go to the start
+            if (tabFocus >= tabs.length) {
+              tabFocus = 0;
+            }
+            // Move left
+          } else if (e.key === "ArrowLeft") {
+            tabFocus--;
+            // If we're at the start, move to the end
+            if (tabFocus < 0) {
+              tabFocus = tabs.length - 1;
+            }
+          }
+
+          tabs[tabFocus].setAttribute("tabindex", "0");
+          tabs[tabFocus].focus();
+        }
+      });
+
+      function changeTabs(e: MouseEvent) {
+        const targetTab = (e.target as HTMLButtonElement).closest("button.tab");
+        if (!targetTab) {
+          throw new Error(`Tab change was not for a tab`);
+        }
+
+        const tabGroup = targetTab.closest("div.tabs-container");
+        if (!tabGroup) {
+          console.error("Event target for tab change", targetTab);
+          throw new Error("Invalid tab target");
+        }
+        const tabs = tabGroup.querySelectorAll(
+          ':scope > [role="tablist"] > button[role="tab"]',
+        );
+
+        // Remove all current selected tabs
+        tabs.forEach((t) => t.setAttribute("aria-selected", "false"));
+        // Set this tab as selected
+        targetTab.setAttribute("aria-selected", "true");
+
+        // Hide all tab panels
+        tabGroup
+          .querySelectorAll(':scope > .panels > [role="tabpanel"]')
+          .forEach((p) => p.setAttribute("hidden", "true"));
+
+        // Show the selected panel
+        const panel = tabGroup.querySelector(
+          `#${targetTab.getAttribute("aria-controls")}`,
+        );
+        if (!panel) {
+          throw new Error(
+            `Tab has no panel with id ${targetTab.getAttribute("aria-controls")}`,
+          );
+        }
+        panel.removeAttribute("hidden");
+      }
+    });
+</script>

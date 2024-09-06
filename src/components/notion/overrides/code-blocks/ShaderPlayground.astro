@@ -1,6 +1,8 @@
 ---
 import type { CodeBlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import type { TextureOptions } from "twgl.js";
+import Tabs from "../../../site/Tabs.astro";
+import CodeRenderer from "../../../site/CodeRenderer.astro";
 
 export interface Props {
   block: CodeBlockObjectResponse;
@@ -53,19 +55,48 @@ if (sections.textures) {
 ---
 
 <div class="shader-playground" data-block={block.id}>
-  <canvas
-    id={`canvas-${block.id}`}
-    class="shader-playground-canvas"
-    data-vertex={sections.vertex ?? DEFAULT_VERTEX}
-    data-fragment={sections.fragment ?? DEFAULT_FRAGMENT}
-    data-textures={textureOptions && JSON.stringify(textureOptions)}
-    data-options={sections.options}></canvas>
+  <Tabs id={`tabs-${block.id}`}>
+    <span slot="tab1">Shader</span>
+    <div slot="panel1" class="preview-area">
+      <canvas
+        id={`canvas-${block.id}`}
+        class="shader-playground-canvas"
+        data-vertex={sections.vertex ?? DEFAULT_VERTEX}
+        data-fragment={sections.fragment ?? DEFAULT_FRAGMENT}
+        data-textures={textureOptions && JSON.stringify(textureOptions)}
+        data-options={sections.options}></canvas>
+    </div>
+
+    <span slot="tab2">Code</span>
+    <div slot="panel2" class="code-area flow">
+      {
+        sections.vertex && (
+          <Fragment>
+            <h3 class="code-title">Vertex shader</h3>
+            <CodeRenderer code={sections.vertex} language="glsl" />
+          </Fragment>
+        )
+      }
+      {
+        sections.fragment && (
+          <Fragment>
+            <h3 class="code-title">Fragment shader</h3>
+            <CodeRenderer code={sections.fragment} language="glsl" />
+          </Fragment>
+        )
+      }
+    </div>
+  </Tabs>
 </div>
 
 <style>
   .shader-playground-canvas {
     width: 100%;
     aspect-ratio: 16 / 9;
+  }
+
+  .code-title {
+    font-size: var(--size-step-point5);
   }
 </style>
 
@@ -87,17 +118,19 @@ if (sections.textures) {
 
   document
     .querySelectorAll<HTMLDivElement>(".shader-playground")
-    .forEach((container) => {
-      const canvas = container.querySelector<HTMLCanvasElement>("canvas");
+    .forEach((playground) => {
+      const canvas = playground.querySelector<HTMLCanvasElement>("canvas");
       if (!canvas) {
         console.error(
-          `Shader area ${container.dataset.block} does not have canvas`,
+          `Shader area ${playground.dataset.block} does not have canvas`,
         );
         return;
       }
 
       let options: SlidersOptionsMap = {};
       if (canvas.dataset.options) {
+        const container =
+          playground.querySelector<HTMLDivElement>(".preview-area")!;
         options = JSON.parse(
           canvas.dataset.options,
         ) as unknown as SlidersOptionsMap;
