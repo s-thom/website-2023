@@ -79,14 +79,16 @@ if (imageUrl) {
       const backgroundUrl = backdropArea.dataset.imageUrl;
       const hasBackground = backgroundUrl !== undefined;
 
-      uniforms.uUseBackdropImage = hasBackground;
-      uniforms.uBalatroPaintIterations = hasBackground ? 4 : 9;
+      uniforms.uUseColors = !hasBackground;
+      uniforms.uWarpIterations = hasBackground ? 4 : 9;
       uniforms.uOffset = backdropArea.dataset.offset
         ? JSON.parse(backdropArea.dataset.offset)
         : [0, 0];
       uniforms.uWarpScale = backdropArea.dataset.warpScale
         ? JSON.parse(backdropArea.dataset.warpScale)
         : 1;
+      // uniforms.uOffset = [0, 0];
+      // uniforms.uWarpScale = 1;
 
       let prefersReducedMotion = getOptionValue("motion") === "reduced";
       const interpolator = new Interpolate(
@@ -120,7 +122,7 @@ if (imageUrl) {
         shaders: { vertex, fragment },
         uniforms,
         onFrame: (time) => {
-          uniforms.uBalatroPaintFactor =
+          uniforms.uWarpAmount =
             ((1 - canvasIntersectionRatio) *
               (MAX_PAINT_FACTOR - MIN_PAINT_FACTOR) +
               MIN_PAINT_FACTOR) *

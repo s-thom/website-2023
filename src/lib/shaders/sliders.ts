@@ -6,6 +6,11 @@ export interface BaseOption<T> {
   readonly?: boolean;
 }
 
+export interface ButtonOption extends BaseOption<any> {
+  type: "button";
+  label?: string;
+  onClick: () => void;
+}
 export interface BooleanOption extends BaseOption<boolean> {
   type: "boolean";
 }
@@ -45,6 +50,7 @@ export interface ColorRgbAOption
 }
 
 export type AllOptions =
+  | ButtonOption
   | BooleanOption
   | FloatOption
   | IntOption
@@ -68,6 +74,11 @@ export function addOptionsToPanel(
 ) {
   for (const [key, option] of Object.entries(options)) {
     switch (option.type) {
+      case "button":
+        container
+          .addButton({ title: option.label ?? key })
+          .on("click", option.onClick);
+        break;
       case "boolean":
       case "string":
         container.addBinding(option, "value", {
