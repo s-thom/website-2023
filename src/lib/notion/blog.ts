@@ -5,10 +5,6 @@ import type {
 import { BLOG_COLLECTION_ID, PAGES_COLLECTION_ID } from "../constants";
 import { queryDatabase } from "./caches";
 
-const PAGES_SORT: QueryDatabaseParameters["sorts"] = [
-  { property: "Published", direction: "descending" },
-];
-
 interface FilterOptions {
   allowUnpublished?: boolean;
   allowUnlisted?: boolean;
@@ -50,11 +46,15 @@ export function getFilter({
   return undefined;
 }
 
+export function getSort(): QueryDatabaseParameters["sorts"] {
+  return [{ property: "Published", direction: "descending" }];
+}
+
 export async function getFilteredBlogItems(filter: FilterOptions) {
   const pages = await queryDatabase(
     BLOG_COLLECTION_ID,
     getFilter(filter),
-    PAGES_SORT,
+    getSort(),
   );
 
   return pages as unknown as DatabaseObjectResponse[];
@@ -64,7 +64,7 @@ export async function getFilteredPageItems(filter: FilterOptions) {
   const pages = await queryDatabase(
     PAGES_COLLECTION_ID,
     getFilter(filter),
-    PAGES_SORT,
+    getSort(),
   );
 
   return pages as unknown as DatabaseObjectResponse[];
