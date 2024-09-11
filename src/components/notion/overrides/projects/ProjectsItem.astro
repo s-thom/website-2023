@@ -7,7 +7,6 @@ import { getBlockChildren } from "../../../../integrations/notion-loader/util";
 import { getPageTitleComponents } from "../../../../lib/notion/titles";
 import { richTextToUnformattedString } from "../../../../lib/notion/util";
 import NotionRenderer from "../../blocks/NotionRenderer.astro";
-import type { NotionOverrideableProps } from "../../blocks/types";
 import NotionBackdrop from "../../common/NotionBackdrop.astro";
 import RichText from "../../common/RichText.astro";
 
@@ -20,14 +19,12 @@ export interface Props {
   showTitle?: boolean;
   showGitHub?: boolean;
   showChildren?: boolean;
-  overrides: NotionOverrideableProps["overrides"];
 }
 
 const {
   data,
   widths,
   sizes,
-  overrides,
   class: className,
   showImage,
   showTitle,
@@ -92,15 +89,7 @@ const githubFragment =
         </ul>
       )
     }
-    {
-      showChildren && (
-        <NotionRenderer
-          blocks={children}
-          blockMap={blockMap}
-          overrides={overrides}
-        />
-      )
-    }
+    {showChildren && <NotionRenderer blocks={children} blockMap={blockMap} />}
   </div>
 </div>
 

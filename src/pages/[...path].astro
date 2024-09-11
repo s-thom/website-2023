@@ -5,7 +5,6 @@ import { join } from "node:path/posix";
 import NotionRenderer from "../components/notion/blocks/NotionRenderer.astro";
 import { getBlockChildren } from "../integrations/notion-loader/util";
 import NotionPageLayout from "../layouts/NotionPageLayout.astro";
-import { getComponentOverrides } from "../lib/notion/overrides";
 import { getPageTitleComponents } from "../lib/notion/titles";
 import { richTextToUnformattedString } from "../lib/notion/util";
 import { generateOgImage } from "../lib/og-images";
@@ -38,7 +37,6 @@ export async function getStaticPaths() {
 const { page, path, blockMap, properties } = Astro.props;
 
 const blocks = getBlockChildren(page.id, blockMap);
-const overrides = await getComponentOverrides(page.id);
 
 const titleComponents = getPageTitleComponents(page);
 const pageTitle = richTextToUnformattedString(titleComponents);
@@ -71,5 +69,5 @@ const ogImage = await generateOgImage(ogImageOptions);
   page={page as unknown as DatabaseObjectResponse}
   showCoverSource
 >
-  <NotionRenderer blocks={blocks} blockMap={blockMap} overrides={overrides} />
+  <NotionRenderer blocks={blocks} blockMap={blockMap} />
 </NotionPageLayout>

@@ -1,13 +1,13 @@
 ---
 import { getCollection } from "astro:content";
-import type { NotionOverrideableProps } from "../../blocks/types";
+import type { BaseBlockComponentProps } from "../../blocks/types";
 import ProjectsItem from "./ProjectsItem.astro";
 
-export interface Props extends NotionOverrideableProps {
+export interface Props extends BaseBlockComponentProps {
   status: string;
 }
 
-const { block, status, overrides } = Astro.props;
+const { block, status } = Astro.props;
 
 const entries = await getCollection(
   "projects",
@@ -22,7 +22,6 @@ const entries = await getCollection(
         data={entry.data}
         widths={[250, 360, 540]}
         sizes="(min-width: 600px) 540px, 100vw"
-        overrides={overrides}
         showImage
         showTitle
         showGitHub

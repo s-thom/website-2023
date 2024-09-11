@@ -5,7 +5,7 @@ import NotionBlockGroup, {
   BLOCK_GROUP_TYPE,
   type BlockGroup,
 } from "./NotionBlockGroup.astro";
-import type { NotionOverrideableProps } from "./types";
+import type { BaseBlockComponentProps } from "./types";
 
 const loadBulletedListItemGroup = () =>
   import("./BulletedListItemGroup.astro").then((b) => b.default);
@@ -13,11 +13,11 @@ const loadNumberedListItemGroup = () =>
   import("./NumberedListItemGroup.astro").then((b) => b.default);
 const loadTodoGroup = () => import("./TodoGroup.astro").then((b) => b.default);
 
-export interface Props extends Omit<NotionOverrideableProps, "block"> {
+export interface Props extends Omit<BaseBlockComponentProps, "block"> {
   blocks: BlockObjectResponse[];
 }
 
-const { blocks, blockMap, overrides } = Astro.props;
+const { blocks, blockMap } = Astro.props;
 
 // There's a bit of an annoying problem with some elements, like lists, where
 // they need to be inside a wrapping element. This is especially important for
@@ -86,20 +86,8 @@ if (currentGroup) {
 {
   items.map((blockOrGroup) => {
     if (blockOrGroup.type === BLOCK_GROUP_TYPE) {
-      return (
-        <NotionBlockGroup
-          group={blockOrGroup}
-          blockMap={blockMap}
-          overrides={overrides}
-        />
-      );
+      return <NotionBlockGroup group={blockOrGroup} blockMap={blockMap} />;
     }
-    return (
-      <NotionBlock
-        block={blockOrGroup}
-        blockMap={blockMap}
-        overrides={overrides}
-      />
-    );
+    return <NotionBlock block={blockOrGroup} blockMap={blockMap} />;
   })
 }

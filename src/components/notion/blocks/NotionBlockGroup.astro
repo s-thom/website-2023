@@ -1,9 +1,9 @@
 ---
 import type { BlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import NotionBlock from "./NotionBlock.astro";
-import type { NotionOverrideableProps } from "./types";
+import type { BaseBlockComponentProps } from "./types";
 
-export interface Props extends Omit<NotionOverrideableProps, "block"> {
+export interface Props extends Omit<BaseBlockComponentProps, "block"> {
   group: BlockGroup;
 }
 
@@ -21,7 +21,7 @@ export interface BlockGroup {
 // component (e.g. WrapperComponent below) must be in the frontmatter
 // area of the file and not assigned in the template section.
 
-const { group, blockMap, overrides } = Astro.props;
+const { group, blockMap } = Astro.props;
 
 const WrapperComponent = group.wrapper;
 ---
@@ -29,7 +29,7 @@ const WrapperComponent = group.wrapper;
 <WrapperComponent>
   {
     group.items.map((block) => (
-      <NotionBlock block={block} blockMap={blockMap} overrides={overrides} />
+      <NotionBlock block={block} blockMap={blockMap} />
     ))
   }
 </WrapperComponent>

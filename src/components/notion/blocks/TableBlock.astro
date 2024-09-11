@@ -4,14 +4,14 @@ import type {
   TableBlockObjectResponse,
 } from "@notionhq/client/build/src/api-endpoints";
 import NotionRenderer from "./NotionRenderer.astro";
-import type { NotionOverrideableProps } from "./types";
+import type { BaseBlockComponentProps } from "./types";
 import { getBlockChildren } from "../../../integrations/notion-loader/util";
 
-export interface Props extends NotionOverrideableProps {
+export interface Props extends BaseBlockComponentProps {
   block: TableBlockObjectResponse;
 }
 
-const { block, blockMap, overrides } = Astro.props;
+const { block, blockMap } = Astro.props;
 
 // Table has its own special behaviour when it comes to children, so doesn't use `<slot />`s.
 // If a solution is found, this means we can override tables properly.
@@ -28,20 +28,12 @@ if (block.table.has_column_header) {
   {
     headerRow && (
       <thead>
-        <NotionRenderer
-          blocks={[headerRow]}
-          blockMap={blockMap}
-          overrides={overrides}
-        />
+        <NotionRenderer blocks={[headerRow]} blockMap={blockMap} />
       </thead>
     )
   }
   <tbody>
-    <NotionRenderer
-      blocks={bodyRows}
-      blockMap={blockMap}
-      overrides={overrides}
-    />
+    <NotionRenderer blocks={bodyRows} blockMap={blockMap} />
   </tbody>
 </table>
 

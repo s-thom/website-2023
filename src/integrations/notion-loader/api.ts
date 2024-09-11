@@ -50,6 +50,8 @@ async function enqueueBlockChildrenInfo(
       continue;
     }
 
+    self.children.push(child.id);
+
     if (blockMap[child.id]) {
       logger.warn(
         `Child ${child.id} of ${blockType} ${blockId} has already been added`,
@@ -95,7 +97,7 @@ export async function collectPageInfo(
   const queue = new PQueue();
   const blockMap: Record<string, BlockInfo> = {};
   // Kick off the traversal with the page
-  blockMap[pageId] = { block: page as any, children: undefined };
+  blockMap[pageId] = { block: page, children: undefined };
   queue.add(() => enqueueBlockChildrenInfo(queue, pageId, blockMap, 0, logger));
 
   await queue.onIdle();

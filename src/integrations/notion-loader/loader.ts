@@ -2,6 +2,7 @@ import { Client, iteratePaginatedAPI } from "@notionhq/client";
 import type { QueryDatabaseParameters } from "@notionhq/client/build/src/api-endpoints";
 import type { Loader } from "astro/loaders";
 import { z } from "astro/zod";
+import PQueue from "p-queue";
 import { collectPageInfo } from "./api";
 import { notionLoaderSchema, propertySchemas } from "./schema";
 
@@ -27,20 +28,37 @@ export function notionLoader(options: NotionLoaderOptions): Loader {
       // Pages that get found will be removed from this set, leaving only deleted ones by the end.
       const previousPageIds = new Set(store.keys());
 
+      const pagesQueue = new PQueue();
+
+      // Need to keep track of the order we encounter pages. Since the requesting process
+      // is async and done in parallel, things can get out of order.
+      const orderedIds: string[] = [];
+      const dataMap = new Map<string, Parameters<typeof store.set>[0]>();
       for await (const page of pagesIterable) {
-        const rawInfo = await collectPageInfo(page.id, logger);
-        previousPageIds.delete(page.id);
+        orderedIds.push(page.id);
+        pagesQueue.add(async () => {
+          const rawInfo = await collectPageInfo(page.id, logger);
+          previousPageIds.delete(page.id);
 
-        const data = await parseData({
-          id: page.id,
-          data: rawInfo as any,
-        });
+          const data = await parseData({
+            id: page.id,
+            data: rawInfo as any,
+          });
 
-        store.set({
-          id: page.id,
-          digest: generateDigest({ lastEdited: rawInfo.page.last_edited_time }),
-          data,
+          dataMap.set(page.id, {
+            id: page.id,
+            digest: generateDigest({
+              lastEdited: rawInfo.page.last_edited_time,
+            }),
+            data,
+          });
         });
+      }
+
+      await pagesQueue.onIdle();
+
+      for (const id of orderedIds) {
+        store.set(dataMap.get(id)!);
       }
 
       for (const id of previousPageIds) {
