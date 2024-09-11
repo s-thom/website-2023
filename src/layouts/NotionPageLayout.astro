@@ -16,9 +16,11 @@ import { LazyLoader } from "../components/react/LazyLoader.tsx";
 import type { StickerTypes } from "../components/react/StickerBook/types";
 import { getPagePropertyByName } from "../lib/notion/util";
 import PageWithHeaderLayout from "./PageWithHeaderLayout.astro";
+import type { BlockInfo } from "../integrations/notion-loader/api";
 
 export interface Props {
   page: DatabaseObjectResponse | PageObjectResponse;
+  blockMap: Record<string, BlockInfo>;
   meta: PageMetaType;
   breadcrumbs?: LinkInfo[];
   showCoverSource?: boolean;
@@ -29,6 +31,7 @@ export interface Props {
 
 const {
   page,
+  blockMap,
   meta,
   breadcrumbs,
   showCoverSource,
@@ -65,6 +68,7 @@ if (showTableOfContents) {
 
   <NotionPageHeader
     page={page}
+    blockMap={blockMap}
     slot="page-header"
     showCoverSource={showCoverSource}
     showReadingTime={showReadingTime}
@@ -91,7 +95,7 @@ if (showTableOfContents) {
   {
     showTableOfContents && (
       <aside class="flow sidebar-box" slot="site-sidebar">
-        <NotionTableOfContents page={page} />
+        <NotionTableOfContents page={page} blockMap={blockMap} />
       </aside>
     )
   }

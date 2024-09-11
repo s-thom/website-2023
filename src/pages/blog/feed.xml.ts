@@ -1,7 +1,7 @@
 import rss from "@astrojs/rss";
 import type { APIContext } from "astro";
-import { getFilteredBlogItems } from "../../lib/notion/blog";
-import { getInfoForPage, getPage } from "../../lib/notion/caches";
+import { getCollection } from "astro:content";
+import { join } from "node:path/posix";
 import { getPageTitleComponents } from "../../lib/notion/titles";
 import {
   getPagePropertyByName,
@@ -9,10 +9,12 @@ import {
 } from "../../lib/notion/util";
 
 export async function GET(context: APIContext) {
-  const results = await getFilteredBlogItems({
-    allowUnpublished: false,
-    allowUnlisted: false,
-  });
+  const listedBlogPosts = await getCollection(
+    "pages",
+    (entry) =>
+      entry.data.properties.Type?.name === "blog" &&
+      entry.data.properties.Status?.name === "Listed",
+  );
 
   return rss({
     title: "Stuart Thomson’s Blog",
@@ -21,14 +23,11 @@ export async function GET(context: APIContext) {
     // Array of `<item>`s in output xml
     // See "Generating items" section for examples using content collections and glob imports
     items: await Promise.all(
-      results.map(async (result) => {
-        const info = await getInfoForPage(result.id);
+      listedBlogPosts.map(async (item) => {
+        const url = new URL(join("/blog", item.data.slug), context.site);
 
-        const url = new URL(info.path, context.site);
-
-        const page = await getPage(info.id);
         const publishedProperty = getPagePropertyByName(
-          page,
+          item.data.page,
           "Published",
           "date",
         );
@@ -36,7 +35,9 @@ export async function GET(context: APIContext) {
           publishedProperty?.date?.start ?? new Date().toString();
 
         return {
-          title: richTextToUnformattedString(getPageTitleComponents(result)),
+          title: richTextToUnformattedString(
+            getPageTitleComponents(item.data.page),
+          ),
           pubDate: new Date(publishedDateString),
           link: url.toString(),
           // TODO: Get description and optionally content

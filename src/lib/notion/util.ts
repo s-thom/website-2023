@@ -4,6 +4,8 @@ import type {
   PropertyItemObjectResponse,
   RichTextItemResponse,
 } from "@notionhq/client/build/src/api-endpoints";
+import { join } from "node:path/posix";
+import type { PageInfo } from "../../integrations/notion-loader/api";
 
 export function richTextToUnformattedString(
   components: RichTextItemResponse | RichTextItemResponse[],
@@ -96,4 +98,18 @@ export function isPageListed(
   }
 
   return !property.multi_select.find((option) => option.name === "unlisted");
+}
+
+export function getPageFullPathFromInfo(
+  page: PageInfo<{ Type: { name: string } | null }>,
+): string {
+  // TODO: Figure out how to not have blog slugs relative to blog path.
+  // This will involve figuring out which layout to use in the catch all path,
+  // and specifying all blog paths manually since they'll no longer be purely generated
+  // otherwise we'd lose the blog path segment.
+  if (page.properties.Type?.name === "blog") {
+    return join("/", page.slug);
+  }
+
+  return join("/", page.slug);
 }

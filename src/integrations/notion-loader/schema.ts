@@ -139,96 +139,131 @@ const richTextSchema: z.ZodType<RichTextItemResponse> = z.discriminatedUnion(
   ],
 ) satisfies z.ZodType<RichTextItemResponse>;
 
+// #region Database properties
+export const propertySchemas = {
+  checkbox: () => z.boolean(),
+  createdBy: () => userPartialSchema,
+  createdTime: () => z.string(),
+  date: () => datePropertyValueSchema.nullable(),
+  email: () => z.string().nullable(),
+  files: () =>
+    z.array(
+      z.discriminatedUnion("type", [
+        externalSchema.extend({ name: z.string() }),
+        fileSchema.extend({ name: z.string() }),
+      ]),
+    ),
+  formula: () =>
+    z.discriminatedUnion("type", [
+      z.object({ type: z.literal("string"), string: z.string() }),
+      z.object({ type: z.literal("number"), number: z.number() }),
+      z.object({ type: z.literal("boolean"), boolean: z.boolean() }),
+      z.object({ type: z.literal("date"), date: datePropertyValueSchema }),
+    ]),
+  lastEditedBy: () => userPartialSchema,
+  lastEditedTime: () => z.string(),
+  multiSelect: () => z.array(selectPropertyValueSchema),
+  number: () => z.number().nullable(),
+  people: () => z.array(userPartialSchema),
+  phoneNumber: () => z.string().nullable(),
+  relation: () => z.array(z.object({ id: z.string() })),
+  richText: () => z.array(richTextSchema),
+  rollup: () => z.never({ message: "Rollup schema not implemented" }),
+  select: () => selectPropertyValueSchema.nullable(),
+  status: () => selectPropertyValueSchema.nullable(),
+  title: () => z.array(richTextSchema),
+  uniqueId: () =>
+    z.object({ prefix: z.string().nullable(), number: z.number().nullable() }),
+  url: () => z.string().nullable(),
+};
+// #endregion
+
+// #region Properties
 const basePropertySchema = z.object({ id: z.string() });
 const titlePropertySchema = basePropertySchema.extend({
   type: z.literal("title"),
-  title: z.array(richTextSchema),
+  title: propertySchemas.title(),
 });
 const richTextPropertySchema = basePropertySchema.extend({
   type: z.literal("rich_text"),
-  rich_text: z.array(richTextSchema),
+  rich_text: propertySchemas.richText(),
 });
 const numberPropertySchema = basePropertySchema.extend({
   type: z.literal("number"),
-  number: z.number().nullable(),
+  number: propertySchemas.number(),
 });
 const selectPropertySchema = basePropertySchema.extend({
   type: z.literal("select"),
-  select: selectPropertyValueSchema.nullable(),
+  select: propertySchemas.select(),
 });
 const statusPropertySchema = basePropertySchema.extend({
   type: z.literal("status"),
-  status: selectPropertyValueSchema.nullable(),
+  status: propertySchemas.status(),
 });
 const multiSelectPropertySchema = basePropertySchema.extend({
   type: z.literal("multi_select"),
-  multi_select: z.array(selectPropertyValueSchema),
+  multi_select: propertySchemas.multiSelect(),
 });
 const datePropertySchema = basePropertySchema.extend({
   type: z.literal("date"),
-  date: datePropertyValueSchema.nullable(),
+  date: propertySchemas.date(),
 });
 const formulaPropertySchema = basePropertySchema.extend({
   type: z.literal("formula"),
-  formula: z.discriminatedUnion("type", [
-    z.object({ type: z.literal("string"), string: z.string() }),
-    z.object({ type: z.literal("number"), number: z.number() }),
-    z.object({ type: z.literal("boolean"), boolean: z.boolean() }),
-    z.object({ type: z.literal("date"), date: datePropertyValueSchema }),
-  ]),
+  formula: propertySchemas.formula(),
 });
 const relationPropertySchema = basePropertySchema.extend({
   type: z.literal("relation"),
-  relation: z.array(z.object({ id: z.string() })),
+  relation: propertySchemas.relation(),
 });
 const rollupPropertySchema = basePropertySchema.extend({
   type: z.literal("rollup"),
-  rollup: z.never({ message: "Rollup schema not implemented" }),
+  rollup: propertySchemas.rollup(),
 });
 const peoplePropertySchema = basePropertySchema.extend({
   type: z.literal("people"),
-  people: z.array(userPartialSchema),
+  people: propertySchemas.people(),
 });
 const filesPropertySchema = basePropertySchema.extend({
   type: z.literal("files"),
-  files: z.array(
-    z.discriminatedUnion("type", [
-      externalSchema.extend({ name: z.string() }),
-      fileSchema.extend({ name: z.string() }),
-    ]),
-  ),
+  files: propertySchemas.files(),
 });
 const checkboxPropertySchema = basePropertySchema.extend({
   type: z.literal("checkbox"),
-  checkbox: z.boolean(),
+  checkbox: propertySchemas.checkbox(),
 });
 const urlPropertySchema = basePropertySchema.extend({
   type: z.literal("url"),
-  url: z.string().nullable(),
+  url: propertySchemas.url(),
 });
 const emailPropertySchema = basePropertySchema.extend({
   type: z.literal("email"),
-  email: z.string().nullable(),
+  email: propertySchemas.email(),
 });
 const phoneNumberPropertySchema = basePropertySchema.extend({
   type: z.literal("phone_number"),
-  phone_number: z.string().nullable(),
+  phone_number: propertySchemas.phoneNumber(),
 });
 const createdTimePropertySchema = basePropertySchema.extend({
   type: z.literal("created_time"),
-  created_time: z.string(),
+  created_time: propertySchemas.createdTime(),
 });
 const createdByPropertySchema = basePropertySchema.extend({
   type: z.literal("created_by"),
-  created_by: userPartialSchema,
+  created_by: propertySchemas.createdBy(),
+  userPartialSchema,
 });
 const lastEditedTimePropertySchema = basePropertySchema.extend({
   type: z.literal("last_edited_time"),
-  last_edited_time: z.string(),
+  last_edited_time: propertySchemas.lastEditedTime(),
 });
 const lastEditedByPropertySchema = basePropertySchema.extend({
   type: z.literal("last_edited_by"),
-  last_edited_by: userPartialSchema,
+  last_edited_by: propertySchemas.lastEditedBy(),
+});
+const uniqueIdPropertySchema = basePropertySchema.extend({
+  type: z.literal("unique_id"),
+  unique_id: propertySchemas.uniqueId(),
 });
 
 const propertiesSchema: z.ZodType<PageObjectResponse["properties"][string]> =
@@ -253,7 +288,9 @@ const propertiesSchema: z.ZodType<PageObjectResponse["properties"][string]> =
     createdByPropertySchema,
     lastEditedTimePropertySchema,
     lastEditedByPropertySchema,
+    uniqueIdPropertySchema,
   ]) satisfies z.ZodType<PageObjectResponse["properties"][string]>;
+// #endregion
 
 const pageSchema: z.ZodType<PageObjectResponse> = z.object({
   object: z.literal("page"),
@@ -274,6 +311,7 @@ const pageSchema: z.ZodType<PageObjectResponse> = z.object({
   public_url: z.string().nullable(),
 }) satisfies z.ZodType<PageObjectResponse>;
 
+// #region Blocks
 const baseBlockExtends = {
   object: z.literal("block"),
   id: z.string().uuid(),
@@ -562,14 +600,16 @@ const blockSchema: z.ZodType<BlockObjectResponse> = z.discriminatedUnion(
     videoBlockSchema,
   ],
 ) satisfies z.ZodType<BlockObjectResponse>;
+// #endregion
 
 const blockInfoSchema = z.object({
   block: z.union([pageSchema, blockSchema]),
   children: z.array(z.string()).optional(),
 }) satisfies z.ZodType<BlockInfo>;
 
-export const pageDataSchema = z.object({
+export const notionLoaderSchema = z.object({
   page: pageSchema,
   slug: z.string(),
-  blockMap: z.map(z.string(), blockInfoSchema),
+  properties: z.object({}),
+  blockMap: z.object({}).catchall(blockInfoSchema),
 }) satisfies z.ZodType<PageInfo>;

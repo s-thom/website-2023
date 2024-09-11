@@ -36,7 +36,7 @@ async function readManifestFile(): Promise<ManifestType> {
   } catch (err) {
     if (NOISY_LOGS) {
       // eslint-disable-next-line no-console
-      console.warn(err);
+      console.warn("Unable to load image manifest. Defaulting to empty");
     }
     return { version: MANIFEST_VERSION, images: {} };
   }

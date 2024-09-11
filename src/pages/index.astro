@@ -1,12 +1,9 @@
 ---
-import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import { getCollection } from "astro:content";
 import LocalImage from "../components/Images/LocalImage.astro";
 import AboutLinks from "../components/notion/overrides/code-blocks/AboutLinks.astro";
 import ProjectsItem from "../components/notion/overrides/projects/ProjectsItem.astro";
 import StandalonePageLayout from "../layouts/StandalonePageLayout.astro";
-import { ACTIVE_PROJECTS_COLLECTION_ID } from "../lib/constants";
-import { getFilter } from "../lib/notion/blog";
-import { queryDatabase } from "../lib/notion/requests";
 import { generateOgImage } from "../lib/og-images";
 
 const NUM_PROJECTS_TO_SHOW = 3;
@@ -17,17 +14,11 @@ const ogImage = await generateOgImage({
   title: "Home",
 });
 
-const activeProjectItems = (await queryDatabase(
-  ACTIVE_PROJECTS_COLLECTION_ID,
-  getFilter({ allowUnlisted: import.meta.env.DEV }),
-  [
-    {
-      property: "Sorting",
-      direction: "descending",
-    },
-  ],
-)) as DatabaseObjectResponse[];
-const projectItemsToShow = activeProjectItems.slice(0, NUM_PROJECTS_TO_SHOW);
+const entries = await getCollection(
+  "projects",
+  (entry) => entry.data.properties.Status?.name === "Complete",
+);
+const projectItemsToShow = entries.slice(0, NUM_PROJECTS_TO_SHOW);
 ---
 
 <StandalonePageLayout
@@ -96,10 +87,10 @@ const projectItemsToShow = activeProjectItems.slice(0, NUM_PROJECTS_TO_SHOW);
       <h3 class="visually-hidden"><a href="/projects">Recent projects</a></h3>
       <div class="projects-list">
         {
-          projectItemsToShow.map((item) => (
+          projectItemsToShow.map((entry) => (
             <ProjectsItem
+              data={entry.data}
               class="project-card"
-              page={item}
               widths={[240, 360]}
               sizes="(min-width: 600px) 360px, 240px"
               overrides={{}}

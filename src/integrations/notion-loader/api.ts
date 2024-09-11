@@ -16,20 +16,21 @@ export interface BlockInfo {
   children?: string[];
 }
 
-export interface PageInfo {
+export interface PageInfo<Properties extends object = object> {
   page: PageObjectResponse;
   slug: string;
-  blockMap: Map<string, BlockInfo>;
+  properties: Properties;
+  blockMap: Record<string, BlockInfo>;
 }
 
 async function enqueueBlockChildrenInfo(
   queue: PQueue,
   blockId: string,
-  blockMap: Map<string, BlockInfo>,
+  blockMap: Record<string, BlockInfo>,
   depth: number,
   logger: AstroIntegrationLogger,
 ): Promise<void> {
-  const self = blockMap.get(blockId);
+  const self = blockMap[blockId];
   if (!self) {
     logger.error(
       `Trying to add children for block that doesn't exist: ${blockId}`,
@@ -49,14 +50,15 @@ async function enqueueBlockChildrenInfo(
       continue;
     }
 
-    if (blockMap.has(child.id)) {
+    if (blockMap[child.id]) {
       logger.warn(
         `Child ${child.id} of ${blockType} ${blockId} has already been added`,
       );
       continue;
     }
 
-    blockMap.set(child.id, { block: child, children: undefined });
+    // eslint-disable-next-line no-param-reassign
+    blockMap[child.id] = { block: child, children: undefined };
 
     if (child.has_children && depth < MAX_VISIT_DEPTH) {
       queue.add(() =>
@@ -64,6 +66,17 @@ async function enqueueBlockChildrenInfo(
       );
     }
   }
+}
+
+function mapProperties(
+  properties: PageObjectResponse["properties"],
+): Record<string, unknown> {
+  return Object.fromEntries(
+    Object.entries(properties).map(([key, property]) => [
+      key,
+      (property as any)[property.type],
+    ]),
+  );
 }
 
 export async function collectPageInfo(
@@ -75,16 +88,17 @@ export async function collectPageInfo(
     throw new Error(`Could not get full page for ${pageId}`);
   }
 
+  const properties = mapProperties(page.properties);
   // Save URL mapping
   const slug = PAGE_PATH_PREFIX_OVERRIDES[page.id] ?? getUrlSlugForPage(page);
 
   const queue = new PQueue();
-  const blockMap = new Map<string, BlockInfo>();
+  const blockMap: Record<string, BlockInfo> = {};
   // Kick off the traversal with the page
-  blockMap.set(pageId, { block: page as any, children: undefined });
+  blockMap[pageId] = { block: page as any, children: undefined };
   queue.add(() => enqueueBlockChildrenInfo(queue, pageId, blockMap, 0, logger));
 
   await queue.onIdle();
 
-  return { page, slug, blockMap };
+  return { page, slug, properties, blockMap };
 }

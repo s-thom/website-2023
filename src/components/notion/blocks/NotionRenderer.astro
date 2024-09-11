@@ -13,11 +13,11 @@ const loadNumberedListItemGroup = () =>
   import("./NumberedListItemGroup.astro").then((b) => b.default);
 const loadTodoGroup = () => import("./TodoGroup.astro").then((b) => b.default);
 
-export interface Props extends NotionOverrideableProps {
+export interface Props extends Omit<NotionOverrideableProps, "block"> {
   blocks: BlockObjectResponse[];
 }
 
-const { blocks, overrides } = Astro.props;
+const { blocks, blockMap, overrides } = Astro.props;
 
 // There's a bit of an annoying problem with some elements, like lists, where
 // they need to be inside a wrapping element. This is especially important for
@@ -86,8 +86,20 @@ if (currentGroup) {
 {
   items.map((blockOrGroup) => {
     if (blockOrGroup.type === BLOCK_GROUP_TYPE) {
-      return <NotionBlockGroup group={blockOrGroup} overrides={overrides} />;
+      return (
+        <NotionBlockGroup
+          group={blockOrGroup}
+          blockMap={blockMap}
+          overrides={overrides}
+        />
+      );
     }
-    return <NotionBlock block={blockOrGroup} overrides={overrides} />;
+    return (
+      <NotionBlock
+        block={blockOrGroup}
+        blockMap={blockMap}
+        overrides={overrides}
+      />
+    );
   })
 }

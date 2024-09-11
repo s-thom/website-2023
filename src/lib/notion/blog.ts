@@ -1,9 +1,4 @@
-import type {
-  DatabaseObjectResponse,
-  QueryDatabaseParameters,
-} from "@notionhq/client/build/src/api-endpoints";
-import { BLOG_COLLECTION_ID, PAGES_COLLECTION_ID } from "../constants";
-import { queryDatabase } from "./caches";
+import type { QueryDatabaseParameters } from "@notionhq/client/build/src/api-endpoints";
 
 interface FilterOptions {
   allowUnpublished?: boolean;
@@ -48,24 +43,4 @@ export function getFilter({
 
 export function getSort(): QueryDatabaseParameters["sorts"] {
   return [{ property: "Published", direction: "descending" }];
-}
-
-export async function getFilteredBlogItems(filter: FilterOptions) {
-  const pages = await queryDatabase(
-    BLOG_COLLECTION_ID,
-    getFilter(filter),
-    getSort(),
-  );
-
-  return pages as unknown as DatabaseObjectResponse[];
-}
-
-export async function getFilteredPageItems(filter: FilterOptions) {
-  const pages = await queryDatabase(
-    PAGES_COLLECTION_ID,
-    getFilter(filter),
-    getSort(),
-  );
-
-  return pages as unknown as DatabaseObjectResponse[];
 }

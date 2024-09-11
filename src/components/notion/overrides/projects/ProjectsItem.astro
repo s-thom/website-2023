@@ -1,20 +1,18 @@
 ---
 import { SiGithub } from "@icons-pack/react-simple-icons";
-import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import type { RichTextItemResponse } from "@notionhq/client/build/src/api-endpoints";
 import { ExternalLinkIcon } from "lucide-react";
-import { getBlockChildren } from "../../../../lib/notion/caches";
+import type { PageInfo } from "../../../../integrations/notion-loader/api";
+import { getBlockChildren } from "../../../../integrations/notion-loader/util";
 import { getPageTitleComponents } from "../../../../lib/notion/titles";
-import {
-  getPagePropertyByName,
-  richTextToUnformattedString,
-} from "../../../../lib/notion/util";
+import { richTextToUnformattedString } from "../../../../lib/notion/util";
 import NotionRenderer from "../../blocks/NotionRenderer.astro";
 import type { NotionOverrideableProps } from "../../blocks/types";
 import NotionBackdrop from "../../common/NotionBackdrop.astro";
 import RichText from "../../common/RichText.astro";
 
-export interface Props extends NotionOverrideableProps {
-  page: DatabaseObjectResponse;
+export interface Props {
+  data: PageInfo<{ URL: string | null; GitHub: RichTextItemResponse[] }>;
   widths: number[];
   sizes: string;
   class?: string;
@@ -22,10 +20,11 @@ export interface Props extends NotionOverrideableProps {
   showTitle?: boolean;
   showGitHub?: boolean;
   showChildren?: boolean;
+  overrides: NotionOverrideableProps["overrides"];
 }
 
 const {
-  page,
+  data,
   widths,
   sizes,
   overrides,
@@ -36,14 +35,14 @@ const {
   showChildren,
 } = Astro.props;
 
-const children = showChildren ? await getBlockChildren(page.id) : [];
+const { page, blockMap } = data;
+const children = getBlockChildren(page.id, blockMap);
+const titleComponents = getPageTitleComponents(data.page);
 
-const titleComponents = getPageTitleComponents(page);
-
-const url = getPagePropertyByName(page, "URL", "url");
-const github = getPagePropertyByName(page, "GitHub", "rich_text");
+const url = data.properties.URL;
+const github = data.properties.GitHub;
 const githubFragment =
-  github && (richTextToUnformattedString(github.rich_text) || undefined);
+  github && (richTextToUnformattedString(github) || undefined);
 ---
 
 <div
@@ -60,8 +59,8 @@ const githubFragment =
   <div class="flow">
     <h3 class={showTitle ? "" : "visually-hidden"}>
       {
-        url && url.url ? (
-          <a href={url.url} rel="external noreferrer">
+        url ? (
+          <a href={url} rel="external noreferrer">
             <RichText components={titleComponents} />
           </a>
         ) : (
@@ -73,9 +72,9 @@ const githubFragment =
     {
       showGitHub && githubFragment !== undefined && (
         <ul class="icon-links-list">
-          {url && url.url && (
+          {url && (
             <li>
-              <a href={url.url} rel="external noreferrer" target="_blank">
+              <a href={url} rel="external noreferrer" target="_blank">
                 <ExternalLinkIcon>
                   <title>Open in new tab</title>
                 </ExternalLinkIcon>
@@ -93,7 +92,15 @@ const githubFragment =
         </ul>
       )
     }
-    {showChildren && <NotionRenderer blocks={children} overrides={overrides} />}
+    {
+      showChildren && (
+        <NotionRenderer
+          blocks={children}
+          blockMap={blockMap}
+          overrides={overrides}
+        />
+      )
+    }
   </div>
 </div>
 

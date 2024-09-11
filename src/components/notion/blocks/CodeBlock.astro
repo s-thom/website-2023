@@ -5,6 +5,12 @@ import CodeRenderer from "../../site/CodeRenderer.astro";
 
 const loadAboutLinks = () =>
   import("../overrides/code-blocks/AboutLinks.astro").then((b) => b.default);
+const loadBlogCollection = () =>
+  import("../overrides/blog/BlogCollection.astro").then((b) => b.default);
+const loadProjectsCollection = () =>
+  import("../overrides/projects/ProjectsCollection.astro").then(
+    (b) => b.default,
+  );
 const loadStickerBook = () =>
   import("../overrides/code-blocks/StickerBook.astro").then((b) => b.default);
 const loadShaderPlayground = () =>
@@ -47,6 +53,12 @@ if (info.type === "override") {
   switch (info.component) {
     case "AboutLinks":
       Component = await loadAboutLinks();
+      break;
+    case "BlogCollection":
+      Component = await loadBlogCollection();
+      break;
+    case "ProjectsCollection":
+      Component = await loadProjectsCollection();
       break;
     case "StickerBook":
       Component = await loadStickerBook();

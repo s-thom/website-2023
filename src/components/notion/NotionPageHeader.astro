@@ -11,16 +11,23 @@ import {
 } from "../../lib/notion/util";
 import RichText from "./common/RichText.astro";
 import NotionProperty from "./properties/NotionProperty.astro";
+import type { BlockInfo } from "../../integrations/notion-loader/api";
 
 export interface Props {
   page: DatabaseObjectResponse | PageObjectResponse;
+  blockMap: Record<string, BlockInfo>;
   showCoverSource?: boolean;
   showReadingTime?: boolean;
   showPublishEditDates?: boolean;
 }
 
-const { page, showCoverSource, showReadingTime, showPublishEditDates } =
-  Astro.props;
+const {
+  page,
+  blockMap,
+  showCoverSource,
+  showReadingTime,
+  showPublishEditDates,
+} = Astro.props;
 
 const titleComponents = getPageTitleComponents(page);
 
@@ -36,7 +43,7 @@ let readingTimeInfo:
   | Awaited<ReturnType<typeof estimateReadingTime>>
   | undefined;
 if (showReadingTime) {
-  readingTimeInfo = await estimateReadingTime(page);
+  readingTimeInfo = await estimateReadingTime(page, blockMap);
 }
 ---
 

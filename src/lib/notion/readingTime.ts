@@ -2,15 +2,17 @@ import type {
   DatabaseObjectResponse,
   PageObjectResponse,
 } from "@notionhq/client/build/src/api-endpoints";
-import { getBlockChildren } from "./caches";
+import type { BlockInfo } from "../../integrations/notion-loader/api";
+import { getBlockChildren } from "../../integrations/notion-loader/util";
 
 // An estimate
 const WORDS_PER_MINUTE = 250;
 
 export async function estimateReadingTime(
   page: PageObjectResponse | DatabaseObjectResponse,
+  blockMap: Record<string, BlockInfo>,
 ): Promise<{ words: number; minutes: number }> {
-  const children = await getBlockChildren(page.id);
+  const children = getBlockChildren(page.id, blockMap);
   const richTextSegments = children.flatMap((child) => {
     switch (child.type) {
       case "paragraph":

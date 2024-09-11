@@ -1,36 +1,33 @@
 ---
 import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import { getCollection } from "astro:content";
 import { join } from "node:path/posix";
 import NotionRenderer from "../components/notion/blocks/NotionRenderer.astro";
+import { getBlockChildren } from "../integrations/notion-loader/util";
 import NotionPageLayout from "../layouts/NotionPageLayout.astro";
-import { getFilteredPageItems } from "../lib/notion/blog";
-import { generateOgImage } from "../lib/og-images";
-import { getOgImageOptionsForNotionPage } from "../lib/og-images/notion";
-import {
-  getBlockChildren,
-  getInfoForPage,
-  getPage,
-  getPageIdFromPath,
-} from "../lib/notion/caches";
 import { getComponentOverrides } from "../lib/notion/overrides";
 import { getPageTitleComponents } from "../lib/notion/titles";
-import {
-  getPagePropertyByName,
-  richTextToUnformattedString,
-} from "../lib/notion/util";
+import { richTextToUnformattedString } from "../lib/notion/util";
+import { generateOgImage } from "../lib/og-images";
+import { getOgImageOptionsForNotionPage } from "../lib/og-images/notion";
 
 export async function getStaticPaths() {
-  const results = await getFilteredPageItems({
-    allowUnpublished: import.meta.env.DEV,
-    allowUnlisted: true,
-  });
+  const collection = await getCollection(
+    "pages",
+    (entry) => entry.data.properties.Type?.name === "page",
+  );
 
   const paths = await Promise.all(
-    results.map(async (result) => {
-      const info = await getInfoForPage(result.id);
-
+    collection.map(async (result) => {
+      const fullPath = join("/", result.data.slug);
       return {
-        params: { path: info.path },
+        params: { path: fullPath },
+        props: {
+          page: result.data.page,
+          path: fullPath,
+          blockMap: result.data.blockMap,
+          properties: result.data.properties,
+        },
       };
     }),
   );
@@ -38,31 +35,26 @@ export async function getStaticPaths() {
   return paths;
 }
 
-const { path } = Astro.params;
+const { page, path, blockMap, properties } = Astro.props;
 
-const id = await getPageIdFromPath(join("/", path!));
+const blocks = getBlockChildren(page.id, blockMap);
+const overrides = await getComponentOverrides(page.id);
 
-const [page, blocks] = await Promise.all([getPage(id), getBlockChildren(id)]);
-const overrides = await getComponentOverrides(id);
-
-const info = await getInfoForPage(page.id);
 const titleComponents = getPageTitleComponents(page);
 const pageTitle = richTextToUnformattedString(titleComponents);
-
-const publishedProperty = getPagePropertyByName(page, "Published", "date");
-const editedProperty = getPagePropertyByName(page, "Edited", "date");
 
 const ogImageOptions = await getOgImageOptionsForNotionPage(page);
 const ogImage = await generateOgImage(ogImageOptions);
 ---
 
 <NotionPageLayout
+  blockMap={blockMap}
   meta={{
     title: pageTitle,
-    url: info.path,
+    url: path,
     authors: [{ firstName: "Stuart", lastName: "Thomson" }],
-    publishedDate: publishedProperty?.date?.start,
-    modifiedDate: editedProperty?.date?.start,
+    publishedDate: properties.Published?.start,
+    modifiedDate: properties.Edited?.start,
     images: [
       {
         url: new URL(ogImage.path, Astro.site).toString(),
@@ -74,10 +66,10 @@ const ogImage = await generateOgImage(ogImageOptions);
   }}
   breadcrumbs={[
     { name: "Home", url: "/" },
-    { name: pageTitle, url: info.path },
+    { name: pageTitle, url: path },
   ]}
   page={page as unknown as DatabaseObjectResponse}
   showCoverSource
 >
-  <NotionRenderer blocks={blocks} overrides={overrides} />
+  <NotionRenderer blocks={blocks} blockMap={blockMap} overrides={overrides} />
 </NotionPageLayout>

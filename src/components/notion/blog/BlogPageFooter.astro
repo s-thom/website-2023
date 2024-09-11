@@ -1,8 +1,7 @@
 ---
 import { type DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import { getCollection } from "astro:content";
 import { BLOG_PAGE_ID } from "../../../lib/constants";
-import { getFilteredBlogItems } from "../../../lib/notion/blog";
-import { getPage } from "../../../lib/notion/caches";
 import { LazyLoader } from "../../react/LazyLoader.tsx";
 import BlogListPageItem from "./BlogListPageItem.astro";
 
@@ -12,22 +11,25 @@ export interface Props {
 
 const { page } = Astro.props;
 
-const blogHomePage = await getPage(BLOG_PAGE_ID);
-const allBlogPages = await getFilteredBlogItems({
-  allowUnpublished: import.meta.env.DEV,
-  allowUnlisted: false,
-});
+const blogIndexEntries = await getCollection(
+  "pages",
+  (entry) => entry.id === BLOG_PAGE_ID,
+);
+const blogEntries = await getCollection(
+  "pages",
+  (entry) => entry.data.properties.Type?.name === "blog",
+);
 
 // Get next/previous entries
-let next: DatabaseObjectResponse | undefined;
-let prev: DatabaseObjectResponse | undefined;
-const index = allBlogPages.findIndex((curr) => curr.id === page.id);
+let next: (typeof blogEntries)[number] | undefined;
+let prev: (typeof blogEntries)[number] | undefined;
+const index = blogEntries.findIndex((curr) => curr.id === page.id);
 if (index !== -1) {
   if (index !== 0) {
-    next = allBlogPages[index - 1];
+    next = blogEntries[index - 1];
   }
-  if (index !== allBlogPages.length - 1) {
-    prev = allBlogPages[index + 1];
+  if (index !== blogEntries.length - 1) {
+    prev = blogEntries[index + 1];
   }
 }
 ---
@@ -37,7 +39,11 @@ if (index !== -1) {
     <div class="links-box next">
       {
         next ? (
-          <BlogListPageItem page={next} showTitle>
+          <BlogListPageItem
+            page={next.data.page}
+            slug={next.data.slug}
+            showTitle
+          >
             <Fragment slot="info-top">
               <span class="pre-title">Next post</span>
             </Fragment>
@@ -54,7 +60,11 @@ if (index !== -1) {
     <div class="links-box prev">
       {
         prev ? (
-          <BlogListPageItem page={prev} showTitle>
+          <BlogListPageItem
+            page={prev.data.page}
+            slug={prev.data.slug}
+            showTitle
+          >
             <Fragment slot="info-top">
               <span class="pre-title">Previous post</span>
             </Fragment>
@@ -69,11 +79,19 @@ if (index !== -1) {
       }
     </div>
     <div class="links-box up">
-      <BlogListPageItem page={blogHomePage as any} showTitle>
-        <Fragment slot="info-top">
-          <span class="pre-title">More posts</span>
-        </Fragment>
-      </BlogListPageItem>
+      {
+        blogIndexEntries.length === 1 && (
+          <BlogListPageItem
+            page={blogIndexEntries[0].data.page}
+            slug=""
+            showTitle
+          >
+            <Fragment slot="info-top">
+              <span class="pre-title">More posts</span>
+            </Fragment>
+          </BlogListPageItem>
+        )
+      }
     </div>
   </div>
 </div>
