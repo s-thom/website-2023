@@ -25,6 +25,7 @@
     "@notionhq/client": "^2.2.15",
     "@resvg/resvg-js": "^2.6.2",
     "@shikijs/transformers": "^1.16.2",
+    "@shikijs/twoslash": "^1.16.3",
     "@types/react-dom": "^18.3.0",
     "astro": "^4.15.4",
     "clsx": "^2.1.1",

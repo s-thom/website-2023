@@ -99,7 +99,11 @@ if (info.type === "override") {
 {
   info.type === "code" && (
     <div class="block-code" data-block={block.id}>
-      <CodeRenderer code={info.code} language={info.language} />
+      <CodeRenderer
+        code={info.code}
+        language={info.language}
+        meta={info.meta}
+      />
     </div>
   )
 }

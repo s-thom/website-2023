@@ -9,6 +9,7 @@ type CodeBlockContentInfo =
       type: "code";
       code: string;
       language: BundledLanguage | SpecialLanguage;
+      meta?: string;
     }
   | {
       type: "override";
@@ -59,6 +60,7 @@ export function getCodeBlockContentInfo(
       type: "code",
       code,
       language: language as BundledLanguage | SpecialLanguage,
+      meta: metaString || undefined,
     };
   }
 

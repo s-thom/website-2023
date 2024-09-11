@@ -8,15 +8,20 @@ import {
   transformerRemoveNotationEscape,
   transformerRenderWhitespace,
 } from "@shikijs/transformers";
+import { transformerTwoslash } from "@shikijs/twoslash";
+import "@shikijs/twoslash/style-rich.css";
 import { Code } from "astro:components";
 import { syntaxTheme } from "../../lib/shiki/theme";
 
+type CodeProps = Parameters<typeof Code>[0];
+
 export interface Props {
   code: string;
-  language: Parameters<typeof Code>[0]["lang"];
+  language: CodeProps["lang"];
+  meta?: CodeProps["meta"];
 }
 
-const { code, language } = Astro.props;
+const { code, language, meta } = Astro.props;
 ---
 
 <Code
@@ -32,7 +37,9 @@ const { code, language } = Astro.props;
     transformerNotationErrorLevel(),
     transformerRenderWhitespace(),
     transformerRemoveNotationEscape(),
+    transformerTwoslash({ explicitTrigger: true }),
   ]}
+  meta={meta}
   tabindex={undefined}
 />
 
