@@ -68,38 +68,6 @@ export function getPagePropertyByName<
   return undefined;
 }
 
-export function isPagePublished(
-  page: PageObjectResponse | DatabaseObjectResponse,
-) {
-  const tagsProperty = getPagePropertyByName(page, "Tags", "multi_select");
-  if (tagsProperty) {
-    if (
-      tagsProperty.multi_select.find((option) => option.name === "unlisted")
-    ) {
-      return false;
-    }
-  }
-
-  const publishedProperty = getPagePropertyByName(page, "Published", "date");
-  if (!(publishedProperty && publishedProperty.date)) {
-    return true;
-  }
-
-  const date = new Date(publishedProperty.date.start);
-  return date.getDate() <= Date.now();
-}
-
-export function isPageListed(
-  page: PageObjectResponse | DatabaseObjectResponse,
-) {
-  const property = getPagePropertyByName(page, "Tags", "multi_select");
-  if (!property) {
-    return true;
-  }
-
-  return !property.multi_select.find((option) => option.name === "unlisted");
-}
-
 export function getPageFullPathFromInfo(
   page: PageInfo<{ Type: { name: string } | null }>,
 ): string {

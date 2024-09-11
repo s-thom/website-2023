@@ -3,10 +3,7 @@ import type { APIContext } from "astro";
 import { getCollection } from "astro:content";
 import { join } from "node:path/posix";
 import { getPageTitleComponents } from "../../lib/notion/titles";
-import {
-  getPagePropertyByName,
-  richTextToUnformattedString,
-} from "../../lib/notion/util";
+import { richTextToUnformattedString } from "../../lib/notion/util";
 
 export async function GET(context: APIContext) {
   const listedBlogPosts = await getCollection(
@@ -26,13 +23,8 @@ export async function GET(context: APIContext) {
       listedBlogPosts.map(async (item) => {
         const url = new URL(join("/blog", item.data.slug), context.site);
 
-        const publishedProperty = getPagePropertyByName(
-          item.data.page,
-          "Published",
-          "date",
-        );
         const publishedDateString =
-          publishedProperty?.date?.start ?? new Date().toString();
+          item.data.properties.Published?.start ?? new Date().toString();
 
         return {
           title: richTextToUnformattedString(
