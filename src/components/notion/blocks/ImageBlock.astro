@@ -17,7 +17,6 @@ const captionPlain = richTextToUnformattedString(block.image.caption);
 
 const imageInfo = await getNotionImageInfo(
   block.id,
-  block.image,
   [360, 540, 720],
   DEFAULT_IMAGE_DENSITIES,
 );

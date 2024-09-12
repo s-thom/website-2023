@@ -14,13 +14,14 @@ import PQueue from "p-queue";
 import { collectPageInfo } from "./api";
 import { notionLoaderSchema, propertySchemas } from "./schema";
 
-const INTERNAL_LOADER_VERSION = "1";
+const INTERNAL_LOADER_VERSION = "2";
 
 export interface NotionLoaderOptions {
   token: string;
   databaseId: string;
   sorts?: QueryDatabaseParameters["sorts"];
   filter?: QueryDatabaseParameters["filter"];
+  verboseLogs?: boolean;
 }
 
 export function notionLoader(options: NotionLoaderOptions): Loader {
@@ -39,7 +40,14 @@ export function notionLoader(options: NotionLoaderOptions): Loader {
       const lastLoaderVersion = meta.get("version");
       let forceRefresh = false;
       if (lastLoaderVersion !== INTERNAL_LOADER_VERSION) {
-        logger.info(`Collection ${collection} needs full sync`);
+        let reason: string;
+        if (lastLoaderVersion === undefined) {
+          reason = "empty cache";
+        } else {
+          reason = "loader update";
+        }
+
+        logger.info(`Collection ${collection} needs full sync (${reason})`);
         meta.set("version", INTERNAL_LOADER_VERSION);
         forceRefresh = true;
       }
@@ -53,13 +61,15 @@ export function notionLoader(options: NotionLoaderOptions): Loader {
         );
       }
 
-      const lastModified = meta.get("last-modified");
-      if (!forceRefresh && database.last_edited_time === lastModified) {
-        logger.info(
-          `Collection ${collection} has not been edited since last update, skipping`,
-        );
-        return;
-      }
+      // Commented out as Notion doesn't update the last updated of the database when you edit a page inside it.
+      // This means we still need to iterate over every page.
+      // const lastModified = meta.get("last-modified");
+      // if (!forceRefresh && database.last_edited_time === lastModified) {
+      //   logger.info(
+      //     `Collection ${collection} has not been edited since last update, skipping`,
+      //   );
+      //   return;
+      // }
 
       const pagesIterable = iteratePaginatedAPI(client.databases.query, {
         database_id: options.databaseId,
@@ -127,7 +137,7 @@ export function notionLoader(options: NotionLoaderOptions): Loader {
 
       await pagesQueue.onIdle();
 
-      if (unchangedPages.length > 0) {
+      if (options.verboseLogs && unchangedPages.length > 0) {
         logger.info(
           `Pages not modified since last update: ${unchangedPages.join(", ")}`,
         );

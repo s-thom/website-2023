@@ -32,8 +32,7 @@ const imageClasses = clsx(className, "notion-backdrop-image");
 
 const imageInfo = page.cover
   ? await getNotionImageInfo(
-      `${page.id}-cover`,
-      page.cover,
+      `${page.id}_cover`,
       widths,
       DEFAULT_IMAGE_DENSITIES,
     )

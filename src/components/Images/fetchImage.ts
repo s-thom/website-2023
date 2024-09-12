@@ -10,43 +10,6 @@ export interface ImageInfo {
 
 const IMAGE_REQUEST_CACHE = new Map<string, Promise<ImageInfo>>();
 
-export function fetchImage(src: string): Promise<ImageInfo> {
-  if (!IMAGE_REQUEST_CACHE.has(src)) {
-    if (NOISY_LOGS) {
-      // eslint-disable-next-line no-console
-      console.log(`[Images] Fetching from ${src}`);
-    }
-
-    const promise = fetch(src).then(
-      async (response) => {
-        let mimeType = response.headers.get("Content-Type");
-        if (!mimeType) {
-          throw new Error(`Image source ${src} did not have a content type`);
-        }
-
-        // Normalise JPEG mime type to the correct one.
-        if (mimeType === "image/jpg") {
-          mimeType = "image/jpeg";
-        }
-
-        const buffer = await response.arrayBuffer();
-        return {
-          buffer,
-          mimeType,
-        };
-      },
-      (err) => {
-        // eslint-disable-next-line no-console
-        console.error(`Error while fetching image at ${src}`);
-        throw err;
-      },
-    );
-    IMAGE_REQUEST_CACHE.set(src, promise);
-  }
-
-  return IMAGE_REQUEST_CACHE.get(src)!;
-}
-
 export const RESOURCES_DIR = join(process.cwd(), "src/resources");
 
 export function readImage(name: string): Promise<ImageInfo> {

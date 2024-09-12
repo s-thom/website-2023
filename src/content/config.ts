@@ -9,6 +9,7 @@ import { PAGES_COLLECTION_ID, PROJECTS_COLLECTION_ID } from "../lib/constants";
 const pagesLoader = notionLoader({
   token: import.meta.env.NOTION_TOKEN,
   databaseId: PAGES_COLLECTION_ID,
+  verboseLogs: true,
   filter: {
     and: [
       { property: "Type", select: { is_not_empty: true } },
@@ -33,6 +34,7 @@ const pagesLoader = notionLoader({
 const projectsLoader = notionLoader({
   token: import.meta.env.NOTION_TOKEN,
   databaseId: PROJECTS_COLLECTION_ID,
+  verboseLogs: true,
   filter: {
     and: [{ property: "Visibility", checkbox: { equals: true } }],
   },

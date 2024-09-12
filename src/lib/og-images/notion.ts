@@ -1,7 +1,7 @@
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import type { GenerateOgImageOptions } from ".";
-import { fetchImage } from "../../components/Images/fetchImage";
 import { getImageInfo } from "../../components/Images/image";
+import { getSavedImage } from "../../integrations/notion-loader";
 import { getPageTitleComponents } from "../notion/titles";
 import { richTextToUnformattedString } from "../notion/util";
 
@@ -12,21 +12,9 @@ async function getCoverImageFilePath(
     return undefined;
   }
 
-  let url: string;
-  switch (page.cover.type) {
-    case "external":
-      url = page.cover.external.url;
-      break;
-    case "file":
-      url = page.cover.file.url;
-      break;
-    default:
-      return undefined;
-  }
-
   const imageInfo = await getImageInfo(
-    `${page.id}-cover`,
-    () => fetchImage(url),
+    `${page.id}_cover`,
+    () => getSavedImage(`${page.id}_cover`),
     [],
     [1],
   );

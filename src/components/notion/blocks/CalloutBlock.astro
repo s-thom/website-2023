@@ -16,7 +16,6 @@ const imageInfo =
   block.callout.icon && block.callout.icon.type !== "emoji"
     ? await getNotionImageInfo(
         `${block.id}_icon`,
-        block.callout.icon,
         [32],
         DEFAULT_IMAGE_DENSITIES,
       )

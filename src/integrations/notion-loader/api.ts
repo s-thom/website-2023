@@ -8,6 +8,7 @@ import PQueue from "p-queue";
 import { PAGE_PATH_PREFIX_OVERRIDES } from "../../lib/constants";
 import { getBlockChildren, getPage } from "../../lib/notion/requests";
 import { getUrlSlugForPage } from "../../lib/notion/titles";
+import { saveImage } from "./images";
 
 const MAX_VISIT_DEPTH = 10;
 
@@ -23,7 +24,26 @@ export interface PageInfo<Properties extends object = object> {
   blockMap: Record<string, BlockInfo>;
 }
 
-async function enqueueBlockChildrenInfo(
+async function saveFileOrExternal(
+  id: string,
+  fileOrExternal: NonNullable<PageObjectResponse["cover"]>,
+  key: string,
+  logger: AstroIntegrationLogger | undefined,
+): Promise<void> {
+  const url =
+    fileOrExternal.type === "file"
+      ? fileOrExternal.file.url
+      : fileOrExternal.external.url;
+
+  return saveImage({
+    id,
+    url,
+    key,
+    logger,
+  });
+}
+
+async function processBlock(
   queue: PQueue,
   blockId: string,
   blockMap: Record<string, BlockInfo>,
@@ -31,6 +51,7 @@ async function enqueueBlockChildrenInfo(
   logger: AstroIntegrationLogger,
 ): Promise<void> {
   const self = blockMap[blockId];
+  const { block } = self;
   if (!self) {
     logger.error(
       `Trying to add children for block that doesn't exist: ${blockId}`,
@@ -39,32 +60,89 @@ async function enqueueBlockChildrenInfo(
       `Trying to add children for block that doesn't exist: ${blockId}`,
     );
   }
-  const children = await getBlockChildren(blockId);
-  self.children = [];
-  for (const child of children) {
-    const blockType = self.block.object === "block" ? self.block.type : "page";
-    if (!isFullBlock(child)) {
-      logger.warn(
-        `Encountered partial child ${child.id} of ${blockType} ${blockId}`,
-      );
-      continue;
-    }
 
-    self.children.push(child.id);
-
-    if (blockMap[child.id]) {
-      logger.warn(
-        `Child ${child.id} of ${blockType} ${blockId} has already been added`,
-      );
-      continue;
-    }
-
-    // eslint-disable-next-line no-param-reassign
-    blockMap[child.id] = { block: child, children: undefined };
-
-    if (child.has_children && depth < MAX_VISIT_DEPTH) {
+  // Behaviour specific to different block types.
+  // Mostly used to deal with images
+  if (block.object === "page") {
+    // Request cover images and icon
+    if (block.cover !== null) {
       queue.add(() =>
-        enqueueBlockChildrenInfo(queue, child.id, blockMap, depth + 1, logger),
+        saveFileOrExternal(
+          `${block.id}_cover`,
+          block.cover as any,
+          block.last_edited_time,
+          logger,
+        ),
+      );
+    }
+    if (block.icon && block.icon.type !== "emoji") {
+      queue.add(() =>
+        saveFileOrExternal(
+          `${block.id}_icon`,
+          block.icon as any,
+          block.last_edited_time,
+          logger,
+        ),
+      );
+    }
+  } else if (block.object === "block") {
+    if (block.type === "image") {
+      queue.add(() =>
+        saveFileOrExternal(
+          block.id,
+          block.image,
+          block.last_edited_time,
+          logger,
+        ),
+      );
+    } else if (block.type === "callout") {
+      const { icon } = block.callout;
+      if (icon && icon.type !== "emoji") {
+        queue.add(() =>
+          saveFileOrExternal(
+            `${block.id}_icon`,
+            icon,
+            block.last_edited_time,
+            logger,
+          ),
+        );
+      }
+    }
+  }
+
+  // Process children
+  if (
+    (block.object === "page" ||
+      (block.object === "block" && block.has_children)) &&
+    depth < MAX_VISIT_DEPTH
+  ) {
+    const children = await getBlockChildren(blockId);
+    if (children.length > 0) {
+      self.children = [];
+    }
+    for (const child of children) {
+      const blockType = block.object === "block" ? block.type : "page";
+      if (!isFullBlock(child)) {
+        logger.warn(
+          `Encountered partial child ${child.id} of ${blockType} ${blockId}`,
+        );
+        continue;
+      }
+
+      self.children!.push(child.id);
+
+      if (blockMap[child.id]) {
+        logger.warn(
+          `Child ${child.id} of ${blockType} ${blockId} has already been added`,
+        );
+        continue;
+      }
+
+      // eslint-disable-next-line no-param-reassign
+      blockMap[child.id] = { block: child, children: undefined };
+
+      queue.add(() =>
+        processBlock(queue, child.id, blockMap, depth + 1, logger),
       );
     }
   }
@@ -98,7 +176,7 @@ export async function collectPageInfo(
   const blockMap: Record<string, BlockInfo> = {};
   // Kick off the traversal with the page
   blockMap[pageId] = { block: page, children: undefined };
-  queue.add(() => enqueueBlockChildrenInfo(queue, pageId, blockMap, 0, logger));
+  queue.add(() => processBlock(queue, pageId, blockMap, 0, logger));
 
   await queue.onIdle();
 
