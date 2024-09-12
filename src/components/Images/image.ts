@@ -107,7 +107,8 @@ function getFilename(
 
 async function convertImageForWidth(
   id: string,
-  { buffer, mimeType }: ImageSourceData,
+  image: Sharp,
+  { mimeType }: ImageSourceData,
   width: number,
 ): Promise<ImageWidthCacheFormat[]> {
   const formatsToGenerate: ImageTypeIdentifier[] = [];
@@ -131,7 +132,7 @@ async function convertImageForWidth(
       throw new Error(`Unsupported MIME type ${mimeType}`);
   }
 
-  const instance = sharp(buffer).resize(width);
+  const instance = image.clone().resize(width);
 
   const formatPromises = formatsToGenerate.map<Promise<ImageWidthCacheFormat>>(
     async (format) => {
@@ -195,6 +196,7 @@ async function convertImageForWidth(
 
 async function convertAndCacheWidth(
   id: string,
+  image: Sharp,
   width: number,
   sourceData: ImageSourceData,
 ) {
@@ -202,7 +204,7 @@ async function convertAndCacheWidth(
   if (!IMAGE_WIDTHS_CACHE.has(key)) {
     IMAGE_WIDTHS_CACHE.set(
       key,
-      convertImageForWidth(id, sourceData, width).then((formats) => ({
+      convertImageForWidth(id, image, sourceData, width).then((formats) => ({
         width,
         cacheOnly: false,
         formats,
@@ -315,14 +317,34 @@ export async function getImageInfo(
     keysToRemove.forEach((key) => IMAGE_WIDTHS_CACHE.delete(key));
   }
 
-  const intrinsicWidth = (await sharp(sourceData.buffer).metadata()).width!;
+  const imSharp = sharp(sourceData.buffer);
+  let intrinsicWidth: number;
+  try {
+    const meta = await imSharp.metadata();
+    intrinsicWidth = meta.width!;
+  } catch (err) {
+    if (err instanceof Error) {
+      if (sourceData.mimeType === "application/xml") {
+        console.warn(
+          "xml image data",
+          Buffer.from(sourceData.buffer).toString(),
+        );
+      }
+      throw new Error(
+        `Error when loading ${sourceData.mimeType} image ${id}: ${err.message}`,
+      );
+    }
+
+    throw err;
+  }
+
   const allWidths = getWidthsForDensities(widths, densities).filter(
     (w) => w <= intrinsicWidth,
   );
 
   // Convert image for all relevant sizes, using cache if possible
   const sizePromises = allWidths.map((width) =>
-    convertAndCacheWidth(id, width, sourceData),
+    convertAndCacheWidth(id, imSharp, width, sourceData),
   );
 
   // Also save a copy of the original size for fallback.
@@ -330,6 +352,7 @@ export async function getImageInfo(
   // I just don't feel like rewriting this file _again_ just for this.
   const originalSize = await convertAndCacheWidth(
     id,
+    imSharp,
     intrinsicWidth,
     sourceData,
   );
