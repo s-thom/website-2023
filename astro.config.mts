@@ -57,5 +57,6 @@ export default defineConfig({
   },
   experimental: {
     contentLayer: true,
+    directRenderScript: true,
   },
 });
