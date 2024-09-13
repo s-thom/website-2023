@@ -1,12 +1,19 @@
 import type { DndContext, DragCancelEvent, DragEndEvent } from "@dnd-kit/core";
 import { useCallback, useMemo, useState } from "react";
-import { sendEvent } from "../../../../../lib/analytics";
 import { useStore } from "../../../store";
 import {
   pageCoordsToPosition,
   screenCoordsToPageCoords,
 } from "../../coordinates";
 import { STICKER_TYPE_MAP } from "../../data";
+
+function sendEvent(type: string, data: { [key: string]: string | number }) {
+  // @ts-ignore
+  if (typeof umami !== "undefined") {
+    // @ts-ignore
+    umami.track(type, data);
+  }
+}
 
 export function useDragState(pageId: string) {
   const stickers = useStore((state) => state.stickers);

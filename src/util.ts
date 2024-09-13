@@ -1,13 +1,4 @@
 /**
- * @returns Promise that resolves after a given timeout
- */
-export function delay(ms: number) {
-  return new Promise<void>((res) => {
-    setTimeout(() => res(), ms);
-  });
-}
-
-/**
  * @param arr Array to choose from
  * @returns A random item from the given array
  */

@@ -1,5 +1,6 @@
 /// <reference path="../.astro/types.d.ts" />
 /// <reference types="astro/client" />
+/// <reference types="@types/umami" />
 
 interface ImportMetaEnv {
   readonly NOTION_TOKEN: string;
