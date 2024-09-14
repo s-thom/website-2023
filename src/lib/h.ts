@@ -21,7 +21,7 @@ export function h<Tag extends keyof HTMLElementTagNameMap>(
       element.addEventListener(eventNameMatch[1], value as any, {
         capture: isCapture,
       });
-      break;
+      continue;
     }
 
     if (key === "style") {
@@ -30,7 +30,7 @@ export function h<Tag extends keyof HTMLElementTagNameMap>(
       )) {
         element.style.setProperty(prop, propValue);
       }
-      break;
+      continue;
     }
 
     element[key as keyof HTMLElementTagNameMap[Tag]] = value as any;
