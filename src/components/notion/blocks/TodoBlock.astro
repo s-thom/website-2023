@@ -1,6 +1,5 @@
 ---
 import type { ToDoBlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
-import { CheckSquareIcon, SquareIcon } from "lucide-react";
 import RichText from "../common/RichText.astro";
 
 export interface Props {
@@ -13,9 +12,36 @@ const { block } = Astro.props;
 <li class="flow tiny-flow todo-item" data-block={block.id}>
   {
     block.to_do.checked ? (
-      <CheckSquareIcon className="todo-item-icon" aria-label="" />
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="todo-item-icon"
+      >
+        <path d="M21 10.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12.5" />
+        <path d="m9 11 3 3L22 4" />
+      </svg>
     ) : (
-      <SquareIcon className="todo-item-icon" aria-label="" />
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="todo-item-icon"
+      >
+        <rect width="18" height="18" x="3" y="3" rx="2" />
+      </svg>
     )
   }
   <p>
