@@ -64,7 +64,8 @@ const notionCacheDevTools: DevToolbarApp = {
         });
       }
     });
-    actionsParagraph.appendChild(reloadButton);
+    // TODO: re-add button when reloading is available in
+    // actionsParagraph.appendChild(reloadButton);
 
     if (import.meta.hot) {
       import.meta.hot.on("sthom:reload", () => {
