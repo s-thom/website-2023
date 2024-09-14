@@ -144,18 +144,18 @@ export function createStickerElement(
   }
 
   if (options.draggable) {
-    import("@atlaskit/pragmatic-drag-and-drop/element/adapter").then(
-      ({ draggable }) => {
-        if (isDestroyed) {
-          return;
-        }
+    import(
+      "@atlaskit/pragmatic-drag-and-drop/dist/cjs/entry-point/element/adapter"
+    ).then(({ draggable }) => {
+      if (isDestroyed) {
+        return;
+      }
 
-        cleanupDraggable = draggable({
-          element: container,
-          getInitialData: () => options.draggableData ?? {},
-        });
-      },
-    );
+      cleanupDraggable = draggable({
+        element: container,
+        getInitialData: () => options.draggableData ?? {},
+      });
+    });
   }
 
   return {

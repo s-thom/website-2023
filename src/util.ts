@@ -26,4 +26,8 @@ export function clone<T>(value: T): T {
   return JSON.parse(JSON.stringify(value));
 }
 
+export function combine(...fns: (() => void)[]): () => void {
+  return () => fns.forEach((fn) => fn());
+}
+
 export const isBrowser = "window" in globalThis;

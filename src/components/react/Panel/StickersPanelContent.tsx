@@ -1,8 +1,7 @@
-import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import {
   dropTargetForElements,
   monitorForElements,
-} from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
+} from "@atlaskit/pragmatic-drag-and-drop/dist/cjs/entry-point/element/adapter";
 import { useEffect, useMemo, useRef } from "react";
 import {
   sortStickerTypes,
@@ -10,6 +9,7 @@ import {
 } from "../../../stickers/data";
 import { removeFromPage } from "../../../stickers/functions";
 import type { StickerInfo } from "../../../stickers/types";
+import { combine } from "../../../util";
 import { useStickers } from "../hooks/useStickers";
 import { StickerWrapper } from "../StickerWrapper.tsx";
 

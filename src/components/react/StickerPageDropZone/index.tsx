@@ -1,8 +1,7 @@
-import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import {
   dropTargetForElements,
   monitorForElements,
-} from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
+} from "@atlaskit/pragmatic-drag-and-drop/dist/cjs/entry-point/element/adapter";
 import clsx from "clsx";
 import { Trash2Icon } from "lucide-react";
 import {
@@ -20,6 +19,7 @@ import {
 } from "../../../stickers/coordinates";
 import { placeOnPage, removeFromPage } from "../../../stickers/functions";
 import type { StickerInfo } from "../../../stickers/types";
+import { combine } from "../../../util";
 import { useStickers } from "../hooks/useStickers";
 import { StickerWrapper } from "../StickerWrapper.tsx";
 import "./index.css";
