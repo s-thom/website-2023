@@ -41,8 +41,8 @@ const OPTION_KEYS: Partial<{
     ],
   },
   stickers: {
-    title: "Stickers",
-    description: "Find collectible stickers while reading.",
+    title: "Emoji",
+    description: "Place emoji while reading.",
     values: [
       { value: "on", label: "On" },
       { value: "off", label: "Off" },
@@ -67,7 +67,7 @@ export function SettingsPanelContent() {
 
   return (
     <div className="settings-content">
-      <h2 className="settings-heading">Preferences</h2>
+      <h2 className="settings-heading">Settings</h2>
       {Object.keys(OPTION_KEYS).map((k) => {
         const key = k as keyof Options;
         const v = OPTION_KEYS[key]!;

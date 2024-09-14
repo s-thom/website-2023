@@ -49,7 +49,9 @@
         button.dataset.umamiEvent = `stickers-toggle-${
           isEnabled ? "disabled" : "enabled"
         }`;
-        button.textContent = isEnabled ? "Disable stickers" : "Enable stickers";
+        button.textContent = isEnabled
+          ? "Turn off stickers"
+          : "Turn on stickers";
       }
 
       const initialEnabled = getOptionValue("stickers") === "on";

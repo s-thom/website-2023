@@ -117,8 +117,8 @@ export function StickersPanelContent() {
         </>
       ) : (
         <div className="sticker-list-empty">
-          Emoji stickers are currently disabled. Use the settings panel to turn
-          them back on, or read more on the{" "}
+          Emoji stickers are currently turned off. Use the settings panel to
+          turn them back on, or read more on the{" "}
           <a href="/sticker-book">sticker book</a> page.
         </div>
       )}
