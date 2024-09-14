@@ -5,15 +5,25 @@ import {
 } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import clsx from "clsx";
 import { Trash2Icon } from "lucide-react";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, type CSSProperties } from "react";
 import {
   pageCoordsToPosition,
+  positionToPageCoords,
   screenCoordsToPageCoords,
 } from "../../../stickers/coordinates";
 import { placeOnPage, removeFromPage } from "../../../stickers/functions";
+import type { StickerInfo } from "../../../stickers/types";
 import { useStickers } from "../hooks/useStickers";
 import { StickerWrapper } from "../StickerWrapper.tsx";
 import "./index.css";
+
+function getStickerPositionStyle(sticker: StickerInfo): CSSProperties {
+  const coords = positionToPageCoords(sticker.position);
+  return {
+    top: coords.y,
+    left: coords.x,
+  };
+}
 
 export interface StickerPageDropZoneProps {
   pageId: string;
@@ -48,9 +58,10 @@ export function StickerPageDropZone({ pageId }: StickerPageDropZoneProps) {
         },
         onDrop: ({ source, location }) => {
           if (typeof source.data.stickerId === "string") {
+            const stickerSize = source.element.getBoundingClientRect();
             const unTransformedPosition = {
-              x: location.current.input.clientX,
-              y: location.current.input.clientY,
+              x: location.current.input.clientX - stickerSize.width / 2,
+              y: location.current.input.clientY - stickerSize.height / 2,
             };
             const position = pageCoordsToPosition(
               screenCoordsToPageCoords(unTransformedPosition),
@@ -98,12 +109,17 @@ export function StickerPageDropZone({ pageId }: StickerPageDropZoneProps) {
     <>
       <div className="sticker-page-positioning">
         {pageStickers.map((sticker) => (
-          <StickerWrapper
+          <div
             key={sticker.id}
-            type={sticker.type}
-            stickerId={sticker.id}
-            draggable
-          />
+            className="sticker-positioning"
+            style={getStickerPositionStyle(sticker)}
+          >
+            <StickerWrapper
+              type={sticker.type}
+              stickerId={sticker.id}
+              draggable
+            />
+          </div>
         ))}
       </div>
       <div ref={pageDropZoneRef} className={clsx("sticker-page-drop-zone")} />

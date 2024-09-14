@@ -4,7 +4,12 @@
   left: 0;
   width: 100%;
   height: 100%;
+  overflow-x: hidden;
   pointer-events: none;
+
+  & .sticker-positioning {
+    position: absolute;
+  }
 
   & .sticker {
     pointer-events: all;
@@ -37,18 +42,21 @@
   left: 50%;
   padding: var(--spacing);
   border-radius: 50%;
-  background-color: rgba(128 128 128 / 1);
+  background-color: rgb(128 128 128);
   color: #fff;
   transition:
     background-color var(--transition-duration) linear,
     transform var(--transition-duration) ease-out;
   pointer-events: all;
-  transform: translateX(-50%) translateY(110%);
+  transform: translateX(-50%) translateY(var(--translateY)) scale(var(--scale));
+  --translateY: 110%;
+  --scale: 100%;
 
   &.active {
-    transform: translateX(-50%) translateY(calc(var(--spacing) * -1));
+    --translateY: calc(var(--spacing) * -1);
   }
   &.over {
-    background-color: rgba(128 0 0 / 1);
+    --scale: 110%;
+    background-color: rgb(229, 47, 49);
   }
 }
