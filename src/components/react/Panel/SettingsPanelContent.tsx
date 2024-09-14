@@ -82,6 +82,7 @@ export function SettingsPanelContent() {
                   />
                   <label
                     htmlFor={`${key}-${value.value}`}
+                    tabIndex={0}
                     {...{ [`data-${key}`]: value.value }}
                   >
                     {value.label}

@@ -23,6 +23,9 @@
   &.open {
     transform: translateX(calc(-100% - var(--side-panel-spacing)));
   }
+  &:has(.side-panel-content:focus-within) {
+    transform: translateX(calc(-100% - var(--side-panel-spacing)));
+  }
 }
 
 [data-has-js] .side-panel {
