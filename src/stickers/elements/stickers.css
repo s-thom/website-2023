@@ -57,6 +57,10 @@
   }
 }
 
+.sticker-draggable {
+  cursor: grab;
+}
+
 .movable-sticker {
   cursor: grab;
 }

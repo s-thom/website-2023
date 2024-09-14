@@ -1,7 +1,6 @@
 ---
 import PageMeta, { type PageMetaType } from "../components/PageMeta.astro";
 import StickersHead from "../components/StickersHead.astro";
-import { LazyLoader } from "../components/react/LazyLoader.tsx";
 import { Panel } from "../components/react/Panel/index.tsx";
 import SettingsInitialLoader from "../components/site/SettingsInitialLoader.astro";
 import Web3IsAScam from "../components/site/Web3IsAScam.astro";
@@ -45,7 +44,7 @@ const { id, meta, stickers } = Astro.props;
   <slot name="page-footer" />
   <slot name="site-footer" />
 
-  {
+  <!-- {
     stickers.enabled && (
       <LazyLoader
         type="sticker-app"
@@ -53,7 +52,7 @@ const { id, meta, stickers } = Astro.props;
         client:stickers={id}
       />
     )
-  }
+  } -->
 
   <Panel client:idle />
 </MinimalLayout>

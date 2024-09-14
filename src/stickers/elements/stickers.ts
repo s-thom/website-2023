@@ -82,6 +82,7 @@ function createLoadingElement(): HTMLDivElement {
 }
 
 export interface CreateStickerOptions {
+  draggable?: boolean;
   className?: string;
 }
 
@@ -91,12 +92,19 @@ export function createStickerElement(
 ): { element: HTMLDivElement; destroy: () => void } {
   const container = h(
     "div",
-    { className: clsx("sticker", options.className) },
+    {
+      className: clsx(
+        "sticker",
+        options.draggable && "sticker-draggable",
+        options.className,
+      ),
+    },
     [],
   );
 
   let isDestroyed = false;
   let animation: AnimationItem;
+  let cleanupDraggable: () => void;
 
   const data = STICKER_TYPE_MAP[type];
   if (data.type === "lottie") {
@@ -120,11 +128,24 @@ export function createStickerElement(
     }
   }
 
+  if (options.draggable) {
+    import("@atlaskit/pragmatic-drag-and-drop/element/adapter").then(
+      ({ draggable }) => {
+        if (isDestroyed) {
+          return;
+        }
+
+        cleanupDraggable = draggable({ element: container });
+      },
+    );
+  }
+
   return {
     element: container,
     destroy: () => {
       isDestroyed = true;
       animation?.destroy();
+      cleanupDraggable?.();
     },
   };
 }

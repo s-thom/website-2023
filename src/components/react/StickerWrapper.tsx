@@ -4,9 +4,10 @@ import type { StickerTypes } from "../../stickers/types";
 
 export interface StickerWrapperProps {
   type: StickerTypes;
+  draggable?: boolean;
 }
 
-export function StickerWrapper({ type }: StickerWrapperProps) {
+export function StickerWrapper({ type, draggable }: StickerWrapperProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -15,14 +16,14 @@ export function StickerWrapper({ type }: StickerWrapperProps) {
       return undefined;
     }
 
-    const { element, destroy } = createStickerElement(type);
+    const { element, destroy } = createStickerElement(type, { draggable });
     wrapper.appendChild(element);
 
     return () => {
       wrapper.removeChild(element);
       destroy();
     };
-  }, [type]);
+  }, [draggable, type]);
 
   return <div ref={wrapperRef} />;
 }
