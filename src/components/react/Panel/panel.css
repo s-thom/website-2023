@@ -57,7 +57,7 @@
 .loading-content,
 .settings-content,
 .stickers-content {
-  margin: var(--spacing);
+  padding: var(--spacing);
 }
 
 .loading-content {
@@ -91,6 +91,15 @@
   }
 }
 
+.stickers-content {
+  background-color: transparent;
+  transition: background-color var(--transition-duration) linear;
+
+  &.over {
+    background-color: rgba(229 47 49 / 0.1);
+  }
+}
+
 .sticker-list {
   display: flex;
   gap: var(--spacing-half);
@@ -106,6 +115,7 @@
   font-size: var(--size-step-min1);
   bottom: 0;
   right: 0;
+  color: var(--color-text);
   background-color: var(--color-background-secondary);
   padding: 0em 0.5em;
   border-radius: 0.5em;

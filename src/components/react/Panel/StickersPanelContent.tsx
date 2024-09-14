@@ -1,8 +1,14 @@
-import { useMemo } from "react";
+import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
+import {
+  dropTargetForElements,
+  monitorForElements,
+} from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
+import { useEffect, useMemo, useRef } from "react";
 import {
   sortStickerTypes,
   type STICKER_TYPE_MAP,
 } from "../../../stickers/data";
+import { removeFromPage } from "../../../stickers/functions";
 import type { StickerInfo } from "../../../stickers/types";
 import { useStickers } from "../hooks/useStickers";
 import { StickerWrapper } from "../StickerWrapper.tsx";
@@ -52,10 +58,47 @@ function StickerList({ stickers }: StickerListProps) {
 }
 
 export function StickersPanelContent() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
   const { enabled, stickers } = useStickers();
 
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) {
+      return undefined;
+    }
+
+    const cleanup = combine(
+      dropTargetForElements({
+        element: container,
+        onDragEnter: () => {
+          container.classList.add("over");
+        },
+        onDragLeave: () => {
+          container.classList.remove("over");
+        },
+        onDrop: ({ source }) => {
+          if (typeof source.data.stickerId === "string") {
+            removeFromPage(source.data.stickerId);
+          }
+        },
+      }),
+      monitorForElements({
+        onDragStart: () => {
+          container.classList.add("active");
+        },
+        onDrop: () => {
+          container.classList.remove("active");
+          container.classList.remove("over");
+        },
+      }),
+    );
+
+    return () => cleanup();
+  }, []);
+
   return (
-    <div className="stickers-content">
+    <div className="stickers-content" ref={containerRef}>
       <h2>
         <a href="/sticker-book">Stickers</a>
       </h2>
