@@ -21,6 +21,7 @@ const { pageId, enabled, unlockOnScroll = true, special } = Astro.props;
 />
 <script>
   import { v4 as uuid } from "uuid";
+  import { getOptionValue, subscribeToOption } from "../lib/options";
   import {
     type AddStickerEventData,
     STICKER_TYPES_BY_RARITY,
@@ -28,7 +29,6 @@ const { pageId, enabled, unlockOnScroll = true, special } = Astro.props;
     type StickerInfo,
     type StickerTypes,
     addSticker,
-    addStickerStoreListener,
     getStickerStore,
   } from "../stickers/stickers";
   import { arrayRandom, range } from "../util";
@@ -202,16 +202,17 @@ const { pageId, enabled, unlockOnScroll = true, special } = Astro.props;
         window.removeEventListener("addsticker", onAddStickerEvent);
       };
 
-      addStickerStoreListener<boolean>(
-        (enabled) => {
-          if (enabled) {
-            subscribe();
-          } else {
-            unsubscribe();
-          }
-        },
-        (value) => value.enabled,
-      );
+      const initialEnabled = getOptionValue("stickers") === "on";
+      if (initialEnabled) {
+        subscribe();
+      }
+      subscribeToOption("stickers", (value) => {
+        if (value === "on") {
+          subscribe();
+        } else {
+          unsubscribe();
+        }
+      });
     }
   }
 

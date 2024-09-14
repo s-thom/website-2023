@@ -87,7 +87,6 @@ export interface CenterPosition {
 export type StickerPosition = NonePosition | CenterPosition;
 
 export interface StickerStoreValue {
-  enabled: boolean;
   stickers: StickerInfo[];
 }
 
@@ -301,7 +300,6 @@ export function sortStickerTypes(a: StickerTypes, z: StickerTypes): number {
 
 // #region Store
 const INITIAL_VALUE: StickerStoreValue = {
-  enabled: true,
   stickers: [],
 };
 const STICKER_STORE_KEY = "sthom-website-stickers";
@@ -735,14 +733,4 @@ export function removeFromPage(stickerId: string): StickerInfo[] {
   setStickerStore(store);
   return store.stickers;
 }
-
-export function toggleStickersEnabled(value?: boolean): boolean {
-  const store = getStickerStore();
-
-  const copy = { ...store };
-  copy.enabled = value ?? !store.enabled;
-  setStickerStore(copy);
-  return store.enabled;
-}
-
 // #endregion

@@ -1,11 +1,21 @@
 import { useSyncExternalStore } from "react";
-import { type StickerStoreValue, addStickerStoreListener, getStickerStore } from '../../../stickers/stickers';
+import {
+  addStickerStoreListener,
+  getStickerStore,
+  type StickerStoreValue,
+} from "../../../stickers/stickers";
+import { useOptions } from "./useOptions";
+
+export function useStickersEnabled(): boolean {
+  const options = useOptions();
+  return options.stickers === "on";
+}
 
 export function useStickers(): StickerStoreValue {
   const value = useSyncExternalStore<StickerStoreValue>(
     addStickerStoreListener,
-    () => getStickerStore(),
-    () => getStickerStore(),
+    getStickerStore,
+    getStickerStore,
   );
 
   return value;

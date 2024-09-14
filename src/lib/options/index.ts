@@ -101,15 +101,23 @@ function mergeState<K extends keyof Options>(
 
 export function setOptionValue<K extends keyof Options>(
   key: K,
-  value: OptionsWithAuto[K],
+  value:
+    | OptionsWithAuto[K]
+    | ((prev: Options[K], isAuto: boolean) => OptionsWithAuto[K]),
 ) {
   const prevState = getState();
   const prevResult = prevState[key];
 
+  const newValue =
+    typeof value === "function"
+      ? value(prevResult.value, prevResult.isAuto)
+      : value;
+
   const newResult: OptionResult<Options[K]> = {
-    value: value === "auto" ? prevResult.autoValue : (value as Options[K]),
+    value:
+      newValue === "auto" ? prevResult.autoValue : (newValue as Options[K]),
     autoValue: prevResult.autoValue,
-    isAuto: value === "auto",
+    isAuto: newValue === "auto",
     listeners: prevResult.listeners,
   };
 

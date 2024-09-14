@@ -35,9 +35,17 @@ const OPTION_KEYS: Partial<{
     title: "Motion",
     description: "Enable or disable animated effects.",
     values: [
-      { value: "reduced", label: "Off" },
       { value: "no-preference", label: "On" },
+      { value: "reduced", label: "Off" },
       { value: "auto", label: "System default" },
+    ],
+  },
+  stickers: {
+    title: "Stickers",
+    description: "Find collectible stickers while reading.",
+    values: [
+      { value: "on", label: "On" },
+      { value: "off", label: "Off" },
     ],
   },
 };
@@ -72,6 +80,8 @@ export function SettingsPanelContent() {
                 <Fragment key={value.value}>
                   <input
                     id={`${key}-${value.value}`}
+                    aria-labelledby={`${key}-${value.value}-label`}
+                    className="visually-hidden"
                     type="radio"
                     name={key}
                     value={value.value}
@@ -81,8 +91,8 @@ export function SettingsPanelContent() {
                     data-umami-event-theme={value.value}
                   />
                   <label
+                    id={`${key}-${value.value}-label`}
                     htmlFor={`${key}-${value.value}`}
-                    tabIndex={0}
                     {...{ [`data-${key}`]: value.value }}
                   >
                     {value.label}

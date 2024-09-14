@@ -7,7 +7,7 @@ import {
   createStickerElement,
   createStickerFrame,
 } from "../../../stickers/stickers";
-import { useStickers } from "../hooks/useStickers";
+import { useStickers, useStickersEnabled } from "../hooks/useStickers";
 import "./StickerBook.css";
 
 const useIdempotentLayoutEffect =
@@ -53,7 +53,9 @@ export function StickerBook() {
   useIdempotentLayoutEffect(() => {
     setIsClient(true);
   }, []);
-  const { enabled: isStickersEnabled, stickers } = useStickers();
+
+  const isStickersEnabled = useStickersEnabled();
+  const { stickers } = useStickers();
 
   const firstStickersOfType = useMemo(() => {
     const map = new Map<keyof typeof STICKER_TYPE_MAP, StickerInfo[]>();

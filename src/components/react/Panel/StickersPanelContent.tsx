@@ -10,7 +10,7 @@ import {
   sortStickerTypes,
 } from "../../../stickers/stickers";
 import { combine } from "../../../util";
-import { useStickers } from "../hooks/useStickers";
+import { useStickers, useStickersEnabled } from "../hooks/useStickers";
 import { StickerWrapper } from "../StickerWrapper.tsx";
 
 interface StickerListProps {
@@ -66,7 +66,8 @@ function StickerList({ stickers }: StickerListProps) {
 export function StickersPanelContent() {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const { enabled, stickers } = useStickers();
+  const enabled = useStickersEnabled();
+  const { stickers } = useStickers();
 
   useEffect(() => {
     const container = containerRef.current;
@@ -106,16 +107,19 @@ export function StickersPanelContent() {
   return (
     <div className="stickers-content flow" ref={containerRef}>
       <h2>Place an emoji</h2>
-      <p>
-        Get new emoji while reading, then place them anywhere on any page.{" "}
-        <a href="/sticker-book">Read more</a>.
-      </p>
       {enabled ? (
-        <StickerList stickers={stickers} />
+        <>
+          <p>
+            Get new emoji while reading, then place them anywhere on any page.{" "}
+            <a href="/sticker-book">Read more</a>.
+          </p>
+          <StickerList stickers={stickers} />
+        </>
       ) : (
         <div className="sticker-list-empty">
-          Emoji stickers are currently disabled. Go to the{" "}
-          <a href="/sticker-book">sticker book</a> page to turn them back on.
+          Emoji stickers are currently disabled. Use the settings panel to turn
+          them back on, or read more on the{" "}
+          <a href="/sticker-book">sticker book</a> page.
         </div>
       )}
     </div>

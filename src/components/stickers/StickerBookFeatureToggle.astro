@@ -33,14 +33,17 @@
 
 <script>
   import {
-    addStickerStoreListener,
-    toggleStickersEnabled,
-  } from "../../stickers/stickers";
+    getOptionValue,
+    setOptionValue,
+    subscribeToOption,
+  } from "../../lib/options";
 
   document
     .querySelectorAll<HTMLButtonElement>("button.stickers-toggle-button")
     .forEach((button) => {
-      button.addEventListener("click", () => toggleStickersEnabled());
+      button.addEventListener("click", () =>
+        setOptionValue("stickers", (prev) => (prev === "on" ? "off" : "on")),
+      );
 
       function updateButton(isEnabled: boolean) {
         button.dataset.umamiEvent = `stickers-toggle-${
@@ -49,11 +52,10 @@
         button.textContent = isEnabled ? "Disable stickers" : "Enable stickers";
       }
 
-      addStickerStoreListener<boolean>(
-        (enabled) => {
-          updateButton(enabled);
-        },
-        (value) => value.enabled,
-      );
+      const initialEnabled = getOptionValue("stickers") === "on";
+      updateButton(initialEnabled);
+      subscribeToOption("stickers", (value) => {
+        updateButton(value === "on");
+      });
     });
 </script>

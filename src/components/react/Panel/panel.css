@@ -73,10 +73,6 @@
   flex-wrap: wrap;
   gap: var(--spacing-half);
 
-  input {
-    display: none;
-  }
-
   label {
     flex-basis: 40%;
     flex-grow: 1;
@@ -88,6 +84,10 @@
   input:checked + label {
     background-color: var(--big-box-color);
     color: var(--color-text-header-negative);
+  }
+  input:focus-visible + label {
+    outline: 2px solid var(--color-link);
+    outline-offset: 2px;
   }
 }
 

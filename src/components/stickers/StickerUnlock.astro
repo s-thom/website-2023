@@ -55,6 +55,7 @@ const { type, hideOnUnlock, class: className } = Astro.props;
 </style>
 
 <script>
+  import { getOptionValue, subscribeToOption } from "../../lib/options";
   import {
     type StickerTypes,
     STICKER_TYPE_MAP,
@@ -62,6 +63,7 @@ const { type, hideOnUnlock, class: className } = Astro.props;
     createStickerElement,
     createStickerFrame,
     addStickerStoreListener,
+    type StickerInfo,
   } from "../../stickers/stickers";
 
   document
@@ -93,18 +95,27 @@ const { type, hideOnUnlock, class: className } = Astro.props;
 
       button.appendChild(frame);
 
-      addStickerStoreListener((value) => {
-        const isUnlocked = !!value.stickers.find(
-          (sticker) => sticker.type === type,
-        );
+      let stickers: StickerInfo[] = [];
+      let stickersEnabled = getOptionValue("stickers") === "on";
+
+      function updateUnlockVsibility() {
+        const isUnlocked = !!stickers.find((sticker) => sticker.type === type);
         const shouldHide =
-          !value.enabled ||
-          (hideOnUnlock &&
-            !!value.stickers.find((sticker) => sticker.type === type));
+          !stickersEnabled ||
+          (hideOnUnlock && !!stickers.find((sticker) => sticker.type === type));
 
         element.classList.toggle("fully-hidden", shouldHide);
         button.classList.toggle("sticker-unlock-claimed", isUnlocked);
         button.disabled = isUnlocked;
+      }
+
+      subscribeToOption("stickers", (value) => {
+        stickersEnabled = value === "on";
+        updateUnlockVsibility();
+      });
+      addStickerStoreListener((value) => {
+        stickers = value.stickers;
+        updateUnlockVsibility();
       });
     });
 </script>

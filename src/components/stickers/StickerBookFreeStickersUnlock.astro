@@ -20,11 +20,11 @@
 </style>
 
 <script>
+  import { getOptionValue, subscribeToOption } from "../../lib/options";
   import {
-    type StickerTypes,
     type AddStickerEventData,
     STICKER_TYPES_BY_RARITY,
-    addStickerStoreListener,
+    type StickerTypes,
   } from "../../stickers/stickers";
   import { arrayRandom, range } from "../../util";
 
@@ -58,11 +58,10 @@
     .forEach((button) => {
       button.addEventListener("click", addMoreStickers);
 
-      addStickerStoreListener<boolean>(
-        (enabled) => {
-          button.classList.toggle("fully-hidden", !enabled);
-        },
-        (value) => value.enabled,
-      );
+      const initialEnabled = getOptionValue("stickers") === "on";
+      button.classList.toggle("fully-hidden", !initialEnabled);
+      subscribeToOption("stickers", (value) => {
+        button.classList.toggle("fully-hidden", value !== "on");
+      });
     });
 </script>

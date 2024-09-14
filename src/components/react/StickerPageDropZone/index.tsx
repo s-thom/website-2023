@@ -20,7 +20,7 @@ import {
   type Vec2,
 } from "../../../stickers/stickers";
 import { combine } from "../../../util";
-import { useStickers } from "../hooks/useStickers";
+import { useStickers, useStickersEnabled } from "../hooks/useStickers";
 import { StickerWrapper } from "../StickerWrapper.tsx";
 import "./index.css";
 
@@ -121,7 +121,9 @@ export function StickerPageDropZone({ pageId }: StickerPageDropZoneProps) {
 
   const pageDropZoneRef = useRef<HTMLDivElement>(null);
   const deleteZoneRef = useRef<HTMLDivElement>(null);
-  const { enabled, stickers } = useStickers();
+
+  const enabled = useStickersEnabled();
+  const { stickers } = useStickers();
 
   const pageStickers = useMemo(
     () => stickers.filter((sticker) => sticker.zone === pageId),
