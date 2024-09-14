@@ -1,4 +1,4 @@
-import { useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import {
   type StickerInfo,
   type StickerTypes,
@@ -10,6 +10,9 @@ import {
 import { useStickers } from "../hooks/useStickers";
 import "./StickerBook.css";
 
+const useIdempotentLayoutEffect =
+  "window" in globalThis ? useLayoutEffect : useEffect;
+
 export interface FramedStickerProps {
   type: StickerTypes;
 }
@@ -17,7 +20,7 @@ export interface FramedStickerProps {
 export function FramedSticker({ type }: FramedStickerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useLayoutEffect(() => {
+  useIdempotentLayoutEffect(() => {
     const container = containerRef.current;
     if (!container) {
       return undefined;
@@ -47,7 +50,7 @@ export function FramedSticker({ type }: FramedStickerProps) {
 
 export function StickerBook() {
   const [isClient, setIsClient] = useState(false);
-  useLayoutEffect(() => {
+  useIdempotentLayoutEffect(() => {
     setIsClient(true);
   }, []);
   const { enabled: isStickersEnabled, stickers } = useStickers();

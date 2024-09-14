@@ -4,11 +4,15 @@ import {
   lazy,
   startTransition,
   Suspense,
+  useEffect,
   useLayoutEffect,
   useState,
 } from "react";
 import { LoadingPanelContent } from "./LoadingPanelContent.tsx";
 import "./panel.css";
+
+const useIdempotentLayoutEffect =
+  "window" in globalThis ? useLayoutEffect : useEffect;
 
 const SettingsPanelContent = lazy(() =>
   import("./SettingsPanelContent.tsx").then((module) => ({
@@ -25,7 +29,7 @@ type PanelTypes = "settings" | "stickers";
 
 export function Panel() {
   const [isClient, setIsClient] = useState(false);
-  useLayoutEffect(() => {
+  useIdempotentLayoutEffect(() => {
     setIsClient(true);
   }, []);
 

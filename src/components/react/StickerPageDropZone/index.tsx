@@ -25,7 +25,10 @@ import { useStickers } from "../hooks/useStickers";
 import { StickerWrapper } from "../StickerWrapper.tsx";
 import "./index.css";
 
-// This file exists to translate between different coordinate systems that are present in the stickers code.
+const useIdempotentLayoutEffect =
+  "window" in globalThis ? useLayoutEffect : useEffect;
+
+// These functions exist to translate between different coordinate systems that are present in the stickers code.
 // Outside of the stickers themselves, there's two important systems that come in to play due to scrolling:
 // * Screen: The x/y coordinates on the user's screen. The drag/drop uses these coordinates.
 // * Page:   The x/y coordinates on the page (may be larger than the physical screen). Invariant of scrolling.
@@ -113,7 +116,7 @@ export interface StickerPageDropZoneProps {
 
 export function StickerPageDropZone({ pageId }: StickerPageDropZoneProps) {
   const [isClient, setIsClient] = useState(false);
-  useLayoutEffect(() => {
+  useIdempotentLayoutEffect(() => {
     setIsClient(true);
   }, []);
 
