@@ -41,7 +41,7 @@ export function h<Tag extends keyof HTMLElementTagNameMap>(
   } else {
     for (const child of children) {
       if (!child) {
-        break;
+        continue;
       }
       element.appendChild(child);
     }
