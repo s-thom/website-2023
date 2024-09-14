@@ -1,8 +1,14 @@
 import clsx from "clsx/lite";
-import { Settings2Icon } from "lucide-react";
-import { Suspense, useState } from "react";
+import { BookHeartIcon, Settings2Icon } from "lucide-react";
+import { lazy, Suspense, useState } from "react";
 import { SettingsPanelContent } from "./SettingsPanelContent.tsx";
 import "./panel.css";
+
+const StickersPanelContent = lazy(() =>
+  import("./StickersPanelContent.tsx").then((module) => ({
+    default: module.StickersPanelContent,
+  })),
+);
 
 type PanelTypes = "settings" | "stickers";
 
@@ -30,7 +36,7 @@ export function Panel() {
       >
         <Settings2Icon />
       </button>
-      {/* <button
+      <button
         type="button"
         className={clsx("side-panel-handle")}
         aria-label="Toggle stickers"
@@ -38,10 +44,11 @@ export function Panel() {
         onClick={() => togglePanel("stickers")}
       >
         <BookHeartIcon />
-      </button> */}
+      </button>
       <div className={clsx("side-panel-content")}>
         <Suspense>
           {selectedPanel === "settings" && <SettingsPanelContent />}
+          {selectedPanel === "stickers" && <StickersPanelContent />}
         </Suspense>
       </div>
     </div>
