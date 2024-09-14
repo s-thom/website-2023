@@ -1,5 +1,4 @@
 import { clsx } from "clsx";
-import lottie from "lottie-web/build/player/lottie_light";
 import { h } from "../lib/h";
 import { getOptionValue, subscribeToOption } from "../lib/options";
 import { clone } from "../util";
@@ -439,7 +438,20 @@ export function getLottieData(type: StickerTypes) {
   return LOTTIE_PROMISE_CACHE[type]!;
 }
 
-function createLottieAnimation(type: StickerTypes): {
+type LottieType =
+  (typeof import("lottie-web/build/player/lottie_light"))["default"];
+// eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle
+let _lottie: LottieType | undefined;
+async function lazyLoadLottie() {
+  const result = await import("lottie-web/build/player/lottie_light");
+  _lottie = result.default;
+  return _lottie;
+}
+
+function createLottieAnimation(
+  lottie: LottieType,
+  type: StickerTypes,
+): {
   element: HTMLDivElement;
   cleanup: () => void;
 } {
@@ -530,20 +542,21 @@ export function createStickerElement(
 
   const data = STICKER_TYPE_MAP[type];
   if (data.type === "lottie") {
-    if (LOTTIE_SNEAKY_CACHE[type]) {
-      const { element, cleanup } = createLottieAnimation(type);
+    // Use sneaky cache (with unwrapped values) if possible
+    if (LOTTIE_SNEAKY_CACHE[type] && _lottie) {
+      const { element, cleanup } = createLottieAnimation(_lottie, type);
       lottieCleanup = cleanup;
       container.appendChild(element);
     } else {
       const loading = createLoadingElement();
       container.appendChild(loading);
 
-      getLottieData(type).then(() => {
+      Promise.all([lazyLoadLottie(), getLottieData(type)]).then(([lottie]) => {
         if (isDestroyed) {
           return;
         }
         container.removeChild(loading);
-        const { element, cleanup } = createLottieAnimation(type);
+        const { element, cleanup } = createLottieAnimation(lottie, type);
         lottieCleanup = cleanup;
         container.appendChild(element);
       });
