@@ -1,6 +1,12 @@
 import clsx from "clsx";
 import { BookHeartIcon, Settings2Icon } from "lucide-react";
-import { lazy, startTransition, Suspense, useState } from "react";
+import {
+  lazy,
+  startTransition,
+  Suspense,
+  useLayoutEffect,
+  useState,
+} from "react";
 import { LoadingPanelContent } from "./LoadingPanelContent.tsx";
 import "./panel.css";
 
@@ -18,6 +24,11 @@ const StickersPanelContent = lazy(() =>
 type PanelTypes = "settings" | "stickers";
 
 export function Panel() {
+  const [isClient, setIsClient] = useState(false);
+  useLayoutEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const [isOpen, setIsOpen] = useState(false);
   const [selectedPanel, setSelectedPanel] = useState<PanelTypes>("settings");
   const [hasLoaded, setHasLoaded] = useState<
@@ -40,6 +51,10 @@ export function Panel() {
       }
     }
   };
+
+  if (!isClient) {
+    return null;
+  }
 
   return (
     <div className={clsx("side-panel", isOpen && "open")}>

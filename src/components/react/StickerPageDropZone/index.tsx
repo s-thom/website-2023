@@ -5,7 +5,14 @@ import {
 } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import clsx from "clsx";
 import { Trash2Icon } from "lucide-react";
-import { useEffect, useMemo, useRef, type CSSProperties } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import {
   pageCoordsToPosition,
   positionToPageCoords,
@@ -30,6 +37,11 @@ export interface StickerPageDropZoneProps {
 }
 
 export function StickerPageDropZone({ pageId }: StickerPageDropZoneProps) {
+  const [isClient, setIsClient] = useState(false);
+  useLayoutEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const pageDropZoneRef = useRef<HTMLDivElement>(null);
   const deleteZoneRef = useRef<HTMLDivElement>(null);
   const { enabled, stickers } = useStickers();
@@ -101,7 +113,7 @@ export function StickerPageDropZone({ pageId }: StickerPageDropZoneProps) {
     return () => cleanup();
   }, [enabled, pageId]);
 
-  if (!enabled) {
+  if (!enabled || !isClient) {
     return null;
   }
 

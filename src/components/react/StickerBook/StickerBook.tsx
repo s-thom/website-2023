@@ -1,4 +1,4 @@
-import { useLayoutEffect, useMemo, useRef } from "react";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { STICKER_TYPE_MAP } from "../../../stickers/data";
 import { createStickerFrame } from "../../../stickers/elements/stickerFrame";
 import { createStickerElement } from "../../../stickers/elements/stickers";
@@ -46,6 +46,10 @@ export function FramedSticker({ type }: FramedStickerProps) {
 }
 
 export function StickerBook() {
+  const [isClient, setIsClient] = useState(false);
+  useLayoutEffect(() => {
+    setIsClient(true);
+  }, []);
   const { enabled: isStickersEnabled, stickers } = useStickers();
 
   const firstStickersOfType = useMemo(() => {
@@ -80,7 +84,7 @@ export function StickerBook() {
     return firstsOfGroups;
   }, [stickers]);
 
-  if (!isStickersEnabled) {
+  if (!isStickersEnabled || !isClient) {
     return null;
   }
 
