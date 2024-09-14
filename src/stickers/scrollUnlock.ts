@@ -53,7 +53,13 @@ export class ScrollUnlockHandler {
     const { stickers: currentStickers } = getStickerStore();
 
     if (this.special !== undefined) {
-      if (!currentStickers.find((sticker) => sticker.type === this.special)) {
+      if (
+        !currentStickers.find(
+          (sticker) =>
+            sticker.type === this.special &&
+            sticker.unlockPageId === this.pageId,
+        )
+      ) {
         // Must have scrolled some amount.
         // This does lead to an edge case where a large enough viewport means that nothing is given. but that's fine.
         // This system isn't exactly fair, but it also doesn't matter at all.

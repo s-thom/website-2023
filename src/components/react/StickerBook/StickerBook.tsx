@@ -91,10 +91,13 @@ export function StickerBook() {
   return firstStickersOfType.length === 0 ? (
     <div className="sticker-book-empty">No stickers unlocked yet...</div>
   ) : (
-    <div className="sticker-book-grid">
-      {firstStickersOfType.map((sticker) => (
-        <FramedSticker key={sticker.type} type={sticker.type} />
-      ))}
+    <div>
+      <h2>Your Collection</h2>
+      <div className="sticker-book-grid">
+        {firstStickersOfType.map((sticker) => (
+          <FramedSticker key={sticker.type} type={sticker.type} />
+        ))}
+      </div>
     </div>
   );
 }

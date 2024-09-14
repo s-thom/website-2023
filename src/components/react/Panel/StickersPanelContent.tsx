@@ -55,7 +55,9 @@ function StickerList({ stickers }: StickerListProps) {
           </li>
         ))
       ) : (
-        <div className="sticker-list-empty">No stickers unlocked yet...</div>
+        <div className="sticker-list-empty">
+          No stickers unlocked yet. Continue reading to get more.
+        </div>
       )}
     </ul>
   );
@@ -102,17 +104,19 @@ export function StickersPanelContent() {
   }, []);
 
   return (
-    <div className="stickers-content" ref={containerRef}>
-      <h2>
-        <a href="/sticker-book">Stickers</a>
-      </h2>
+    <div className="stickers-content flow" ref={containerRef}>
+      <h2>Place an emoji</h2>
       <p>
-        Get stickers while on this site and place them anywhere on any page.
+        Get new emoji while reading, then place them anywhere on any page.{" "}
+        <a href="/sticker-book">Read more</a>.
       </p>
       {enabled ? (
         <StickerList stickers={stickers} />
       ) : (
-        <div>Stickers are currently disabled</div>
+        <div className="sticker-list-empty">
+          Emoji stickers are currently disabled. Go to the{" "}
+          <a href="/sticker-book">sticker book</a> page to turn them back on.
+        </div>
       )}
     </div>
   );
