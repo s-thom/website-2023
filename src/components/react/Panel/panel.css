@@ -120,3 +120,10 @@
   padding: 0em 0.5em;
   border-radius: 0.5em;
 }
+
+.sticker-list-empty {
+  color: var(--color-text-secondary);
+  font-style: italic;
+  text-align: center;
+  margin-top: var(--spacing);
+}
