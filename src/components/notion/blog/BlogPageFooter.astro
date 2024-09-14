@@ -2,8 +2,6 @@
 import { type DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { getCollection } from "astro:content";
 import { BLOG_PAGE_ID } from "../../../lib/constants";
-import { getFilteredBlogItems } from "../../../lib/notion/blog";
-import { getPage } from "../../../lib/notion/caches";
 import StickerUnlock from "../../stickers/StickerUnlock.astro";
 import BlogListPageItem from "./BlogListPageItem.astro";
 

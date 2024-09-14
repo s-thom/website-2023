@@ -1,6 +1,5 @@
 import type { DndContext, DragCancelEvent, DragEndEvent } from "@dnd-kit/core";
 import { useCallback, useMemo, useState } from "react";
-import { sendEvent } from "../../../../../lib/analytics";
 import {
   pageCoordsToPosition,
   screenCoordsToPageCoords,
