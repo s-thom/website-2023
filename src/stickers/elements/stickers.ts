@@ -1,4 +1,4 @@
-import { clsx } from "clsx/lite";
+import { clsx } from "clsx";
 import lottie, {
   type AnimationItem,
 } from "lottie-web/build/player/lottie_light";
@@ -83,6 +83,7 @@ function createLoadingElement(): HTMLDivElement {
 
 export interface CreateStickerOptions {
   draggable?: boolean;
+  draggableData?: Record<string, unknown>;
   className?: string;
 }
 
@@ -135,7 +136,10 @@ export function createStickerElement(
           return;
         }
 
-        cleanupDraggable = draggable({ element: container });
+        cleanupDraggable = draggable({
+          element: container,
+          getInitialData: () => options.draggableData ?? {},
+        });
       },
     );
   }

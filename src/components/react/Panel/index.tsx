@@ -1,4 +1,4 @@
-import clsx from "clsx/lite";
+import clsx from "clsx";
 import { BookHeartIcon, Settings2Icon } from "lucide-react";
 import { lazy, Suspense, useState } from "react";
 import { SettingsPanelContent } from "./SettingsPanelContent.tsx";

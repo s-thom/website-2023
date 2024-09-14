@@ -1,4 +1,4 @@
-import clsx from "clsx/lite";
+import clsx from "clsx";
 import { h } from "../../lib/h";
 import type { StickerRarity } from "../types";
 import "./stickerFrame.css";

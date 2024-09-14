@@ -67,6 +67,9 @@ function sendValueToListeners(value: StickerStoreValue): void {
 }
 
 function readStickerStoreFromStorage(): StickerStoreValue {
+  if (!("localStorage" in globalThis)) {
+    return INITIAL_VALUE;
+  }
   const valueString = localStorage.getItem(STICKER_STORE_KEY);
   if (!valueString) {
     return INITIAL_VALUE;
@@ -84,14 +87,19 @@ function writeStickerStoreToStorage(value: StickerStoreValue): void {
 let currentStickerStoreValue = readStickerStoreFromStorage();
 
 // Update this tab's value when another tab has a change
-window.addEventListener("storage", (event) => {
-  if (event.storageArea === localStorage && event.key === STICKER_STORE_KEY) {
-    currentStickerStoreValue = readStickerStoreFromStorage();
-    sendValueToListeners(currentStickerStoreValue);
-  }
-});
+if (typeof window !== "undefined") {
+  window.addEventListener("storage", (event) => {
+    if (event.storageArea === localStorage && event.key === STICKER_STORE_KEY) {
+      currentStickerStoreValue = readStickerStoreFromStorage();
+      sendValueToListeners(currentStickerStoreValue);
+    }
+  });
+}
 
 export function getStickerStore(): StickerStoreValue {
+  if (!("localStorage" in globalThis)) {
+    return INITIAL_VALUE;
+  }
   return currentStickerStoreValue;
 }
 
