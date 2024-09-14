@@ -4,11 +4,11 @@ import {
 } from "@atlaskit/pragmatic-drag-and-drop/dist/cjs/entry-point/element/adapter";
 import { useEffect, useMemo, useRef } from "react";
 import {
+  type StickerInfo,
+  STICKER_TYPE_MAP,
+  removeFromPage,
   sortStickerTypes,
-  type STICKER_TYPE_MAP,
-} from "../../../stickers/data";
-import { removeFromPage } from "../../../stickers/functions";
-import type { StickerInfo } from "../../../stickers/types";
+} from "../../../stickers/stickers";
 import { combine } from "../../../util";
 import { useStickers } from "../hooks/useStickers";
 import { StickerWrapper } from "../StickerWrapper.tsx";

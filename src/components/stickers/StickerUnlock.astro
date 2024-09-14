@@ -1,5 +1,5 @@
 ---
-import type { StickerTypes } from "../../stickers/types";
+import type { StickerTypes } from "../../stickers/stickers";
 
 export interface Props {
   type: StickerTypes;
@@ -55,12 +55,14 @@ const { type, hideOnUnlock, class: className } = Astro.props;
 </style>
 
 <script>
-  import { createStickerElement } from "../../stickers/elements/stickers";
-  import { createStickerFrame } from "../../stickers/elements/stickerFrame";
-  import { sendAddStickerEvent } from "../../stickers/events";
-  import { addStickerStoreListener } from "../../stickers/store";
-  import type { StickerTypes } from "../../stickers/types";
-  import { STICKER_TYPE_MAP } from "../../stickers/data";
+  import {
+    type StickerTypes,
+    STICKER_TYPE_MAP,
+    type AddStickerEventData,
+    createStickerElement,
+    createStickerFrame,
+    addStickerStoreListener,
+  } from "../../stickers/stickers";
 
   document
     .querySelectorAll<HTMLDivElement>("div.sticker-unlock-box")
@@ -78,7 +80,12 @@ const { type, hideOnUnlock, class: className } = Astro.props;
       button.type = "button";
       button.classList.add("sticker-unlock-button");
       button.dataset.umamiEvent = "sickers-sticker-book-unlock";
-      button.addEventListener("click", () => sendAddStickerEvent(type));
+      button.addEventListener("click", () => {
+        const event = new CustomEvent<AddStickerEventData>("addsticker", {
+          detail: { type },
+        });
+        window.dispatchEvent(event);
+      });
       container.appendChild(button);
 
       const { element: sticker } = createStickerElement(type);

@@ -1,12 +1,12 @@
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
-import { STICKER_TYPE_MAP } from "../../../stickers/data";
-import { createStickerFrame } from "../../../stickers/elements/stickerFrame";
-import { createStickerElement } from "../../../stickers/elements/stickers";
 import {
-  RARITY_RANK,
   type StickerInfo,
   type StickerTypes,
-} from "../../../stickers/types";
+  RARITY_RANK,
+  STICKER_TYPE_MAP,
+  createStickerElement,
+  createStickerFrame,
+} from "../../../stickers/stickers";
 import { useStickers } from "../hooks/useStickers";
 import "./StickerBook.css";
 

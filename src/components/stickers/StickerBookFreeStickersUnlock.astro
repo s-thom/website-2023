@@ -20,14 +20,24 @@
 </style>
 
 <script>
+  import {
+    type StickerTypes,
+    type AddStickerEventData,
+    STICKER_TYPES_BY_RARITY,
+    addStickerStoreListener,
+  } from "../../stickers/stickers";
   import { arrayRandom, range } from "../../util";
-  import { sendAddStickerEvent } from "../../stickers/events";
-  import { STICKER_TYPES_BY_RARITY } from "../../stickers/data";
-  import { addStickerStoreListener } from "../../stickers/store";
 
   const COMMONS_TO_ADD = 5;
   const UNCOMMONS_TO_ADD = 2;
   const RARES_TO_ADD = 0;
+
+  function sendAddStickerEvent(type: StickerTypes, pageId?: string) {
+    const event = new CustomEvent<AddStickerEventData>("addsticker", {
+      detail: { type, pageId },
+    });
+    window.dispatchEvent(event);
+  }
 
   function addMoreStickers() {
     range(COMMONS_TO_ADD).forEach(() =>
