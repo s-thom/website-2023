@@ -111,7 +111,7 @@ export function StickerPageDropZone({ pageId }: StickerPageDropZoneProps) {
     );
 
     return () => cleanup();
-  }, [enabled, pageId]);
+  }, [enabled, pageId, isClient]);
 
   if (!enabled || !isClient) {
     return null;
