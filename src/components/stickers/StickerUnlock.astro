@@ -81,7 +81,7 @@ const { type, hideOnUnlock, class: className } = Astro.props;
       button.addEventListener("click", () => sendAddStickerEvent(type));
       container.appendChild(button);
 
-      const sticker = createStickerElement(type);
+      const { element: sticker } = createStickerElement(type);
       const frame = createStickerFrame(sticker, { rarity: data.rarity });
 
       button.appendChild(frame);

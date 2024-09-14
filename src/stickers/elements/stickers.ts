@@ -88,29 +88,43 @@ export interface CreateStickerOptions {
 export function createStickerElement(
   type: StickerTypes,
   options: CreateStickerOptions = {},
-): HTMLDivElement {
+): { element: HTMLDivElement; destroy: () => void } {
   const container = h(
     "div",
     { className: clsx("sticker", options.className) },
     [],
   );
 
+  let isDestroyed = false;
+  let animation: AnimationItem;
+
   const data = STICKER_TYPE_MAP[type];
   if (data.type === "lottie") {
     if (LOTTIE_SNEAKY_CACHE[type]) {
-      const { element } = createLottieAnimation(type);
+      const { element, anim } = createLottieAnimation(type);
+      animation = anim;
       container.appendChild(element);
     } else {
       const loading = createLoadingElement();
       container.appendChild(loading);
 
       getLottieData(type).then(() => {
+        if (isDestroyed) {
+          return;
+        }
         container.removeChild(loading);
-        const { element } = createLottieAnimation(type);
+        const { element, anim } = createLottieAnimation(type);
+        animation = anim;
         container.appendChild(element);
       });
     }
   }
 
-  return container;
+  return {
+    element: container,
+    destroy: () => {
+      isDestroyed = true;
+      animation?.destroy();
+    },
+  };
 }
