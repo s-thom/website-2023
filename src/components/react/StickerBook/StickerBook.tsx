@@ -1,10 +1,49 @@
-import { useMemo } from "react";
-import { useStickers } from "../../../hooks/useStickers";
-import { STICKER_TYPE_MAP } from "../../../../../stickers/data";
-import { RARITY_RANK, type StickerInfo } from "../../../../../stickers/types";
-import { Sticker } from "../Sticker/Sticker.tsx";
-import { StickerFrame } from "../StickerFrame/index.tsx";
+import { useLayoutEffect, useMemo, useRef } from "react";
+import { STICKER_TYPE_MAP } from "../../../stickers/data";
+import { createStickerFrame } from "../../../stickers/elements/stickerFrame";
+import { createStickerElement } from "../../../stickers/elements/stickers";
+import {
+  RARITY_RANK,
+  type StickerInfo,
+  type StickerTypes,
+} from "../../../stickers/types";
+import { useStickers } from "../hooks/useStickers";
 import "./StickerBook.css";
+
+export interface FramedStickerProps {
+  type: StickerTypes;
+}
+
+export function FramedSticker({ type }: FramedStickerProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    const container = containerRef.current;
+    if (!container) {
+      return undefined;
+    }
+
+    const data = STICKER_TYPE_MAP[type];
+
+    const { element: sticker, destroy } = createStickerElement(type);
+    const frame = createStickerFrame(sticker, {
+      rarity: data.rarity,
+      description: data.description,
+      name: data.name,
+      showRarityLabel: true,
+      unlockedBy: data.unlockedBy,
+    });
+
+    container.appendChild(frame);
+
+    return () => {
+      container.removeChild(frame);
+      destroy();
+    };
+  }, [type]);
+
+  return <div ref={containerRef} />;
+}
 
 export function StickerBook() {
   const { enabled: isStickersEnabled, stickers } = useStickers();
@@ -50,16 +89,7 @@ export function StickerBook() {
   ) : (
     <div className="sticker-book-grid">
       {firstStickersOfType.map((sticker) => (
-        <StickerFrame
-          key={sticker.type}
-          type={sticker.type}
-          showRarityLabel
-          showName
-          showDescription
-          showUnlockedBy
-        >
-          <Sticker type={sticker.type} animated />
-        </StickerFrame>
+        <FramedSticker key={sticker.type} type={sticker.type} />
       ))}
     </div>
   );

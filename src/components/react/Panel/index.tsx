@@ -20,15 +20,24 @@ type PanelTypes = "settings" | "stickers";
 export function Panel() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedPanel, setSelectedPanel] = useState<PanelTypes>("settings");
+  const [hasLoaded, setHasLoaded] = useState<
+    Partial<Record<PanelTypes, boolean>>
+  >({});
 
   const togglePanel = (type: PanelTypes) => {
     if (isOpen && type === selectedPanel) {
       setIsOpen(false);
     } else {
       setIsOpen(true);
-      startTransition(() => {
+
+      if (hasLoaded[type]) {
+        startTransition(() => {
+          setSelectedPanel(type);
+        });
+      } else {
         setSelectedPanel(type);
-      });
+        setHasLoaded((prev) => ({ ...prev, [type]: true }));
+      }
     }
   };
 
