@@ -7,3 +7,10 @@ export interface Props {}
 <ul class="flow">
   <slot />
 </ul>
+
+<style>
+  ul:is(ul) {
+    list-style: none;
+    margin-inline-start: 1.5rem;
+  }
+</style>
