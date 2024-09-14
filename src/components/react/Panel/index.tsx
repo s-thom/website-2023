@@ -1,9 +1,14 @@
 import clsx from "clsx";
 import { BookHeartIcon, Settings2Icon } from "lucide-react";
-import { lazy, Suspense, useState } from "react";
-import { SettingsPanelContent } from "./SettingsPanelContent.tsx";
+import { lazy, startTransition, Suspense, useState } from "react";
+import { LoadingPanelContent } from "./LoadingPanelContent.tsx";
 import "./panel.css";
 
+const SettingsPanelContent = lazy(() =>
+  import("./SettingsPanelContent.tsx").then((module) => ({
+    default: module.SettingsPanelContent,
+  })),
+);
 const StickersPanelContent = lazy(() =>
   import("./StickersPanelContent.tsx").then((module) => ({
     default: module.StickersPanelContent,
@@ -21,7 +26,9 @@ export function Panel() {
       setIsOpen(false);
     } else {
       setIsOpen(true);
-      setSelectedPanel(type);
+      startTransition(() => {
+        setSelectedPanel(type);
+      });
     }
   };
 
@@ -46,7 +53,7 @@ export function Panel() {
         <BookHeartIcon />
       </button>
       <div className={clsx("side-panel-content")}>
-        <Suspense>
+        <Suspense fallback={<LoadingPanelContent />}>
           {selectedPanel === "settings" && <SettingsPanelContent />}
           {selectedPanel === "stickers" && <StickersPanelContent />}
         </Suspense>

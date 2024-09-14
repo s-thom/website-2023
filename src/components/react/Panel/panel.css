@@ -54,9 +54,14 @@
   color: inherit;
 }
 
+.loading-content,
 .settings-content,
 .stickers-content {
   margin: var(--spacing);
+}
+
+.loading-content {
+  text-align: center;
 }
 
 .settings-setting-heading {
