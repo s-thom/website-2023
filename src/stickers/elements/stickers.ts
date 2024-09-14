@@ -1,8 +1,7 @@
 import { clsx } from "clsx";
-import lottie, {
-  type AnimationItem,
-} from "lottie-web/build/player/lottie_light";
+import lottie from "lottie-web/build/player/lottie_light";
 import { h } from "../../lib/h";
+import { getOptionValue, subscribeToOption } from "../../lib/options";
 import { STICKER_TYPE_MAP } from "../data";
 import type { StickerTypes } from "../types";
 import "./stickers.css";
@@ -35,18 +34,20 @@ export function getLottieData(type: StickerTypes) {
 
 function createLottieAnimation(type: StickerTypes): {
   element: HTMLDivElement;
-  anim: AnimationItem;
+  cleanup: () => void;
 } {
   const data = STICKER_TYPE_MAP[type];
   // By the time this function is called we know the data is cached here.
   const animationData = LOTTIE_SNEAKY_CACHE[type];
+
+  let motionState = getOptionValue("motion");
 
   const element = h(
     "div",
     {
       className: "lottie-sticker",
       onpointerover: (event) => {
-        if (event.currentTarget === element) {
+        if (event.currentTarget === element && motionState !== "reduced") {
           // eslint-disable-next-line @typescript-eslint/no-use-before-define
           anim.play();
         }
@@ -70,7 +71,20 @@ function createLottieAnimation(type: StickerTypes): {
   });
   anim.goToAndStop(data.initialFrame, true);
 
-  return { element, anim };
+  const unsubscribe = subscribeToOption("motion", (value) => {
+    motionState = value;
+    if (value === "reduced") {
+      anim.goToAndStop(data.initialFrame, true);
+    }
+  });
+
+  return {
+    element,
+    cleanup: () => {
+      anim.destroy();
+      unsubscribe();
+    },
+  };
 }
 
 function createLoadingElement(): HTMLDivElement {
@@ -104,14 +118,14 @@ export function createStickerElement(
   );
 
   let isDestroyed = false;
-  let animation: AnimationItem;
+  let lottieCleanup: () => void;
   let cleanupDraggable: () => void;
 
   const data = STICKER_TYPE_MAP[type];
   if (data.type === "lottie") {
     if (LOTTIE_SNEAKY_CACHE[type]) {
-      const { element, anim } = createLottieAnimation(type);
-      animation = anim;
+      const { element, cleanup } = createLottieAnimation(type);
+      lottieCleanup = cleanup;
       container.appendChild(element);
     } else {
       const loading = createLoadingElement();
@@ -122,8 +136,8 @@ export function createStickerElement(
           return;
         }
         container.removeChild(loading);
-        const { element, anim } = createLottieAnimation(type);
-        animation = anim;
+        const { element, cleanup } = createLottieAnimation(type);
+        lottieCleanup = cleanup;
         container.appendChild(element);
       });
     }
@@ -148,8 +162,8 @@ export function createStickerElement(
     element: container,
     destroy: () => {
       isDestroyed = true;
-      animation?.destroy();
       cleanupDraggable?.();
+      lottieCleanup?.();
     },
   };
 }
