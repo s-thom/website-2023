@@ -96,7 +96,13 @@ function mergeState<K extends keyof Options>(
   notifyListeners(result);
 
   // eslint-disable-next-line @typescript-eslint/no-use-before-define
-  setStorageState(getOptions());
+  const toStore: Partial<Options> = {};
+  for (const [toStoreKey, toStoreResult] of Object.entries(__state_singleton)) {
+    if (!toStoreResult.isAuto) {
+      (toStore as any)[toStoreKey] = toStoreResult.value;
+    }
+  }
+  setStorageState(toStore);
 }
 
 export function setOptionValue<K extends keyof Options>(
