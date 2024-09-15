@@ -19,7 +19,12 @@ const { navItems /* breadcrumbs, */, shouldBlur } = Astro.props;
 
 <div class="header-area">
   <div
-    class:list={["flow", "header-content", shouldBlur && "header-content-blur"]}
+    class:list={[
+      "flow",
+      "header-content",
+      "big-box-border",
+      shouldBlur && "header-content-blur",
+    ]}
   >
     <header>
       <a href="/" class="site-name">

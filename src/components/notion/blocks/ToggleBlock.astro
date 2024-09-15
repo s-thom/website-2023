@@ -9,7 +9,7 @@ export interface Props {
 const { block } = Astro.props;
 ---
 
-<details class="small-box flow" data-block={block.id}>
+<details class="small-box small-box-border flow" data-block={block.id}>
   <summary>
     <RichText components={block.toggle.rich_text} />
   </summary>

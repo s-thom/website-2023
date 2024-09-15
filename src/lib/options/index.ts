@@ -18,10 +18,10 @@ function memo<K, V>(fn: (key: K) => V): (key: K) => V {
 }
 
 export type Options = {
-  theme: "light" | "dark";
+  theme: "light" | "dark" | "bg3";
   motion: "reduced" | "no-preference";
   stickers: "on" | "off";
-  font: "serif" | "sans-serif" | "comic-sans";
+  font: "serif" | "sans-serif" | "comic-sans" | "bg3";
 };
 
 export type OptionsWithAuto = {
@@ -220,6 +220,11 @@ function getInitialState(): OptionsState {
       ];
     }),
   ) as unknown as OptionsState;
+
+  // Manual fixups. Need to do this better, but oh well...
+  if (state.theme.value === "bg3" && state.font.isAuto) {
+    state.font.value = "bg3";
+  }
 
   if (!isBrowser) {
     return state;

@@ -42,7 +42,7 @@ const githubFragment =
 
 <div
   data-block={page.id}
-  class:list={["projects-item", "small-box", className]}
+  class:list={["projects-item", "small-box", "small-box-border", className]}
 >
   {
     showImage && (
@@ -117,6 +117,10 @@ const githubFragment =
 </div>
 
 <style>
+  .projects-item {
+    overflow: clip;
+  }
+
   .projects-item-image {
     margin: calc(var(--small-box-spacing) * -1);
     margin-block-end: var(--small-box-spacing);

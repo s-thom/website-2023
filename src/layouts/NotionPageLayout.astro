@@ -91,13 +91,13 @@ if (showTableOfContents) {
     <div id="DEV-notion-page-id" style={{ display: "none" }}>{page.id}</div>
   </DevOnly>
 
-  <article class="content flow" id="content">
+  <article class="content big-box-border flow" id="content">
     <slot />
   </article>
 
   {
     showTableOfContents && (
-      <aside class="flow sidebar-box" slot="site-sidebar">
+      <aside class="flow sidebar-box big-box-border" slot="site-sidebar">
         <NotionTableOfContents page={page} blockMap={blockMap} />
       </aside>
     )
@@ -108,7 +108,6 @@ if (showTableOfContents) {
 
 <style>
   .content {
-    border: var(--big-box-border-width) solid var(--big-box-color);
     padding: var(--big-box-spacing-small);
   }
 

@@ -7,27 +7,27 @@
   --size-step-3: clamp(1.95rem, calc(1.71rem + 1.24vw), 2.66rem);
   --size-step-4: clamp(2.44rem, calc(2.05rem + 1.93vw), 3.55rem);
 
-  --font-family-body: "Source Sans 3", "Adjusted Arial Fallback", system-ui,
-    sans-serif;
+  --font-family-body: "Source Sans 3", "Adjusted Source Sans Fallback",
+    system-ui, sans-serif;
   --font-family-mono: "Source Code Pro", "Cascadia Code", Menlo, Consolas,
     "DejaVu Sans Mono", ui-monospace, monospace;
   font-family: var(--font-family-body);
 }
 
 [data-font="auto"] {
-  --font-family-body: "Source Sans 3", "Adjusted Arial Fallback", system-ui,
-    sans-serif;
+  --font-family-body: "Source Sans 3", "Adjusted Source Sans Fallback",
+    system-ui, sans-serif;
   font-family: var(--font-family-body);
 }
 
 [data-font="serif"] {
-  --font-family-body: "Source Serif 4", "Adjusted Georgia Fallback", serif;
+  --font-family-body: "Source Serif 4", "Adjusted Source Serif Fallback", serif;
   font-family: var(--font-family-body);
 }
 
 [data-font="sans-serif"] {
-  --font-family-body: "Source Sans 3", "Adjusted Arial Fallback", system-ui,
-    sans-serif;
+  --font-family-body: "Source Sans 3", "Adjusted Source Sans Fallback",
+    system-ui, sans-serif;
   font-family: var(--font-family-body);
 }
 
@@ -46,7 +46,7 @@
     format("woff2");
 }
 @font-face {
-  font-family: "Adjusted Arial Fallback";
+  font-family: "Adjusted Source Sans Fallback";
   src: local(Arial);
   size-adjust: 93%;
   ascent-override: 108%;
@@ -69,7 +69,7 @@
     format("woff2");
 }
 @font-face {
-  font-family: "Adjusted Georgia Fallback";
+  font-family: "Adjusted Source Serif Fallback";
   src: local(Georgia);
   size-adjust: 101%;
   ascent-override: 104%;
@@ -143,6 +143,49 @@
   --font-family-body: "Comic Sans MS", "Brush Script MT", "Comic Sans MS Remote",
     cursive;
   --font-family-mono: "Comic Code", ui-monospace, monospace;
+  font-family: var(--font-family-body);
+}
+
+@font-face {
+  font-family: "Adjusted BG3 Fallback";
+  src: local(Georgia);
+  size-adjust: 92%;
+  ascent-override: 102%;
+  descent-override: 45%;
+  line-gap-override: normal;
+}
+@font-face {
+  font-family: "Quadraat Offc Pro";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(/static/fonts/QuadraatOffcPro/QuadraatOffcPro.ttf) format("truetype");
+  unicode-range: U+000-5FF;
+}
+@font-face {
+  font-family: "Quadraat Offc Pro";
+  font-style: italic;
+  font-display: swap;
+  font-weight: 400;
+  src: url(/static/fonts/QuadraatOffcPro/QuadraatOffcPro-Italic.ttf)
+    format("truetype");
+  unicode-range: U+000-5FF;
+}
+@font-face {
+  font-family: "Quadraat Offc Pro";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url(/static/fonts/QuadraatOffcPro/QuadraatOffcPro-Bold.ttf)
+    format("truetype");
+  unicode-range: U+000-5FF;
+}
+
+[data-theme="bg3"][data-font="auto"],
+[data-theme="bg3"] [data-font="auto"],
+[data-font="bg3"] {
+  --font-family-body: "Quadraat Offc Pro", "Adjusted BG3 Fallback", Charter,
+    "Bitstream Charter", "Sitka Text", Cambria, serif;
   font-family: var(--font-family-body);
 }
 

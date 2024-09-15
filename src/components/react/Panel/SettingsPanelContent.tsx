@@ -19,6 +19,7 @@ const OPTION_KEYS: Partial<{
     values: [
       { value: "light", label: "Light" },
       { value: "dark", label: "Dark" },
+      { value: "bg3", label: "Baldur's Gate 3" },
       { value: "auto", label: "System default" },
     ],
   },

@@ -7,7 +7,7 @@ const { id, meta, stickers } = Astro.props;
 ---
 
 <PageLayout id={id} meta={meta} stickers={stickers}>
-  <div class="standalone-page">
+  <div class="standalone-page big-box-border">
     <slot />
   </div>
 </PageLayout>
@@ -19,7 +19,6 @@ const { id, meta, stickers } = Astro.props;
     margin: var(--big-box-spacing);
     display: flex;
     flex-direction: column;
-    border: var(--big-box-border-width) solid var(--big-box-color);
     margin: var(--big-box-spacing-small);
     padding: var(--big-box-spacing-small);
   }
