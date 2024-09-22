@@ -28,11 +28,25 @@ export type OptionsWithAuto = {
   [Key in keyof Options]: Options[Key] | "auto";
 };
 
-const DEFAULT_OPTIONS: Options = {
-  theme: "light",
-  font: "sans-serif",
-  motion: "no-preference",
-  stickers: "on",
+const OPTIONS_META: {
+  [Key in keyof Options]: { defaultValue: Options[Key]; hasAuto: boolean };
+} = {
+  theme: {
+    defaultValue: "light",
+    hasAuto: true,
+  },
+  font: {
+    defaultValue: "sans-serif",
+    hasAuto: true,
+  },
+  motion: {
+    defaultValue: "no-preference",
+    hasAuto: true,
+  },
+  stickers: {
+    defaultValue: "on",
+    hasAuto: false,
+  },
 };
 
 type OptionListener<V> = (value: V, valueWithAuto: V | "auto") => void;
@@ -98,7 +112,11 @@ function mergeState<K extends keyof Options>(
   // eslint-disable-next-line @typescript-eslint/no-use-before-define
   const toStore: Partial<Options> = {};
   for (const [toStoreKey, toStoreResult] of Object.entries(__state_singleton)) {
-    if (!toStoreResult.isAuto) {
+    const meta = OPTIONS_META[toStoreKey as keyof Options];
+    const shouldAdd = meta.hasAuto
+      ? !toStoreResult.isAuto
+      : toStoreResult.isAuto || toStoreResult.value !== meta.defaultValue;
+    if (shouldAdd) {
       (toStore as any)[toStoreKey] = toStoreResult.value;
     }
   }
@@ -189,14 +207,14 @@ function getInitialState(): OptionsState {
   const storedState: Partial<Options> = isBrowser ? getStorageState() : {};
 
   const state = Object.fromEntries(
-    Object.entries(DEFAULT_OPTIONS).map(([k, defaultValue]) => {
+    Object.entries(OPTIONS_META).map(([k, meta]) => {
       const key = k as keyof Options;
       return [
         key,
         {
-          value: storedState[key] ?? defaultValue,
-          autoValue: defaultValue,
-          isAuto: !(key in storedState),
+          value: storedState[key] ?? meta.defaultValue,
+          autoValue: meta.defaultValue,
+          isAuto: meta.hasAuto ? !(key in storedState) : false,
           listeners: [],
         },
       ];
