@@ -29,6 +29,7 @@ const { pageId, enabled, unlockOnScroll = true, special } = Astro.props;
     type StickerInfo,
     type StickerTypes,
     addSticker,
+    canAddSticker,
     getStickerStore,
   } from "../stickers/stickers";
   import { arrayRandom, range } from "../util";
@@ -190,6 +191,15 @@ const { pageId, enabled, unlockOnScroll = true, special } = Astro.props;
           window.addEventListener("scrollend", onScroll);
         }
         window.addEventListener("addsticker", onAddStickerEvent);
+
+        const now = new Date();
+        if (
+          now.getDate() === 4 &&
+          now.getMonth() === 2 &&
+          canAddSticker("birthday-cake")
+        ) {
+          this.giveSticker("birthday-cake");
+        }
 
         onResize();
       };

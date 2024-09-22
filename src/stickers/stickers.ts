@@ -20,22 +20,30 @@ export const ORDERED_STICKER_TYPES = [
   "100",
   "party-popper",
   "light-bulb",
-  "rocket",
-  "earth",
 
-  // Unused so far
+  // Rare
+  "earth", // D&D pages
+
+  // UNUSED RARES
+  "rocket",
+  "camping",
+
+  // Legendary
+  "fire-heart", // Sticker book page
+  "construction", // How this website was made blog post
+  "dragon", // Secret page
+  "rainbow", // How this site handles interactivity blog post
+
+  // UNUSED LEGENDARIES
   "turtle",
   "lizard",
-  "dragon",
-
-  "rainbow",
 
   // Uniques
-  "camera-flash",
-  "chequered-flag",
-  "fire-heart",
-  "glowing-star",
-  "goose",
+  "birthday-cake", // Birthday
+  "camera-flash", // NOTHING, must be cheated in
+  "chequered-flag", // Final blog post
+  "glowing-star", // Latest blog post
+  "goose", // Clicking the goose
 ] as const;
 
 export type StickerTypes = (typeof ORDERED_STICKER_TYPES)[number];
@@ -65,7 +73,6 @@ interface BaseStickerData {
 export interface LottieStickerData extends BaseStickerData {
   type: "lottie";
   url: string;
-  initialFrame: number;
 }
 
 export type StickerData = LottieStickerData;
@@ -110,7 +117,14 @@ export const STICKER_TYPE_MAP: Record<StickerTypes, StickerData> = {
     rarity: "uncommon",
     name: "100",
     url: "/static/lottie/100.json",
-    initialFrame: 0,
+  },
+  "birthday-cake": {
+    type: "lottie",
+    rarity: "unique",
+    name: "Birthday Cake",
+    description: "Happy birthday to me?",
+    unlockedBy: "visiting this site on one particular day of the year",
+    url: "/static/lottie/birthday-cake.json",
   },
   "camera-flash": {
     type: "lottie",
@@ -119,7 +133,12 @@ export const STICKER_TYPE_MAP: Record<StickerTypes, StickerData> = {
     description: "Caught in 4k",
     unlockedBy: "cheating it in yourself",
     url: "/static/lottie/camera-flash.json",
-    initialFrame: 0,
+  },
+  camping: {
+    type: "lottie",
+    rarity: "rare",
+    name: "Camping",
+    url: "/static/lottie/camping.json",
   },
   "chequered-flag": {
     type: "lottie",
@@ -127,43 +146,43 @@ export const STICKER_TYPE_MAP: Record<StickerTypes, StickerData> = {
     name: "Chequered Flag",
     unlockedBy: "reading the earliest blog post",
     url: "/static/lottie/chequered-flag.json",
-    initialFrame: 0,
   },
   clap: {
     type: "lottie",
     rarity: "common",
     name: "Clap",
     url: "/static/lottie/clap.json",
-    initialFrame: 0,
+  },
+  construction: {
+    type: "lottie",
+    rarity: "legendary",
+    name: "Construction",
+    description: "This website is perpetually under construction",
+    url: "/static/lottie/construction.json",
   },
   dragon: {
     type: "lottie",
     rarity: "legendary",
     name: "Dragon",
     url: "/static/lottie/dragon.json",
-    initialFrame: 60,
   },
   earth: {
     type: "lottie",
     rarity: "rare",
     name: "Earth",
     url: "/static/lottie/earth.json",
-    initialFrame: 0,
   },
   fire: {
     type: "lottie",
     rarity: "uncommon",
     name: "Fire",
     url: "/static/lottie/fire.json",
-    initialFrame: 0,
   },
   "fire-heart": {
     type: "lottie",
-    rarity: "unique",
+    rarity: "legendary",
     name: "Fire Heart",
-    unlockedBy: "reaching the end of the Sticker book page",
     url: "/static/lottie/fire-heart.json",
-    initialFrame: 0,
   },
   "glowing-star": {
     type: "lottie",
@@ -171,7 +190,6 @@ export const STICKER_TYPE_MAP: Record<StickerTypes, StickerData> = {
     name: "Glowing Star",
     unlockedBy: "reading the latest blog post",
     url: "/static/lottie/glowing-star.json",
-    initialFrame: 50,
   },
   goose: {
     type: "lottie",
@@ -180,105 +198,90 @@ export const STICKER_TYPE_MAP: Record<StickerTypes, StickerData> = {
     description: "It's a lovely morning on the internet...",
     unlockedBy: "clicking the goose",
     url: "/static/lottie/goose.json",
-    initialFrame: 0,
   },
   heart: {
     type: "lottie",
     rarity: "common",
     name: "Heart",
     url: "/static/lottie/heart.json",
-    initialFrame: 0,
   },
   joy: {
     type: "lottie",
     rarity: "common",
     name: "Joy",
     url: "/static/lottie/joy.json",
-    initialFrame: 0,
   },
   laughing: {
     type: "lottie",
     rarity: "common",
     name: "Laughing",
     url: "/static/lottie/laughing.json",
-    initialFrame: 0,
   },
   "light-bulb": {
     type: "lottie",
     rarity: "common",
     name: "Light bulb",
     url: "/static/lottie/light-bulb.json",
-    initialFrame: 130,
   },
   lizard: {
     type: "lottie",
     rarity: "legendary",
     name: "Lizard",
     url: "/static/lottie/lizard.json",
-    initialFrame: 0,
   },
   "mind-blown": {
     type: "lottie",
     rarity: "uncommon",
     name: "Mind blown",
     url: "/static/lottie/mind-blown.json",
-    initialFrame: 28,
   },
   "party-popper": {
     type: "lottie",
     rarity: "common",
     name: "Party popper",
     url: "/static/lottie/party-popper.json",
-    initialFrame: 25,
   },
   rainbow: {
     type: "lottie",
     rarity: "legendary",
     name: "Rainbow",
     url: "/static/lottie/rainbow.json",
-    initialFrame: 50,
   },
   rocket: {
     type: "lottie",
     rarity: "rare",
     name: "Rocket",
     url: "/static/lottie/rocket.json",
-    initialFrame: 0,
   },
   rofl: {
     type: "lottie",
     rarity: "uncommon",
     name: "ROFL",
     url: "/static/lottie/rofl.json",
-    initialFrame: 0,
   },
   smile: {
     type: "lottie",
     rarity: "common",
     name: "Smile",
     url: "/static/lottie/smile.json",
-    initialFrame: 100,
   },
   thinking: {
     type: "lottie",
     rarity: "common",
     name: "Thinking",
     url: "/static/lottie/thinking.json",
-    initialFrame: 0,
   },
   "thumbs-up": {
     type: "lottie",
     rarity: "common",
     name: "Thumbs up",
     url: "/static/lottie/thumbs-up.json",
-    initialFrame: 60,
   },
   turtle: {
     type: "lottie",
     rarity: "legendary",
     name: "Turtle",
     url: "/static/lottie/turtle.json",
-    initialFrame: 0,
   },
 };
 
@@ -453,7 +456,6 @@ function createLottieAnimation(
   element: HTMLDivElement;
   cleanup: () => void;
 } {
-  const data = STICKER_TYPE_MAP[type];
   // By the time this function is called we know the data is cached here.
   const animationData = LOTTIE_SNEAKY_CACHE[type];
 
@@ -472,7 +474,7 @@ function createLottieAnimation(
       onpointerleave: (event) => {
         if (event.currentTarget === element) {
           // eslint-disable-next-line @typescript-eslint/no-use-before-define
-          anim.goToAndStop(data.initialFrame, true);
+          anim.goToAndStop("rest", true);
         }
       },
     },
@@ -486,12 +488,12 @@ function createLottieAnimation(
     autoplay: false,
     rendererSettings: { className: "lottie-animation" },
   });
-  anim.goToAndStop(data.initialFrame, true);
+  anim.goToAndStop("rest", true);
 
   const unsubscribe = subscribeToOption("motion", (value) => {
     motionState = value;
     if (value === "reduced") {
-      anim.goToAndStop(data.initialFrame, true);
+      anim.goToAndStop("rest", true);
     }
   });
 
