@@ -4,6 +4,94 @@ import { getOptionValue, subscribeToOption } from "../lib/options";
 import { clone } from "../util";
 import "./stickers.css";
 
+// #region Coordinates
+export interface NonePosition {
+  type: "none";
+}
+
+export interface PagePosition {
+  type: "page";
+  coordinates: Vec2;
+}
+
+export interface ScreenPosition {
+  type: "screen";
+  coordinates: Vec2;
+}
+
+export interface CenterPosition {
+  type: "center";
+  coordinates: Vec2;
+}
+
+export type AllPosition =
+  | NonePosition
+  | PagePosition
+  | ScreenPosition
+  | CenterPosition;
+
+export function toPagePosition(position: AllPosition): PagePosition {
+  switch (position.type) {
+    case "none":
+      return { type: "page", coordinates: { x: 0, y: 0 } };
+    case "center":
+      return {
+        type: "page",
+        coordinates: {
+          x: position.coordinates.x + document.documentElement.scrollWidth / 2,
+          y: position.coordinates.y,
+        },
+      };
+    case "screen":
+      return {
+        type: "page",
+        coordinates: {
+          x: position.coordinates.x + window.scrollX,
+          y: position.coordinates.y + window.scrollY,
+        },
+      };
+    case "page":
+      return position;
+    default:
+      throw new Error(
+        `Unknown position type ${(position as AllPosition).type}`,
+      );
+  }
+}
+
+export function pagePositionToType(
+  type: AllPosition["type"],
+  position: PagePosition,
+): AllPosition {
+  switch (type) {
+    case "none":
+      return { type };
+    case "center":
+      return {
+        type: "center",
+        coordinates: {
+          x: position.coordinates.x - document.documentElement.scrollWidth / 2,
+          y: position.coordinates.y,
+        },
+      };
+    case "screen":
+      return {
+        type: "page",
+        coordinates: {
+          x: position.coordinates.x - window.scrollX,
+          y: position.coordinates.y - window.scrollY,
+        },
+      };
+    case "page":
+      return position;
+    default:
+      throw new Error(
+        `Unknown position type ${(position as AllPosition).type}`,
+      );
+  }
+}
+// #endregion
+
 // #region Types & data
 export const ORDERED_STICKER_TYPES = [
   // Emoji series
@@ -82,17 +170,6 @@ export interface Vec2 {
   y: number;
 }
 
-export interface NonePosition {
-  type: "none";
-}
-
-export interface CenterPosition {
-  type: "center";
-  coordinates: Vec2;
-}
-
-export type StickerPosition = NonePosition | CenterPosition;
-
 export interface StickerStoreValue {
   stickers: StickerInfo[];
 }
@@ -103,7 +180,7 @@ export interface StickerInfo {
   unlockTime: number;
   unlockPageId: string | undefined;
   zone: string | undefined;
-  position: StickerPosition;
+  position: NonePosition | CenterPosition;
 }
 
 export interface AddStickerEventData {
@@ -363,7 +440,12 @@ function sendToListener(listener: Listener<any>, value: StickerStoreValue) {
 
 function sendValueToListeners(value: StickerStoreValue): void {
   listeners.forEach((listener) => {
-    sendToListener(listener, value);
+    try {
+      sendToListener(listener, value);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Error in sticker store listener", error);
+    }
   });
 }
 
@@ -408,6 +490,50 @@ export function setStickerStore(value: StickerStoreValue) {
   currentStickerStoreValue = value;
   writeStickerStoreToStorage(value);
   sendValueToListeners(value);
+}
+
+// #endregion
+
+// #region Animation listeners
+export interface StickerAnimationStop {
+  type: "page" | "screen";
+  coordinates: Vec2;
+}
+
+export interface BaseAnimation {
+  callback?: () => void;
+}
+
+export interface StickerAddAnimation extends BaseAnimation {
+  type: "add";
+  sticker: StickerTypes;
+}
+
+export type StickerAnimationOptions = StickerAddAnimation;
+
+const animationListeners = new Set<
+  (animation: StickerAnimationOptions) => void
+>();
+
+export function addAnimationListener(
+  listener: (animation: StickerAnimationOptions) => void,
+) {
+  animationListeners.add(listener);
+
+  return () => {
+    animationListeners.delete(listener);
+  };
+}
+
+export function animate(animation: StickerAnimationOptions) {
+  for (const listener of animationListeners) {
+    try {
+      listener(animation);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Error in sticker animation store listener", error);
+    }
+  }
 }
 
 // #endregion
@@ -669,6 +795,15 @@ export function createStickerFrame(
 // #endregion
 
 // #region Functions
+export async function preloadStickerData(type: StickerTypes): Promise<void> {
+  switch (STICKER_TYPE_MAP[type].type) {
+    case "lottie":
+      await getLottieData(type);
+      break;
+    default:
+  }
+}
+
 export function canAddSticker(type: StickerTypes): boolean {
   const { stickers } = getStickerStore();
 

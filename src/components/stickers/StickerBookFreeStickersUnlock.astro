@@ -23,6 +23,8 @@
   import { getOptionValue, subscribeToOption } from "../../lib/options";
   import {
     type AddStickerEventData,
+    animate,
+    preloadStickerData,
     STICKER_TYPES_BY_RARITY,
     type StickerTypes,
   } from "../../stickers/stickers";
@@ -32,6 +34,7 @@
   const UNCOMMONS_TO_ADD = 2;
 
   function sendAddStickerEvent(type: StickerTypes, pageId?: string) {
+    animate({ type: "add", sticker: type });
     const event = new CustomEvent<AddStickerEventData>("addsticker", {
       detail: { type, pageId },
     });
@@ -39,12 +42,21 @@
   }
 
   function addMoreStickers() {
+    const types: StickerTypes[] = [];
+
     range(COMMONS_TO_ADD).forEach(() =>
-      sendAddStickerEvent(arrayRandom(STICKER_TYPES_BY_RARITY.common)),
+      types.push(arrayRandom(STICKER_TYPES_BY_RARITY.common)),
     );
     range(UNCOMMONS_TO_ADD).forEach(() =>
-      sendAddStickerEvent(arrayRandom(STICKER_TYPES_BY_RARITY.uncommon)),
+      types.push(arrayRandom(STICKER_TYPES_BY_RARITY.uncommon)),
     );
+
+    Promise.all(types.map((type) => preloadStickerData(type))).then(() => {
+      for (const type of types) {
+        animate({ type: "add", sticker: type });
+        sendAddStickerEvent(type);
+      }
+    });
   }
 
   document

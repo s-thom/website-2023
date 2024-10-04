@@ -63,6 +63,7 @@ const { type, hideOnUnlock, class: className } = Astro.props;
     createStickerFrame,
     addStickerStoreListener,
     type StickerInfo,
+    animate,
   } from "../../stickers/stickers";
 
   document
@@ -86,6 +87,7 @@ const { type, hideOnUnlock, class: className } = Astro.props;
           detail: { type },
         });
         window.dispatchEvent(event);
+        animate({ type: "add", sticker: type });
       });
       container.appendChild(button);
 

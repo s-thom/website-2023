@@ -1,0 +1,60 @@
+.sticker-anim-page-positioning {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow-y: visible;
+  pointer-events: none;
+}
+
+.sticker-anim-screen-positioning {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.sticker-positioning {
+  position: absolute;
+}
+
+.sticker-anim-add-rotate {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  rotate: var(--sticker-anim-rotate);
+  transform-origin: center center;
+}
+
+.sticker-anim-add-translate {
+  --sticker-size: 32px;
+  animation-name: StickerAddAnimation;
+  animation-duration: 2s;
+  animation-timing-function: ease-in-out;
+  transform-origin: center center;
+}
+
+@keyframes StickerAddAnimation {
+  0% {
+    translate: 0;
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  25% {
+    translate: -56px;
+  }
+  85% {
+    translate: -56px;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    translate: 0;
+    opacity: 0;
+  }
+}

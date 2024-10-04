@@ -2,6 +2,7 @@
 import PageMeta, { type PageMetaType } from "../components/PageMeta.astro";
 import StickersHead from "../components/StickersHead.astro";
 import { Panel } from "../components/react/Panel/index.tsx";
+import { StickerAnimator } from "../components/react/StickerAnimator/index.tsx";
 import { StickerPageDropZone } from "../components/react/StickerPageDropZone/index.tsx";
 import SettingsInitialLoader from "../components/site/SettingsInitialLoader.astro";
 import Web3IsAScam from "../components/site/Web3IsAScam.astro";
@@ -46,6 +47,7 @@ const { id, meta, stickers } = Astro.props;
   <slot name="site-footer" />
 
   {stickers.enabled && <StickerPageDropZone pageId={id} client:stickers={id} />}
+  {stickers.enabled && <StickerAnimator client:stickers={id} />}
 
   <Panel client:idle />
 </MinimalLayout>

@@ -29,8 +29,10 @@ const { pageId, enabled, unlockOnScroll = true, special } = Astro.props;
     type StickerInfo,
     type StickerTypes,
     addSticker,
+    animate,
     canAddSticker,
     getStickerStore,
+    preloadStickerData,
   } from "../stickers/stickers";
   import { arrayRandom, range } from "../util";
   import type { PageStickerData } from "./StickersHead.astro";
@@ -115,12 +117,22 @@ const { pageId, enabled, unlockOnScroll = true, special } = Astro.props;
       );
 
       if (matchedThresholds.length > 0) {
+        const types: StickerTypes[] = [];
         matchedThresholds.forEach((threshold) => {
           if (threshold.shouldGiveCommon) {
-            this.giveSticker(arrayRandom(STICKER_TYPES_BY_RARITY.common));
+            const stickerType = arrayRandom(STICKER_TYPES_BY_RARITY.common);
+            types.push(stickerType);
           }
           if (threshold.shouldGiveUncommon) {
-            this.giveSticker(arrayRandom(STICKER_TYPES_BY_RARITY.uncommon));
+            const stickerType = arrayRandom(STICKER_TYPES_BY_RARITY.uncommon);
+            types.push(stickerType);
+          }
+        });
+
+        Promise.all(types.map((type) => preloadStickerData(type))).then(() => {
+          for (const type of types) {
+            animate({ type: "add", sticker: type });
+            this.giveSticker(type);
           }
         });
       }

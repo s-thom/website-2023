@@ -2,7 +2,8 @@ type HTMLAttrMap<Tag extends keyof HTMLElementTagNameMap> = Omit<
   HTMLElementTagNameMap[Tag],
   "style"
 > & {
-  style: Partial<Omit<HTMLElementTagNameMap[Tag]["style"], "setProperty">>;
+  style: Partial<Omit<HTMLElementTagNameMap[Tag]["style"], "setProperty">> &
+    Record<`--${string}`, string>;
 };
 
 const EVENT_NAME_REGEX = /^on(.*)(capture)?$/;
