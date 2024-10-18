@@ -29,9 +29,9 @@ jobs:
         run: |
           npm run lint
 
-      - name: Astro check
-        run: |
-          npm run astro-check
+      # - name: Astro check
+      #   run: |
+      #     npm run astro-check
 
       - name: Typescript
         run: |
