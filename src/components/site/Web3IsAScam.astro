@@ -3,15 +3,22 @@
 ---
 
 <script>
-  // Only download Javascript for feature if required
   let loaded = false;
-  const web3IsAScam = () =>
-    loaded
-      ? Promise.resolve()
-      : import("../../lib/web3IsAScam").then((m) => {
-          loaded = true;
-          m.web3IsAScam();
-        });
+  const start = async () => {
+    if (loaded) {
+      return;
+    }
+    loaded = true;
+
+    // Only download main script Javascript if required
+    (await import("../../lib/web3IsAScam")).web3IsAScam();
+  };
+  const startAndTrack = () => {
+    start();
+    if (typeof umami !== "undefined") {
+      umami.track("web3IsAScam");
+    }
+  };
 
   if (
     "etherium" in window ||
@@ -21,10 +28,11 @@
     "wallets" in window.navigator ||
     localStorage.getItem("simulate-hell") === "true"
   ) {
-    web3IsAScam();
+    startAndTrack();
   } else {
-    window.addEventListener("eip6963:announceProvider", web3IsAScam);
-    window.addEventListener("wallet-standard:register-wallet", web3IsAScam);
+    window.addEventListener("eip6963:announceProvider", startAndTrack);
+    window.addEventListener("wallet-standard:register-wallet", startAndTrack);
+    window.addEventListener("mock-web3isascam", start); // No tracking for mock
     window.dispatchEvent(new Event("eip6963:requestProvider"));
     window.dispatchEvent(new Event("wallet-standard:app-ready"));
   }

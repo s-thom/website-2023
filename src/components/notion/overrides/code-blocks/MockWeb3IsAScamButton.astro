@@ -1,0 +1,22 @@
+---
+
+---
+
+<div>
+  <button
+    type="button"
+    class="mock-web3IsAScam-button"
+    data-umami-event="mock-web3IsAScam"
+  >
+    Enable Web3 mode
+  </button>
+</div>
+
+<script>
+  document.querySelectorAll(".mock-web3IsAScam-button").forEach((button) => {
+    button.addEventListener("click", () => {
+      window.dispatchEvent(new Event("mock-web3isascam"));
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  });
+</script>

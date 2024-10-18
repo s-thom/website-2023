@@ -5,6 +5,7 @@ import { getCodeBlockContentInfo } from "../../../lib/shiki";
 import CodeRenderer from "../../site/CodeRenderer.astro";
 import BlogCollection from "../overrides/blog/BlogCollection.astro";
 import AboutLinks from "../overrides/code-blocks/AboutLinks.astro";
+import MockWeb3IsAScamButton from "../overrides/code-blocks/MockWeb3IsAScamButton.astro";
 import RawHTML from "../overrides/code-blocks/RawHTML.astro";
 import ShaderPlayground from "../overrides/code-blocks/ShaderPlayground.astro";
 import Trunic from "../overrides/code-blocks/Trunic.astro";
@@ -37,6 +38,9 @@ if (info.type === "override") {
       break;
     case "BlogCollection":
       Component = BlogCollection;
+      break;
+    case "MockWeb3IsAScamButton":
+      Component = MockWeb3IsAScamButton;
       break;
     case "ProjectsCollection":
       Component = ProjectsCollection;
