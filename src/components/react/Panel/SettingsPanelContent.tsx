@@ -88,7 +88,7 @@ export function SettingsPanelContent() {
                     checked={options[key] === value.value}
                     onChange={() => onOptionChange(key, value.value)}
                     data-umami-event={key}
-                    data-umami-event-theme={value.value}
+                    {...{ [`data-umami-event-${key}`]: value.value }}
                   />
                   <label
                     id={`${key}-${value.value}-label`}
