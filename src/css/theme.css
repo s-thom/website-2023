@@ -1,8 +1,8 @@
 :root {
-  --color-text: #333333;
+  --color-text: #111111;
   --color-text-secondary: #606060;
   --color-text-header: #ffffff;
-  --color-text-header-negative: #333333;
+  --color-text-header-negative: #111111;
   --color-background: #f8f8f8;
   --color-background-secondary: #dddddd;
   --color-background-header: #152041;
@@ -140,10 +140,10 @@
 }
 
 [data-theme="light"] {
-  --color-text: #333333;
+  --color-text: #111111;
   --color-text-secondary: #606060;
   --color-text-header: #ffffff;
-  --color-text-header-negative: #333333;
+  --color-text-header-negative: #111111;
   --color-background: #f8f8f8;
   --color-background-secondary: #dddddd;
   --color-background-header: #152041;

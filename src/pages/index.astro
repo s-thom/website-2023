@@ -5,8 +5,10 @@ import AboutLinks from "../components/notion/overrides/code-blocks/AboutLinks.as
 import ProjectsItem from "../components/notion/overrides/projects/ProjectsItem.astro";
 import StandalonePageLayout from "../layouts/StandalonePageLayout.astro";
 import { generateOgImage } from "../lib/og-images";
+import BlogListPageItem from "../components/notion/blog/BlogListPageItem.astro";
 
 const NUM_PROJECTS_TO_SHOW = 3;
+const NUM_BLOG_POSTS_TO_SHOW = 3;
 
 const ogImage = await generateOgImage({
   id: "home_og",
@@ -14,11 +16,18 @@ const ogImage = await generateOgImage({
   title: "Home",
 });
 
-const entries = await getCollection(
-  "projects",
-  (entry) => entry.data.properties.Status?.name === "Complete",
-);
-const projectItemsToShow = entries.slice(0, NUM_PROJECTS_TO_SHOW);
+const projects = (
+  await getCollection(
+    "projects",
+    (entry) => entry.data.properties.Status?.name === "Complete",
+  )
+).slice(0, NUM_PROJECTS_TO_SHOW);
+const blogPosts = (
+  await getCollection(
+    "pages",
+    (entry) => entry.data.properties.Type?.name === "blog",
+  )
+).slice(0, NUM_BLOG_POSTS_TO_SHOW);
 ---
 
 <StandalonePageLayout
@@ -63,8 +72,10 @@ const projectItemsToShow = entries.slice(0, NUM_PROJECTS_TO_SHOW);
     <div class="flow">
       <p>Hi, it's me.</p>
       <p>
-        This is just my little corner of the internet, here to be read or
-        ignored at your leisure.
+        I'm a software developer who works across the stack, but specialises in
+        frontend applications. This website is my little corner of the internet,
+        a place for me to put projects I've made or write things I've been
+        thinking about. Maybe some of those will be useful to you.
       </p>
     </div>
 
@@ -85,10 +96,17 @@ const projectItemsToShow = entries.slice(0, NUM_PROJECTS_TO_SHOW);
     </div>
 
     <div class="flow">
-      <h3 class="visually-hidden"><a href="/projects">Recent projects</a></h3>
+      <h3><a href="/projects">Recent projects</a></h3>
+      <p>
+        Here's a selection of the projects I've done. Chances are you came to
+        this website from one of these. Small projects like these are how I keep
+        up with whatever's happening in the land of web development, and they
+        give me an opportunity to try out new ideas while also making something
+        that helps people out.
+      </p>
       <div class="projects-list">
         {
-          projectItemsToShow.map((entry) => (
+          projects.map((entry) => (
             <ProjectsItem
               data={entry.data}
               class="project-card"
@@ -104,6 +122,30 @@ const projectItemsToShow = entries.slice(0, NUM_PROJECTS_TO_SHOW);
         </div>
       </div>
     </div>
+
+    <div class="flow">
+      <h3><a href="/blog">Blog</a></h3>
+      <p>
+        I quite enoy the act of writing. Writing is one of the ways I organise
+        information in my head, while also providing a way for others to learn
+        what I've picked up over the years. And if my writing encurages someone
+        else to start? Even better.
+      </p>
+      <div class="projects-list">
+        {
+          blogPosts.map((entry) => (
+            <BlogListPageItem
+              page={entry.data.page}
+              slug={entry.data.slug}
+              showTitle
+            />
+          ))
+        }
+        <div class="small-box see-more">
+          <a href="/blog">Read more...</a>
+        </div>
+      </div>
+    </div>
   </div>
 </StandalonePageLayout>
 
@@ -115,6 +157,10 @@ const projectItemsToShow = entries.slice(0, NUM_PROJECTS_TO_SHOW);
     gap: calc(var(--spacing) * 4);
     justify-content: center;
     align-items: center;
+
+    > * {
+      width: 100%;
+    }
   }
 
   .header {
@@ -156,6 +202,8 @@ const projectItemsToShow = entries.slice(0, NUM_PROJECTS_TO_SHOW);
   }
 
   .projects-list {
+    margin-inline: auto;
+    width: fit-content;
     display: grid;
     gap: var(--spacing);
     grid-template-columns: 1fr;
