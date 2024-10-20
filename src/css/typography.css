@@ -7,28 +7,89 @@
   --size-step-3: clamp(1.95rem, calc(1.71rem + 1.24vw), 2.66rem);
   --size-step-4: clamp(2.44rem, calc(2.05rem + 1.93vw), 3.55rem);
 
-  --font-family-body: Inter, Roboto, "Helvetica Neue", "Arial Nova",
-    "Nimbus Sans", Arial, system-ui, sans-serif;
-  --font-family-mono: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo,
-    Consolas, "DejaVu Sans Mono", monospace;
+  --font-family-body: "Source Sans 3", "Adjusted Arial Fallback", system-ui,
+    sans-serif;
+  --font-family-mono: "Source Code Pro", "Cascadia Code", Menlo, Consolas,
+    "DejaVu Sans Mono", ui-monospace, monospace;
   font-family: var(--font-family-body);
 }
 
 [data-font="auto"] {
-  --font-family-body: Inter, Roboto, "Helvetica Neue", "Arial Nova",
-    "Nimbus Sans", Arial, system-ui, sans-serif;
+  --font-family-body: "Source Sans 3", "Adjusted Arial Fallback", system-ui,
+    sans-serif;
   font-family: var(--font-family-body);
 }
 
 [data-font="serif"] {
-  --font-family-body: Charter, "Bitstream Charter", "Sitka Text", Cambria, serif;
+  --font-family-body: "Source Serif 4", "Adjusted Georgia Fallback", serif;
   font-family: var(--font-family-body);
 }
 
 [data-font="sans-serif"] {
-  --font-family-body: Inter, Roboto, "Helvetica Neue", "Arial Nova",
-    "Nimbus Sans", Arial, system-ui, sans-serif;
+  --font-family-body: "Source Sans 3", "Adjusted Arial Fallback", system-ui,
+    sans-serif;
   font-family: var(--font-family-body);
+}
+
+@font-face {
+  font-family: "Source Sans 3";
+  font-style: normal;
+  font-display: swap;
+  src: url("/static/fonts/source-sans/SourceSans3VF-Upright.ttf.woff2")
+    format("woff2");
+}
+@font-face {
+  font-family: "Source Sans 3";
+  font-style: italic;
+  font-display: swap;
+  src: url("/static/fonts/source-sans/SourceSans3VF-Italic.ttf.woff2")
+    format("woff2");
+}
+@font-face {
+  font-family: "Adjusted Arial Fallback";
+  src: local(Arial);
+  size-adjust: 93%;
+  ascent-override: 108%;
+  descent-override: 30%;
+  line-gap-override: normal;
+}
+
+@font-face {
+  font-family: "Source Serif 4";
+  font-style: normal;
+  font-display: swap;
+  src: url("/static/fonts/source-serif/SourceSerif4Variable-Roman.ttf.woff2")
+    format("woff2");
+}
+@font-face {
+  font-family: "Source Serif 4";
+  font-style: italic;
+  font-display: swap;
+  src: url("/static/fonts/source-serif/SourceSerif4Variable-Italic.ttf.woff2")
+    format("woff2");
+}
+@font-face {
+  font-family: "Adjusted Georgia Fallback";
+  src: local(Georgia);
+  size-adjust: 101%;
+  ascent-override: 104%;
+  descent-override: 32%;
+  line-gap-override: normal;
+}
+
+@font-face {
+  font-family: "Source Code Pro";
+  font-style: normal;
+  font-display: swap;
+  src: url("/static/fonts/source-code/SourceCodeVF-Upright.ttf.woff2")
+    format("woff2");
+}
+@font-face {
+  font-family: "Source Code Pro";
+  font-style: italic;
+  font-display: swap;
+  src: url("/static/fonts/source-code/SourceCodeVF-Italic.ttf.woff2")
+    format("woff2");
 }
 
 @font-face {
@@ -126,7 +187,7 @@ blockquote {
 .text-code,
 code {
   font-family: var(--font-family-mono);
-  font-weight: 370;
+  font-weight: 400;
 }
 
 .text-code {
