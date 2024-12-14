@@ -122,7 +122,7 @@ if (imageUrl) {
       );
       observer.observe(canvas);
 
-      const { start } = setupShader({
+      const { start, stop } = setupShader({
         canvas,
         shaders: { vertex, fragment },
         uniforms,
@@ -140,6 +140,17 @@ if (imageUrl) {
           interpolator.setTarget(prefersReducedMotion ? 0 : 1, 10_000);
           start();
         },
+      });
+
+      interpolator.on("start", ({ current }) => {
+        if (current === 0) {
+          start();
+        }
+      });
+      interpolator.on("end", ({ current }) => {
+        if (current === 0) {
+          stop();
+        }
       });
 
       if (!hasBackground) {

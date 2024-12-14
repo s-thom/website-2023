@@ -141,7 +141,9 @@ export function setupShader(options: ShaderSetupOptions) {
 
     frameCount++;
     lastTime = time;
-    animFrameHandle = requestAnimationFrame(render);
+    if (hasBeenStarted) {
+      animFrameHandle = requestAnimationFrame(render);
+    }
   }
 
   return {
@@ -153,7 +155,7 @@ export function setupShader(options: ShaderSetupOptions) {
       }
     },
     stop: () => {
-      hasBeenStarted = true;
+      hasBeenStarted = false;
       cancelFrame();
     },
     destroy: () => {
