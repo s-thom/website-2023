@@ -181,6 +181,7 @@
   unicode-range: U+000-5FF;
 }
 
+[data-theme="bg3"]:not([data-font]),
 [data-theme="bg3"][data-font="auto"],
 [data-theme="bg3"] [data-font="auto"],
 [data-font="bg3"] {
