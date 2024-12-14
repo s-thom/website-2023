@@ -100,6 +100,11 @@ if (imageUrl) {
         interpolator.setTarget(prefersReducedMotion ? 0 : 1, 1000);
       });
 
+      let theme = getOptionValue("theme");
+      subscribeToOption("theme", (value) => {
+        theme = value;
+      });
+
       // Intersection observer for changing multiplier during scroll
       let canvasIntersectionRatio = 1;
       const observer = new IntersectionObserver(
@@ -127,6 +132,8 @@ if (imageUrl) {
               (MAX_PAINT_FACTOR - MIN_PAINT_FACTOR) +
               MIN_PAINT_FACTOR) *
             interpolator.getValue();
+          uniforms.uPixelated = theme === "minecraft";
+          uniforms.uPixelDensity = window.devicePixelRatio;
         },
         textures: hasBackground ? [{ src: backgroundUrl }] : undefined,
         onTexturesReady: () => {

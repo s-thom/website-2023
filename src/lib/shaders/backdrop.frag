@@ -15,7 +15,10 @@ uniform int uWarpIterations;
 uniform float uWarpAmount;
 uniform float uWarpScale;
 uniform bool uUseColors;
+uniform bool uPixelated;
+uniform float uPixelDensity;
 
+const float PIXEL_FACTOR = 4.0f;
 const float IMAGE_SCALE = 1.0f;
 const float COLOR_MIX_1 = 1.0f;
 const float COLOR_MIX_2 = 5.0f;
@@ -26,11 +29,13 @@ const vec4 COLOR_3 = vec4(0.0f, 0.14f, 0.33f, 1.0f);
 // Note: parts of this shader have been copied from https://www.playbalatro.com/
 
 vec2 getInitialUv() {
+  vec2 xy = uPixelated ? (floor(gl_FragCoord.xy / (uPixelDensity * PIXEL_FACTOR)) * uPixelDensity * PIXEL_FACTOR) : gl_FragCoord.xy;
+
   vec2 halfRes = iResolution.xy / 2.0f;
   vec2 texSize = vec2(textureSize(iChannel1, 0));
   vec2 texSizeRatio = texSize / iResolution.xy;
   float minTexSizeRatio = min(texSizeRatio.x, texSizeRatio.y);
-  vec2 scaledPx = (((gl_FragCoord.xy - halfRes) * minTexSizeRatio) / (texSizeRatio * IMAGE_SCALE)) + halfRes;
+  vec2 scaledPx = (((xy - halfRes) * minTexSizeRatio) / (texSizeRatio * IMAGE_SCALE)) + halfRes;
 
   vec2 baseUv = (scaledPx * texSizeRatio) / texSize;
   return baseUv + uOffset - 0.5f;

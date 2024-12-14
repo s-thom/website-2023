@@ -18,7 +18,7 @@ function memo<K, V>(fn: (key: K) => V): (key: K) => V {
 }
 
 export type Options = {
-  theme: "light" | "dark" | "bg3";
+  theme: "light" | "dark" | "bg3" | "minecraft";
   motion: "reduced" | "no-preference";
   stickers: "on" | "off";
   font: "serif" | "sans-serif" | "comic-sans" | "bg3";

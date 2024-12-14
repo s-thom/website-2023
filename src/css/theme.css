@@ -346,13 +346,82 @@
   }
 }
 
+[data-theme="minecraft"] {
+  --color-text: #f8f8f8;
+  --color-text-secondary: #808080;
+  --color-text-header: #ffffff;
+  --color-text-header-negative: #181818;
+  --color-background: #181818;
+  --color-background-secondary: #3a3a3a;
+  --color-background-header: #152041;
+  --color-background-error: #5f2526;
+  --color-background-delete: oklch(30% 0.03 18);
+  --color-border: #555555;
+  --color-link: oklch(50% 0.185 258);
+  --color-link-hover: oklch(55% 0.14 258);
+  --color-link-active: oklch(50% 0.185 20);
+  --color-link-visited: oklch(50% 0.185 304);
+  --color-link-visited-hover: oklch(55% 0.185 304);
+
+  --color-notion-default: oklch(38% 0 0);
+  --color-notion-default-background: oklch(30% 0 0);
+  --color-notion-gray: oklch(38% 0 0);
+  --color-notion-gray-background: oklch(30% 0 0);
+  --color-notion-brown: oklch(38% 0.08 255);
+  --color-notion-brown-background: oklch(30% 0.03 255);
+  --color-notion-orange: oklch(38% 0.08 40);
+  --color-notion-orange-background: oklch(30% 0.03 40);
+  --color-notion-yellow: oklch(38% 0.08 95);
+  --color-notion-yellow-background: oklch(30% 0.03 95);
+  --color-notion-green: oklch(38% 0.08 155);
+  --color-notion-green-background: oklch(30% 0.03 155);
+  --color-notion-blue: oklch(38% 0.08 255);
+  --color-notion-blue-background: oklch(30% 0.03 255);
+  --color-notion-purple: oklch(38% 0.08 300);
+  --color-notion-purple-background: oklch(30% 0.03 300);
+  --color-notion-pink: oklch(38% 0.08 341);
+  --color-notion-pink-background: oklch(30% 0.03 341);
+  --color-notion-red: oklch(38% 0.08 23);
+  --color-notion-red-background: oklch(30% 0.03 23);
+
+  --color-sticker-common: #aaaaaa;
+  --color-sticker-common-background: #2a2a2a;
+  --color-sticker-uncommon: #00aa00;
+  --color-sticker-uncommon-background: #153f15;
+  --color-sticker-rare: #5555ff;
+  --color-sticker-rare-background: #15153f;
+  --color-sticker-legendary: #ff55ff;
+  --color-sticker-legendary-background: #3f153f;
+  --color-sticker-unique: #ffaa00;
+  --color-sticker-unique-background: #3e2a00;
+  --color-sticker-frame-shiny: #ffffff11;
+
+  color-scheme: dark;
+
+  --border-radius: 0px;
+  --big-box-border-width: 4px;
+  --small-box-border-width: 4px;
+
+  body {
+    background-image: url("/static/images/theme/dirt-dark.webp");
+    background-repeat: repeat;
+  }
+
+  .small-box-border,
+  .big-box-border {
+    background-image: url("/static/images/theme/deepslate-dark.webp");
+    background-repeat: repeat;
+    background-position: center top;
+  }
+}
+
 body {
   margin: 0;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   min-height: 100svh;
-  background: var(--color-background);
+  background-color: var(--color-background);
   color: var(--color-text);
 }
 

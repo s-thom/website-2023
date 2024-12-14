@@ -190,6 +190,92 @@
   font-family: var(--font-family-body);
 }
 
+/* https://github.com/macimas-fonts/macsMinecraft */
+@font-face {
+  font-family: "Adjusted macsMinecraft Fallback";
+  src: local(Verdana);
+  size-adjust: 123%;
+  ascent-override: 81%;
+  descent-override: 10%;
+  line-gap-override: normal;
+}
+@font-face {
+  font-family: "macsMinecraft";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/static/fonts/macsMinecraft/macsMinecraftTweaked-Regular.woff2")
+    format("woff2");
+  size-adjust: 80%;
+}
+@font-face {
+  font-family: "macsMinecraft";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/static/fonts/macsMinecraft/macsMinecraftTweaked-Italic.woff2")
+    format("woff2");
+  size-adjust: 80%;
+}
+@font-face {
+  font-family: "macsMinecraft";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/static/fonts/macsMinecraft/macsMinecraftTweaked-Bold.woff2")
+    format("woff2");
+  size-adjust: 80%;
+}
+@font-face {
+  font-family: "macsMinecraft";
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/static/fonts/macsMinecraft/macsMinecraftTweaked-BoldItalic.woff2")
+    format("woff2");
+  size-adjust: 80%;
+}
+
+@font-face {
+  font-family: "Monocraft";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/static/fonts/monocraft/Monocraft.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Monocraft";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/static/fonts/monocraft/Monocraft-Italic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Monocraft";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/static/fonts/monocraft/Monocraft-Bold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Monocraft";
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/static/fonts/monocraft/Monocraft-Bold-Italic.woff2")
+    format("woff2");
+}
+
+[data-theme="minecraft"]:not([data-font]),
+[data-theme="minecraft"][data-font="auto"],
+[data-theme="minecraft"] [data-font="auto"],
+[data-font="minecraft"] {
+  --font-family-body: "macsMinecraft", "Adjusted macsMinecraft Fallback",
+    sans-serif;
+  --font-family-mono: "Monocraft", ui-monospace, monospace;
+  font-family: var(--font-family-body);
+}
+
 body {
   font-family: var(--font-family-body);
   font-size: var(--size-step-0);

@@ -20,6 +20,7 @@ const OPTION_KEYS: Partial<{
       { value: "light", label: "Light" },
       { value: "dark", label: "Dark" },
       { value: "bg3", label: "Baldur's Gate 3" },
+      { value: "minecraft", label: "Minecraft" },
       { value: "auto", label: "System default" },
     ],
   },
@@ -94,6 +95,7 @@ export function SettingsPanelContent() {
                   <label
                     id={`${key}-${value.value}-label`}
                     htmlFor={`${key}-${value.value}`}
+                    data-font
                     {...{ [`data-${key}`]: value.value }}
                   >
                     {value.label}
