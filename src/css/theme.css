@@ -71,7 +71,7 @@
 
   --sidebar-width: 350px;
 
-  color-scheme: light dark;
+  color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -124,6 +124,8 @@
     --color-sticker-unique: oklch(70% 0.175 99);
     --color-sticker-unique-background: oklch(30% 0.03 99);
     --color-sticker-frame-shiny: #ffffff11;
+
+    color-scheme: dark;
   }
 }
 
@@ -188,6 +190,8 @@
   --color-sticker-unique: oklch(82% 0.175 99);
   --color-sticker-unique-background: oklch(92% 0.03 99);
   --color-sticker-frame-shiny: #ffffff66;
+
+  color-scheme: light;
 }
 
 [data-theme="dark"] {
@@ -239,6 +243,8 @@
   --color-sticker-unique: oklch(70% 0.175 99);
   --color-sticker-unique-background: oklch(30% 0.03 99);
   --color-sticker-frame-shiny: #ffffff11;
+
+  color-scheme: dark;
 }
 
 body {
