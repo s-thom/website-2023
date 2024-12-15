@@ -55,8 +55,4 @@ export default defineConfig({
     },
     plugins: [glsl()],
   },
-  experimental: {
-    contentLayer: true,
-    directRenderScript: true,
-  },
 });
