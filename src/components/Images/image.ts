@@ -325,6 +325,7 @@ export async function getImageInfo(
   } catch (err) {
     if (err instanceof Error) {
       if (sourceData.mimeType === "application/xml") {
+        // eslint-disable-next-line no-console
         console.warn(
           "xml image data",
           Buffer.from(sourceData.buffer).toString(),

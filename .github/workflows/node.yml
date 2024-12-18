@@ -29,16 +29,18 @@ jobs:
         run: |
           npm run lint
 
-      # - name: Astro check
-      #   run: |
-      #     npm run astro-check
+      - name: Astro check
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+        run: |
+          npm run astro-check
 
       - name: Typescript
         run: |
           npm run typecheck
 
-      # - name: Build
-      #   env:
-      #     NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
-      #   run: |
-      #     npm run build
+      - name: Build
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+        run: |
+          npm run build

@@ -25,7 +25,7 @@ export function readImage(name: string): Promise<ImageInfo> {
     }
 
     const promise = readFile(join(RESOURCES_DIR, name)).then((buffer) => ({
-      buffer,
+      buffer: buffer.buffer as ArrayBuffer,
       mimeType,
     }));
     IMAGE_REQUEST_CACHE.set(name, promise);

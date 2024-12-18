@@ -44,6 +44,7 @@
   },
   "devDependencies": {
     "@astrojs/ts-plugin": "^1.10.4",
+    "@tweakpane/core": "^2.0.5",
     "@types/mime-types": "^2.1.4",
     "@types/react": "^19.0.1",
     "@types/react-dom": "^19.0.2",
