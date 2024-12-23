@@ -28,6 +28,7 @@ User-agent: DuckAssistBot
 User-agent: DuckAssistbot
 User-agent: EvoUptimeBot
 User-agent: FacebookBot
+User-agent: Factset_spyderbot
 User-agent: Freshping
 User-agent: FullStory
 User-agent: GPTBot
