@@ -7,16 +7,17 @@
   --size-step-3: clamp(1.95rem, calc(1.71rem + 1.24vw), 2.66rem);
   --size-step-4: clamp(2.44rem, calc(2.05rem + 1.93vw), 3.55rem);
 
-  --font-family-body: "Source Sans 3", "Adjusted Source Sans Fallback",
-    system-ui, sans-serif;
-  --font-family-mono: "Source Code Pro", "Cascadia Code", Menlo, Consolas,
-    "DejaVu Sans Mono", ui-monospace, monospace;
+  --font-family-body:
+    "Source Sans 3", "Adjusted Source Sans Fallback", system-ui, sans-serif;
+  --font-family-mono:
+    "Source Code Pro", "Cascadia Code", Menlo, Consolas, "DejaVu Sans Mono",
+    ui-monospace, monospace;
   font-family: var(--font-family-body);
 }
 
 [data-font="auto"] {
-  --font-family-body: "Source Sans 3", "Adjusted Source Sans Fallback",
-    system-ui, sans-serif;
+  --font-family-body:
+    "Source Sans 3", "Adjusted Source Sans Fallback", system-ui, sans-serif;
   font-family: var(--font-family-body);
 }
 
@@ -26,8 +27,8 @@
 }
 
 [data-font="sans-serif"] {
-  --font-family-body: "Source Sans 3", "Adjusted Source Sans Fallback",
-    system-ui, sans-serif;
+  --font-family-body:
+    "Source Sans 3", "Adjusted Source Sans Fallback", system-ui, sans-serif;
   font-family: var(--font-family-body);
 }
 
@@ -140,8 +141,8 @@
 }
 
 [data-font="comic-sans"] {
-  --font-family-body: "Comic Sans MS", "Brush Script MT", "Comic Sans MS Remote",
-    cursive;
+  --font-family-body:
+    "Comic Sans MS", "Brush Script MT", "Comic Sans MS Remote", cursive;
   --font-family-mono: "Comic Code", ui-monospace, monospace;
   font-family: var(--font-family-body);
 }
@@ -185,8 +186,9 @@
 [data-theme="bg3"][data-font="auto"],
 [data-theme="bg3"] [data-font="auto"],
 [data-font="bg3"] {
-  --font-family-body: "Quadraat Offc Pro", "Adjusted BG3 Fallback", Charter,
-    "Bitstream Charter", "Sitka Text", Cambria, serif;
+  --font-family-body:
+    "Quadraat Offc Pro", "Adjusted BG3 Fallback", Charter, "Bitstream Charter",
+    "Sitka Text", Cambria, serif;
   font-family: var(--font-family-body);
 }
 
@@ -270,8 +272,8 @@
 [data-theme="minecraft"][data-font="auto"],
 [data-theme="minecraft"] [data-font="auto"],
 [data-font="minecraft"] {
-  --font-family-body: "macsMinecraft", "Adjusted macsMinecraft Fallback",
-    sans-serif;
+  --font-family-body:
+    "macsMinecraft", "Adjusted macsMinecraft Fallback", sans-serif;
   --font-family-mono: "Monocraft", ui-monospace, monospace;
   font-family: var(--font-family-body);
 }
@@ -372,4 +374,8 @@ em,
 
 .lede + * {
   --flow-space: 2em;
+}
+
+.color-primary {
+  color: var(--color-primary);
 }

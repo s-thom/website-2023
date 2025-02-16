@@ -1,4 +1,5 @@
 :root {
+  --color-primary: #114fae;
   --color-text: #111111;
   --color-text-secondary: #606060;
   --color-text-header: #ffffff;
@@ -76,6 +77,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
+    --color-primary: #798eff;
     --color-text: #f8f8f8;
     --color-text-secondary: #808080;
     --color-text-header: #ffffff;
@@ -142,6 +144,7 @@
 }
 
 [data-theme="light"] {
+  --color-primary: #114fae;
   --color-text: #111111;
   --color-text-secondary: #606060;
   --color-text-header: #ffffff;
@@ -195,6 +198,7 @@
 }
 
 [data-theme="dark"] {
+  --color-primary: #798eff;
   --color-text: #f8f8f8;
   --color-text-secondary: #808080;
   --color-text-header: #ffffff;
@@ -248,6 +252,7 @@
 }
 
 [data-theme="bg3"] {
+  --color-primary: #b7861d;
   --color-text: #fffcf0;
   --color-text-secondary: #969696;
   --color-text-header: #fffcf0;
@@ -347,6 +352,7 @@
 }
 
 [data-theme="minecraft"] {
+  --color-primary: #3c8527;
   --color-text: #f8f8f8;
   --color-text-secondary: #808080;
   --color-text-header: #ffffff;
@@ -413,6 +419,10 @@
     background-repeat: repeat;
     background-position: center top;
   }
+}
+
+@view-transition {
+  navigation: auto;
 }
 
 body {

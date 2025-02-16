@@ -18,7 +18,8 @@
   backdrop-filter: brightness(40%) saturate(80%) blur(10px);
   z-index: 2;
   color: var(--color-text-header);
-  --big-box-color: var(--color-text-header);
+  --big-box-color: var(--color-text);
+  --big-box-content-color: var(--color-text-header);
 
   &.open {
     transform: translateX(calc(-100% - var(--side-panel-spacing)));
@@ -76,13 +77,13 @@
   label {
     flex-basis: 40%;
     flex-grow: 1;
-    border: var(--big-box-border-width) solid var(--big-box-color);
-    color: var(--big-box-color);
+    border: var(--big-box-border-width) solid var(--big-box-content-color);
+    color: var(--big-box-content-color);
     text-align: center;
     padding: var(--spacing-half);
   }
   input:checked + label {
-    background-color: var(--big-box-color);
+    background-color: var(--big-box-content-color);
     color: var(--color-text-header-negative);
   }
   input:focus-visible + label {
