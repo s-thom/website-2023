@@ -5,7 +5,7 @@ import { join } from "path";
 
 const CACHE_DIR = join(
   process.cwd(),
-  "node_modules/.astro/sthom/notion-loader/images",
+  ".astro/sthom/notion-loader/images",
 );
 const CACHE_MANIFEST_FILE = join(CACHE_DIR, "manifest.json");
 

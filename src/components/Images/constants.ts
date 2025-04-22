@@ -65,7 +65,7 @@ export const IMAGE_DIR = "static/images/build";
 
 export const CACHE_IMAGE_DIR = join(
   process.cwd(),
-  "node_modules/.astro/sthom/images",
+  ".astro/sthom/images",
 );
 export const DEV_IMAGE_DIR = join(process.cwd(), "public", IMAGE_DIR);
 export const DIST_IMAGE_DIR = join(process.cwd(), "dist", IMAGE_DIR);
