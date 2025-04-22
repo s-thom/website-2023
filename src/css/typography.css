@@ -48,7 +48,8 @@
   );
 
   --font-family-body:
-    "Source Sans 3", "Adjusted Source Sans Fallback", system-ui, sans-serif;
+    "Parclo Serif Trial", "Adjusted Parclo Serif Fallback", "Source Serif 4",
+    "Adjusted Source Serif Fallback", serif;
   --font-family-mono:
     "Source Code Pro", "Cascadia Code", Menlo, Consolas, "DejaVu Sans Mono",
     ui-monospace, monospace;
@@ -57,7 +58,8 @@
 
 [data-font="auto"] {
   --font-family-body:
-    "Source Sans 3", "Adjusted Source Sans Fallback", system-ui, sans-serif;
+    "Parclo Serif Trial", "Adjusted Parclo Serif Fallback", "Source Serif 4",
+    "Adjusted Source Serif Fallback", serif;
   font-family: var(--font-family-body);
 }
 
