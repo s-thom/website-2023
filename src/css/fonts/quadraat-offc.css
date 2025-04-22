@@ -1,0 +1,37 @@
+@font-face {
+  font-family: "Adjusted BG3 Fallback";
+  src: local(Georgia);
+  size-adjust: 92%;
+  ascent-override: 102%;
+  descent-override: 45%;
+  line-gap-override: normal;
+}
+
+@font-face {
+  font-family: "Quadraat Offc Pro";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(/static/fonts/QuadraatOffcPro/QuadraatOffcPro.ttf) format("truetype");
+  unicode-range: U+000-5FF;
+}
+
+@font-face {
+  font-family: "Quadraat Offc Pro";
+  font-style: italic;
+  font-display: swap;
+  font-weight: 400;
+  src: url(/static/fonts/QuadraatOffcPro/QuadraatOffcPro-Italic.ttf)
+    format("truetype");
+  unicode-range: U+000-5FF;
+}
+
+@font-face {
+  font-family: "Quadraat Offc Pro";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url(/static/fonts/QuadraatOffcPro/QuadraatOffcPro-Bold.ttf)
+    format("truetype");
+  unicode-range: U+000-5FF;
+}

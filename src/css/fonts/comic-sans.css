@@ -1,0 +1,33 @@
+@font-face {
+  font-family: "Comic Sans MS Remote";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/static/fonts/comic-sans/comic-sans-regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Comic Sans MS Remote";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/static/fonts/comic-sans/comic-sans-regular-italic.woff2")
+    format("woff2");
+}
+
+@font-face {
+  font-family: "Comic Sans MS Remote";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/static/fonts/comic-sans/comic-sans-bold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Comic Sans MS Remote";
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/static/fonts/comic-sans/comic-sans-bold-italic.woff2")
+    format("woff2");
+}

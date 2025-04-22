@@ -1,0 +1,32 @@
+@font-face {
+  font-family: "Monocraft";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/static/fonts/monocraft/Monocraft.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Monocraft";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/static/fonts/monocraft/Monocraft-Italic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Monocraft";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/static/fonts/monocraft/Monocraft-Bold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Monocraft";
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/static/fonts/monocraft/Monocraft-Bold-Italic.woff2")
+    format("woff2");
+}

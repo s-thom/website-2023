@@ -1,0 +1,16 @@
+@font-face {
+  font-family: "Comic Code";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/static/fonts/comic-code/comic-code-regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Comic Code";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/static/fonts/comic-code/comic-code-regular-italic.woff2")
+    format("woff2");
+}
