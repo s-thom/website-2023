@@ -55,7 +55,8 @@ if (showReadingTime) {
     {
       showReadingTime && readingTimeInfo && (
         <div class="read-time">
-          Estimated reading time: {readingTimeInfo.minutes} minutes
+          <span class="info-key">Estimated reading time:</span>{" "}
+          <span class="info-value">{readingTimeInfo.minutes} minutes</span>
         </div>
       )
     }
@@ -64,8 +65,10 @@ if (showReadingTime) {
         coverSourceProperty &&
         richTextToUnformattedString(coverSourceProperty.rich_text) !== "" && (
           <div class="cover-source">
-            Cover image source:{" "}
-            <NotionProperty property={coverSourceProperty} />
+            <span class="info-key">Cover image source:</span>{" "}
+            <span class="info-value">
+              <NotionProperty property={coverSourceProperty} />
+            </span>
           </div>
         )
     }
@@ -74,7 +77,10 @@ if (showReadingTime) {
         publishedDateProperty &&
         publishedDateProperty.date !== null && (
           <div class="date-info">
-            Published: <NotionProperty property={publishedDateProperty} />
+            <span class="info-key">Published:</span>{" "}
+            <span class="info-value">
+              <NotionProperty property={publishedDateProperty} />
+            </span>
           </div>
         )
     }
@@ -83,7 +89,10 @@ if (showReadingTime) {
         editedDateProperty &&
         editedDateProperty.date !== null && (
           <div class="date-info">
-            Edited: <NotionProperty property={editedDateProperty} />
+            <span class="info-key">Edited:</span>{" "}
+            <span class="info-value">
+              <NotionProperty property={editedDateProperty} />
+            </span>
           </div>
         )
     }
@@ -93,5 +102,14 @@ if (showReadingTime) {
 <style>
   .page-title {
     word-break: break-word;
+    font-weight: 800;
+  }
+
+  .info-key {
+    font-weight: 400;
+  }
+
+  .info-value {
+    font-weight: 300;
   }
 </style>

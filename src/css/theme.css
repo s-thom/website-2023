@@ -61,7 +61,7 @@
   --sticker-size: calc(var(--spacing) * 3);
 
   --big-box-color: var(--color-text);
-  --big-box-spacing: calc(max(var(--spacing), 10vw));
+  --big-box-spacing: calc(max(var(--spacing), 7vw));
   --big-box-spacing-small: calc(
     clamp(var(--spacing), 5vw, calc(var(--spacing) * 3))
   );
@@ -625,6 +625,7 @@ a {
 
 h1.site-name-heading {
   font-size: var(--size-step-3) !important;
+  font-weight: 600;
 }
 
 .notion-backdrop {
