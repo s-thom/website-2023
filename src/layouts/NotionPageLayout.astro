@@ -26,6 +26,7 @@ export interface Props {
   showReadingTime?: boolean;
   showPublishEditDates?: boolean;
   showTableOfContents?: boolean;
+  border?: boolean;
 }
 
 const {
@@ -37,6 +38,7 @@ const {
   showReadingTime,
   showPublishEditDates,
   showTableOfContents,
+  border,
 } = Astro.props;
 
 const giveStickersProperty = getPagePropertyByName(
@@ -91,13 +93,19 @@ if (showTableOfContents) {
     <div id="DEV-notion-page-id" style={{ display: "none" }}>{page.id}</div>
   </DevOnly>
 
-  <article class="content big-box-border flow" id="content">
+  <article
+    class:list={["content flow", border && "big-box-border"]}
+    id="content"
+  >
     <slot />
   </article>
 
   {
     showTableOfContents && (
-      <aside class="flow sidebar-box big-box-border" slot="site-sidebar">
+      <aside
+        class:list={["flow sidebar-box", border && "big-box-border"]}
+        slot="site-sidebar"
+      >
         <NotionTableOfContents page={page} blockMap={blockMap} />
       </aside>
     )

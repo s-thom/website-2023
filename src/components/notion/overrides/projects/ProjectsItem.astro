@@ -42,7 +42,13 @@ const githubFragment =
 
 <div
   data-block={page.id}
-  class:list={["projects-item", "small-box", "small-box-border", className]}
+  class:list={[
+    "projects-item",
+    "small-box",
+    "small-box-border",
+    "big-corners",
+    className,
+  ]}
 >
   {
     showImage && (
@@ -52,7 +58,7 @@ const githubFragment =
     )
   }
   <div class="flow">
-    <h3 class={showTitle ? "" : "visually-hidden"}>
+    <h3 class:list={["projects-item-title", !showTitle && "visually-hidden"]}>
       {
         url ? (
           <a href={url} rel="external noreferrer">
@@ -128,5 +134,9 @@ const githubFragment =
   .icon-links-list {
     display: flex;
     gap: var(--spacing);
+  }
+
+  .projects-item-title {
+    font-weight: 800;
   }
 </style>

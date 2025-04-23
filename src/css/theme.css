@@ -524,6 +524,10 @@ a {
   padding-left: 0 !important;
 }
 
+.big-corners {
+  border-radius: 50px;
+}
+
 .big-box {
   position: relative;
   padding: var(--big-box-spacing-small) var(--big-box-spacing);
@@ -532,6 +536,10 @@ a {
 
 .big-box-border {
   border: var(--big-box-border-width) solid var(--big-box-color);
+}
+
+.big-box-padding {
+  padding: var(--big-box-spacing-small) var(--big-box-spacing);
 }
 
 .big-box-margin {
@@ -549,7 +557,6 @@ a {
 
 .sidebar-box {
   position: relative;
-  padding: var(--big-box-spacing-small) var(--small-box-spacing);
 }
 
 /* #region Header */
@@ -625,7 +632,8 @@ a {
 
 h1.site-name-heading {
   font-size: var(--size-step-3) !important;
-  font-weight: 600;
+  font-weight: 1000;
+  font-style: italic;
 }
 
 .notion-backdrop {

@@ -16,7 +16,7 @@ const { page, slug, showTitle } = Astro.props;
 const titleComponents = getPageTitleComponents(page);
 ---
 
-<a href={join("/blog", slug)} class="page-item">
+<a href={join("/blog", slug)} class="page-item big-box-border big-corners">
   <div class="backdrop-container">
     <NotionBackdrop
       page={page}
@@ -24,7 +24,7 @@ const titleComponents = getPageTitleComponents(page);
       sizes="(min-width: 900) 540px, 100vw"
     />
   </div>
-  <div class="info flow">
+  <div class="info flow small-box">
     <slot name="info-top" />
     {
       showTitle && (
@@ -42,12 +42,13 @@ const titleComponents = getPageTitleComponents(page);
     display: block;
     min-height: 50px;
     height: 100%;
+    overflow: hidden;
   }
 
   .info {
     height: 100%;
-    padding: var(--spacing);
     backdrop-filter: brightness(40%) saturate(80%) blur(10px);
+    padding: var(--big-box-spacing-small);
   }
 
   .title {

@@ -12,7 +12,7 @@ import StandalonePageLayout from "../layouts/StandalonePageLayout.astro";
   }}
   stickers={{ enabled: false }}
 >
-  <div class="container">
+  <div class="container big-box-border big-box-padding big-corners">
     <h1 class="title">404</h1>
     <p class="subtitle">Page not found</p>
     <div>Return to <a href="/">home page</a></div>
@@ -31,5 +31,9 @@ import StandalonePageLayout from "../layouts/StandalonePageLayout.astro";
     gap: var(--spacing);
     justify-content: center;
     align-items: center;
+  }
+
+  .title {
+    font-weight: 800;
   }
 </style>

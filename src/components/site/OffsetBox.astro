@@ -1,0 +1,44 @@
+---
+import DefaultPageBackdrop from "./DefaultPageBackdrop.astro";
+
+export interface Props {
+  class?: string;
+  wrapperClass?: string;
+}
+
+const { wrapperClass, class: className } = Astro.props;
+---
+
+<div class:list={["offset-box", wrapperClass]}>
+  <div class:list={["offset-box-background", className]}>
+    <slot name="background">
+      <DefaultPageBackdrop />
+    </slot>
+  </div>
+  <div class:list={["offset-box-content", className]}>
+    <slot />
+  </div>
+</div>
+
+<style>
+  .offset-box {
+    position: relative;
+  }
+
+  .offset-box-background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    background-color: var(--color-primary);
+    translate: 20px -20px;
+    transition: translate 0.3s ease-out;
+    overflow: hidden;
+
+    .offset-box:hover > & {
+      translate: 0 0;
+    }
+  }
+</style>

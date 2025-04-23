@@ -1,11 +1,13 @@
 ---
 import { getCollection } from "astro:content";
 import LocalImage from "../components/Images/LocalImage.astro";
+import BlogListPageItem from "../components/notion/blog/BlogListPageItem.astro";
 import AboutLinks from "../components/notion/overrides/code-blocks/AboutLinks.astro";
 import ProjectsItem from "../components/notion/overrides/projects/ProjectsItem.astro";
+import OffsetBox from "../components/site/OffsetBox.astro";
+import ShaderBackdrop from "../components/site/ShaderBackdrop.astro";
 import StandalonePageLayout from "../layouts/StandalonePageLayout.astro";
 import { generateOgImage } from "../lib/og-images";
-import BlogListPageItem from "../components/notion/blog/BlogListPageItem.astro";
 
 const NUM_PROJECTS_TO_SHOW = 3;
 const NUM_BLOG_POSTS_TO_SHOW = 3;
@@ -49,28 +51,30 @@ const blogPosts = (
   stickers={{ enabled: true, unlockOnScroll: false }}
 >
   <div class="container">
-    <div class="header">
-      <p>The website of the person known as</p>
-      <div class="site-name">
+    <OffsetBox class="big-corners">
+      <ShaderBackdrop id="home" slot="background" />
+      <div class="big-box-border big-box-padding big-corners header">
         <LocalImage
           id="profile2023"
           resourcePath="profile-2023.jpg"
           class="profile-photo"
           alt="Stuart Thomson"
-          widths={[64]}
-          sizes="64px"
+          widths={[96]}
+          sizes="96px"
           loading="eager"
         />
-        <!-- prettier-ignore -->
-        <h1 class="site-name-heading"><span class="color-primary">Stuart Thomson</span></h1>
+        <div>
+          <p>The website of the person known as</p>
+          <h1 class="site-name-heading">Stuart Thomson</h1>
+          <p class="tagline">
+            who is both a{" "}
+            <a href="/software-developer">Software Developer</a>{" and "}<a
+              href="/human-being">Human Being</a
+            >
+          </p>
+        </div>
       </div>
-      <h2 class="tagline">
-        who is both a{" "}
-        <a href="/software-developer">Software Developer</a>{" and "}<a
-          href="/human-being">Human Being</a
-        >
-      </h2>
-    </div>
+    </OffsetBox>
 
     <div class="flow">
       <p>Hi, it's me.</p>
@@ -82,21 +86,23 @@ const blogPosts = (
       </p>
     </div>
 
-    <div class="links">
-      <ul class="nav-list">
-        <li>
-          <a href="/projects">Projects</a>
-        </li>
-        <li>
-          <a href="/blog">Blog</a>
-        </li>
-        <li>
-          <a href="/about">About</a>
-        </li>
-      </ul>
+    <OffsetBox class="big-corners">
+      <div class="links big-box-border big-box-padding big-corners">
+        <ul class="nav-list">
+          <li>
+            <a href="/projects">Projects</a>
+          </li>
+          <li>
+            <a href="/blog">Blog</a>
+          </li>
+          <li>
+            <a href="/about">About</a>
+          </li>
+        </ul>
 
-      <AboutLinks />
-    </div>
+        <AboutLinks />
+      </div>
+    </OffsetBox>
 
     <div class="flow">
       <h3><a href="/projects">Recent projects</a></h3>
@@ -120,7 +126,7 @@ const blogPosts = (
             />
           ))
         }
-        <div class="small-box small-box-border see-more">
+        <div class="small-box small-box-border big-corners see-more">
           <a href="/projects">See more...</a>
         </div>
       </div>
@@ -131,7 +137,7 @@ const blogPosts = (
       <p>
         I quite enoy the act of writing. Writing is one of the ways I organise
         information in my head, while also providing a way for others to learn
-        what I've picked up over the years. And if my writing encurages someone
+        what I've picked up over the years. And if my writing encourages someone
         else to start? Even better.
       </p>
       <div class="projects-list">
@@ -169,25 +175,28 @@ const blogPosts = (
   .header {
     width: 100%;
     display: flex;
+    gap: var(--spacing);
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
   }
 
+  .profile-photo {
+    width: 96px;
+    height: 96px;
+  }
+
   @media (min-width: 900px) {
     .header {
-      align-items: flex-end;
-      text-align: end;
+      flex-direction: row;
+      text-align: start;
     }
 
     .site-name-heading {
       font-size: var(--size-step-4) !important;
-    }
-
-    .profile-photo {
-      width: 64px;
-      height: 64px;
+      font-weight: 1000;
+      font-style: italic;
     }
   }
 
@@ -233,5 +242,9 @@ const blogPosts = (
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  .new-shape {
+    padding: var(--big-box-spacing);
   }
 </style>

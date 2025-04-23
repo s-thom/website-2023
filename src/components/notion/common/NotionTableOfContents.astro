@@ -9,6 +9,7 @@ import {
 } from "../../../lib/notion/util";
 import { getBlockChildren } from "../../../integrations/notion-loader/util";
 import type { BlockInfo } from "../../../integrations/notion-loader/api";
+import OffsetBox from "../../site/OffsetBox.astro";
 
 export interface Props {
   page: DatabaseObjectResponse | PageObjectResponse;
@@ -74,51 +75,59 @@ const hierarchical = headings.reduce<HeadingData[]>((acc, heading) => {
 }, []);
 ---
 
-<nav
-  class="toc flow"
-  id="table-of-contents"
-  data-headings={JSON.stringify(headings)}
->
-  <h2 class="toc-heading">Table of Contents</h2>
-  {
-    hierarchical.length > 0 ? (
-      <ul class="toc-list flow">
-        {hierarchical.map((h1) => (
-          <li data-hash={h1.hash}>
-            <a href={`#${h1.hash}`}>{h1.title}</a>
-            <ul class="toc-list flow">
-              {h1.children.map((h2) => (
-                <li data-hash={h2.hash}>
-                  <a href={`#${h2.hash}`}>{h2.title}</a>
-                  <ul class="toc-list flow">
-                    {h2.children.map((h3) => (
-                      <li data-hash={h3.hash}>
-                        <a href={`#${h3.hash}`}>{h3.title}</a>
-                      </li>
-                    ))}
-                  </ul>
-                </li>
-              ))}
-            </ul>
-          </li>
-        ))}
-      </ul>
-    ) : null
-  }
-  <a class="visually-hidden" href="#top">Back to top</a>
-</nav>
+<div class="toc-sticky">
+  <OffsetBox class="big-corners">
+    <nav
+      class="toc big-box-border big-corners flow"
+      id="table-of-contents"
+      data-headings={JSON.stringify(headings)}
+    >
+      <h2 class="toc-heading">Table of Contents</h2>
+      {
+        hierarchical.length > 0 ? (
+          <ul class="toc-list flow">
+            {hierarchical.map((h1) => (
+              <li data-hash={h1.hash}>
+                <a href={`#${h1.hash}`}>{h1.title}</a>
+                <ul class="toc-list flow">
+                  {h1.children.map((h2) => (
+                    <li data-hash={h2.hash}>
+                      <a href={`#${h2.hash}`}>{h2.title}</a>
+                      <ul class="toc-list flow">
+                        {h2.children.map((h3) => (
+                          <li data-hash={h3.hash}>
+                            <a href={`#${h3.hash}`}>{h3.title}</a>
+                          </li>
+                        ))}
+                      </ul>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+        ) : null
+      }
+      <a class="visually-hidden" href="#top">Back to top</a>
+    </nav>
+  </OffsetBox>
+</div>
 
 <style>
-  .toc {
+  .toc-sticky {
     position: sticky;
-    top: var(--spacing);
+    top: calc(var(--spacing) * 2);
   }
 
   @media (min-width: 1200px) {
-    .toc {
+    .toc-sticky {
       position: sticky;
-      top: var(--spacing);
+      top: calc(var(--spacing) * 2);
     }
+  }
+
+  .toc {
+    padding: var(--big-box-spacing-small);
   }
 
   .toc-heading {

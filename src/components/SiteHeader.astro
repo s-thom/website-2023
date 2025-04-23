@@ -23,6 +23,7 @@ const { navItems /* breadcrumbs, */, shouldBlur } = Astro.props;
       "flow",
       "header-content",
       "big-box-border",
+      "big-corners",
       shouldBlur && "header-content-blur",
     ]}
   >
@@ -98,6 +99,8 @@ const { navItems /* breadcrumbs, */, shouldBlur } = Astro.props;
 
   .site-name-heading {
     word-break: break-word;
+    font-weight: 1000;
+    font-style: italic;
   }
   .header-content-blur {
     backdrop-filter: brightness(40%) saturate(80%) blur(10px);

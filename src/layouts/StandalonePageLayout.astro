@@ -1,13 +1,15 @@
 ---
 import PageLayout, { type Props as PageLayoutProps } from "./PageLayout.astro";
 
-export interface Props extends PageLayoutProps {}
+export interface Props extends PageLayoutProps {
+  border?: boolean;
+}
 
-const { id, meta, stickers } = Astro.props;
+const { id, meta, stickers, border } = Astro.props;
 ---
 
 <PageLayout id={id} meta={meta} stickers={stickers}>
-  <div class="standalone-page big-box-border">
+  <div class:list={["standalone-page", border && "big-box-border"]}>
     <slot />
   </div>
 </PageLayout>
