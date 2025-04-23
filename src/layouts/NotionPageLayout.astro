@@ -3,6 +3,7 @@ import type {
   DatabaseObjectResponse,
   PageObjectResponse,
 } from "@notionhq/client/build/src/api-endpoints";
+import seedrandom from "seedrandom";
 import DevOnly from "../components/DevOnly.astro";
 import type { PageMetaType } from "../components/PageMeta.astro";
 import type { LinkInfo } from "../components/SiteHeader.astro";
@@ -12,10 +13,10 @@ import SkipLinks, {
 import NotionPageHeader from "../components/notion/NotionPageHeader.astro";
 import NotionBackdrop from "../components/notion/common/NotionBackdrop.astro";
 import NotionTableOfContents from "../components/notion/common/NotionTableOfContents.astro";
+import type { BlockInfo } from "../integrations/notion-loader/api";
 import { getPagePropertyByName } from "../lib/notion/util";
 import type { StickerTypes } from "../stickers/stickers";
 import PageWithHeaderLayout from "./PageWithHeaderLayout.astro";
-import type { BlockInfo } from "../integrations/notion-loader/api";
 
 export interface Props {
   page: DatabaseObjectResponse | PageObjectResponse;
@@ -57,6 +58,9 @@ const skipLinks: SkipLinksProps["links"] = [
 if (showTableOfContents) {
   skipLinks.unshift({ name: "Table of Contents", url: "#table-of-contents" });
 }
+
+const random = seedrandom(page.id);
+const colorAngle = `${Math.round(random() * 360)}deg`;
 ---
 
 <PageWithHeaderLayout
@@ -113,6 +117,13 @@ if (showTableOfContents) {
 
   <slot name="page-footer" slot="page-footer" />
 </PageWithHeaderLayout>
+
+<script is:inline define:vars={{ colorAngle }}>
+  document.documentElement.style.setProperty(
+    "--color-dynamic-angle",
+    colorAngle,
+  );
+</script>
 
 <style>
   .content {

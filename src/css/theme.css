@@ -1,12 +1,19 @@
 :root {
-  --color-primary: #114fae;
+  --color-dynamic-angle: 267.79deg;
+  --color-dynamic-lightness: 0.62;
+  --color-dynamic-chroma: 0.1032;
+  --color-background-primary: #6b83c4;
+  --color-background-primary: oklch(
+    var(--color-dynamic-lightness) var(--color-dynamic-chroma)
+      var(--color-dynamic-angle)
+  ) !important;
+
   --color-text: #111111;
   --color-text-secondary: #606060;
   --color-text-header: #ffffff;
   --color-text-header-negative: #111111;
   --color-background: #f8f8f8;
   --color-background-secondary: #dddddd;
-  --color-background-header: #152041;
   --color-background-error: #5f2526;
   --color-background-delete: oklch(95% 0.013 18);
   --color-border: #aaaaaa;
@@ -77,14 +84,16 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-primary: #798eff;
+    --color-dynamic-lightness: 0.35;
+    --color-dynamic-chroma: 0.0598;
+    --color-background-primary: #2d395a;
+
     --color-text: #f8f8f8;
     --color-text-secondary: #808080;
     --color-text-header: #ffffff;
     --color-text-header-negative: #181818;
     --color-background: #181818;
     --color-background-secondary: #3a3a3a;
-    --color-background-header: #152041;
     --color-background-error: #5f2526;
     --color-background-delete: oklch(30% 0.03 18);
     --color-border: #555555;
@@ -144,14 +153,16 @@
 }
 
 [data-theme="light"] {
-  --color-primary: #114fae;
+  --color-dynamic-lightness: 0.62;
+  --color-dynamic-chroma: 0.1032;
+  --color-background-primary: #6b83c4;
+
   --color-text: #111111;
   --color-text-secondary: #606060;
   --color-text-header: #ffffff;
   --color-text-header-negative: #111111;
   --color-background: #f8f8f8;
   --color-background-secondary: #dddddd;
-  --color-background-header: #152041;
   --color-background-error: #5f2526;
   --color-background-delete: oklch(95% 0.013 18);
   --color-border: #aaaaaa;
@@ -198,14 +209,16 @@
 }
 
 [data-theme="dark"] {
-  --color-primary: #798eff;
+  --color-dynamic-lightness: 0.35;
+  --color-dynamic-chroma: 0.0598;
+  --color-background-primary: #2d395a;
+
   --color-text: #f8f8f8;
   --color-text-secondary: #808080;
   --color-text-header: #ffffff;
   --color-text-header-negative: #181818;
   --color-background: #181818;
   --color-background-secondary: #3a3a3a;
-  --color-background-header: #152041;
   --color-background-error: #5f2526;
   --color-background-delete: oklch(30% 0.03 18);
   --color-border: #555555;
@@ -252,14 +265,17 @@
 }
 
 [data-theme="bg3"] {
-  --color-primary: #b7861d;
+  --color-dynamic-angle: 80.67deg;
+  --color-dynamic-lightness: 0.65;
+  --color-dynamic-chroma: 0.1264;
+  --color-background-primary: #b7861d;
+
   --color-text: #fffcf0;
   --color-text-secondary: #969696;
   --color-text-header: #fffcf0;
   --color-text-header-negative: #181818;
   --color-background: #181818;
   --color-background-secondary: #3a3a3a;
-  --color-background-header: #152041;
   --color-background-error: #5f2526;
   --color-background-delete: oklch(30% 0.03 18);
   --color-border: #555555;
@@ -349,17 +365,28 @@
   a {
     color: var(--color-link);
   }
+
+  .big-corners {
+    border-radius: 10px;
+  }
+
+  .offset-box-background {
+    translate: 0 0 !important;
+  }
 }
 
 [data-theme="minecraft"] {
-  --color-primary: #3c8527;
+  --color-dynamic-angle: 139.52deg;
+  --color-dynamic-lightness: 0.55;
+  --color-dynamic-chroma: 0.1477;
+  --color-background-primary: #3c8527;
+
   --color-text: #f8f8f8;
   --color-text-secondary: #808080;
   --color-text-header: #ffffff;
   --color-text-header-negative: #181818;
   --color-background: #181818;
   --color-background-secondary: #3a3a3a;
-  --color-background-header: #152041;
   --color-background-error: #5f2526;
   --color-background-delete: oklch(30% 0.03 18);
   --color-border: #555555;
@@ -418,6 +445,14 @@
     background-image: url("/static/images/theme/deepslate-dark.webp");
     background-repeat: repeat;
     background-position: center top;
+  }
+
+  .big-corners {
+    border-radius: 0px;
+  }
+
+  .offset-box-background {
+    translate: 0 0 !important;
   }
 }
 
@@ -505,7 +540,7 @@ a {
 .skip-links {
   text-align: center;
   padding: var(--spacing);
-  background-color: var(--color-background-header);
+  background-color: var(--color-background-primary);
   color: var(--color-text-header);
 }
 
@@ -674,7 +709,7 @@ h1.site-name-heading {
     content: " ";
     height: 100%;
     width: 100%;
-    background: var(--color-background-header);
+    background: var(--color-background-primary);
   }
 }
 

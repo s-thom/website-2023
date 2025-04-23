@@ -26,6 +26,7 @@
     "@shikijs/twoslash": "^2.4.1",
     "astro": "^5.3.0",
     "clsx": "^2.1.1",
+    "culori": "^4.0.1",
     "fenceparser": "^2.2.0",
     "lottie-web": "^5.12.2",
     "mime-types": "^2.1.35",
@@ -45,6 +46,7 @@
   "devDependencies": {
     "@astrojs/ts-plugin": "^1.10.4",
     "@tweakpane/core": "^2.0.5",
+    "@types/culori": "^2.1.1",
     "@types/mime-types": "^2.1.4",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",

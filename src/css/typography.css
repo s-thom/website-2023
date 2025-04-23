@@ -201,6 +201,6 @@ em,
   --flow-space: 2em;
 }
 
-.color-primary {
-  color: var(--color-primary);
+.color-background-primary {
+  color: var(--color-background-primary);
 }

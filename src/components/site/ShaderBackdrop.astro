@@ -37,10 +37,16 @@ if (imageUrl) {
     right: 0;
     height: 100%;
     width: 100%;
+    background-color: var(--color-background-primary);
   }
 </style>
 
 <script>
+  import {
+    convertLchToLab,
+    convertLrgbToRgb,
+    convertOklabToLrgb,
+  } from "culori";
   import { getOptionValue, subscribeToOption } from "../../lib/options";
   import fragment from "../../lib/shaders/backdrop.frag";
   import vertex from "../../lib/shaders/backdrop.vert";
@@ -54,6 +60,40 @@ if (imageUrl) {
 
   const MIN_PAINT_FACTOR = 0.15;
   const MAX_PAINT_FACTOR = 0.45;
+
+  function OKLchToRGBA(lightness: number, chroma: number, hue: number) {
+    const converted = convertLrgbToRgb(
+      convertOklabToLrgb(convertLchToLab({ l: lightness, c: chroma, h: hue })),
+    );
+
+    return [converted.r, converted.g, converted.b, 1.0];
+  }
+
+  function getBackgroundColors(): {
+    color1: number[];
+    color2: number[];
+    color3: number[];
+  } {
+    const documentStyle = getComputedStyle(document.documentElement);
+
+    const lightnessString = documentStyle.getPropertyValue(
+      "--color-dynamic-lightness",
+    );
+    const chromaString = documentStyle.getPropertyValue(
+      "--color-dynamic-chroma",
+    );
+    const hueString = documentStyle.getPropertyValue("--color-dynamic-angle");
+
+    const lightness = parseFloat(lightnessString);
+    const chroma = parseFloat(chromaString);
+    const hue = parseFloat(hueString.replace(/deg$/, ""));
+
+    return {
+      color1: OKLchToRGBA(lightness, chroma - 0.03, hue),
+      color2: OKLchToRGBA(lightness, chroma, hue),
+      color3: OKLchToRGBA(lightness - 0.15, chroma, hue - 15),
+    };
+  }
 
   document
     .querySelectorAll<HTMLDivElement>(".shader-backdrop")
@@ -90,6 +130,15 @@ if (imageUrl) {
       // uniforms.uOffset = [0, 0];
       // uniforms.uWarpScale = 1;
 
+      function setUniformColors() {
+        const colors = getBackgroundColors();
+
+        uniforms.uColor1 = colors.color1;
+        uniforms.uColor2 = colors.color2;
+        uniforms.uColor3 = colors.color3;
+      }
+      setUniformColors();
+
       let prefersReducedMotion = getOptionValue("motion") === "reduced";
       const interpolator = new Interpolate(
         easeInOutCubic,
@@ -103,6 +152,9 @@ if (imageUrl) {
       let theme = getOptionValue("theme");
       subscribeToOption("theme", (value) => {
         theme = value;
+        requestAnimationFrame(() => {
+          setUniformColors();
+        });
       });
 
       // Intersection observer for changing multiplier during scroll

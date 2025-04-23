@@ -18,13 +18,14 @@ uniform bool uUseColors;
 uniform bool uPixelated;
 uniform float uPixelDensity;
 
+uniform vec4 uColor1;
+uniform vec4 uColor2;
+uniform vec4 uColor3;
+
 const float PIXEL_FACTOR = 4.0f;
 const float IMAGE_SCALE = 1.0f;
 const float COLOR_MIX_1 = 1.0f;
 const float COLOR_MIX_2 = 5.0f;
-const vec4 COLOR_1 = vec4(0.28f, 0.28f, 0.28f, 1.0f);
-const vec4 COLOR_2 = vec4(0.0f, 0.03f, 0.21f, 1.0f);
-const vec4 COLOR_3 = vec4(0.0f, 0.14f, 0.33f, 1.0f);
 
 // Note: parts of this shader have been copied from https://www.playbalatro.com/
 
@@ -71,7 +72,7 @@ vec4 sampleColor(vec2 uv) {
   float c2p = max(0.f, 1.f - contrast_mod * abs(paint_res));
   float c3p = 1.f - min(1.f, c1p + c2p);
 
-  vec4 color = (0.3f / COLOR_MIX_1) * COLOR_1 + (1.f - 0.3f / COLOR_MIX_1) * (COLOR_1 * c1p + COLOR_2 * c2p + vec4(c3p * COLOR_3.rgb, c3p * COLOR_1.a));
+  vec4 color = (0.3f / COLOR_MIX_1) * uColor1 + (1.f - 0.3f / COLOR_MIX_1) * (uColor1 * c1p + uColor2 * c2p + vec4(c3p * uColor3.rgb, c3p * uColor1.a));
   return color;
 }
 

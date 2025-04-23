@@ -78,7 +78,7 @@
 }
 
 .sticker-frame {
-  --sticker-color-primary: transparent;
+  --sticker-color-background-primary: transparent;
   --sticker-color-background: transparent;
 
   position: relative;
@@ -88,34 +88,34 @@
   justify-content: flex-start;
   justify-content: start;
   padding: var(--spacing);
-  border: 3px solid var(--sticker-color-primary);
+  border: 3px solid var(--sticker-color-background-primary);
   border-radius: 9px;
   background-color: var(--sticker-color-background);
   overflow: hidden;
 }
 
 .sticker-frame-common {
-  --sticker-color-primary: var(--color-sticker-common);
+  --sticker-color-background-primary: var(--color-sticker-common);
   --sticker-color-background: var(--color-sticker-common-background);
 }
 
 .sticker-frame-uncommon {
-  --sticker-color-primary: var(--color-sticker-uncommon);
+  --sticker-color-background-primary: var(--color-sticker-uncommon);
   --sticker-color-background: var(--color-sticker-uncommon-background);
 }
 
 .sticker-frame-rare {
-  --sticker-color-primary: var(--color-sticker-rare);
+  --sticker-color-background-primary: var(--color-sticker-rare);
   --sticker-color-background: var(--color-sticker-rare-background);
 }
 
 .sticker-frame-legendary {
-  --sticker-color-primary: var(--color-sticker-legendary);
+  --sticker-color-background-primary: var(--color-sticker-legendary);
   --sticker-color-background: var(--color-sticker-legendary-background);
 }
 
 .sticker-frame-unique {
-  --sticker-color-primary: var(--color-sticker-unique);
+  --sticker-color-background-primary: var(--color-sticker-unique);
   --sticker-color-background: var(--color-sticker-unique-background);
 }
 
@@ -169,7 +169,7 @@
   top: 0;
   left: 0;
   font-size: var(--size-step-min1);
-  background-color: var(--sticker-color-primary);
+  background-color: var(--sticker-color-background-primary);
   color: var(--color-text-header);
   padding-left: 3px;
   padding-right: 0.5em;
