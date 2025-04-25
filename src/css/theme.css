@@ -480,38 +480,6 @@ main {
   gap: var(--spacing);
 }
 
-@media (min-width: 1200px) {
-  .sidebar-layout {
-    flex-direction: row;
-
-    main > * {
-      width: 100%;
-    }
-
-    &:has(main + aside) {
-      aside {
-        width: var(--sidebar-width);
-      }
-
-      main > * {
-        width: calc(100% - var(--spacing) - var(--sidebar-width));
-      }
-    }
-  }
-}
-
-@media (min-width: 1200px) and (max-width: 1599px) {
-  body:has(.sidebar-box) {
-    --big-box-spacing: calc(max(var(--spacing), 5vw));
-  }
-}
-
-@media (min-width: 1600px) and (max-width: 1919px) {
-  body:has(.sidebar-box) {
-    --big-box-spacing: calc(max(var(--spacing), 7vw));
-  }
-}
-
 a {
   color: currentColor;
   text-decoration-color: var(--color-link);
@@ -592,6 +560,7 @@ a {
 
 .sidebar-box {
   position: relative;
+  order: -1;
 }
 
 /* #region Header */
@@ -714,3 +683,39 @@ h1.site-name-heading {
 }
 
 /* #endregion */
+
+@media (min-width: 1200px) {
+  .sidebar-layout {
+    flex-direction: row;
+
+    main > * {
+      width: 100%;
+    }
+
+    &:has(main + aside) {
+      aside {
+        width: var(--sidebar-width);
+      }
+
+      main > * {
+        width: calc(100% - var(--spacing) - var(--sidebar-width));
+      }
+    }
+  }
+
+  .sidebar-box {
+    order: 1;
+  }
+}
+
+@media (min-width: 1200px) and (max-width: 1599px) {
+  body:has(.sidebar-box) {
+    --big-box-spacing: calc(max(var(--spacing), 5vw));
+  }
+}
+
+@media (min-width: 1600px) and (max-width: 1919px) {
+  body:has(.sidebar-box) {
+    --big-box-spacing: calc(max(var(--spacing), 7vw));
+  }
+}
