@@ -32,7 +32,7 @@ const { wrapperClass, class: className } = Astro.props;
     top: 0;
     left: 0;
     z-index: -1;
-    translate: 20px -20px;
+    translate: min(20px, 3vw) calc(min(20px, 3vw) * -1);
     transition: translate 0.3s ease-out;
     overflow: hidden;
 
