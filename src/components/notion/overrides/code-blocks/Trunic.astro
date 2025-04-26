@@ -1,0 +1,10 @@
+---
+export interface Props {
+  content?: string;
+  alt?: string;
+}
+
+const { content, alt } = Astro.props;
+---
+
+<div data-font="trunic" aria-label={alt}>{content}</div>

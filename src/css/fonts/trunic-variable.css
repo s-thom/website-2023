@@ -1,0 +1,55 @@
+/* Font by Alex "IsoFrieze" Losego
+ * https://www.youtube.com/watch?v=i2M0I1m18Zs */
+
+@font-face {
+  font-family: "Trunic";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("/static/fonts/trunic-variable/Trunic-Regular.otf")
+    format("truetype");
+}
+
+@font-face {
+  font-family: "Trunic";
+  font-style: normal;
+  font-weight: 700;
+  font-display: block;
+  src: url("/static/fonts/trunic-variable/Trunic-Bold.otf") format("truetype");
+}
+
+@font-face {
+  font-family: "Trunic Condensed";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("/static/fonts/trunic-variable/Trunic-Condensed.otf")
+    format("truetype");
+}
+
+@font-face {
+  font-family: "Trunic Condensed";
+  font-style: normal;
+  font-weight: 700;
+  font-display: block;
+  src: url("/static/fonts/trunic-variable/Trunic-BoldCondensed.otf")
+    format("truetype");
+}
+
+@font-face {
+  font-family: "Trunic Handwritten";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("/static/fonts/trunic-variable/Trunic-Handwritten.otf")
+    format("truetype");
+}
+
+@font-face {
+  font-family: "Trunic Handwritten";
+  font-style: normal;
+  font-weight: 700;
+  font-display: block;
+  src: url("/static/fonts/trunic-variable/Trunic-BoldHandwritten.otf")
+    format("truetype");
+}

@@ -17,6 +17,8 @@ const loadShaderPlayground = () =>
   import("../overrides/code-blocks/ShaderPlayground.astro").then(
     (b) => b.default,
   );
+const loadTrunic = () =>
+  import("../overrides/code-blocks/Trunic.astro").then((b) => b.default);
 const loadStickerBookFeatureToggle = () =>
   import("../../stickers/StickerBookFeatureToggle.astro").then(
     (b) => b.default,
@@ -76,6 +78,9 @@ if (info.type === "override") {
       break;
     case "StickerUnlock":
       Component = await loadStickerUnlock();
+      break;
+    case "Trunic":
+      Component = await loadTrunic();
       break;
     case "RawHTML":
       Component = await loadRawHTML();
