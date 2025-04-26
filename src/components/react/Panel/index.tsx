@@ -24,7 +24,7 @@ const StickersPanelContent = lazy(() =>
   })),
 );
 
-type PanelTypes = "settings" | "stickers";
+type PanelTypes = "settings" | "stickers" | "none";
 
 export function Panel() {
   const [isClient, setIsClient] = useState(false);
@@ -33,7 +33,7 @@ export function Panel() {
   }, []);
 
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedPanel, setSelectedPanel] = useState<PanelTypes>("settings");
+  const [selectedPanel, setSelectedPanel] = useState<PanelTypes>("none");
   const [hasLoaded, setHasLoaded] = useState<
     Partial<Record<PanelTypes, boolean>>
   >({});
