@@ -15,8 +15,9 @@ const info = getCodeBlockContentInfo(block);
   info.type === "override" && (
     <Fragment>
       {"```override\r\n"}
-      {info.type}
-      {"```\r\n\r\n"}
+      {info.component}
+      {"\r\n"}
+      {"```\r\n"}
     </Fragment>
   )
 }
@@ -26,7 +27,8 @@ const info = getCodeBlockContentInfo(block);
     <Fragment>
       {`\`\`\`${info.language}\r\n`}
       {info.code}
-      {"```\r\n\r\n"}
+      {"\r\n"}
+      {"```\r\n"}
     </Fragment>
   )
 }

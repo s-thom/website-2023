@@ -18,5 +18,5 @@ const imageInfo = await getNotionImageInfo(block.id, [360], [1]);
   {
     `![${captionPlain || "Image, no caption"}](${imageInfo?.formats?.[0]?.sizes[0]?.path})`
   }
-  {"\r\n\r\n"}
+  {"\r\n"}
 </Fragment>

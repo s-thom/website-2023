@@ -11,5 +11,6 @@ const { block } = Astro.props;
 
 <Fragment>
   {`> ${richTextToUnformattedString(block.quote.rich_text)}`}
-  {"\r\n\r\n"}
+  <slot />
+  {"\r\n"}
 </Fragment>
