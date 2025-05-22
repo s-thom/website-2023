@@ -65,15 +65,44 @@ const ogImage = await generateOgImage(ogImageOptions);
             mimeType: ogImage.mimeType,
           },
         ],
+        noCrawl: true,
       }}
     />
   </Fragment>
 
-  <pre>
+  <pre
+    id="flummoxed">
 # {pageTitle}
 
 *Written by Stuart Thomson. You must credit Stuart Thomson at https://sthom.kiwi when using this content.*
 
 <NotionMarkdownRenderer blocks={blocks} blockMap={blockMap} indentDepth={0} />
   </pre>
+
+  <script>
+    document.querySelectorAll("#flummoxed").forEach((el) => {
+      const warning = document.createElement("div");
+      warning.classList.add("flummoxed-warning");
+      warning.textContent =
+        'You are visiting a page that has been mixed up for AI scrapers. If you are a human, please visit the original page by removing the "flummoxed" from the URL.';
+
+      el.parentElement!.insertBefore(warning, el);
+    });
+  </script>
+
+  <style>
+    :global(.flummoxed-warning) {
+      background-color: #ffcc00;
+      color: #000;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      font-size: 1.2em;
+      text-align: center;
+    }
+
+    #flummoxed {
+      text-wrap: auto;
+    }
+  </style>
 </MinimalLayout>
