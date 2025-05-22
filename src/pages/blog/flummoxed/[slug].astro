@@ -1,0 +1,75 @@
+---
+import { getCollection } from "astro:content";
+import { join } from "node:path/posix";
+import PageMeta from "../../../components/PageMeta.astro";
+import { getBlockChildren } from "../../../integrations/notion-loader/util";
+import MinimalLayout from "../../../layouts/MinimalLayout.astro";
+import { getPageTitleComponents } from "../../../lib/notion/titles";
+import { richTextToUnformattedString } from "../../../lib/notion/util";
+import { generateOgImage } from "../../../lib/og-images";
+import { getOgImageOptionsForNotionPage } from "../../../lib/og-images/notion";
+import NotionMarkdownRenderer from "../../../components/notion/blocks/markdown/NotionMarkdownRenderer.astro";
+
+export async function getStaticPaths() {
+  const collection = await getCollection(
+    "pages",
+    (entry) => entry.data.properties.Type?.name === "blog",
+  );
+
+  const paths = await Promise.all(
+    collection.map(async (result) => {
+      const fullPath = join("/blog", result.data.slug);
+      return {
+        params: { slug: result.data.slug },
+        props: {
+          page: result.data.page,
+          path: fullPath,
+          properties: result.data.properties,
+          blockMap: result.data.blockMap,
+        },
+      };
+    }),
+  );
+
+  return paths;
+}
+
+const { page, path, properties, blockMap } = Astro.props;
+
+const blocks = getBlockChildren(page.id, blockMap);
+
+const titleComponents = getPageTitleComponents(page);
+const pageTitle = richTextToUnformattedString(titleComponents);
+
+const ogImageOptions = await getOgImageOptionsForNotionPage(page);
+ogImageOptions.layout = "blog";
+const ogImage = await generateOgImage(ogImageOptions);
+---
+
+<MinimalLayout>
+  <Fragment slot="head">
+    <PageMeta
+      meta={{
+        title: pageTitle,
+        url: path,
+        rssUrl: "/blog/feed.xml",
+        authors: [{ firstName: "Stuart", lastName: "Thomson" }],
+        article: { type: "blog" },
+        publishedDate: properties.Published?.start,
+        modifiedDate: properties.Edited?.start,
+        images: [
+          {
+            url: new URL(ogImage.path, Astro.site).toString(),
+            width: ogImage.width,
+            height: ogImage.height,
+            mimeType: ogImage.mimeType,
+          },
+        ],
+      }}
+    />
+  </Fragment>
+
+  <pre>
+<NotionMarkdownRenderer blocks={blocks} blockMap={blockMap} />
+  </pre>
+</MinimalLayout>

@@ -1,0 +1,16 @@
+---
+import type { TableRowBlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import { richTextToUnformattedString } from "../../../../lib/notion/util";
+
+export interface Props {
+  block: TableRowBlockObjectResponse;
+}
+
+const { block } = Astro.props;
+---
+
+<Fragment>
+  {
+    `| ${block.table_row.cells.map((cell) => richTextToUnformattedString(cell)).join(" | ")} |\r\n`
+  }
+</Fragment>

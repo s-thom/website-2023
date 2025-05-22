@@ -1,0 +1,31 @@
+---
+import type { TableBlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import { getBlockChildren } from "../../../../integrations/notion-loader/util";
+import { range } from "../../../../util";
+import type { BaseBlockComponentProps } from "../types";
+import NotionMarkdownRenderer from "./NotionMarkdownRenderer.astro";
+
+export interface Props extends BaseBlockComponentProps {
+  block: TableBlockObjectResponse;
+}
+
+const { block, blockMap } = Astro.props;
+
+// Table has its own special behaviour when it comes to children, so doesn't use `<slot />`s.
+// If a solution is found, this means we can override tables properly.
+const children = block.has_children ? getBlockChildren(block.id, blockMap) : [];
+
+const [headerRow, ...bodyRows] = children;
+---
+
+<Fragment>
+  <NotionMarkdownRenderer blocks={[headerRow]} blockMap={blockMap} />
+  {"\r\n"}
+  {
+    range(block.table.table_width + 1)
+      .map(() => "|")
+      .join("---")
+  }
+  {"\r\n"}
+  <NotionMarkdownRenderer blocks={bodyRows} blockMap={blockMap} />
+</Fragment>

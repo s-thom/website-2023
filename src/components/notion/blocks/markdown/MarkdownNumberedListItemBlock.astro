@@ -1,0 +1,15 @@
+---
+import type { NumberedListItemBlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import { richTextToUnformattedString } from "../../../../lib/notion/util";
+
+export interface Props {
+  block: NumberedListItemBlockObjectResponse;
+}
+
+const { block } = Astro.props;
+---
+
+<Fragment>
+  {`1. ${richTextToUnformattedString(block.numbered_list_item.rich_text)}`}
+  <slot />
+</Fragment>

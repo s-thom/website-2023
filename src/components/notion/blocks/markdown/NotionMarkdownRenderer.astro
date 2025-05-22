@@ -1,0 +1,96 @@
+---
+import type { BlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import NotionMarkdownBlock from "./NotionMarkdownBlock.astro";
+import NotionMarkdownBlockGroup, {
+  BLOCK_GROUP_TYPE,
+  type BlockGroup,
+} from "./NotionMarkdownBlockGroup.astro";
+import type { BaseBlockComponentProps } from "../types";
+
+const loadBulletedListItemGroup = () =>
+  import("./MarkdownBulletedListItemGroup.astro").then((b) => b.default);
+const loadNumberedListItemGroup = () =>
+  import("./MarkdownNumberedListItemGroup.astro").then((b) => b.default);
+const loadTodoGroup = () =>
+  import("./MarkdownTodoGroup.astro").then((b) => b.default);
+
+export interface Props extends Omit<BaseBlockComponentProps, "block"> {
+  blocks: BlockObjectResponse[];
+}
+
+const { blocks, blockMap } = Astro.props;
+
+// There's a bit of an annoying problem with some elements, like lists, where
+// they need to be inside a wrapping element. This is especially important for
+// numbered lists to have the correct numbers.
+// As such, this component deals with "block groups", which are essentially
+// consecutive blocks of the same type. This extra work only needs to be done
+// for certain block types, though.
+const items: (BlockObjectResponse | BlockGroup)[] = [];
+let currentGroup: BlockGroup | undefined;
+
+// eslint-disable-next-line no-restricted-syntax
+for (const block of blocks) {
+  if (currentGroup) {
+    // Add to existing group if types are the same
+    if (currentGroup.blockType === block.type) {
+      currentGroup.items.push(block);
+      // eslint-disable-next-line no-continue
+      continue;
+    }
+
+    // Append new group when the type differs
+    items.push(currentGroup);
+    currentGroup = undefined;
+  }
+
+  // Possibly create new group when
+  switch (block.type) {
+    case "bulleted_list_item":
+      currentGroup = {
+        type: BLOCK_GROUP_TYPE,
+        blockType: block.type,
+        // eslint-disable-next-line no-await-in-loop
+        wrapper: await loadBulletedListItemGroup(),
+        items: [block],
+      };
+      break;
+    case "numbered_list_item":
+      currentGroup = {
+        type: BLOCK_GROUP_TYPE,
+        blockType: block.type,
+        // eslint-disable-next-line no-await-in-loop
+        wrapper: await loadNumberedListItemGroup(),
+        items: [block],
+      };
+      break;
+    case "to_do":
+      currentGroup = {
+        type: BLOCK_GROUP_TYPE,
+        blockType: block.type,
+        // eslint-disable-next-line no-await-in-loop
+        wrapper: await loadTodoGroup(),
+        items: [block],
+      };
+      break;
+    default:
+      items.push(block);
+  }
+}
+// Pick up any stragglers
+if (currentGroup) {
+  items.push(currentGroup);
+  currentGroup = undefined;
+}
+---
+
+{
+  items.map((blockOrGroup) => {
+    if (blockOrGroup.type === BLOCK_GROUP_TYPE) {
+      return (
+        <NotionMarkdownBlockGroup group={blockOrGroup} blockMap={blockMap} />
+      );
+    }
+    return <NotionMarkdownBlock block={blockOrGroup} blockMap={blockMap} />;
+  })
+}
