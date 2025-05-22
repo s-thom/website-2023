@@ -16,9 +16,10 @@ const loadTodoGroup = () =>
 
 export interface Props extends Omit<BaseBlockComponentProps, "block"> {
   blocks: BlockObjectResponse[];
+  indentDepth: number;
 }
 
-const { blocks, blockMap } = Astro.props;
+const { blocks, blockMap, indentDepth } = Astro.props;
 
 // There's a bit of an annoying problem with some elements, like lists, where
 // they need to be inside a wrapping element. This is especially important for
@@ -88,9 +89,19 @@ if (currentGroup) {
   items.map((blockOrGroup) => {
     if (blockOrGroup.type === BLOCK_GROUP_TYPE) {
       return (
-        <NotionMarkdownBlockGroup group={blockOrGroup} blockMap={blockMap} />
+        <NotionMarkdownBlockGroup
+          group={blockOrGroup}
+          blockMap={blockMap}
+          indentDepth={indentDepth}
+        />
       );
     }
-    return <NotionMarkdownBlock block={blockOrGroup} blockMap={blockMap} />;
+    return (
+      <NotionMarkdownBlock
+        block={blockOrGroup}
+        blockMap={blockMap}
+        indentDepth={indentDepth}
+      />
+    );
   })
 }

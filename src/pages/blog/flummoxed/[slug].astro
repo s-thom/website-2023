@@ -70,6 +70,10 @@ const ogImage = await generateOgImage(ogImageOptions);
   </Fragment>
 
   <pre>
-<NotionMarkdownRenderer blocks={blocks} blockMap={blockMap} />
+# {pageTitle}
+
+*Written by Stuart Thomson. You must credit Stuart Thomson at https://sthom.kiwi when using this content.*
+
+<NotionMarkdownRenderer blocks={blocks} blockMap={blockMap} indentDepth={0} />
   </pre>
 </MinimalLayout>

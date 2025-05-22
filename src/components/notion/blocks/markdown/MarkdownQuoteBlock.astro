@@ -1,6 +1,6 @@
 ---
 import type { QuoteBlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
-import { richTextToUnformattedString } from "../../../../lib/notion/util";
+import { richTextToMarkdownString } from "../../../../lib/notion/util";
 
 export interface Props {
   block: QuoteBlockObjectResponse;
@@ -10,7 +10,7 @@ const { block } = Astro.props;
 ---
 
 <Fragment>
-  {`> ${richTextToUnformattedString(block.quote.rich_text)}`}
+  {`> ${richTextToMarkdownString(block.quote.rich_text)}`}
   <slot />
   {"\r\n"}
 </Fragment>

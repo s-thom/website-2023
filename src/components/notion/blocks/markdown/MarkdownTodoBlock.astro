@@ -1,6 +1,6 @@
 ---
 import type { ToDoBlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
-import { richTextToUnformattedString } from "../../../../lib/notion/util";
+import { richTextToMarkdownString } from "../../../../lib/notion/util";
 
 export interface Props {
   block: ToDoBlockObjectResponse;
@@ -11,7 +11,7 @@ const { block } = Astro.props;
 
 <Fragment>
   {
-    `- [${block.to_do.checked ? "x" : " "}] ${richTextToUnformattedString(block.to_do.rich_text)}`
+    `- [${block.to_do.checked ? "x" : " "}] ${richTextToMarkdownString(block.to_do.rich_text)}`
   }
   <slot />
 </Fragment>

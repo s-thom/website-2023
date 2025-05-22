@@ -5,6 +5,7 @@ import type { BaseBlockComponentProps } from "../types";
 
 export interface Props extends Omit<BaseBlockComponentProps, "block"> {
   group: BlockGroup;
+  indentDepth: number;
 }
 
 export const BLOCK_GROUP_TYPE = "_block-group";
@@ -21,7 +22,7 @@ export interface BlockGroup {
 // component (e.g. WrapperComponent below) must be in the frontmatter
 // area of the file and not assigned in the template section.
 
-const { group, blockMap } = Astro.props;
+const { group, blockMap, indentDepth } = Astro.props;
 
 const WrapperComponent = group.wrapper;
 ---
@@ -29,7 +30,11 @@ const WrapperComponent = group.wrapper;
 <WrapperComponent>
   {
     group.items.map((block) => (
-      <NotionMarkdownBlock block={block} blockMap={blockMap} />
+      <NotionMarkdownBlock
+        block={block}
+        blockMap={blockMap}
+        indentDepth={indentDepth}
+      />
     ))
   }
 </WrapperComponent>

@@ -16,6 +16,40 @@ export function richTextToUnformattedString(
     .join("");
 }
 
+export function richTextToMarkdownString(
+  components: RichTextItemResponse | RichTextItemResponse[],
+): string {
+  return [components]
+    .flatMap((component) => component)
+    .map((component) => {
+      let decoration = "";
+
+      if (component.annotations.bold) {
+        decoration += "**";
+      }
+      if (component.annotations.italic) {
+        decoration += "_";
+      }
+      if (component.annotations.strikethrough) {
+        decoration += "~~";
+      }
+      if (component.annotations.code) {
+        decoration += "`";
+      }
+
+      let prefix = "";
+      let suffix = "";
+      if (component.type === "text" && component.text.link) {
+        const link = component.text.link.url;
+        prefix += `[`;
+        suffix += `](${link})`;
+      }
+
+      return `${decoration}${prefix}${component.plain_text}${suffix}${decoration}`;
+    })
+    .join("");
+}
+
 export function toProperUuid(str: string): string {
   const lower = str.toLowerCase();
   if (

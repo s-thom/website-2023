@@ -1,6 +1,6 @@
 ---
 import type { ParagraphBlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
-import { richTextToUnformattedString } from "../../../../lib/notion/util";
+import { richTextToMarkdownString } from "../../../../lib/notion/util";
 
 export interface Props {
   block: ParagraphBlockObjectResponse;
@@ -10,6 +10,6 @@ const { block } = Astro.props;
 ---
 
 <Fragment>
-  {richTextToUnformattedString(block.paragraph.rich_text)}
+  {richTextToMarkdownString(block.paragraph.rich_text)}
   {"\r\n"}
 </Fragment>

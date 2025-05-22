@@ -7,9 +7,10 @@ import NotionMarkdownRenderer from "./NotionMarkdownRenderer.astro";
 
 export interface Props extends BaseBlockComponentProps {
   block: TableBlockObjectResponse;
+  indentDepth: number;
 }
 
-const { block, blockMap } = Astro.props;
+const { block, blockMap, indentDepth } = Astro.props;
 
 // Table has its own special behaviour when it comes to children, so doesn't use `<slot />`s.
 // If a solution is found, this means we can override tables properly.
@@ -19,7 +20,11 @@ const [headerRow, ...bodyRows] = children;
 ---
 
 <Fragment>
-  <NotionMarkdownRenderer blocks={[headerRow]} blockMap={blockMap} />
+  <NotionMarkdownRenderer
+    blocks={[headerRow]}
+    blockMap={blockMap}
+    indentDepth={indentDepth}
+  />
   {"\r\n"}
   {
     range(block.table.table_width + 1)
@@ -27,5 +32,9 @@ const [headerRow, ...bodyRows] = children;
       .join("---")
   }
   {"\r\n"}
-  <NotionMarkdownRenderer blocks={bodyRows} blockMap={blockMap} />
+  <NotionMarkdownRenderer
+    blocks={bodyRows}
+    blockMap={blockMap}
+    indentDepth={indentDepth}
+  />
 </Fragment>

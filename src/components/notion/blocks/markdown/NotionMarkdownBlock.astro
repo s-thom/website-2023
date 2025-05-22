@@ -43,9 +43,10 @@ const loadToggleBlock = () =>
 
 export interface Props extends BaseBlockComponentProps {
   block: BlockObjectResponse;
+  indentDepth: number;
 }
 
-const { block, blockMap } = Astro.props;
+const { block, blockMap, indentDepth } = Astro.props;
 
 const children = block.has_children
   ? getBlockChildren(block.id, blockMap)
@@ -125,10 +126,14 @@ switch (block.type) {
 }
 ---
 
-<Component block={block} blockMap={blockMap}>
+<Component block={block} blockMap={blockMap} indentDepth={indentDepth}>
   {
     children ? (
-      <NotionMarkdownRenderer blocks={children} blockMap={blockMap} />
+      <NotionMarkdownRenderer
+        blocks={children}
+        blockMap={blockMap}
+        indentDepth={indentDepth + 1}
+      />
     ) : undefined
   }
 </Component>
