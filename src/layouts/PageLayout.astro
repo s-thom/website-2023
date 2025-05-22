@@ -37,6 +37,7 @@ const { id, meta, stickers } = Astro.props;
     <SettingsInitialLoader />
   </Fragment>
 
+  <slot name="top" />
   <slot name="skip-links" />
 
   <slot name="site-header" />

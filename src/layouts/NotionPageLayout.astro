@@ -73,6 +73,9 @@ const colorAngle = `${Math.round(random() * 360)}deg`;
     special: shouldGiveStickers ? specialSticker : undefined,
   }}
 >
+  <slot name="head" slot="head" />
+  <slot name="top" slot="top" />
+
   <SkipLinks links={skipLinks} slot="skip-links" />
 
   <NotionPageHeader
