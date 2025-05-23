@@ -25,7 +25,7 @@ export async function getStaticPaths() {
         props: {
           page: result.data.page,
           path: fullPath,
-          flummoxedPath: join("/blog", "flummoxed", result.data.slug),
+          flummoxedPath: join("/flummoxed", "blog", result.data.slug),
           properties: result.data.properties,
           blockMap: result.data.blockMap,
         },

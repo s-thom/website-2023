@@ -36,7 +36,7 @@ export default defineConfig({
     sthomNotionLoader(),
     sthomSliders(),
     react(),
-    sitemap(),
+    sitemap({ filter: (page) => !page.includes("/flummoxed/") }),
   ],
   scopedStyleStrategy: "class",
   build: {

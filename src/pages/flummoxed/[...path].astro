@@ -1,30 +1,29 @@
 ---
 import { getCollection } from "astro:content";
 import { join } from "node:path/posix";
-import NotionMarkdownRenderer from "../../../components/notion/blocks/markdown/NotionMarkdownRenderer.astro";
-import { getBlockChildren } from "../../../integrations/notion-loader/util";
-import MinimalLayout from "../../../layouts/MinimalLayout.astro";
-import { getPageTitleComponents } from "../../../lib/notion/titles";
-import { richTextToUnformattedString } from "../../../lib/notion/util";
-import { getOgImageOptionsForNotionPage } from "../../../lib/og-images/notion";
-import { flummoxBlockMap } from "../../../lib/notion/flummox";
+import NotionMarkdownRenderer from "../../components/notion/blocks/markdown/NotionMarkdownRenderer.astro";
+import { getBlockChildren } from "../../integrations/notion-loader/util";
+import MinimalLayout from "../../layouts/MinimalLayout.astro";
+import { flummoxBlockMap } from "../../lib/notion/flummox";
+import { getPageTitleComponents } from "../../lib/notion/titles";
+import { richTextToUnformattedString } from "../../lib/notion/util";
 
 export async function getStaticPaths() {
   const collection = await getCollection(
     "pages",
-    (entry) => entry.data.properties.Type?.name === "blog",
+    (entry) => entry.data.properties.Type?.name === "page",
   );
 
   const paths = await Promise.all(
     collection.map(async (result) => {
-      const fullPath = join("/blog", result.data.slug);
+      const fullPath = join("/", result.data.slug);
       return {
-        params: { slug: result.data.slug },
+        params: { path: fullPath },
         props: {
           page: result.data.page,
           path: fullPath,
-          properties: result.data.properties,
           blockMap: result.data.blockMap,
+          properties: result.data.properties,
         },
       };
     }),
@@ -40,9 +39,6 @@ const blocks = getBlockChildren(page.id, blockMap);
 
 const titleComponents = getPageTitleComponents(page);
 const pageTitle = richTextToUnformattedString(titleComponents);
-
-const ogImageOptions = await getOgImageOptionsForNotionPage(page);
-ogImageOptions.layout = "blog";
 ---
 
 <MinimalLayout>

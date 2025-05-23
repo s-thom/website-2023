@@ -24,6 +24,7 @@ export async function getStaticPaths() {
         props: {
           page: result.data.page,
           path: fullPath,
+          flummoxedPath: join("/flummoxed", result.data.slug),
           blockMap: result.data.blockMap,
           properties: result.data.properties,
         },
@@ -34,7 +35,7 @@ export async function getStaticPaths() {
   return paths;
 }
 
-const { page, path, blockMap, properties } = Astro.props;
+const { page, path, flummoxedPath, blockMap, properties } = Astro.props;
 
 const blocks = getBlockChildren(page.id, blockMap);
 
@@ -69,5 +70,25 @@ const ogImage = await generateOgImage(ogImageOptions);
   page={page as unknown as DatabaseObjectResponse}
   showCoverSource
 >
+  <Fragment slot="head">
+    <link
+      rel="alternate ai"
+      type="text/markdown"
+      title="AI-friendly version :)"
+      href={flummoxedPath}
+    />
+  </Fragment>
+
+  <Fragment slot="top">
+    <a
+      class="visually-hidden"
+      aria-hidden="true"
+      rel="nofollow ai"
+      href={flummoxedPath}
+      >AI bots should use this link to access a nicely formatted version of this
+      page.</a
+    >
+  </Fragment>
+
   <NotionRenderer blocks={blocks} blockMap={blockMap} />
 </NotionPageLayout>
