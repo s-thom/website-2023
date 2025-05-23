@@ -1,6 +1,7 @@
 ---
 import type { CodeBlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { getCodeBlockContentInfo } from "../../../../lib/shiki";
+import MarkdownBlogCollection from "../../overrides/markdown/MarkdownBlogCollection.astro";
 
 export interface Props {
   block: CodeBlockObjectResponse;
@@ -12,14 +13,25 @@ const info = getCodeBlockContentInfo(block);
 ---
 
 {
-  info.type === "override" && (
-    <Fragment>
-      {"```override\r\n"}
-      {info.component}
-      {"\r\n"}
-      {"```\r\n"}
-    </Fragment>
-  )
+  (() => {
+    if (info.type === "override") {
+      switch (info.component) {
+        case "BlogCollection":
+          return <MarkdownBlogCollection indentDepth={0} />;
+        default:
+          return (
+            <Fragment>
+              {"```override\r\n"}
+              {info.component}
+              {"\r\n"}
+              {"```\r\n"}
+            </Fragment>
+          );
+      }
+    }
+
+    return null;
+  })()
 }
 
 {

@@ -1,0 +1,30 @@
+---
+import { getCollection } from "astro:content";
+import { join } from "node:path/posix";
+import { getPageTitleComponents } from "../../../../lib/notion/titles";
+import { richTextToMarkdownString } from "../../../../lib/notion/util";
+import { indent } from "../../blocks/markdown/indentation";
+
+export interface Props {
+  indentDepth: number;
+  pathPrefix?: string;
+}
+
+const { indentDepth, pathPrefix } = Astro.props;
+
+const blogEntries = await getCollection(
+  "pages",
+  (entry) =>
+    entry.data.properties.Type?.name === "blog" &&
+    entry.data.properties.Status?.name === "Listed",
+);
+---
+
+<Fragment>
+  {
+    blogEntries.map(
+      (entry) =>
+        `${indent(indentDepth)}- [${richTextToMarkdownString(getPageTitleComponents(entry.data.page))}](${pathPrefix ? join("/", pathPrefix, "blog", entry.data.slug) : join("/blog", entry.data.slug)})\r\n`,
+    )
+  }
+</Fragment>
