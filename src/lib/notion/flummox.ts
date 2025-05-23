@@ -12,6 +12,10 @@ function randomWord(random: PRNG): string {
   return arrayRandom(objects, random);
 }
 
+function randomLink(random: PRNG): string {
+  return `https://en.wikipedia.org/wiki/${randomWord(random)}`;
+}
+
 function flummoxRichText(
   random: PRNG,
   components: RichTextItemResponse | RichTextItemResponse[],
@@ -36,6 +40,14 @@ function flummoxRichText(
       text: {
         ...component.text,
         content: flummoxedText,
+        link: component.text.link
+          ? {
+              ...component.text.link,
+              url: component.text.link.url.startsWith("/")
+                ? randomLink(random)
+                : component.text.link.url,
+            }
+          : null,
       },
       plain_text: flummoxedText,
     };
