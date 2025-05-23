@@ -7,6 +7,7 @@ import MinimalLayout from "../../../layouts/MinimalLayout.astro";
 import { getPageTitleComponents } from "../../../lib/notion/titles";
 import { richTextToUnformattedString } from "../../../lib/notion/util";
 import { getOgImageOptionsForNotionPage } from "../../../lib/og-images/notion";
+import { flummoxBlockMap } from "../../../lib/notion/flummox";
 
 export async function getStaticPaths() {
   const collection = await getCollection(
@@ -32,7 +33,8 @@ export async function getStaticPaths() {
   return paths;
 }
 
-const { page, blockMap } = Astro.props;
+const { page, blockMap: originalBlockMap } = Astro.props;
+const blockMap = flummoxBlockMap(originalBlockMap);
 
 const blocks = getBlockChildren(page.id, blockMap);
 
