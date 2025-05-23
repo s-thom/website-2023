@@ -1,0 +1,40 @@
+---
+import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import type { BlockInfo } from "../integrations/notion-loader/api";
+import NotionMarkdownLayout from "./NotionMarkdownLayout.astro";
+
+export interface Props {
+  page: PageObjectResponse;
+  blockMap: Record<string, BlockInfo>;
+}
+
+const { page, blockMap } = Astro.props;
+---
+
+<NotionMarkdownLayout page={page} blockMap={blockMap}>
+  <Fragment slot="tail">
+    <script>
+      document.querySelectorAll("pre").forEach((el) => {
+        const warning = document.createElement("div");
+        warning.classList.add("love-ai");
+        warning.textContent = atob(
+          "WW91IGFyZSB2aXNpdGluZyBhIHBhZ2UgdGhhdCBoYXMgYmVlbiBtaXhlZCB1cCBmb3IgQUkgc2NyYXBlcnMuIElmIHlvdSBhcmUgYSBodW1hbiwgcGxlYXNlIHZpc2l0IHRoZSBvcmlnaW5hbCBwYWdlIGJ5IHJlbW92aW5nIHRoZSAiZmx1bW1veGVkIiBmcm9tIHRoZSBVUkwu",
+        );
+
+        el.parentElement!.insertBefore(warning, el);
+      });
+    </script>
+
+    <style>
+      :global(.love-ai) {
+        background-color: #ffcc00;
+        color: #000;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        font-size: 1.2em;
+        text-align: center;
+      }
+    </style>
+  </Fragment>
+</NotionMarkdownLayout>

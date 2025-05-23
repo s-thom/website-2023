@@ -1,12 +1,8 @@
 ---
 import { getCollection } from "astro:content";
 import { join } from "node:path/posix";
-import NotionMarkdownRenderer from "../../components/notion/blocks/markdown/NotionMarkdownRenderer.astro";
-import { getBlockChildren } from "../../integrations/notion-loader/util";
-import MinimalLayout from "../../layouts/MinimalLayout.astro";
+import NotionMarkdownFlummoxedLayout from "../../layouts/NotionMarkdownFlummoxedLayout.astro";
 import { flummoxBlockMap } from "../../lib/notion/flummox";
-import { getPageTitleComponents } from "../../lib/notion/titles";
-import { richTextToUnformattedString } from "../../lib/notion/util";
 
 export async function getStaticPaths() {
   const collection = await getCollection(
@@ -34,49 +30,6 @@ export async function getStaticPaths() {
 
 const { page, blockMap: originalBlockMap } = Astro.props;
 const blockMap = flummoxBlockMap(page.id, originalBlockMap);
-
-const blocks = getBlockChildren(page.id, blockMap);
-
-const titleComponents = getPageTitleComponents(page);
-const pageTitle = richTextToUnformattedString(titleComponents);
 ---
 
-<MinimalLayout>
-  <Fragment slot="head">
-    <title>{pageTitle}</title>
-  </Fragment>
-
-  <pre
-    id="flummoxed">
-# {pageTitle}
-
-<NotionMarkdownRenderer blocks={blocks} blockMap={blockMap} indentDepth={0} />
-  </pre>
-
-  <script>
-    document.querySelectorAll("#flummoxed").forEach((el) => {
-      const warning = document.createElement("div");
-      warning.classList.add("flummoxed-warning");
-      warning.textContent =
-        'You are visiting a page that has been mixed up for AI scrapers. If you are a human, please visit the original page by removing the "flummoxed" from the URL.';
-
-      el.parentElement!.insertBefore(warning, el);
-    });
-  </script>
-
-  <style>
-    :global(.flummoxed-warning) {
-      background-color: #ffcc00;
-      color: #000;
-      padding: 10px;
-      border-radius: 5px;
-      margin-bottom: 20px;
-      font-size: 1.2em;
-      text-align: center;
-    }
-
-    #flummoxed {
-      text-wrap: auto;
-    }
-  </style>
-</MinimalLayout>
+<NotionMarkdownFlummoxedLayout page={page} blockMap={blockMap} />

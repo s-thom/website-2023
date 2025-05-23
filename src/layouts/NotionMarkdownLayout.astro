@@ -1,0 +1,41 @@
+---
+import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import NotionMarkdownRenderer from "../components/notion/blocks/markdown/NotionMarkdownRenderer.astro";
+import type { BlockInfo } from "../integrations/notion-loader/api";
+import { getPageTitleComponents } from "../lib/notion/titles";
+import { richTextToUnformattedString } from "../lib/notion/util";
+import MinimalLayout from "./MinimalLayout.astro";
+import { getBlockChildren } from "../integrations/notion-loader/util";
+
+export interface Props {
+  page: PageObjectResponse;
+  blockMap: Record<string, BlockInfo>;
+}
+
+const { page, blockMap } = Astro.props;
+
+const blocks = getBlockChildren(page.id, blockMap);
+
+const titleComponents = getPageTitleComponents(page);
+const pageTitle = richTextToUnformattedString(titleComponents);
+---
+
+<MinimalLayout>
+  <Fragment slot="head">
+    <title>{pageTitle}</title>
+  </Fragment>
+
+  <pre>
+# {pageTitle}
+
+<NotionMarkdownRenderer blocks={blocks} blockMap={blockMap} indentDepth={0} />
+  </pre>
+
+  <style>
+    pre {
+      text-wrap: auto;
+    }
+  </style>
+
+  <slot name="tail" />
+</MinimalLayout>
