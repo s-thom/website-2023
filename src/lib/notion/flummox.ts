@@ -1,12 +1,19 @@
 import type { RichTextItemResponse } from "@notionhq/client/build/src/api-endpoints";
+import { objects } from "friendly-words";
+import seedrandom, { type PRNG } from "seedrandom";
 import type { BlockInfo } from "../../integrations/notion-loader/api";
+import { arrayRandom } from "../../util";
 import { getPageTitleComponents } from "./titles";
 
-function flummoxWord(str: string): string {
-  return str.replace(/./g, "x");
+const MIN_WORD_LENGTH = 4;
+const RANDOM_CHANCE = 0.2;
+
+function randomWord(random: PRNG): string {
+  return arrayRandom(objects, random);
 }
 
 function flummoxRichText(
+  random: PRNG,
   components: RichTextItemResponse | RichTextItemResponse[],
 ): RichTextItemResponse[] {
   const asArray = Array.isArray(components) ? components : [components];
@@ -16,9 +23,13 @@ function flummoxRichText(
       return component;
     }
 
-    const words = component.plain_text.split(" ");
-    const flummoxedWords = words.map((word) => flummoxWord(word));
-    const flummoxedText = flummoxedWords.join(" ");
+    const words = component.plain_text.split(/\b/);
+    const flummoxedWords = words.map((word) =>
+      word.length >= MIN_WORD_LENGTH && random() < RANDOM_CHANCE
+        ? randomWord(random)
+        : word,
+    );
+    const flummoxedText = flummoxedWords.join("");
 
     return {
       ...component,
@@ -31,7 +42,11 @@ function flummoxRichText(
   });
 }
 
-function flummoxBlock(blockId: string, blockInfo: BlockInfo): BlockInfo {
+function flummoxBlock(
+  random: PRNG,
+  blockId: string,
+  blockInfo: BlockInfo,
+): BlockInfo {
   if (blockInfo.block.object === "page") {
     const titleComponents = getPageTitleComponents(blockInfo.block);
 
@@ -43,7 +58,7 @@ function flummoxBlock(blockId: string, blockInfo: BlockInfo): BlockInfo {
           ...blockInfo.block.properties,
           title: {
             type: "rich_text",
-            rich_text: flummoxRichText(titleComponents),
+            rich_text: flummoxRichText(random, titleComponents),
             id: "title",
           },
         },
@@ -59,7 +74,10 @@ function flummoxBlock(blockId: string, blockInfo: BlockInfo): BlockInfo {
           ...blockInfo.block,
           paragraph: {
             ...blockInfo.block.paragraph,
-            rich_text: flummoxRichText(blockInfo.block.paragraph.rich_text),
+            rich_text: flummoxRichText(
+              random,
+              blockInfo.block.paragraph.rich_text,
+            ),
           },
         },
       };
@@ -70,7 +88,10 @@ function flummoxBlock(blockId: string, blockInfo: BlockInfo): BlockInfo {
           ...blockInfo.block,
           heading_1: {
             ...blockInfo.block.heading_1,
-            rich_text: flummoxRichText(blockInfo.block.heading_1.rich_text),
+            rich_text: flummoxRichText(
+              random,
+              blockInfo.block.heading_1.rich_text,
+            ),
           },
         },
       };
@@ -81,7 +102,10 @@ function flummoxBlock(blockId: string, blockInfo: BlockInfo): BlockInfo {
           ...blockInfo.block,
           heading_2: {
             ...blockInfo.block.heading_2,
-            rich_text: flummoxRichText(blockInfo.block.heading_2.rich_text),
+            rich_text: flummoxRichText(
+              random,
+              blockInfo.block.heading_2.rich_text,
+            ),
           },
         },
       };
@@ -92,7 +116,10 @@ function flummoxBlock(blockId: string, blockInfo: BlockInfo): BlockInfo {
           ...blockInfo.block,
           heading_3: {
             ...blockInfo.block.heading_3,
-            rich_text: flummoxRichText(blockInfo.block.heading_3.rich_text),
+            rich_text: flummoxRichText(
+              random,
+              blockInfo.block.heading_3.rich_text,
+            ),
           },
         },
       };
@@ -103,7 +130,10 @@ function flummoxBlock(blockId: string, blockInfo: BlockInfo): BlockInfo {
           ...blockInfo.block,
           callout: {
             ...blockInfo.block.callout,
-            rich_text: flummoxRichText(blockInfo.block.callout.rich_text),
+            rich_text: flummoxRichText(
+              random,
+              blockInfo.block.callout.rich_text,
+            ),
           },
         },
       };
@@ -117,7 +147,10 @@ function flummoxBlock(blockId: string, blockInfo: BlockInfo): BlockInfo {
           ...blockInfo.block,
           toggle: {
             ...blockInfo.block.toggle,
-            rich_text: flummoxRichText(blockInfo.block.toggle.rich_text),
+            rich_text: flummoxRichText(
+              random,
+              blockInfo.block.toggle.rich_text,
+            ),
           },
         },
       };
@@ -129,6 +162,7 @@ function flummoxBlock(blockId: string, blockInfo: BlockInfo): BlockInfo {
           bulleted_list_item: {
             ...blockInfo.block.bulleted_list_item,
             rich_text: flummoxRichText(
+              random,
               blockInfo.block.bulleted_list_item.rich_text,
             ),
           },
@@ -142,6 +176,7 @@ function flummoxBlock(blockId: string, blockInfo: BlockInfo): BlockInfo {
           numbered_list_item: {
             ...blockInfo.block.numbered_list_item,
             rich_text: flummoxRichText(
+              random,
               blockInfo.block.numbered_list_item.rich_text,
             ),
           },
@@ -154,7 +189,7 @@ function flummoxBlock(blockId: string, blockInfo: BlockInfo): BlockInfo {
           ...blockInfo.block,
           image: {
             ...blockInfo.block.image,
-            caption: flummoxRichText(blockInfo.block.image.caption),
+            caption: flummoxRichText(random, blockInfo.block.image.caption),
           },
         },
       };
@@ -165,7 +200,7 @@ function flummoxBlock(blockId: string, blockInfo: BlockInfo): BlockInfo {
           ...blockInfo.block,
           quote: {
             ...blockInfo.block.quote,
-            rich_text: flummoxRichText(blockInfo.block.quote.rich_text),
+            rich_text: flummoxRichText(random, blockInfo.block.quote.rich_text),
           },
         },
       };
@@ -182,7 +217,7 @@ function flummoxBlock(blockId: string, blockInfo: BlockInfo): BlockInfo {
           ...blockInfo.block,
           to_do: {
             ...blockInfo.block.to_do,
-            rich_text: flummoxRichText(blockInfo.block.to_do.rich_text),
+            rich_text: flummoxRichText(random, blockInfo.block.to_do.rich_text),
           },
         },
       };
@@ -196,7 +231,7 @@ function flummoxBlock(blockId: string, blockInfo: BlockInfo): BlockInfo {
           table_row: {
             ...blockInfo.block.table_row,
             cells: blockInfo.block.table_row.cells.map((cell) =>
-              flummoxRichText(cell),
+              flummoxRichText(random, cell),
             ),
           },
         },
@@ -223,12 +258,15 @@ function flummoxBlock(blockId: string, blockInfo: BlockInfo): BlockInfo {
 }
 
 export function flummoxBlockMap(
+  id: string,
   blockMap: Record<string, BlockInfo>,
 ): Record<string, BlockInfo> {
+  const random = seedrandom(id);
+
   const newBlockMap: Record<string, BlockInfo> = {};
 
   for (const [blockId, blockInfo] of Object.entries(blockMap)) {
-    newBlockMap[blockId] = flummoxBlock(blockId, blockInfo);
+    newBlockMap[blockId] = flummoxBlock(random, blockId, blockInfo);
   }
 
   return newBlockMap;

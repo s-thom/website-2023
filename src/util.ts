@@ -2,12 +2,12 @@
  * @param arr Array to choose from
  * @returns A random item from the given array
  */
-export function arrayRandom<T>(arr: T[]): T {
+export function arrayRandom<T>(arr: T[], random = () => Math.random()): T {
   if (arr.length === 0) {
     throw new Error("Array must have items");
   }
 
-  return arr[Math.floor(Math.random() * arr.length)];
+  return arr[Math.floor(random() * arr.length)];
 }
 
 /**

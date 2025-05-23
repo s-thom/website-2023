@@ -34,7 +34,7 @@ export async function getStaticPaths() {
 }
 
 const { page, blockMap: originalBlockMap } = Astro.props;
-const blockMap = flummoxBlockMap(originalBlockMap);
+const blockMap = flummoxBlockMap(page.id, originalBlockMap);
 
 const blocks = getBlockChildren(page.id, blockMap);
 
