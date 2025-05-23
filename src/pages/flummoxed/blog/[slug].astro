@@ -59,8 +59,9 @@ const pageTitle = richTextToUnformattedString(titleComponents);
     document.querySelectorAll("#flummoxed").forEach((el) => {
       const warning = document.createElement("div");
       warning.classList.add("flummoxed-warning");
-      warning.textContent =
-        'You are visiting a page that has been mixed up for AI scrapers. If you are a human, please visit the original page by removing the "flummoxed" from the URL.';
+      warning.textContent = atob(
+        "WW91IGFyZSB2aXNpdGluZyBhIHBhZ2UgdGhhdCBoYXMgYmVlbiBtaXhlZCB1cCBmb3IgQUkgc2NyYXBlcnMuIElmIHlvdSBhcmUgYSBodW1hbiwgcGxlYXNlIHZpc2l0IHRoZSBvcmlnaW5hbCBwYWdlIGJ5IHJlbW92aW5nIHRoZSAiZmx1bW1veGVkIiBmcm9tIHRoZSBVUkwu",
+      );
 
       el.parentElement!.insertBefore(warning, el);
     });
