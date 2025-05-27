@@ -3,26 +3,29 @@ import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endp
 import { getCollection } from "astro:content";
 import { join } from "node:path/posix";
 import NotionRenderer from "../components/notion/blocks/NotionRenderer.astro";
+import BlogPageFooter from "../components/notion/blog/BlogPageFooter.astro";
+import type { LinkInfo } from "../components/SiteHeader.astro";
 import { getBlockChildren } from "../integrations/notion-loader/util";
 import NotionPageLayout from "../layouts/NotionPageLayout.astro";
+import { getFlummoxedUrlPath } from "../lib/notion/flummox";
 import { getPageTitleComponents } from "../lib/notion/titles";
 import { richTextToUnformattedString } from "../lib/notion/util";
 import { generateOgImage } from "../lib/og-images";
 import { getOgImageOptionsForNotionPage } from "../lib/og-images/notion";
 
 export async function getStaticPaths() {
-  const collection = await getCollection(
-    "pages",
-    (entry) => entry.data.properties.Type?.name === "page",
-  );
+  const collection = await getCollection("pages");
 
   const paths = await Promise.all(
     collection.map(async (result) => {
-      const fullPath = join("/", result.data.slug);
+      const type = result.data.properties.Type?.name ?? "page";
+      const fullPath = join(type === "blog" ? "/blog" : "/", result.data.slug);
+
       return {
         params: { path: fullPath },
         props: {
           page: result.data.page,
+          type,
           path: fullPath,
           flummoxedPath: join("/flummoxed", result.data.slug),
           blockMap: result.data.blockMap,
@@ -35,7 +38,9 @@ export async function getStaticPaths() {
   return paths;
 }
 
-const { page, path, flummoxedPath, blockMap, properties } = Astro.props;
+const { page, type, path, flummoxedPath, blockMap, properties } = Astro.props;
+
+const isBlog = type === "blog";
 
 const blocks = getBlockChildren(page.id, blockMap);
 
@@ -51,7 +56,9 @@ const ogImage = await generateOgImage(ogImageOptions);
   meta={{
     title: pageTitle,
     url: path,
+    rssUrl: isBlog ? "/blog/feed.xml" : undefined,
     authors: [{ firstName: "Stuart", lastName: "Thomson" }],
+    article: isBlog ? { type: "blog" } : undefined,
     publishedDate: properties.Published?.start,
     modifiedDate: properties.Edited?.start,
     images: [
@@ -65,10 +72,14 @@ const ogImage = await generateOgImage(ogImageOptions);
   }}
   breadcrumbs={[
     { name: "Home", url: "/" },
+    isBlog ? { name: "Blog", url: "/blog" } : null,
     { name: pageTitle, url: path },
-  ]}
+  ].filter<LinkInfo>((c) => c !== null)}
   page={page as unknown as DatabaseObjectResponse}
   showCoverSource
+  showReadingTime={isBlog}
+  showPublishEditDates={isBlog}
+  showTableOfContents={isBlog}
 >
   <Fragment slot="head">
     <link
@@ -91,4 +102,13 @@ const ogImage = await generateOgImage(ogImageOptions);
   </Fragment>
 
   <NotionRenderer blocks={blocks} blockMap={blockMap} />
+
+  {
+    isBlog && (
+      <BlogPageFooter
+        page={page as unknown as DatabaseObjectResponse}
+        slot="page-footer"
+      />
+    )
+  }
 </NotionPageLayout>
