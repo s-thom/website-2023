@@ -3,10 +3,7 @@ import { extension } from "mime-types";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "path";
 
-const CACHE_DIR = join(
-  process.cwd(),
-  ".astro/sthom/notion-loader/images",
-);
+const CACHE_DIR = join(process.cwd(), ".astro/sthom/notion-loader/images");
 const CACHE_MANIFEST_FILE = join(CACHE_DIR, "manifest.json");
 
 const MANIFEST_VERSION = 1;

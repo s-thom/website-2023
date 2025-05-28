@@ -97,7 +97,7 @@ async function processBlock(
       );
     } else if (block.type === "callout") {
       const { icon } = block.callout;
-      if (icon && icon.type !== "emoji") {
+      if (icon && (icon.type === "file" || icon.type === "external")) {
         queue.add(() =>
           saveFileOrExternal(
             `${block.id}_icon`,
