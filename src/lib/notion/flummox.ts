@@ -270,10 +270,10 @@ function flummoxBlock(
 }
 
 export function flummoxBlockMap(
-  id: string,
   blockMap: Record<string, BlockInfo>,
+  seed: string,
 ): Record<string, BlockInfo> {
-  const random = seedrandom(id);
+  const random = seedrandom(seed);
 
   const newBlockMap: Record<string, BlockInfo> = {};
 

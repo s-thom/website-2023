@@ -5,19 +5,21 @@ import NotionMarkdownFlummoxedLayout from "../../layouts/NotionMarkdownFlummoxed
 import { flummoxBlockMap } from "../../lib/notion/flummox";
 
 export async function getStaticPaths() {
-  const collection = await getCollection(
-    "pages",
-    (entry) => entry.data.properties.Type?.name === "page",
-  );
+  const collection = await getCollection("pages");
 
   const paths = await Promise.all(
     collection.map(async (result) => {
-      const fullPath = join("/", result.data.slug);
+      const type = result.data.properties.Type?.name ?? "page";
+      const fullPath = join(type === "blog" ? "/blog" : "/", result.data.slug);
+      const flummoxedPath = join("/flummoxed", fullPath);
+
       return {
         params: { path: fullPath },
         props: {
           page: result.data.page,
+          type,
           path: fullPath,
+          flummoxedPath,
           blockMap: result.data.blockMap,
           properties: result.data.properties,
         },
@@ -29,7 +31,8 @@ export async function getStaticPaths() {
 }
 
 const { page, blockMap: originalBlockMap } = Astro.props;
-const blockMap = flummoxBlockMap(page.id, originalBlockMap);
+
+const blockMap = flummoxBlockMap(originalBlockMap, page.id);
 ---
 
 <NotionMarkdownFlummoxedLayout page={page} blockMap={blockMap} />

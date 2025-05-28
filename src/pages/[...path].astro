@@ -7,7 +7,6 @@ import BlogPageFooter from "../components/notion/blog/BlogPageFooter.astro";
 import type { LinkInfo } from "../components/SiteHeader.astro";
 import { getBlockChildren } from "../integrations/notion-loader/util";
 import NotionPageLayout from "../layouts/NotionPageLayout.astro";
-import { getFlummoxedUrlPath } from "../lib/notion/flummox";
 import { getPageTitleComponents } from "../lib/notion/titles";
 import { richTextToUnformattedString } from "../lib/notion/util";
 import { generateOgImage } from "../lib/og-images";
@@ -20,6 +19,7 @@ export async function getStaticPaths() {
     collection.map(async (result) => {
       const type = result.data.properties.Type?.name ?? "page";
       const fullPath = join(type === "blog" ? "/blog" : "/", result.data.slug);
+      const flummoxedPath = join("/flummoxed", fullPath);
 
       return {
         params: { path: fullPath },
@@ -27,7 +27,7 @@ export async function getStaticPaths() {
           page: result.data.page,
           type,
           path: fullPath,
-          flummoxedPath: join("/flummoxed", result.data.slug),
+          flummoxedPath,
           blockMap: result.data.blockMap,
           properties: result.data.properties,
         },
