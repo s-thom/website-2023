@@ -12,6 +12,10 @@ const { page, blockMap } = Astro.props;
 ---
 
 <NotionMarkdownLayout page={page} blockMap={blockMap}>
+  <Fragment slot="head">
+    <meta name="robots" content="noindex" />
+  </Fragment>
+
   <Fragment slot="tail">
     <script>
       document.querySelectorAll("pre").forEach((el) => {

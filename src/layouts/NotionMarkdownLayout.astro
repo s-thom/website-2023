@@ -23,6 +23,7 @@ const pageTitle = richTextToUnformattedString(titleComponents);
 <MinimalLayout>
   <Fragment slot="head">
     <title>{pageTitle}</title>
+    <slot name="head" />
   </Fragment>
 
   <pre>
