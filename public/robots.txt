@@ -27,7 +27,6 @@ User-agent: Diffbot
 User-agent: Dr. Link Check
 User-agent: DuckAssistBot
 User-agent: DuckAssistbot
-User-agent: EvoUptimeBot
 User-agent: FacebookBot
 User-agent: Factset_spyderbot
 User-agent: FullStory
@@ -82,9 +81,11 @@ User-agent: Reelevant
 User-agent: RetroListeCOM
 User-agent: SE Ranking Bot
 User-agent: SalesViewerBot
+User-agent: Sentry Uptime Monitoring
 User-agent: Site24x7
 User-agent: Spectate
 User-agent: Splunk
+User-agent: Stape Scanner
 User-agent: StatsDroneBot
 User-agent: StatusCake
 User-agent: Swifteq Link Checker
@@ -94,7 +95,6 @@ User-agent: Timpibot
 User-agent: Trendiction Bot
 User-agent: UptimeRobot
 User-agent: Uptimia
-User-agent: WP Umbrella
 User-agent: WPMU DEV Broken Link Checker
 User-agent: WPMUDEV Uptime Monitor 5.0
 User-agent: Watchful
