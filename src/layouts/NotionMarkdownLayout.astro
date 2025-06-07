@@ -1,11 +1,13 @@
 ---
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
-import NotionMarkdownRenderer from "../components/notion/blocks/markdown/NotionMarkdownRenderer.astro";
+import type { Root } from "mdast";
+import remarkStringify from "remark-stringify";
+import { unified } from "unified";
 import type { BlockInfo } from "../integrations/notion-loader/api";
 import { getPageTitleComponents } from "../lib/notion/titles";
 import { richTextToUnformattedString } from "../lib/notion/util";
+import { notionToRemark } from "../lib/unified/notionToRemark";
 import MinimalLayout from "./MinimalLayout.astro";
-import { getBlockChildren } from "../integrations/notion-loader/util";
 
 export interface Props {
   page: PageObjectResponse;
@@ -14,10 +16,15 @@ export interface Props {
 
 const { page, blockMap } = Astro.props;
 
-const blocks = getBlockChildren(page.id, blockMap);
-
 const titleComponents = getPageTitleComponents(page);
 const pageTitle = richTextToUnformattedString(titleComponents);
+
+const processor = unified().use(remarkStringify);
+
+const tree = notionToRemark(page.id, blockMap);
+const processedTree = (await processor.run(tree)) as Root;
+
+const markdownContent = processor.stringify(processedTree);
 ---
 
 <MinimalLayout>
@@ -27,9 +34,7 @@ const pageTitle = richTextToUnformattedString(titleComponents);
   </Fragment>
 
   <pre>
-# {pageTitle}
-
-<NotionMarkdownRenderer blocks={blocks} blockMap={blockMap} indentDepth={0} />
+{markdownContent}
   </pre>
 
   <style>
