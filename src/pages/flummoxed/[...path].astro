@@ -8,6 +8,7 @@ import NotionMarkdownLayout from "../../layouts/NotionMarkdownLayout.astro";
 import { getPageTitleComponents } from "../../lib/notion/titles";
 import { richTextToUnformattedString } from "../../lib/notion/util";
 import { notionToRemark } from "../../lib/unified/notionToRemark";
+import { remarkFlummox } from "../../lib/unified/remarkFlummox";
 
 export async function getStaticPaths() {
   const collection = await getCollection("pages");
@@ -41,6 +42,7 @@ const titleComponents = getPageTitleComponents(page);
 const pageTitle = richTextToUnformattedString(titleComponents);
 
 const processor = unified()
+  .use(remarkFlummox, { seed: page.id })
   .use(remarkStringify);
 
 const tree = notionToRemark(page.id, blockMap);
