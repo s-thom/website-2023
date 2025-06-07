@@ -1,6 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import { join } from "node:path/posix";
+import remarkGfm from "remark-gfm";
 import remarkStringify from "remark-stringify";
 import { unified } from "unified";
 import NotionMarkdownLayout from "../../layouts/NotionMarkdownLayout.astro";
@@ -62,6 +63,7 @@ const processor = unified()
       default: mapRedactContent,
     },
   })
+  .use(remarkGfm)
   .use(remarkStringify);
 
 const tree = notionToRemark(page.id, blockMap);
