@@ -13,6 +13,7 @@ import {
   remarkCodeOverrides,
 } from "../../lib/unified/remarkCodeOverrides";
 import { remarkFlummox } from "../../lib/unified/remarkFlummox";
+import { remarkTempNoImages } from "../../lib/unified/remarkTempNoImages";
 
 export async function getStaticPaths() {
   const collection = await getCollection("pages");
@@ -53,6 +54,7 @@ const allBlogEntries = await getCollection(
 );
 
 const processor = unified()
+  .use(remarkTempNoImages)
   .use(remarkFlummox, { seed: page.id })
   .use(remarkCodeOverrides, {
     mappers: {
