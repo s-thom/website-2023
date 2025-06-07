@@ -1,7 +1,5 @@
-import type { CodeBlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import parse from "fenceparser";
 import type { BundledLanguage, SpecialLanguage } from "shiki";
-import { richTextToUnformattedString } from "../notion/util";
 import { languageMap } from "./languageMap";
 
 type CodeBlockContentInfo =
@@ -22,32 +20,30 @@ type CodeBlockContentInfo =
     };
 
 export function getCodeBlockContentInfo(
-  block: CodeBlockObjectResponse,
+  content: string,
+  language?: string | null,
 ): CodeBlockContentInfo {
-  const blockLanguage = block.code.language;
-  const blockContent = richTextToUnformattedString(block.code.rich_text);
-
-  if (blockLanguage && blockContent) {
-    let notionLanguage = blockLanguage.toLowerCase();
+  if (language && content) {
+    let rawLanguage = language.toLowerCase();
     let metaString = "";
-    let code = blockContent;
+    let code = content;
     // Try match language from first line of text
     // Match get a "comment", followed by the keyword "lang"
-    const match = blockContent.match(
+    const match = content.match(
       /^(?:[/#]+ *lang:? *([^\n\s]*)(?: *([^\r\n]*)))(?:\r?\n)?([\s\S]*)$/,
     );
     if (match) {
-      [, notionLanguage, metaString, code] = match;
+      [, rawLanguage, metaString, code] = match;
     }
 
-    const language =
-      languageMap[notionLanguage as keyof typeof languageMap] ??
-      notionLanguage ??
+    const finalisedLanguage =
+      languageMap[rawLanguage as keyof typeof languageMap] ??
+      rawLanguage ??
       "tsx";
     const meta = metaString ? parse(metaString) : {};
 
     // Extra: marker for component override
-    if (language === "override") {
+    if (finalisedLanguage === "override") {
       return {
         type: "override",
         component: meta.component as string,
@@ -59,14 +55,10 @@ export function getCodeBlockContentInfo(
     return {
       type: "code",
       code,
-      language: language as BundledLanguage | SpecialLanguage,
+      language: finalisedLanguage as BundledLanguage | SpecialLanguage,
       meta: metaString || undefined,
     };
   }
 
-  // eslint-disable-next-line no-console
-  console.warn(
-    `Unable to determine language and/or content of code block ${block.id}`,
-  );
   return { type: "none" };
 }

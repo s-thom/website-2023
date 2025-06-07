@@ -1,6 +1,5 @@
 ---
 import { getCollection } from "astro:content";
-import type { Root } from "mdast";
 import { join } from "node:path/posix";
 import remarkStringify from "remark-stringify";
 import { unified } from "unified";
@@ -8,6 +7,11 @@ import NotionMarkdownLayout from "../../layouts/NotionMarkdownLayout.astro";
 import { getPageTitleComponents } from "../../lib/notion/titles";
 import { richTextToUnformattedString } from "../../lib/notion/util";
 import { notionToRemark } from "../../lib/unified/notionToRemark";
+import {
+  getMapBlogCollection,
+  mapRedactContent,
+  remarkCodeOverrides,
+} from "../../lib/unified/remarkCodeOverrides";
 import { remarkFlummox } from "../../lib/unified/remarkFlummox";
 
 export async function getStaticPaths() {
@@ -41,12 +45,25 @@ const { page, blockMap } = Astro.props;
 const titleComponents = getPageTitleComponents(page);
 const pageTitle = richTextToUnformattedString(titleComponents);
 
+const allBlogEntries = await getCollection(
+  "pages",
+  (entry) =>
+    entry.data.properties.Type?.name === "blog" &&
+    entry.data.properties.Status?.name === "Listed",
+);
+
 const processor = unified()
   .use(remarkFlummox, { seed: page.id })
+  .use(remarkCodeOverrides, {
+    mappers: {
+      BlogCollection: getMapBlogCollection(allBlogEntries, "flummoxed"),
+      default: mapRedactContent,
+    },
+  })
   .use(remarkStringify);
 
 const tree = notionToRemark(page.id, blockMap);
-const processedTree = (await processor.run(tree)) as Root;
+const processedTree = await processor.run(tree);
 
 const markdownContent = processor.stringify(processedTree);
 ---

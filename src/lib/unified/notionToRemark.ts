@@ -24,7 +24,7 @@ interface BlockGroup {
   items: BlockInfo[];
 }
 
-function richTextToMarkdownNodes(
+export function richTextToMarkdownNodes(
   richText: RichTextItemResponse[],
 ): PhrasingContent[] {
   const rawContent = richText.map((item) => {

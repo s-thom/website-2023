@@ -2,6 +2,7 @@
 import type { CodeBlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { getCodeBlockContentInfo } from "../../../lib/shiki";
 import CodeRenderer from "../../site/CodeRenderer.astro";
+import { richTextToUnformattedString } from "../../../lib/notion/util";
 
 const loadAboutLinks = () =>
   import("../overrides/code-blocks/AboutLinks.astro").then((b) => b.default);
@@ -44,7 +45,16 @@ export interface Props {
 
 const { block } = Astro.props;
 
-const info = getCodeBlockContentInfo(block);
+const blockContent = richTextToUnformattedString(block.code.rich_text);
+const blockLanguage = block.code.language;
+const info = getCodeBlockContentInfo(blockContent, blockLanguage);
+
+if (info.type === "none") {
+  // eslint-disable-next-line no-console
+  console.warn(
+    `Unable to determine language and/or content of code block ${block.id}`,
+  );
+}
 
 let Component: any;
 if (info.type === "override") {
