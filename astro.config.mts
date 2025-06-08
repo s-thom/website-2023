@@ -10,6 +10,7 @@ import sthomClientStickers from "./src/integrations/clientStickers";
 import sthomFavicon from "./src/integrations/favicon";
 import sthomImages from "./src/integrations/images";
 import { sthomNotionLoader } from "./src/integrations/notion-loader";
+import { sthomRelatedPosts } from "./src/integrations/related-posts";
 import sthomSliders from "./src/integrations/sliders";
 import { IMAGE_OPTIMISATION_ALLOWED_DOMAINS } from "./src/lib/constants";
 
@@ -35,6 +36,13 @@ export default defineConfig({
     sthomFavicon({ src: "./src/resources/profile-2023.jpg" }),
     sthomNotionLoader(),
     sthomSliders(),
+    sthomRelatedPosts({
+      collection: "pages",
+      label: "blog-posts",
+      filter: (pageInfo) =>
+        pageInfo.properties.Type?.name === "blog" &&
+        pageInfo.properties.Status?.name === "Listed",
+    }),
     react(),
     sitemap({ filter: (page) => !page.includes("/flummoxed/") }),
   ],
