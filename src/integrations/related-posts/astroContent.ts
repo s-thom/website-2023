@@ -12,8 +12,8 @@ interface PageMinimal {
   blockMap: Record<string, BlockInfo>;
 }
 
-const DATA_STORE_LOCATION = "node_modules/.astro/data-store.json";
-const SECONDARY_DATA_STORE_LOCATION = ".astro/data-store.json";
+const DATA_STORE_LOCATION = ".astro/data-store.json";
+const SECONDARY_DATA_STORE_LOCATION = "node_modules/.astro/data-store.json";
 
 const processor = unified().use(strip).use(remarkStringify);
 
