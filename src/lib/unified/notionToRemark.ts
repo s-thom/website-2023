@@ -20,8 +20,42 @@ const BLOCK_GROUP_TYPE = "_block-group";
 interface BlockGroup {
   type: typeof BLOCK_GROUP_TYPE;
   blockType: BlockObjectResponse["type"];
-  wrapper: (_props: any) => any;
-  items: BlockInfo[];
+  children: BlockInfo[];
+}
+
+function compressPhrasingContent(
+  content: PhrasingContent[],
+): PhrasingContent[] {
+  let previousNode: PhrasingContent | undefined;
+  const compressed = content.flatMap<PhrasingContent>((node) => {
+    if (!("children" in node)) {
+      // Node if of a different type, so need to clear state.
+      previousNode = undefined;
+      return [node];
+    }
+
+    if (previousNode === undefined || previousNode.type !== node.type) {
+      // Compress children now that all children that will be in the previous node have been added
+      if (previousNode && "children" in previousNode) {
+        previousNode.children = compressPhrasingContent(previousNode.children);
+      }
+
+      // Set new previous node
+      previousNode = node;
+
+      return [node];
+    }
+
+    // Compress nodes of the same type
+    previousNode.children.push(...node.children);
+    return [];
+  });
+
+  if (previousNode && "children" in previousNode) {
+    previousNode.children = compressPhrasingContent(previousNode.children);
+  }
+
+  return compressed;
 }
 
 export function richTextToMarkdownNodes(
@@ -50,7 +84,7 @@ export function richTextToMarkdownNodes(
   });
 
   // TODO: Compress neighbouring types of thing.
-  return rawContent;
+  return compressPhrasingContent(rawContent);
 }
 
 function convertChildren(
@@ -69,6 +103,48 @@ function convertChildren(
   const convertedChildren: Nodes[] = [];
   let currentGroup: BlockGroup | undefined;
 
+  function addCurrentGroup() {
+    if (!currentGroup) {
+      return;
+    }
+
+    // Append new group when the type differs
+    switch (currentGroup.blockType) {
+      case "bulleted_list_item":
+        convertedChildren.push({
+          type: "list",
+          ordered: false,
+          children: currentGroup.children.map(
+            (nestedChild) => convertNode(nestedChild, blockMap) as ListItem,
+          ),
+        });
+        break;
+      case "numbered_list_item":
+        convertedChildren.push({
+          type: "list",
+          ordered: true,
+          start: 1,
+          children: currentGroup.children.map(
+            (nestedChild) => convertNode(nestedChild, blockMap) as ListItem,
+          ),
+        });
+        break;
+      case "to_do":
+        convertedChildren.push({
+          type: "list",
+          ordered: false,
+          children: currentGroup.children.map(
+            (nestedChild) => convertNode(nestedChild, blockMap) as ListItem,
+          ),
+        });
+        break;
+      default:
+      // Do nothing special
+    }
+
+    currentGroup = undefined;
+  }
+
   for (const child of children) {
     if (child.block.object === "page") {
       continue;
@@ -79,46 +155,12 @@ function convertChildren(
     if (currentGroup) {
       // Add to existing group if types are the same
       if (currentGroup.blockType === block.type) {
-        currentGroup.items.push(child);
+        currentGroup.children.push(child);
         // eslint-disable-next-line no-continue
         continue;
       }
 
-      // Append new group when the type differs
-      switch (currentGroup.blockType) {
-        case "bulleted_list_item":
-          convertedChildren.push({
-            type: "list",
-            ordered: false,
-            children: currentGroup.items.map(
-              (nestedChild) => convertNode(nestedChild, blockMap) as ListItem,
-            ),
-          });
-          break;
-        case "numbered_list_item":
-          convertedChildren.push({
-            type: "list",
-            ordered: true,
-            start: 1,
-            children: currentGroup.items.map(
-              (nestedChild) => convertNode(nestedChild, blockMap) as ListItem,
-            ),
-          });
-          break;
-        case "to_do":
-          convertedChildren.push({
-            type: "list",
-            ordered: false,
-            children: currentGroup.items.map(
-              (nestedChild) => convertNode(nestedChild, blockMap) as ListItem,
-            ),
-          });
-          break;
-        default:
-        // Do nothing special
-      }
-
-      currentGroup = undefined;
+      addCurrentGroup();
     }
 
     switch (block.type) {
@@ -126,24 +168,21 @@ function convertChildren(
         currentGroup = {
           type: BLOCK_GROUP_TYPE,
           blockType: block.type,
-          wrapper: () => {},
-          items: [child],
+          children: [child],
         };
         continue;
       case "numbered_list_item":
         currentGroup = {
           type: BLOCK_GROUP_TYPE,
           blockType: block.type,
-          wrapper: () => {},
-          items: [child],
+          children: [child],
         };
         continue;
       case "to_do":
         currentGroup = {
           type: BLOCK_GROUP_TYPE,
           blockType: block.type,
-          wrapper: () => {},
-          items: [child],
+          children: [child],
         };
         continue;
       // Column list and column are just containers so flatten them
@@ -178,6 +217,8 @@ function convertChildren(
         convertedChildren.push(convertNode(child, blockMap));
     }
   }
+
+  addCurrentGroup();
 
   return convertedChildren;
 }
