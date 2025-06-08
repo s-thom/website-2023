@@ -12,7 +12,8 @@ interface PageMinimal {
   blockMap: Record<string, BlockInfo>;
 }
 
-const DATA_STORE_LOCATION = ".astro/data-store.json";
+const DATA_STORE_LOCATION = "node_modules/.astro/data-store.json";
+const SECONDARY_DATA_STORE_LOCATION = ".astro/data-store.json";
 
 const processor = unified().use(strip).use(remarkStringify);
 
@@ -24,7 +25,16 @@ async function getBlogPosts<C extends keyof DataEntryMap>(
   // Instead, we're doing it live by reading the manifest file that Astro produces.
   // This is almost certainly going to break one day and I will curse myself for doing this.
   // Have I come back to curse myself yet: No (insert date here).
-  const rawData = await readFile(DATA_STORE_LOCATION, "utf-8");
+  let rawData: string;
+  try {
+    rawData = await readFile(DATA_STORE_LOCATION, "utf-8");
+  } catch (err) {
+    try {
+      rawData = await readFile(SECONDARY_DATA_STORE_LOCATION, "utf-8");
+    } catch (err2) {
+      throw new Error("Data store file was not found.");
+    }
+  }
   const data: Map<string, unknown> = parse(rawData);
 
   if (!(data instanceof Map)) {
