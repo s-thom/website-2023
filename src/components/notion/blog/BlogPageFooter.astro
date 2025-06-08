@@ -4,6 +4,7 @@ import { getCollection } from "astro:content";
 import { BLOG_PAGE_ID } from "../../../lib/constants";
 import StickerUnlock from "../../stickers/StickerUnlock.astro";
 import BlogListPageItem from "./BlogListPageItem.astro";
+import { getRelatedPosts } from "../../../integrations/related-posts";
 
 export interface Props {
   page: DatabaseObjectResponse;
@@ -32,10 +33,28 @@ if (index !== -1) {
     prev = blogEntries[index + 1];
   }
 }
+
+const relatedLinks = await getRelatedPosts("blog-posts", page.id);
+const relatedPages = relatedLinks
+  .map((related) => blogEntries.find((entry) => entry.id === related.id))
+  .filter((entry) => entry !== undefined);
 ---
 
 <div class="blog-footer big-box-margin">
-  <div class="links">
+  {
+    relatedPages.length > 0 && (
+      <div class="links">
+        {relatedPages.map((entry) => (
+          <BlogListPageItem
+            page={entry.data.page}
+            slug={entry.data.slug}
+            showTitle
+          />
+        ))}
+      </div>
+    )
+  }
+  <div class="links static-links">
     <div class="links-box next">
       {
         next ? (
@@ -109,6 +128,9 @@ if (index !== -1) {
     display: grid;
     gap: var(--spacing);
     grid-template-columns: repeat(1, 1fr);
+  }
+
+  .static-links {
     grid-template-areas:
       "next"
       "prev"
@@ -132,6 +154,12 @@ if (index !== -1) {
   @media (min-width: 900px) {
     .links {
       grid-template-columns: repeat(2, 1fr);
+      grid-template-areas:
+        "prev next"
+        "up up";
+    }
+
+    .static-links {
       grid-template-areas:
         "prev next"
         "up up";

@@ -1,12 +1,8 @@
 import { pipeline } from "@huggingface/transformers";
+import type { RelatedPostInfo } from "./types";
 
 // Heavily inspired by (read: directly copied from)
 // https://alexop.dev/posts/semantic-related-posts-astro-transformersjs/
-
-export interface RelatedPostInfo {
-  id: string;
-  similarity: number;
-}
 
 const NUM_SIMILAR_POSTS = 2;
 
