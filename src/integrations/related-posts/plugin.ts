@@ -34,17 +34,22 @@ export function sthomRelatedPosts<CollectionName extends keyof DataEntryMap>({
   return {
     name: "sthom-related-posts",
     hooks: {
-      "astro:config:setup": async ({ createCodegenDir, logger }) => {
+      "astro:config:setup": async ({
+        createCodegenDir,
+        logger,
+        addWatchFile,
+      }) => {
         const dir = createCodegenDir();
         filePath = new URL(fileName, dir);
 
         await writeFile(filePath, "{}", "utf-8");
+        addWatchFile(filePath);
         logger.info(`Created ${fileName} file`);
       },
       "astro:build:start": async ({ logger }) => {
         await getAndWriteEmbeddings(logger);
       },
-      "astro:server:setup": async ({ logger }) => {
+      "astro:server:start": async ({ logger }) => {
         await getAndWriteEmbeddings(logger);
       },
     },
