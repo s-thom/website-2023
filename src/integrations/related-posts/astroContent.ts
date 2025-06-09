@@ -5,6 +5,7 @@ import remarkStringify from "remark-stringify";
 import strip from "strip-markdown";
 import { unified } from "unified";
 import { notionToRemark } from "../../lib/unified/notionToRemark";
+import { remarkCodeOverrides } from "../../lib/unified/remarkCodeOverrides";
 import type { BlockInfo } from "../notion-loader/api";
 
 interface PageMinimal {
@@ -15,7 +16,10 @@ interface PageMinimal {
 const DATA_STORE_LOCATION = ".astro/data-store.json";
 const SECONDARY_DATA_STORE_LOCATION = "node_modules/.astro/data-store.json";
 
-const processor = unified().use(strip).use(remarkStringify);
+const processor = unified()
+  .use(remarkCodeOverrides, { mappers: { default: () => [] } }) // Remove all code blocks
+  .use(strip)
+  .use(remarkStringify);
 
 async function getBlogPosts<C extends keyof DataEntryMap>(
   collectionName: C,

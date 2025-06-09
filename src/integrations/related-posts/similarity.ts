@@ -1,11 +1,13 @@
 import { pipeline } from "@huggingface/transformers";
 import type { RelatedPostInfo } from "./types";
 
-// Heavily inspired by (read: directly copied from)
+// Heavily inspired by (read: copied from)
 // https://alexop.dev/posts/semantic-related-posts-astro-transformersjs/
 
 const NUM_SIMILAR_POSTS = 2;
 
+// A function to manually normalise a vector (make its length 1).
+// This is important when we go to get the dot product of two vectors.
 function normalise(vector: Float32Array): Float32Array {
   const length = Math.hypot(...vector);
   if (length === 0) {
@@ -15,10 +17,8 @@ function normalise(vector: Float32Array): Float32Array {
   return new Float32Array(vector.map((x) => x / length));
 }
 
-/**
- * Computes dot product of two same-length vectors.
- * Vectors MUST be normalized before using this for cosine similarity!
- */
+// The dot product tell us how similar two vectors are.
+// +1 means they're identical, -1 means they're completely opposite.
 function dotProduct(a: Float32Array, b: Float32Array) {
   return a.reduce((sum, num, i) => sum + num * b[i], 0);
 }
@@ -36,9 +36,6 @@ async function embedStrings(
     { dtype: "fp32" },
   );
 
-  // From https://alexop.dev/posts/semantic-related-posts-astro-transformersjs/
-  // We need to normalise the resulting vectors ourselves. It's a bit more
-  // processing, but this happens during build which is already slow for this site :)
   const result = await featureExtractor(
     entries.map((entry) => entry.content),
     { pooling: "mean", normalize: false },
