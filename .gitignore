@@ -22,3 +22,6 @@ pnpm-debug.log*
 
 /public/static/icons/build/
 /public/static/images/build/
+
+# Shader overrides shouldn't be committed as it's a development tool
+src/lib/shaders/overrides/

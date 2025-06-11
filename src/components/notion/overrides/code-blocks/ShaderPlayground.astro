@@ -99,6 +99,7 @@ if (sections.textures) {
   import type { TextureOptions } from "twgl.js";
   import { tweakpaneCSS } from "../../../../css/misc/tweakpane";
   import { h } from "../../../../lib/h";
+  import { getShaderOverride } from "../../../../lib/shaders/overrides/overrides";
   import { setupShader } from "../../../../lib/shaders/setup";
   import {
     addOptionsToPanel,
@@ -118,14 +119,16 @@ if (sections.textures) {
         return;
       }
 
+      const override = getShaderOverride(playground.dataset.block ?? "");
+
       let options: SlidersOptionsMap = {};
-      if (canvas.dataset.options) {
+      if (canvas.dataset.options ?? override.uniforms) {
         const container =
           playground.querySelector<HTMLDivElement>(".preview-area")!;
 
-        options = JSON.parse(
-          canvas.dataset.options,
-        ) as unknown as SlidersOptionsMap;
+        options =
+          override.uniforms ??
+          (JSON.parse(canvas.dataset.options!) as unknown as SlidersOptionsMap);
 
         // Add fullscreen option
         let isFullscreen = false;
@@ -153,13 +156,14 @@ if (sections.textures) {
       if (canvas.dataset.textures) {
         textures = JSON.parse(canvas.dataset.textures);
       }
+      textures = override.textures ?? textures;
 
       const uniforms: Record<string, unknown> = {};
       const { start } = setupShader({
         canvas,
         shaders: {
-          vertex: canvas.dataset.vertex!,
-          fragment: canvas.dataset.fragment!,
+          vertex: override.vertex ?? canvas.dataset.vertex!,
+          fragment: override.fragment ?? canvas.dataset.fragment!,
         },
         uniforms,
         onFrame: () => {
