@@ -11,7 +11,11 @@ import type {
 import type { Loader } from "astro/loaders";
 import { z } from "astro/zod";
 import PQueue from "p-queue";
-import { collectPageInfo } from "./api";
+import {
+  runCustomIntegrationHook,
+  type BaseCustomHookPayload,
+} from "../../lib/astro/integrations";
+import { collectPageInfo, type PageInfo } from "./api";
 import { notionLoaderSchema, propertySchemas } from "./schema";
 
 const INTERNAL_LOADER_VERSION = "2";
@@ -22,6 +26,27 @@ export interface NotionLoaderOptions {
   sorts?: QueryDatabaseParameters["sorts"];
   filter?: QueryDatabaseParameters["filter"];
   verboseLogs?: boolean;
+}
+
+export interface Page<Properties extends object> {
+  id: string;
+  data: PageInfo<Properties>;
+}
+
+export interface NotionLoaderLoadedHookPayload<Properties extends object>
+  extends BaseCustomHookPayload {
+  collection: string;
+  pages: Page<Properties>[];
+}
+
+declare global {
+  namespace Astro {
+    export interface IntegrationHooks {
+      "sthom-notion-loader:loaded": (
+        params: NotionLoaderLoadedHookPayload<object>,
+      ) => void | Promise<void>;
+    }
+  }
 }
 
 export function notionLoader(options: NotionLoaderOptions): Loader {
@@ -36,6 +61,7 @@ export function notionLoader(options: NotionLoaderOptions): Loader {
       meta,
       generateDigest,
       parseData,
+      config,
     }) => {
       const lastLoaderVersion = meta.get("version");
       let forceRefresh = false;
@@ -153,6 +179,20 @@ export function notionLoader(options: NotionLoaderOptions): Loader {
 
       meta.set("last-modified", database.last_edited_time);
       logger.info(`Collection ${collection} done!`);
+
+      // Notify all listeners
+      logger.info("Running hooks");
+      await runCustomIntegrationHook(
+        config,
+        logger,
+        "sthom-notion-loader:loaded",
+        {
+          collection,
+          pages: orderedIds.map(
+            (id) => dataMap.get(id) as unknown as Page<object>,
+          ),
+        },
+      );
     },
     schema: async () => {
       const database = await client.databases.retrieve({
