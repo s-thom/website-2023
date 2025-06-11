@@ -48,10 +48,17 @@ const notionCacheDevTools: DevToolbarApp = {
     actionsLinkButton.textContent = "Open in Notion";
     actionsLink.appendChild(actionsLinkButton);
 
+    let reloadEnabled = true;
     const reloadButton = document.createElement("astro-dev-toolbar-button");
     reloadButton.buttonStyle = "gray";
     reloadButton.textContent = "Reload Notion cache";
     reloadButton.addEventListener("click", () => {
+      if (!reloadEnabled) {
+        return;
+      }
+
+      reloadEnabled = false;
+
       if (import.meta.hot) {
         import.meta.hot.send("sthom-notion-loader:reload", {
           pageId: idParagraphId.textContent,
@@ -61,7 +68,13 @@ const notionCacheDevTools: DevToolbarApp = {
     actionsParagraph.appendChild(reloadButton);
 
     if (import.meta.hot) {
+      import.meta.hot.on("sthom-notion-loader:reload-started", () => {
+        reloadButton.buttonStyle = "outline";
+      });
       import.meta.hot.on("sthom-notion-loader:reload-complete", () => {
+        reloadEnabled = true;
+        reloadButton.buttonStyle = "gray";
+
         window.location.reload();
       });
     }

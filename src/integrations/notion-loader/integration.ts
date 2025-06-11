@@ -20,6 +20,7 @@ export default function sthomNotionLoader(): AstroIntegration {
           logger.info(`Request to clear from page ${data.pageId}`);
 
           if (refreshContent) {
+            client.send("sthom-notion-loader:reload-started", {});
             await refreshContent({
               loaders: ["sthom-notion-loader"],
               context: {
