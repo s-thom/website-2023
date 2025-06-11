@@ -53,7 +53,7 @@ const notionCacheDevTools: DevToolbarApp = {
     reloadButton.textContent = "Reload Notion cache";
     reloadButton.addEventListener("click", () => {
       if (import.meta.hot) {
-        import.meta.hot.send("sthom:notion-cache", {
+        import.meta.hot.send("sthom-notion-loader:reload", {
           pageId: idParagraphId.textContent,
         });
       }
@@ -61,7 +61,7 @@ const notionCacheDevTools: DevToolbarApp = {
     actionsParagraph.appendChild(reloadButton);
 
     if (import.meta.hot) {
-      import.meta.hot.on("sthom:reload", () => {
+      import.meta.hot.on("sthom-notion-loader:reload-complete", () => {
         window.location.reload();
       });
     }

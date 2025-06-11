@@ -8,9 +8,9 @@ import { defineConfig } from "astro/config";
 import glsl from "vite-plugin-glsl";
 import sthomClientStickers from "./src/integrations/clientStickers";
 import sthomFavicon from "./src/integrations/favicon";
-import sthomImages from "./src/integrations/images";
-import { sthomNotionLoader } from "./src/integrations/notion-loader";
-import { sthomRelatedPosts } from "./src/integrations/related-posts";
+import sthomImages from "./src/integrations/images-old";
+import sthomNotionLoader from "./src/integrations/notion-loader/integration";
+import sthomRelatedPosts from "./src/integrations/related-posts/integration";
 import sthomSliders from "./src/integrations/sliders";
 import { IMAGE_OPTIMISATION_ALLOWED_DOMAINS } from "./src/lib/constants";
 

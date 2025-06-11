@@ -4,7 +4,7 @@ import { DEV_IMAGE_DIR, DIST_IMAGE_DIR } from "../components/Images/constants";
 
 export default function sthomImages(): AstroIntegration {
   return {
-    name: "sthom-images",
+    name: "sthom-images-old",
     hooks: {
       "astro:build:done": async () => {
         await Promise.all([

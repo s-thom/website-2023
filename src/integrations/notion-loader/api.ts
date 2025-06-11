@@ -6,9 +6,9 @@ import type {
 import type { AstroIntegrationLogger } from "astro";
 import PQueue from "p-queue";
 import { PAGE_PATH_PREFIX_OVERRIDES } from "../../lib/constants";
-import { getBlockChildren, getPage } from "../../lib/notion/requests";
 import { getUrlSlugForPage } from "../../lib/notion/titles";
 import { saveImage } from "./images";
+import { getRequester, type Requester } from "./requests";
 
 const MAX_VISIT_DEPTH = 10;
 
@@ -45,6 +45,7 @@ async function saveFileOrExternal(
 
 async function processBlock(
   queue: PQueue,
+  requester: Requester,
   blockId: string,
   blockMap: Record<string, BlockInfo>,
   depth: number,
@@ -116,7 +117,7 @@ async function processBlock(
       (block.object === "block" && block.has_children)) &&
     depth < MAX_VISIT_DEPTH
   ) {
-    const children = await getBlockChildren(blockId);
+    const children = await requester.getBlockChildren(blockId);
     if (children.length > 0) {
       self.children = [];
     }
@@ -142,7 +143,7 @@ async function processBlock(
       blockMap[child.id] = { block: child, children: undefined };
 
       queue.add(() =>
-        processBlock(queue, child.id, blockMap, depth + 1, logger),
+        processBlock(queue, requester, child.id, blockMap, depth + 1, logger),
       );
     }
   }
@@ -163,7 +164,9 @@ export async function collectPageInfo(
   pageId: string,
   logger: AstroIntegrationLogger,
 ): Promise<PageInfo> {
-  const page = await getPage(pageId);
+  const requester = getRequester(logger);
+
+  const page = await requester.getPage(pageId);
   if (!isFullPageOrDatabase(page)) {
     throw new Error(`Could not get full page for ${pageId}`);
   }
@@ -176,7 +179,7 @@ export async function collectPageInfo(
   const blockMap: Record<string, BlockInfo> = {};
   // Kick off the traversal with the page
   blockMap[pageId] = { block: page, children: undefined };
-  queue.add(() => processBlock(queue, pageId, blockMap, 0, logger));
+  queue.add(() => processBlock(queue, requester, pageId, blockMap, 0, logger));
 
   await queue.onIdle();
 
