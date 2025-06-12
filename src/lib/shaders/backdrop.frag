@@ -7,6 +7,7 @@ precision highp float;
 uniform float iTime;
 uniform vec3 iResolution;
 uniform sampler2D iChannel1;
+uniform float iDevicePixelRatio;
 
 out vec4 outColor;
 
@@ -16,7 +17,6 @@ uniform float uWarpAmount;
 uniform float uWarpScale;
 uniform bool uUseColors;
 uniform bool uPixelated;
-uniform float uPixelDensity;
 
 uniform vec4 uColor1;
 uniform vec4 uColor2;
@@ -30,7 +30,7 @@ const float COLOR_MIX_2 = 5.0f;
 // Note: parts of this shader have been copied from https://www.playbalatro.com/
 
 vec2 getInitialUv() {
-  vec2 xy = uPixelated ? (floor(gl_FragCoord.xy / (uPixelDensity * PIXEL_FACTOR)) * uPixelDensity * PIXEL_FACTOR) : gl_FragCoord.xy;
+  vec2 xy = uPixelated ? (floor(gl_FragCoord.xy / (iDevicePixelRatio * PIXEL_FACTOR)) * iDevicePixelRatio * PIXEL_FACTOR) : gl_FragCoord.xy;
 
   vec2 halfRes = iResolution.xy / 2.0f;
   vec2 texSize = vec2(textureSize(iChannel1, 0));

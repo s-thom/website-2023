@@ -185,7 +185,6 @@ if (imageUrl) {
               MIN_PAINT_FACTOR) *
             interpolator.getValue();
           uniforms.uPixelated = theme === "minecraft";
-          uniforms.uPixelDensity = window.devicePixelRatio;
         },
         textures: hasBackground ? [{ src: backgroundUrl }] : undefined,
         onTexturesReady: () => {

@@ -131,6 +131,7 @@ export function setupShader(options: ShaderSetupOptions) {
       iTime: time * 0.001,
       iTimeDelta: lastFrameDelta,
       iFrame: frameCount,
+      iDevicePixelRatio: window.devicePixelRatio,
       ...textureUniforms,
     };
 
