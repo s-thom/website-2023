@@ -2,13 +2,13 @@ import type { FolderApi, Pane } from "tweakpane";
 
 export interface BaseOption<T> {
   type: unknown;
+  label?: string;
   value: T;
   readonly?: boolean;
 }
 
 export interface ButtonOption extends BaseOption<any> {
   type: "button";
-  label?: string;
   onClick: () => void;
 }
 export interface BooleanOption extends BaseOption<boolean> {
@@ -82,13 +82,13 @@ export function addOptionsToPanel(
       case "boolean":
       case "string":
         container.addBinding(option, "value", {
-          label: key,
+          label: option.label ?? key,
           readonly: option.readonly,
         });
         break;
       case "float":
         container.addBinding(option, "value", {
-          label: key,
+          label: option.label ?? key,
           readonly: option.readonly,
           min: option.min ?? 0,
           max: option.max ?? 100,
@@ -97,7 +97,7 @@ export function addOptionsToPanel(
         break;
       case "int":
         container.addBinding(option, "value", {
-          label: key,
+          label: option.label ?? key,
           readonly: option.readonly,
           min: option.min ?? 0,
           max: option.max ?? 100,
@@ -115,7 +115,7 @@ export function addOptionsToPanel(
         };
         container
           .addBinding(rgbContainer, "rgb", {
-            label: key,
+            label: option.label ?? key,
             readonly: option.readonly,
             picker: "inline",
             color: { type: "float" },
@@ -136,7 +136,7 @@ export function addOptionsToPanel(
         };
         container
           .addBinding(rgbaContainer, "rgba", {
-            label: key,
+            label: option.label ?? key,
             readonly: option.readonly,
             picker: "inline",
             color: { type: "float" },
@@ -155,7 +155,7 @@ export function addOptionsToPanel(
         };
         container
           .addBinding(vec2Container, "vec2", {
-            label: key,
+            label: option.label ?? key,
             readonly: option.readonly ?? (false as any),
             picker: "inline",
             x: {
