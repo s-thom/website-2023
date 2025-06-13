@@ -1,4 +1,6 @@
 ---
+import CommonScripts from "./site/CommonScripts.astro";
+
 export interface PageMetaType {
   title: string;
   description?: string;
@@ -211,11 +213,4 @@ if (images && images.length > 0) {
   ))
 }
 
-<script
-  is:inline
-  async
-  defer
-  data-do-not-track="true"
-  data-website-id="5384fcb9-84be-4d5e-8dba-20d4e862bf19"
-  data-domains="sthom.kiwi"
-  src="https://stats.sthom.kiwi/script.js"></script>
+<CommonScripts />
