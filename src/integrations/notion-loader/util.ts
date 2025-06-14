@@ -1,9 +1,9 @@
 import type { BlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
-import type { BlockInfo } from "./api";
+import type { BlockMap } from "./api";
 
 export function getBlockChildren(
   blockId: string,
-  blockMap: Record<string, BlockInfo>,
+  blockMap: BlockMap,
 ): BlockObjectResponse[] {
   const parentNode = blockMap[blockId];
   if (!parentNode) {
@@ -14,9 +14,7 @@ export function getBlockChildren(
     ? parentNode.children.map((childId) => {
         const node = blockMap[childId];
         if (!node) {
-          if (!node) {
-            throw new Error(`Unable to find child node ${blockId}`);
-          }
+          throw new Error(`Unable to find child node ${blockId}`);
         }
         if (node.block.object === "page") {
           throw new Error(`Child node ${blockId} is a page`);

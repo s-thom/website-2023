@@ -93,7 +93,7 @@ export function getPagePropertyByName<
   type: T,
 ): Extract<PropertyItemObjectResponse, { type: T }> | undefined {
   const property =
-    (page?.properties?.[name] as PropertyItemObjectResponse | undefined) ??
+    (page.properties[name] as PropertyItemObjectResponse | undefined) ??
     undefined;
 
   if (property?.type === type) {

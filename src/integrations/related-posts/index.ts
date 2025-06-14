@@ -12,6 +12,7 @@ export async function getRelatedPosts(
     join(BASE_PATH, `${collectionLabel}.json`),
     "utf-8",
   );
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const data: Record<string, RelatedPostInfo[]> = JSON.parse(rawData);
 
   return data[pageId] ?? [];

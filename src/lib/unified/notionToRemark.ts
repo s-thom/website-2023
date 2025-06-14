@@ -11,7 +11,7 @@ import type {
   RootContent,
   TableRow,
 } from "mdast";
-import type { BlockInfo } from "../../integrations/notion-loader/api";
+import type { BlockInfo, BlockMap } from "../../integrations/notion-loader/api";
 import { getPageTitleComponents } from "../notion/titles";
 import { richTextToUnformattedString } from "../notion/util";
 
@@ -87,18 +87,15 @@ export function richTextToMarkdownNodes(
   return compressPhrasingContent(rawContent);
 }
 
-function convertChildren(
-  info: BlockInfo,
-  blockMap: Record<string, BlockInfo>,
-): Nodes[] {
+function convertChildren(info: BlockInfo, blockMap: BlockMap): Nodes[] {
   if (!info.children) {
     return [];
   }
 
-  const children =
-    info.children
-      .map((id) => blockMap[id])
-      .filter((child) => child !== undefined) ?? [];
+  const children = info.children
+    .map((id) => blockMap[id])
+
+    .filter((child) => child !== undefined);
 
   const convertedChildren: Nodes[] = [];
   let currentGroup: BlockGroup | undefined;
@@ -156,7 +153,6 @@ function convertChildren(
       // Add to existing group if types are the same
       if (currentGroup.blockType === block.type) {
         currentGroup.children.push(child);
-        // eslint-disable-next-line no-continue
         continue;
       }
 
@@ -223,10 +219,7 @@ function convertChildren(
   return convertedChildren;
 }
 
-function convertNode(
-  info: BlockInfo,
-  blockMap: Record<string, BlockInfo>,
-): Nodes {
+function convertNode(info: BlockInfo, blockMap: BlockMap): Nodes {
   const { block } = info;
 
   if (block.object === "page") {
@@ -299,7 +292,7 @@ function convertNode(
               block.bulleted_list_item.rich_text,
             ),
           },
-          ...(convertChildren(info, blockMap) as any[]),
+          ...(convertChildren(info, blockMap) as never[]),
         ],
       };
     case "numbered_list_item":
@@ -312,7 +305,7 @@ function convertNode(
               block.numbered_list_item.rich_text,
             ),
           },
-          ...(convertChildren(info, blockMap) as any[]),
+          ...(convertChildren(info, blockMap) as never[]),
         ],
       };
     case "quote":
@@ -323,7 +316,7 @@ function convertNode(
             type: "paragraph",
             children: richTextToMarkdownNodes(block.quote.rich_text),
           },
-          ...(convertChildren(info, blockMap) as any[]),
+          ...(convertChildren(info, blockMap) as never[]),
         ],
       };
     case "to_do":
@@ -335,7 +328,7 @@ function convertNode(
             type: "paragraph",
             children: richTextToMarkdownNodes(block.to_do.rich_text),
           },
-          ...(convertChildren(info, blockMap) as any[]),
+          ...(convertChildren(info, blockMap) as never[]),
         ],
       };
     case "equation":
@@ -351,7 +344,7 @@ function convertNode(
             type: "paragraph",
             children: richTextToMarkdownNodes(block.callout.rich_text),
           },
-          ...(convertChildren(info, blockMap) as any[]),
+          ...(convertChildren(info, blockMap) as never[]),
         ],
       };
     case "divider":
@@ -460,10 +453,11 @@ function convertNode(
   }
 }
 
-export function notionToRemark(
-  rootId: string,
-  blockMap: Record<string, BlockInfo>,
-): Root {
+export function notionToRemark(rootId: string, blockMap: BlockMap): Root {
   const root = blockMap[rootId];
+  if (!root) {
+    throw new Error(`Root node ${rootId} not found`);
+  }
+
   return convertNode(root, blockMap) as Root;
 }

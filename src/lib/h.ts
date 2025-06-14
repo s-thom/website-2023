@@ -19,7 +19,7 @@ export function h<Tag extends keyof HTMLElementTagNameMap>(
     const eventNameMatch = key.match(EVENT_NAME_REGEX);
     if (eventNameMatch) {
       const isCapture = eventNameMatch[2] === "capture";
-      element.addEventListener(eventNameMatch[1], value as any, {
+      element.addEventListener(eventNameMatch[1], value as never, {
         capture: isCapture,
       });
       continue;
@@ -34,7 +34,7 @@ export function h<Tag extends keyof HTMLElementTagNameMap>(
       continue;
     }
 
-    element[key as keyof HTMLElementTagNameMap[Tag]] = value as any;
+    element[key as keyof HTMLElementTagNameMap[Tag]] = value as never;
   }
 
   if (typeof children === "string") {

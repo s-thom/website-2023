@@ -1,5 +1,5 @@
 ---
-import PageMeta, { type PageMetaType } from "../components/PageMeta.astro";
+import PageMeta from "../components/PageMeta.astro";
 import StickersHead from "../components/StickersHead.astro";
 import { Panel } from "../components/react/Panel/index.tsx";
 import { StickerAnimator } from "../components/react/StickerAnimator/index.tsx";
@@ -7,6 +7,7 @@ import { StickerPageDropZone } from "../components/react/StickerPageDropZone/ind
 import SettingsInitialLoader from "../components/site/SettingsInitialLoader.astro";
 import Web3IsAScam from "../components/site/Web3IsAScam.astro";
 import "../css/index.css";
+import type { PageMetaType } from "../lib/site/PageMeta";
 import type { StickerTypes } from "../stickers/stickers";
 import MinimalLayout from "./MinimalLayout.astro";
 

@@ -13,7 +13,7 @@ export interface Props {
 
 const { block, content } = Astro.props;
 
-function parseSections(input: string): Record<string, string> {
+function parseSections(input: string): Record<string, string | undefined> {
   const sections = input.split(/---\s*/).filter(Boolean);
   const result: Record<string, string> = {};
 

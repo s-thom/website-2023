@@ -5,9 +5,8 @@ import type { ClientDirective } from "astro";
  * Otherwise they are really low priority.
  */
 const clientStickersEntrypoint: ClientDirective = (load, opts) => {
-  const cb = async () => {
-    const hydrate = await load();
-    await hydrate();
+  const cb = () => {
+    void load().then((hydrate) => hydrate());
   };
 
   // If there's a sticker for this page, then we want to load quickly.

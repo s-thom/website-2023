@@ -1,19 +1,9 @@
 ---
-import type { BlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import NotionBlock from "./NotionBlock.astro";
-import type { BaseBlockComponentProps } from "./types";
+import type { BaseBlockComponentProps, BlockGroup } from "./types";
 
 export interface Props extends Omit<BaseBlockComponentProps, "block"> {
   group: BlockGroup;
-}
-
-export const BLOCK_GROUP_TYPE = "_block-group";
-
-export interface BlockGroup {
-  type: typeof BLOCK_GROUP_TYPE;
-  blockType: BlockObjectResponse["type"];
-  wrapper: (_props: any) => any;
-  items: BlockObjectResponse[];
 }
 
 // This needs to be its own component to get around a quirk of the

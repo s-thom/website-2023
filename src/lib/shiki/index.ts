@@ -37,6 +37,7 @@ export function getCodeBlockContentInfo(
     }
 
     const finalisedLanguage =
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       languageMap[rawLanguage as keyof typeof languageMap] ??
       rawLanguage ??
       "tsx";

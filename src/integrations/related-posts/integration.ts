@@ -21,7 +21,7 @@ export default function sthomRelatedPosts<
   return {
     name: `sthom-related-posts`,
     hooks: {
-      "astro:config:setup": async ({ createCodegenDir }) => {
+      "astro:config:setup": ({ createCodegenDir }) => {
         const dir = createCodegenDir();
         filePath = new URL(fileName, dir);
       },
@@ -31,7 +31,7 @@ export default function sthomRelatedPosts<
         pages,
       }) => {
         if (c2 === collection) {
-          const filtered = pages.filter((page) => filter(page.data as any));
+          const filtered = pages.filter((page) => filter(page.data as never));
           if (filtered.length === 0) {
             return;
           }

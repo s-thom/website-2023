@@ -1,14 +1,9 @@
 ---
 import type { PropertyItemObjectResponse } from "@notionhq/client/build/src/api-endpoints";
-
-const loadDateProperty = () =>
-  import("./DateProperty.astro").then((b) => b.default);
-const loadDefaultProperty = () =>
-  import("./DefaultProperty.astro").then((b) => b.default);
-const loadMultiSelectProperty = () =>
-  import("./MultiSelectProperty.astro").then((b) => b.default);
-const loadRichTextProperty = () =>
-  import("./RichTextProperty.astro").then((b) => b.default);
+import DateProperty from "./DateProperty.astro";
+import DefaultProperty from "./DefaultProperty.astro";
+import MultiSelectProperty from "./MultiSelectProperty.astro";
+import RichTextProperty from "./RichTextProperty.astro";
 
 export interface Props {
   property: PropertyItemObjectResponse;
@@ -16,16 +11,16 @@ export interface Props {
 
 const { property } = Astro.props;
 
-let Component: any;
+let Component: (props: never) => void;
 switch (property.type) {
   case "rich_text":
-    Component = await loadRichTextProperty();
+    Component = RichTextProperty;
     break;
   case "multi_select":
-    Component = await loadMultiSelectProperty();
+    Component = MultiSelectProperty;
     break;
   case "date":
-    Component = await loadDateProperty();
+    Component = DateProperty;
     break;
   case "number":
   case "url":
@@ -46,8 +41,9 @@ switch (property.type) {
   case "last_edited_by":
   case "last_edited_time":
   default:
-    Component = await loadDefaultProperty();
+    Component = DefaultProperty;
 }
 ---
 
+{/* @ts-expect-error Dynamic types like this are never fun */}
 <Component property={property} />

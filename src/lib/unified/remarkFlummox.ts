@@ -25,7 +25,6 @@ export function remarkFlummox({
 }: RemarkFlummoxOptions): Transformer<Root> {
   const random = seedrandom(seed);
 
-  // eslint-disable-next-line @typescript-eslint/no-shadow
   return function remarkFlummox(tree) {
     visit(tree, (node) => {
       if (node.type === "text") {
@@ -36,12 +35,10 @@ export function remarkFlummox({
             : word,
         );
 
-        // eslint-disable-next-line no-param-reassign
         node.value = flummoxedWords.join("");
       }
 
       if (node.type === "link" && node.url.startsWith("/")) {
-        // eslint-disable-next-line no-param-reassign
         node.url = randomLink(random);
       }
     });

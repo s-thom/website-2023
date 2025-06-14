@@ -5,6 +5,7 @@ import {
   iteratePaginatedAPI,
 } from "@notionhq/client";
 import type {
+  DatabaseObjectResponse,
   PageObjectResponse,
   QueryDatabaseParameters,
 } from "@notionhq/client/build/src/api-endpoints";
@@ -40,6 +41,7 @@ export interface NotionLoaderLoadedHookPayload<Properties extends object>
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Astro {
     export interface IntegrationHooks {
       "sthom-notion-loader:loaded": (
@@ -59,7 +61,9 @@ export function notionLoader(options: NotionLoaderOptions): Loader {
       store,
       logger,
       meta,
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       generateDigest,
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       parseData,
       config,
     }) => {
@@ -142,12 +146,12 @@ export function notionLoader(options: NotionLoaderOptions): Loader {
           dataMap.set(page.id, previousPageData);
         } else {
           // Need to queue the page update
-          pagesQueue.add(async () => {
+          void pagesQueue.add(async () => {
             const rawInfo = await collectPageInfo(page.id, logger);
 
             const data = await parseData({
               id: page.id,
-              data: rawInfo as any,
+              data: rawInfo as never,
             });
 
             dataMap.set(page.id, {
@@ -268,7 +272,7 @@ export function notionLoader(options: NotionLoaderOptions): Loader {
               break;
             default:
               throw new Error(
-                `Unknown property type ${(property as any).type}`,
+                `Unknown property type ${(property as DatabaseObjectResponse["properties"][""]).type}`,
               );
           }
 

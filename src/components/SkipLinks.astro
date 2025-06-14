@@ -1,6 +1,8 @@
 ---
+import type { LinkInfo } from "../lib/site/LinkInfo";
+
 export interface Props {
-  links: { name: string; url: string }[];
+  links: LinkInfo[];
 }
 
 const { links } = Astro.props;

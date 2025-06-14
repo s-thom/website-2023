@@ -84,7 +84,10 @@ export function StickerPageDropZone({ pageId }: StickerPageDropZoneProps) {
                 y: location.current.input.clientY - stickerSize.height / 2,
               },
             });
-            const centerPosition = pagePositionToType("center", pagePosition) as CenterPosition;
+            const centerPosition = pagePositionToType(
+              "center",
+              pagePosition,
+            ) as CenterPosition;
             placeOnPage(source.data.stickerId, pageId, centerPosition);
           }
         },
@@ -117,7 +120,9 @@ export function StickerPageDropZone({ pageId }: StickerPageDropZoneProps) {
       }),
     );
 
-    return () => cleanup();
+    return () => {
+      cleanup();
+    };
   }, [enabled, pageId, isClient]);
 
   if (!enabled || !isClient) {

@@ -65,8 +65,10 @@ export function Panel() {
         type="button"
         className={clsx("side-panel-handle")}
         aria-label="Toggle preferences"
-        style={{ "--handle-index": 0 } as any}
-        onClick={() => togglePanel("settings")}
+        style={{ "--handle-index": 0 } as never}
+        onClick={() => {
+          togglePanel("settings");
+        }}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -89,8 +91,10 @@ export function Panel() {
         type="button"
         className={clsx("side-panel-handle")}
         aria-label="Toggle stickers"
-        style={{ "--handle-index": 1 } as any}
-        onClick={() => togglePanel("stickers")}
+        style={{ "--handle-index": 1 } as never}
+        onClick={() => {
+          togglePanel("stickers");
+        }}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

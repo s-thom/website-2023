@@ -15,7 +15,7 @@ export function arrayRandom<T>(arr: T[], random = () => Math.random()): T {
  * @returns An array from 0 to length - 1
  */
 export function range(length: number): number[] {
-  return [...Array(length)].map((_, i) => i);
+  return [...Array<number>(length)].map((_, i) => i);
 }
 
 export function clone<T>(value: T): T {
@@ -23,11 +23,16 @@ export function clone<T>(value: T): T {
     return structuredClone(value);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return JSON.parse(JSON.stringify(value));
 }
 
 export function combine(...fns: (() => void)[]): () => void {
-  return () => fns.forEach((fn) => fn());
+  return () => {
+    fns.forEach((fn) => {
+      fn();
+    });
+  };
 }
 
 export const isBrowser = "window" in globalThis;

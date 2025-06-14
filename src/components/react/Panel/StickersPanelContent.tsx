@@ -101,7 +101,9 @@ export function StickersPanelContent() {
       }),
     );
 
-    return () => cleanup();
+    return () => {
+      cleanup();
+    };
   }, []);
 
   return (

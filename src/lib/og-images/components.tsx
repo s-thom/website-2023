@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import pMemoize from "p-memoize";
+import type { JSX } from "react/jsx-runtime";
 import type { GenerateOgImageOptions } from ".";
 import {
   OG_IMAGE_HEIGHT,
@@ -11,7 +12,7 @@ import {
 
 const BIG_BOX_PADDING_AMOUNT = 50;
 
-const ADD_DEBUG_BOXES = false;
+const ADD_DEBUG_BOXES: boolean = false;
 
 const getProfileImageUrl = pMemoize(
   async () =>
@@ -21,7 +22,7 @@ const getProfileImageUrl = pMemoize(
     )}`,
 );
 
-function toChildren(...children: any[]) {
+function toChildren(...children: JSX.Element[]) {
   return children.filter(Boolean).flatMap((c) => c);
 }
 
@@ -57,6 +58,7 @@ async function SiteContent() {
     <BigBox>
       <img
         src={profileImageUrl}
+        alt=""
         width={128}
         height={128}
         style={{ borderRadius: "50%", marginBottom: "32px" }}
@@ -96,6 +98,7 @@ async function PageContent(title: string) {
         >
           <img
             src={profileImageUrl}
+            alt=""
             width={76}
             height={76}
             style={{ borderRadius: "50%", marginRight: "32px" }}
@@ -133,6 +136,7 @@ async function Background(
   return toChildren(
     <img
       src={backgroundImageUrl}
+      alt=""
       width={OG_IMAGE_WIDTH}
       height={OG_IMAGE_HEIGHT}
       style={{
@@ -183,7 +187,7 @@ function debugBoxes() {
 }
 
 export async function buildOgImageJsx(options: GenerateOgImageOptions) {
-  let content: any;
+  let content: JSX.Element | null = null;
   switch (options.layout) {
     case "site":
       content = await SiteContent();

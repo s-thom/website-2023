@@ -6,30 +6,7 @@ import sharp, { type Sharp } from "sharp";
 
 const convertQueue = new PQueue({ concurrency: 3, throwOnTimeout: true });
 
-interface IconSpec {
-  name: string;
-  size: number;
-  mask?: string;
-}
-
 const MASK_SIZE = 512;
-
-const ICONS_TO_GENERATE: IconSpec[] = [
-  { name: "icon-96x96.png", size: 96, mask: "circle" },
-  { name: "icon-144x144.png", size: 144, mask: "circle" },
-  { name: "icon-192x192.png", size: 192, mask: "circle" },
-  { name: "icon-256x256.png", size: 256, mask: "circle" },
-  { name: "icon-512x512.png", size: 512, mask: "circle" },
-  { name: "icon-512x512-maskable.png", size: 512 },
-  { name: "apple-icon-144x144.png", size: 144, mask: "ios" },
-  { name: "apple-icon-180x180.png", size: 180, mask: "ios" },
-  { name: "apple-icon-192x192.png", size: 192, mask: "ios" },
-  { name: "apple-icon-512x512.png", size: 512, mask: "ios" },
-  { name: "favicon-16x16.png", size: 16, mask: "circle" },
-  { name: "favicon-64x64.png", size: 64, mask: "circle" },
-  { name: "favicon-96x96.png", size: 96, mask: "circle" },
-  { name: "favicon-128x128.png", size: 128, mask: "circle" },
-];
 
 const circleMaskSvg = `
 <svg height="${MASK_SIZE}" width="${MASK_SIZE}">
@@ -58,10 +35,33 @@ const iosMaskSharp = sharp(Buffer.from(iosMaskSvg), {
   .resize(MASK_SIZE)
   .png();
 
-const masks = {
+const MASKS = {
   circle: circleMaskSharp,
   ios: iosMaskSharp,
 };
+
+interface IconSpec {
+  name: string;
+  size: number;
+  mask?: keyof typeof MASKS;
+}
+
+const ICONS_TO_GENERATE: IconSpec[] = [
+  { name: "icon-96x96.png", size: 96, mask: "circle" },
+  { name: "icon-144x144.png", size: 144, mask: "circle" },
+  { name: "icon-192x192.png", size: 192, mask: "circle" },
+  { name: "icon-256x256.png", size: 256, mask: "circle" },
+  { name: "icon-512x512.png", size: 512, mask: "circle" },
+  { name: "icon-512x512-maskable.png", size: 512 },
+  { name: "apple-icon-144x144.png", size: 144, mask: "ios" },
+  { name: "apple-icon-180x180.png", size: 180, mask: "ios" },
+  { name: "apple-icon-192x192.png", size: 192, mask: "ios" },
+  { name: "apple-icon-512x512.png", size: 512, mask: "ios" },
+  { name: "favicon-16x16.png", size: 16, mask: "circle" },
+  { name: "favicon-64x64.png", size: 64, mask: "circle" },
+  { name: "favicon-96x96.png", size: 96, mask: "circle" },
+  { name: "favicon-128x128.png", size: 128, mask: "circle" },
+];
 
 export const ICON_DIR = "static/icons/build";
 export const DEV_ICON_DIR = join(process.cwd(), "public", ICON_DIR);
@@ -72,7 +72,7 @@ export const DIST_FAVICON_FILE = join(process.cwd(), "dist", "favicon.ico");
 async function generateIcon(sharpInstance: Sharp, spec: IconSpec) {
   let clone = sharpInstance.clone();
 
-  const mask = spec.mask && (masks as any)[spec.mask];
+  const mask = spec.mask && MASKS[spec.mask];
   if (mask) {
     clone = clone.composite([
       {
@@ -83,7 +83,7 @@ async function generateIcon(sharpInstance: Sharp, spec: IconSpec) {
   }
   clone = clone.resize(spec.size, spec.size);
 
-  clone.toFile(join(DEV_ICON_DIR, spec.name));
+  await clone.toFile(join(DEV_ICON_DIR, spec.name));
 }
 
 async function generateAllIcons(src: string) {

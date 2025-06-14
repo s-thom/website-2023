@@ -1,42 +1,26 @@
 ---
 import type { BlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { getBlockChildren } from "../../../integrations/notion-loader/util";
+import BulletedListItemBlock from "./BulletedListItemBlock.astro";
+import CalloutBlock from "./CalloutBlock.astro";
+import CodeBlock from "./CodeBlock.astro";
+import Column from "./Column.astro";
+import ColumnList from "./ColumnList.astro";
+import DefaultBlock from "./DefaultBlock.astro";
+import DividerBlock from "./DividerBlock.astro";
+import Heading1Block from "./Heading1Block.astro";
+import Heading2Block from "./Heading2Block.astro";
+import Heading3Block from "./Heading3Block.astro";
+import ImageBlock from "./ImageBlock.astro";
 import NotionRenderer from "./NotionRenderer.astro";
+import NumberedListItemBlock from "./NumberedListItemBlock.astro";
+import ParagraphBlock from "./ParagraphBlock.astro";
+import QuoteBlock from "./QuoteBlock.astro";
+import TableBlock from "./TableBlock.astro";
+import TableRowBlock from "./TableRowBlock.astro";
+import TodoBlock from "./TodoBlock.astro";
+import ToggleBlock from "./ToggleBlock.astro";
 import type { BaseBlockComponentProps } from "./types";
-
-const loadBulletedListItemBlock = () =>
-  import("./BulletedListItemBlock.astro").then((b) => b.default);
-const loadCalloutBlock = () =>
-  import("./CalloutBlock.astro").then((b) => b.default);
-const loadCodeBlock = () => import("./CodeBlock.astro").then((b) => b.default);
-const loadColumn = () => import("./Column.astro").then((b) => b.default);
-const loadColumnList = () =>
-  import("./ColumnList.astro").then((b) => b.default);
-const loadDefaultBlock = () =>
-  import("./DefaultBlock.astro").then((b) => b.default);
-const loadDividerBlock = () =>
-  import("./DividerBlock.astro").then((b) => b.default);
-const loadHeading1Block = () =>
-  import("./Heading1Block.astro").then((b) => b.default);
-const loadHeading2Block = () =>
-  import("./Heading2Block.astro").then((b) => b.default);
-const loadHeading3Block = () =>
-  import("./Heading3Block.astro").then((b) => b.default);
-const loadImageBlock = () =>
-  import("./ImageBlock.astro").then((b) => b.default);
-const loadNumberedListItemBlock = () =>
-  import("./NumberedListItemBlock.astro").then((b) => b.default);
-const loadParagraphBlock = () =>
-  import("./ParagraphBlock.astro").then((b) => b.default);
-const loadQuoteBlock = () =>
-  import("./QuoteBlock.astro").then((b) => b.default);
-const loadTableBlock = () =>
-  import("./TableBlock.astro").then((b) => b.default);
-const loadTableRowBlock = () =>
-  import("./TableRowBlock.astro").then((b) => b.default);
-const loadTodoBlock = () => import("./TodoBlock.astro").then((b) => b.default);
-const loadToggleBlock = () =>
-  import("./ToggleBlock.astro").then((b) => b.default);
 
 export interface Props extends BaseBlockComponentProps {
   block: BlockObjectResponse;
@@ -48,58 +32,59 @@ const children = block.has_children
   ? getBlockChildren(block.id, blockMap)
   : undefined;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let Component: any;
 switch (block.type) {
   case "paragraph":
-    Component = await loadParagraphBlock();
+    Component = ParagraphBlock;
     break;
   case "heading_1":
-    Component = await loadHeading1Block();
+    Component = Heading1Block;
     break;
   case "heading_2":
-    Component = await loadHeading2Block();
+    Component = Heading2Block;
     break;
   case "heading_3":
-    Component = await loadHeading3Block();
+    Component = Heading3Block;
     break;
   case "callout":
-    Component = await loadCalloutBlock();
+    Component = CalloutBlock;
     break;
   case "code":
-    Component = await loadCodeBlock();
+    Component = CodeBlock;
     break;
   case "toggle":
-    Component = await loadToggleBlock();
+    Component = ToggleBlock;
     break;
   case "bulleted_list_item":
-    Component = await loadBulletedListItemBlock();
+    Component = BulletedListItemBlock;
     break;
   case "numbered_list_item":
-    Component = await loadNumberedListItemBlock();
+    Component = NumberedListItemBlock;
     break;
   case "image":
-    Component = await loadImageBlock();
+    Component = ImageBlock;
     break;
   case "quote":
-    Component = await loadQuoteBlock();
+    Component = QuoteBlock;
     break;
   case "divider":
-    Component = await loadDividerBlock();
+    Component = DividerBlock;
     break;
   case "column_list":
-    Component = await loadColumnList();
+    Component = ColumnList;
     break;
   case "column":
-    Component = await loadColumn();
+    Component = Column;
     break;
   case "to_do":
-    Component = await loadTodoBlock();
+    Component = TodoBlock;
     break;
   case "table":
-    Component = await loadTableBlock();
+    Component = TableBlock;
     break;
   case "table_row":
-    Component = await loadTableRowBlock();
+    Component = TableRowBlock;
     break;
   case "template":
   case "synced_block":
@@ -118,7 +103,7 @@ switch (block.type) {
   case "link_preview":
   case "unsupported":
   default:
-    Component = await loadDefaultBlock();
+    Component = DefaultBlock;
 }
 ---
 

@@ -22,7 +22,7 @@ export function getPageTitleComponents(
   }
 
   // If a title property is on the object, we can return early
-  if (page.object === "database" && page.title) {
+  if (page.object === "database") {
     return page.title;
   }
 
@@ -33,7 +33,7 @@ export function getPageTitleComponents(
   const titleProperty = properties.find(
     (property) => property.type === "title",
   );
-  if (!titleProperty || titleProperty.type !== "title") {
+  if (!titleProperty) {
     throw new Error(`Page ${page.id} has no title`);
   }
 
@@ -48,7 +48,6 @@ export function getUrlSlugForPage(
 ) {
   if (
     page.object === "page" && // TODO: figure out what to do about database type pages
-    page.parent &&
     page.parent.type === "database_id"
   ) {
     const slugProperty =

@@ -1,39 +1,50 @@
 ---
-import type { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
-import { getCollection } from "astro:content";
+import type {
+  DatabaseObjectResponse,
+  PageObjectResponse,
+} from "@notionhq/client/build/src/api-endpoints";
+import { getCollection, type DataEntryMap } from "astro:content";
 import { join } from "node:path/posix";
 import NotionRenderer from "../components/notion/blocks/NotionRenderer.astro";
 import BlogPageFooter from "../components/notion/blog/BlogPageFooter.astro";
-import type { LinkInfo } from "../components/SiteHeader.astro";
 import { getBlockChildren } from "../integrations/notion-loader/util";
 import NotionPageLayout from "../layouts/NotionPageLayout.astro";
 import { getPageTitleComponents } from "../lib/notion/titles";
 import { richTextToUnformattedString } from "../lib/notion/util";
 import { generateOgImage } from "../lib/og-images";
 import { getOgImageOptionsForNotionPage } from "../lib/og-images/notion";
+import type { BlockMap } from "../integrations/notion-loader/api";
+import type { LinkInfo } from "../lib/site/LinkInfo";
+
+export interface Props {
+  page: PageObjectResponse;
+  type: string;
+  path: string;
+  flummoxedPath: string;
+  blockMap: BlockMap;
+  properties: DataEntryMap["pages"][""]["data"]["properties"];
+}
 
 export async function getStaticPaths() {
   const collection = await getCollection("pages");
 
-  const paths = await Promise.all(
-    collection.map(async (result) => {
-      const type = result.data.properties.Type?.name ?? "page";
-      const fullPath = join(type === "blog" ? "/blog" : "/", result.data.slug);
-      const flummoxedPath = join("/flummoxed", fullPath);
+  const paths = collection.map((result) => {
+    const type = result.data.properties.Type?.name ?? "page";
+    const fullPath = join(type === "blog" ? "/blog" : "/", result.data.slug);
+    const flummoxedPath = join("/flummoxed", fullPath);
 
-      return {
-        params: { path: fullPath },
-        props: {
-          page: result.data.page,
-          type,
-          path: fullPath,
-          flummoxedPath,
-          blockMap: result.data.blockMap,
-          properties: result.data.properties,
-        },
-      };
-    }),
-  );
+    return {
+      params: { path: fullPath },
+      props: {
+        page: result.data.page,
+        type,
+        path: fullPath,
+        flummoxedPath,
+        blockMap: result.data.blockMap,
+        properties: result.data.properties,
+      },
+    };
+  });
 
   return paths;
 }

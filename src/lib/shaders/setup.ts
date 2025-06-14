@@ -12,6 +12,7 @@ import {
 export interface ShaderSetupOptions {
   canvas: HTMLCanvasElement;
   shaders: { vertex: string; fragment: string };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   uniforms?: Record<string, any>;
   onFrame?: (time: DOMHighResTimeStamp) => void;
   textures?: TextureOptions[];
@@ -43,7 +44,6 @@ export function setupShader(options: ShaderSetupOptions) {
   let isIntersecting = false;
 
   function queueFrame() {
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     animFrameHandle = requestAnimationFrame(render);
   }
   function cancelFrame() {

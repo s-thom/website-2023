@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 const PREFERENCES_STORAGE_KEY = "sthom-preferences";
 
 function memo<K, V>(fn: (key: K) => V): (key: K) => V {
@@ -13,7 +12,7 @@ function memo<K, V>(fn: (key: K) => V): (key: K) => V {
     }
 
     // We know that value has a value here.
-    return value!;
+    return value;
   };
 }
 
@@ -90,11 +89,9 @@ function notifyListeners<V>(result: OptionResult<V>): void {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle
-let __state_singleton: OptionsState;
+let __state_singleton: OptionsState | undefined;
 function getState(): OptionsState {
   if (!__state_singleton) {
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     __state_singleton = getInitialState();
   }
 
@@ -109,7 +106,6 @@ function mergeState<K extends keyof Options>(
 
   notifyListeners(result);
 
-  // eslint-disable-next-line @typescript-eslint/no-use-before-define
   const toStore: Partial<Options> = {};
   for (const [toStoreKey, toStoreResult] of Object.entries(__state_singleton)) {
     const meta = OPTIONS_META[toStoreKey as keyof Options];
@@ -117,6 +113,7 @@ function mergeState<K extends keyof Options>(
       ? !toStoreResult.isAuto
       : toStoreResult.isAuto || toStoreResult.value !== meta.defaultValue;
     if (shouldAdd) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
       (toStore as any)[toStoreKey] = toStoreResult.value;
     }
   }

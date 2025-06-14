@@ -178,7 +178,7 @@ if (imageUrl) {
         canvas,
         shaders: { vertex, fragment },
         uniforms,
-        onFrame: (time) => {
+        onFrame: () => {
           uniforms.uWarpAmount =
             ((1 - canvasIntersectionRatio) *
               (MAX_PAINT_FACTOR - MIN_PAINT_FACTOR) +

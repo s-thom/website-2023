@@ -11,7 +11,7 @@ const MANIFEST_VERSION = 6;
 
 interface ManifestType {
   version: number;
-  images: Record<string, ImageInfo>;
+  images: Partial<Record<string, ImageInfo>>;
 }
 
 async function createManifestDir() {
@@ -54,14 +54,13 @@ async function writeManifestFile(manifest: ManifestType) {
   while (shouldWriteManifest) {
     shouldWriteManifest = false;
 
-    // eslint-disable-next-line no-await-in-loop
     await writeFile(IMAGE_MANIFEST_PATH, JSON.stringify(manifest), {
       encoding: "utf-8",
     });
   }
 }
 
-let loadedManifest: ManifestType = undefined as any;
+let loadedManifest: ManifestType = undefined as never;
 const loadedManifestPromise = readManifestFile().then((manifest) => {
   loadedManifest = manifest;
 });
@@ -112,13 +111,14 @@ export async function addToManifest(id: string, info: ImageInfo) {
     }
   }
 
-  writeManifestFile(loadedManifest);
+  void writeManifestFile(loadedManifest);
 }
 
 export function removeFromManifest(id: string) {
   if (loadedManifest.images[id]) {
+    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     delete loadedManifest.images[id];
   }
 
-  writeManifestFile(loadedManifest);
+  void writeManifestFile(loadedManifest);
 }

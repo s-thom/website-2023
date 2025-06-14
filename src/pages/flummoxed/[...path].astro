@@ -15,29 +15,39 @@ import {
 } from "../../lib/unified/remarkCodeOverrides";
 import { remarkFlummox } from "../../lib/unified/remarkFlummox";
 import { remarkTempNoImages } from "../../lib/unified/remarkTempNoImages";
+import type { BlockMap } from "../../integrations/notion-loader/api";
+import type { PageObjectResponse } from "@notionhq/client";
+import type { DataEntryMap } from "astro:content";
+
+export interface Props {
+  page: PageObjectResponse;
+  type: string;
+  path: string;
+  flummoxedPath: string;
+  blockMap: BlockMap;
+  properties: DataEntryMap["pages"][""]["data"]["properties"];
+}
 
 export async function getStaticPaths() {
   const collection = await getCollection("pages");
 
-  const paths = await Promise.all(
-    collection.map(async (result) => {
-      const type = result.data.properties.Type?.name ?? "page";
-      const fullPath = join(type === "blog" ? "/blog" : "/", result.data.slug);
-      const flummoxedPath = join("/flummoxed", fullPath);
+  const paths = collection.map((result) => {
+    const type = result.data.properties.Type?.name ?? "page";
+    const fullPath = join(type === "blog" ? "/blog" : "/", result.data.slug);
+    const flummoxedPath = join("/flummoxed", fullPath);
 
-      return {
-        params: { path: fullPath },
-        props: {
-          page: result.data.page,
-          type,
-          path: fullPath,
-          flummoxedPath,
-          blockMap: result.data.blockMap,
-          properties: result.data.properties,
-        },
-      };
-    }),
-  );
+    return {
+      params: { path: fullPath },
+      props: {
+        page: result.data.page,
+        type,
+        path: fullPath,
+        flummoxedPath,
+        blockMap: result.data.blockMap,
+        properties: result.data.properties,
+      },
+    };
+  });
 
   return paths;
 }

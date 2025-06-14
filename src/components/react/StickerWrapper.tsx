@@ -1,5 +1,8 @@
 import { useEffect, useRef } from "react";
-import { type StickerTypes, createStickerElement } from '../../stickers/stickers';
+import {
+  type StickerTypes,
+  createStickerElement,
+} from "../../stickers/stickers";
 
 export interface StickerWrapperProps {
   type: StickerTypes;

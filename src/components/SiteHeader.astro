@@ -1,12 +1,8 @@
 ---
+import type { LinkInfo } from "../lib/site/LinkInfo";
 import LocalImage from "./Images/LocalImage.astro";
 import DefaultPageBackdrop from "./site/DefaultPageBackdrop.astro";
 import DefaultPageHeader from "./site/DefaultPageHeader.astro";
-
-export interface LinkInfo {
-  url: string;
-  name: string;
-}
 
 export interface Props {
   navItems?: LinkInfo[];

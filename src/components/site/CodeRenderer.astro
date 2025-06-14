@@ -13,12 +13,10 @@ import "@shikijs/twoslash/style-rich.css";
 import { Code } from "astro:components";
 import { syntaxTheme } from "../../lib/shiki/theme";
 
-type CodeProps = Parameters<typeof Code>[0];
-
 export interface Props {
   code: string;
-  language: CodeProps["lang"];
-  meta?: CodeProps["meta"];
+  language: string;
+  meta?: string;
 }
 
 const { code, language, meta } = Astro.props;
@@ -27,7 +25,7 @@ const { code, language, meta } = Astro.props;
 <Code
   class="code-block"
   code={code}
-  lang={language}
+  lang={language as "plaintext"}
   theme={syntaxTheme}
   transformers={[
     transformerNotationDiff({ matchAlgorithm: "v3" }),

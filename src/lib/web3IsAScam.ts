@@ -124,7 +124,7 @@ function getCharactersPerMs() {
 
 export function web3IsAScam() {
   if (typeof umami !== "undefined") {
-    umami.track("web3IsAScam");
+    void umami.track("web3IsAScam");
   }
   addBanner();
   const numToRemovePerMs = getCharactersPerMs();

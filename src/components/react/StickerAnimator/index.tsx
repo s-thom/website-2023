@@ -31,6 +31,7 @@ function withCooldown(ms: number): (fn: () => void) => void {
 
 const addCooldown = withCooldown(100);
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface StickerAnimatorProps {}
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -74,6 +75,7 @@ export function StickerAnimator(_: StickerAnimatorProps) {
 
   useEffect(() => {
     const cleanup = addAnimationListener((animation) => {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (animation.type === "add") {
         addAddAnimation(animation);
       }

@@ -16,19 +16,24 @@ export default function sthomNotionLoader(): AstroIntegration {
         });
       },
       "astro:server:setup": ({ server, refreshContent, logger }) => {
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         server.ws.on("sthom-notion-loader:reload", async (data, client) => {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
           logger.info(`Request to clear from page ${data.pageId}`);
 
           if (refreshContent) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
             client.send("sthom-notion-loader:reload-started", {});
             await refreshContent({
               loaders: ["sthom-notion-loader"],
               context: {
-                pageId: data.pageId,
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                pageId: data.pageId as never,
               },
             });
           }
 
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
           client.send("sthom-notion-loader:reload-complete", {});
         });
       },

@@ -29,28 +29,25 @@ const imageInfo =
   {
     block.callout.icon && (
       <>
-        {
-          // eslint-disable-next-line no-nested-ternary
-          imageInfo ? (
-            <Picture
-              imageInfo={imageInfo}
-              alt=""
-              sizes={[32]}
-              linkToOriginal
-              sizes="32px"
-              loading="lazy"
-            />
-          ) : block.callout.icon.type === "emoji" ? (
-            <span class:list={["block-callout-icon", "emoji-icon"]}>
-              {block.callout.icon.emoji}
-            </span>
-          ) : (
-            <DevOnly>
-              callout block {block.id} has unsupported image type{" "}
-              {block.callout.icon.type}
-            </DevOnly>
-          )
-        }
+        {imageInfo ? (
+          <Picture
+            imageInfo={imageInfo}
+            alt=""
+            sizes={[32]}
+            linkToOriginal
+            sizes="32px"
+            loading="lazy"
+          />
+        ) : block.callout.icon.type === "emoji" ? (
+          <span class:list={["block-callout-icon", "emoji-icon"]}>
+            {block.callout.icon.emoji}
+          </span>
+        ) : (
+          <DevOnly>
+            callout block {block.id} has unsupported image type{" "}
+            {block.callout.icon.type}
+          </DevOnly>
+        )}
       </>
     )
   }

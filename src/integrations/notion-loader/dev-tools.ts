@@ -80,7 +80,7 @@ const notionCacheDevTools: DevToolbarApp = {
     }
 
     eventTarget.addEventListener("app-toggled", (event) => {
-      if ((event as any).detail.state === true) {
+      if ((event as CustomEvent<{ state: boolean }>).detail.state) {
         const pageIdElement = document.querySelector("#DEV-notion-page-id");
         if (!pageIdElement) {
           noNotion.style.display = "block";

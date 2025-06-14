@@ -88,7 +88,9 @@ export function SettingsPanelContent() {
                     name={key}
                     value={value.value}
                     checked={options[key] === value.value}
-                    onChange={() => onOptionChange(key, value.value)}
+                    onChange={() => {
+                      onOptionChange(key, value.value);
+                    }}
                     data-umami-event={key}
                     {...{ [`data-umami-event-${key}`]: value.value }}
                   />

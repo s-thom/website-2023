@@ -1,17 +1,15 @@
 ---
 import type { BlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import NotionBlock from "./NotionBlock.astro";
-import NotionBlockGroup, {
+import NotionBlockGroup from "./NotionBlockGroup.astro";
+import {
   BLOCK_GROUP_TYPE,
+  type BaseBlockComponentProps,
   type BlockGroup,
-} from "./NotionBlockGroup.astro";
-import type { BaseBlockComponentProps } from "./types";
-
-const loadBulletedListItemGroup = () =>
-  import("./BulletedListItemGroup.astro").then((b) => b.default);
-const loadNumberedListItemGroup = () =>
-  import("./NumberedListItemGroup.astro").then((b) => b.default);
-const loadTodoGroup = () => import("./TodoGroup.astro").then((b) => b.default);
+} from "./types";
+import BulletedListItemGroup from "./BulletedListItemGroup.astro";
+import NumberedListItemGroup from "./NumberedListItemGroup.astro";
+import TodoGroup from "./TodoGroup.astro";
 
 export interface Props extends Omit<BaseBlockComponentProps, "block"> {
   blocks: BlockObjectResponse[];
@@ -28,13 +26,11 @@ const { blocks, blockMap } = Astro.props;
 const items: (BlockObjectResponse | BlockGroup)[] = [];
 let currentGroup: BlockGroup | undefined;
 
-// eslint-disable-next-line no-restricted-syntax
 for (const block of blocks) {
   if (currentGroup) {
     // Add to existing group if types are the same
     if (currentGroup.blockType === block.type) {
       currentGroup.items.push(block);
-      // eslint-disable-next-line no-continue
       continue;
     }
 
@@ -49,8 +45,7 @@ for (const block of blocks) {
       currentGroup = {
         type: BLOCK_GROUP_TYPE,
         blockType: block.type,
-        // eslint-disable-next-line no-await-in-loop
-        wrapper: await loadBulletedListItemGroup(),
+        wrapper: BulletedListItemGroup,
         items: [block],
       };
       break;
@@ -58,8 +53,7 @@ for (const block of blocks) {
       currentGroup = {
         type: BLOCK_GROUP_TYPE,
         blockType: block.type,
-        // eslint-disable-next-line no-await-in-loop
-        wrapper: await loadNumberedListItemGroup(),
+        wrapper: NumberedListItemGroup,
         items: [block],
       };
       break;
@@ -67,8 +61,7 @@ for (const block of blocks) {
       currentGroup = {
         type: BLOCK_GROUP_TYPE,
         blockType: block.type,
-        // eslint-disable-next-line no-await-in-loop
-        wrapper: await loadTodoGroup(),
+        wrapper: TodoGroup,
         items: [block],
       };
       break;

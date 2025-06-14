@@ -7,7 +7,7 @@ export interface BaseOption<T> {
   readonly?: boolean;
 }
 
-export interface ButtonOption extends BaseOption<any> {
+export interface ButtonOption extends BaseOption<unknown> {
   type: "button";
   onClick: () => void;
 }
@@ -156,6 +156,7 @@ export function addOptionsToPanel(
         container
           .addBinding(vec2Container, "vec2", {
             label: option.label ?? key,
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
             readonly: option.readonly ?? (false as any),
             picker: "inline",
             x: {

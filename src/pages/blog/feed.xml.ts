@@ -19,24 +19,22 @@ export async function GET(context: APIContext) {
     site: `${context.site!}blog/`,
     // Array of `<item>`s in output xml
     // See "Generating items" section for examples using content collections and glob imports
-    items: await Promise.all(
-      listedBlogPosts.map(async (item) => {
-        const url = new URL(join("/blog", item.data.slug), context.site);
+    items: listedBlogPosts.map((item) => {
+      const url = new URL(join("/blog", item.data.slug), context.site);
 
-        const publishedDateString =
-          item.data.properties.Published?.start ?? new Date().toString();
+      const publishedDateString =
+        item.data.properties.Published?.start ?? new Date().toString();
 
-        return {
-          title: richTextToUnformattedString(
-            getPageTitleComponents(item.data.page),
-          ),
-          pubDate: new Date(publishedDateString),
-          link: url.toString(),
-          // TODO: Get description and optionally content
-          // description,
-        };
-      }),
-    ),
+      return {
+        title: richTextToUnformattedString(
+          getPageTitleComponents(item.data.page),
+        ),
+        pubDate: new Date(publishedDateString),
+        link: url.toString(),
+        // TODO: Get description and optionally content
+        // description,
+      };
+    }),
     stylesheet: `${context.site!}static/pretty-feed-v3.xsl`,
   });
 }

@@ -3,6 +3,7 @@ import type {
   DatabaseObjectResponse,
   PageObjectResponse,
 } from "@notionhq/client/build/src/api-endpoints";
+import type { BlockMap } from "../../integrations/notion-loader/api";
 import { estimateReadingTime } from "../../lib/notion/readingTime";
 import { getPageTitleComponents } from "../../lib/notion/titles";
 import {
@@ -11,11 +12,10 @@ import {
 } from "../../lib/notion/util";
 import RichText from "./common/RichText.astro";
 import NotionProperty from "./properties/NotionProperty.astro";
-import type { BlockInfo } from "../../integrations/notion-loader/api";
 
 export interface Props {
   page: DatabaseObjectResponse | PageObjectResponse;
-  blockMap: Record<string, BlockInfo>;
+  blockMap: BlockMap;
   showCoverSource?: boolean;
   showReadingTime?: boolean;
   showPublishEditDates?: boolean;
@@ -39,11 +39,9 @@ const coverSourceProperty = getPagePropertyByName(
 const publishedDateProperty = getPagePropertyByName(page, "Published", "date");
 const editedDateProperty = getPagePropertyByName(page, "Edited", "date");
 
-let readingTimeInfo:
-  | Awaited<ReturnType<typeof estimateReadingTime>>
-  | undefined;
+let readingTimeInfo: ReturnType<typeof estimateReadingTime> | undefined;
 if (showReadingTime) {
-  readingTimeInfo = await estimateReadingTime(page, blockMap);
+  readingTimeInfo = estimateReadingTime(page, blockMap);
 }
 ---
 

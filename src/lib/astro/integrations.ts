@@ -32,18 +32,17 @@ export async function runCustomIntegrationHook<
 
     logger.debug(`Starting ${key} for ${integration.name}`);
     try {
-      // eslint-disable-next-line no-await-in-loop
       await hook({
         ...payload,
         logger: logger.fork(integration.name),
-      } as any);
+      } as never);
     } catch (err) {
       logger.error(`Error running ${key} hook for ${integration.name}`);
       throw err;
     } finally {
       clearTimeout(timeout);
 
-      if (wasSlow) {
+      if (wasSlow as boolean) {
         const endTime = performance.now();
         const diffMs = endTime - startTime;
         const centis = Math.floor(diffMs / 10) % 100;

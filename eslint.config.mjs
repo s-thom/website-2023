@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
 import eslint from "@eslint/js";
-import parser from "astro-eslint-parser";
 import eslintPluginAstro from "eslint-plugin-astro";
 import importPlugin from "eslint-plugin-import";
 import jsxA11y from "eslint-plugin-jsx-a11y";
@@ -14,9 +13,14 @@ export default tseslint.config([
   tseslint.configs.strictTypeChecked,
   importPlugin.flatConfigs.recommended,
   eslintPluginPrettier,
-  reactPlugin.configs.flat.recommended,
-  reactPlugin.configs.flat["jsx-runtime"],
-  reactHooks.configs["recommended-latest"],
+  {
+    files: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
+    extends: [
+      reactPlugin.configs.flat.recommended,
+      reactPlugin.configs.flat["jsx-runtime"],
+      reactHooks.configs["recommended-latest"],
+    ],
+  },
   {
     plugins: { "jsx-a11y": jsxA11y },
     rules: jsxA11y.configs.recommended.rules,
@@ -26,14 +30,20 @@ export default tseslint.config([
   {
     settings: {
       "import/resolver": {
-        // You will also need to install and configure the TypeScript resolver
-        // See also https://github.com/import-js/eslint-import-resolver-typescript#configuration
         typescript: {
           project: "./tsconfig.json",
         },
         node: true,
       },
       react: { version: "detect" },
+    },
+  },
+  {
+    files: ["*.astro"],
+    rules: {
+      "@typescript-eslint/no-unsafe-argument": "off",
+      "@typescript-eslint/no-unsafe-assignment": "off",
+      "@typescript-eslint/no-unsafe-member-access": "off",
     },
   },
   {
@@ -46,9 +56,34 @@ export default tseslint.config([
     },
     rules: {
       "import/prefer-default-export": "off",
+      "import/no-unresolved": [
+        "error",
+        {
+          ignore: ["astro:*"],
+        },
+      ],
       "no-continue": "off",
       "no-plusplus": "off",
       "prettier/prettier": "warn",
+      "no-console": "warn",
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          caughtErrors: "none",
+        },
+      ],
+      "@typescript-eslint/no-non-null-assertion": "off",
+      "@typescript-eslint/restrict-template-expressions": [
+        "error",
+        {
+          allow: [{ name: ["Error", "URL", "URLSearchParams"], from: "lib" }],
+          allowAny: true,
+          allowBoolean: true,
+          allowNullish: true,
+          allowNumber: true,
+          allowRegExp: true,
+        },
+      ],
 
       "no-restricted-syntax": [
         "error",
@@ -66,27 +101,6 @@ export default tseslint.config([
           selector: "WithStatement",
           message:
             "`with` is disallowed in strict mode because it makes code impossible to predict and optimize.",
-        },
-      ],
-    },
-  },
-  {
-    files: ["**/*.astro"],
-    languageOptions: {
-      parser: parser,
-      ecmaVersion: 5,
-      sourceType: "script",
-
-      parserOptions: {
-        parser: "@typescript-eslint/parser",
-        extraFileExtensions: [".astro"],
-      },
-    },
-    rules: {
-      "import/no-unresolved": [
-        "error",
-        {
-          ignore: ["astro:*"],
         },
       ],
     },

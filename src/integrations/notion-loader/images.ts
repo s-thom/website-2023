@@ -15,7 +15,7 @@ interface ManifestImageData {
 }
 interface ManifestType {
   version: number;
-  images: Record<string, ManifestImageData>;
+  images: Partial<Record<string, ManifestImageData>>;
 }
 
 export interface ImageData {
@@ -40,7 +40,6 @@ async function writeManifestFile(manifest: ManifestType) {
   while (shouldWriteManifest) {
     shouldWriteManifest = false;
 
-    // eslint-disable-next-line no-await-in-loop
     await writeFile(CACHE_MANIFEST_FILE, JSON.stringify(manifest), {
       encoding: "utf-8",
     });
@@ -66,7 +65,7 @@ async function readManifestFile(): Promise<ManifestType> {
   }
 }
 
-let loadedManifestPromise: Promise<ManifestType>;
+let loadedManifestPromise: Promise<ManifestType> | undefined;
 
 async function getManifest() {
   if (!loadedManifestPromise) {
@@ -81,7 +80,7 @@ async function addToManifest(id: string, data: ManifestImageData) {
 
   manifest.images[id] = data;
 
-  writeManifestFile(manifest);
+  void writeManifestFile(manifest);
 }
 
 interface SaveImageOptions {
@@ -130,7 +129,7 @@ export async function saveImage({
   const path = `${id}.${extension(mimeType)}`;
   await writeFile(join(CACHE_DIR, path), new Uint8Array(buffer));
 
-  addToManifest(id, { key, url, path, mimeType });
+  void addToManifest(id, { key, url, path, mimeType });
 }
 
 export async function getSavedImage(id: string): Promise<ImageData> {

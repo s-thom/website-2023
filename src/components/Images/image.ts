@@ -48,6 +48,10 @@ const readManifestPromise = getManifest().then((manifest) => {
   const tempCache = new Map<ImageWidthCacheKey, ImageWidthCacheValue>();
 
   for (const [id, info] of Object.entries(manifest.images)) {
+    if (!info) {
+      continue;
+    }
+
     for (const format of info.formats) {
       for (const size of format.sizes) {
         const key: ImageWidthCacheKey = `${id}_${size.width}`;
@@ -164,6 +168,7 @@ async function convertImageForWidth(
           formatMimeType = "image/avif";
           break;
         default:
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
           throw new Error(`Unable to convert to type ${format}`);
       }
 

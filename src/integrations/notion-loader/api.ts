@@ -17,16 +17,34 @@ export interface BlockInfo {
   children?: string[];
 }
 
+export type BlockMap = Partial<Record<string, BlockInfo>>;
+
 export interface PageInfo<Properties extends object = object> {
   page: PageObjectResponse;
   slug: string;
   properties: Properties;
-  blockMap: Record<string, BlockInfo>;
+  blockMap: BlockMap;
 }
+
+type ExternalPageIconResponse = {
+  type: "external";
+  external: {
+    url: string;
+  };
+};
+type FilePageIconResponse = {
+  type: "file";
+  file: {
+    url: string;
+    expiry_time: string;
+  };
+};
+
+type ExternalResponse = ExternalPageIconResponse | FilePageIconResponse;
 
 async function saveFileOrExternal(
   id: string,
-  fileOrExternal: NonNullable<PageObjectResponse["cover"]>,
+  fileOrExternal: ExternalResponse,
   key: string,
   logger: AstroIntegrationLogger | undefined,
 ): Promise<void> {
@@ -47,12 +65,11 @@ async function processBlock(
   queue: PQueue,
   requester: Requester,
   blockId: string,
-  blockMap: Record<string, BlockInfo>,
+  blockMap: BlockMap,
   depth: number,
   logger: AstroIntegrationLogger,
 ): Promise<void> {
   const self = blockMap[blockId];
-  const { block } = self;
   if (!self) {
     logger.error(
       `Trying to add children for block that doesn't exist: ${blockId}`,
@@ -61,34 +78,36 @@ async function processBlock(
       `Trying to add children for block that doesn't exist: ${blockId}`,
     );
   }
+  const { block } = self;
 
   // Behaviour specific to different block types.
   // Mostly used to deal with images
   if (block.object === "page") {
     // Request cover images and icon
     if (block.cover !== null) {
-      queue.add(() =>
+      void queue.add(() =>
         saveFileOrExternal(
           `${block.id}_cover`,
-          block.cover as any,
+          block.cover!,
           block.last_edited_time,
           logger,
         ),
       );
     }
     if (block.icon && block.icon.type !== "emoji") {
-      queue.add(() =>
+      void queue.add(() =>
         saveFileOrExternal(
           `${block.id}_icon`,
-          block.icon as any,
+          block.icon as ExternalResponse,
           block.last_edited_time,
           logger,
         ),
       );
     }
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   } else if (block.object === "block") {
     if (block.type === "image") {
-      queue.add(() =>
+      void queue.add(() =>
         saveFileOrExternal(
           block.id,
           block.image,
@@ -99,7 +118,7 @@ async function processBlock(
     } else if (block.type === "callout") {
       const { icon } = block.callout;
       if (icon && (icon.type === "file" || icon.type === "external")) {
-        queue.add(() =>
+        void queue.add(() =>
           saveFileOrExternal(
             `${block.id}_icon`,
             icon,
@@ -114,6 +133,7 @@ async function processBlock(
   // Process children
   if (
     (block.object === "page" ||
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       (block.object === "block" && block.has_children)) &&
     depth < MAX_VISIT_DEPTH
   ) {
@@ -139,10 +159,9 @@ async function processBlock(
         continue;
       }
 
-      // eslint-disable-next-line no-param-reassign
       blockMap[child.id] = { block: child, children: undefined };
 
-      queue.add(() =>
+      void queue.add(() =>
         processBlock(queue, requester, child.id, blockMap, depth + 1, logger),
       );
     }
@@ -155,7 +174,7 @@ function mapProperties(
   return Object.fromEntries(
     Object.entries(properties).map(([key, property]) => [
       key,
-      (property as any)[property.type],
+      (property as never)[property.type],
     ]),
   );
 }
@@ -176,10 +195,12 @@ export async function collectPageInfo(
   const slug = PAGE_PATH_PREFIX_OVERRIDES[page.id] ?? getUrlSlugForPage(page);
 
   const queue = new PQueue();
-  const blockMap: Record<string, BlockInfo> = {};
+  const blockMap: BlockMap = {};
   // Kick off the traversal with the page
   blockMap[pageId] = { block: page, children: undefined };
-  queue.add(() => processBlock(queue, requester, pageId, blockMap, 0, logger));
+  void queue.add(() =>
+    processBlock(queue, requester, pageId, blockMap, 0, logger),
+  );
 
   await queue.onIdle();
 

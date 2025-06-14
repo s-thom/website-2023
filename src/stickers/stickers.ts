@@ -393,7 +393,7 @@ type Listener<T> = {
 };
 const DEFAULT_MAPPER: StickerStoreMapper<StickerStoreValue> = (value) => value;
 
-const listeners: Listener<any>[] = [];
+const listeners: Listener<unknown>[] = [];
 
 export function addStickerStoreListener(
   handler: StickerStoreHandler<StickerStoreValue>,
@@ -409,26 +409,26 @@ export function addStickerStoreListener<T>(
   const listener: Listener<T> = {
     handler,
     mapper: mapper ?? (DEFAULT_MAPPER as StickerStoreMapper<T>),
-    lastValue: {} as any, // Must be any unique value, doesn't matter what it is at this stage
+    lastValue: {} as T, // Must be any unique value, doesn't matter what it is at this stage
   };
-  listeners.push(listener);
+  const listenerUK = listener as Listener<unknown>;
 
-  // eslint-disable-next-line @typescript-eslint/no-use-before-define
-  sendToListener(listener, getStickerStore());
+  listeners.push(listenerUK);
+
+  sendToListener(listenerUK, getStickerStore());
 
   return () => {
-    const index = listeners.indexOf(listener);
+    const index = listeners.indexOf(listenerUK);
     if (index > -1) {
       listeners.splice(index, 1);
     }
   };
 }
 
-function sendToListener(listener: Listener<any>, value: StickerStoreValue) {
+function sendToListener(listener: Listener<unknown>, value: StickerStoreValue) {
   try {
     const newValue = listener.mapper(value);
     if (newValue !== listener.lastValue) {
-      // eslint-disable-next-line no-param-reassign
       listener.lastValue = newValue;
       listener.handler(newValue);
     }
@@ -458,6 +458,7 @@ function readStickerStoreFromStorage(): StickerStoreValue {
     return INITIAL_VALUE;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const value: StickerStoreValue = JSON.parse(valueString);
   return value;
 }
@@ -541,15 +542,19 @@ export function animate(animation: StickerAnimationOptions) {
 // #region Elements
 async function requestLottieFile(url: string) {
   const response = await fetch(url);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const json = await response.json();
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return json;
 }
 
-const LOTTIE_PROMISE_CACHE: { [key: string]: Promise<any> } = {};
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const LOTTIE_PROMISE_CACHE: { [key: string]: Promise<any> | undefined } = {};
 // For the most part you want to use the Promise cache but in special
 // circumstances it's nice to get the actual value, even if it's a bit
 // unsafe to do so. Hopefully the word "sneaky" in the name gives a
 // clue that this really shouldn't be used.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const LOTTIE_SNEAKY_CACHE: { [key: string]: any } = {};
 
 export function getLottieData(type: StickerTypes) {
@@ -557,17 +562,17 @@ export function getLottieData(type: StickerTypes) {
 
   if (!LOTTIE_PROMISE_CACHE[type]) {
     LOTTIE_PROMISE_CACHE[type] = requestLottieFile(data.url).then((json) => {
-      LOTTIE_SNEAKY_CACHE[type] = json;
-      return json;
+      LOTTIE_SNEAKY_CACHE[type] = json as never;
+      return json as never;
     });
   }
 
-  return LOTTIE_PROMISE_CACHE[type]!;
+  return LOTTIE_PROMISE_CACHE[type];
 }
 
 type LottieType =
   (typeof import("lottie-web/build/player/lottie_light"))["default"];
-// eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle
+
 let _lottie: LottieType | undefined;
 async function lazyLoadLottie() {
   const result = await import("lottie-web/build/player/lottie_light");
@@ -583,7 +588,7 @@ function createLottieAnimation(
   cleanup: () => void;
 } {
   // By the time this function is called we know the data is cached here.
-  const animationData = LOTTIE_SNEAKY_CACHE[type];
+  const animationData = LOTTIE_SNEAKY_CACHE[type] as never;
 
   let motionState = getOptionValue("motion");
 
@@ -593,13 +598,11 @@ function createLottieAnimation(
       className: "lottie-sticker",
       onpointerover: (event) => {
         if (event.currentTarget === element && motionState !== "reduced") {
-          // eslint-disable-next-line @typescript-eslint/no-use-before-define
           anim.play();
         }
       },
       onpointerleave: (event) => {
         if (event.currentTarget === element) {
-          // eslint-disable-next-line @typescript-eslint/no-use-before-define
           anim.goToAndStop("rest", true);
         }
       },
@@ -663,10 +666,12 @@ export function createStickerElement(
   );
 
   let isDestroyed = false;
-  let lottieCleanup: () => void;
-  let cleanupDraggable: () => void;
+  let lottieCleanup: (() => void) | undefined;
+  let cleanupDraggable: (() => void) | undefined;
 
   const data = STICKER_TYPE_MAP[type];
+
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (data.type === "lottie") {
     // Use sneaky cache (with unwrapped values) if possible
     if (LOTTIE_SNEAKY_CACHE[type] && _lottie) {
@@ -677,20 +682,22 @@ export function createStickerElement(
       const loading = createLoadingElement();
       container.appendChild(loading);
 
-      Promise.all([lazyLoadLottie(), getLottieData(type)]).then(([lottie]) => {
-        if (isDestroyed) {
-          return;
-        }
-        container.removeChild(loading);
-        const { element, cleanup } = createLottieAnimation(lottie, type);
-        lottieCleanup = cleanup;
-        container.appendChild(element);
-      });
+      void Promise.all([lazyLoadLottie(), getLottieData(type)]).then(
+        ([lottie]) => {
+          if (isDestroyed) {
+            return;
+          }
+          container.removeChild(loading);
+          const { element, cleanup } = createLottieAnimation(lottie, type);
+          lottieCleanup = cleanup;
+          container.appendChild(element);
+        },
+      );
     }
   }
 
   if (options.draggable) {
-    import(
+    void import(
       "@atlaskit/pragmatic-drag-and-drop/dist/cjs/entry-point/element/adapter"
     ).then(({ draggable }) => {
       if (isDestroyed) {
@@ -797,6 +804,7 @@ export function createStickerFrame(
 // #region Functions
 export async function preloadStickerData(type: StickerTypes): Promise<void> {
   switch (STICKER_TYPE_MAP[type].type) {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     case "lottie":
       await getLottieData(type);
       break;

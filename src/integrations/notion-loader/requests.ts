@@ -38,7 +38,7 @@ function withQueue<Params extends unknown[], Return>(
   return wrapper;
 }
 
-let singletonClient: Client;
+let singletonClient: Client | undefined;
 
 function getClient() {
   if (!singletonClient) {

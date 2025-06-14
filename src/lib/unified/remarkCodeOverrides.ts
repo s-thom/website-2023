@@ -18,8 +18,7 @@ function flatMapNodesRecursive(ast: Nodes, mapper: (node: Nodes) => Nodes[]) {
         }
       }
 
-      // eslint-disable-next-line no-param-reassign
-      node.children = newChildren as any;
+      node.children = newChildren as never;
     }
 
     return mapper(node);
@@ -40,7 +39,6 @@ export interface RemarkCodeOverridesOptions {
 export function remarkCodeOverrides({
   mappers = {},
 }: RemarkCodeOverridesOptions): Transformer<Root> {
-  // eslint-disable-next-line @typescript-eslint/no-shadow
   return function remarkCodeOverrides(tree) {
     flatMapNodesRecursive(tree, (node) => {
       if (node.type !== "code") {
@@ -80,7 +78,9 @@ export function getMapBlogCollection(
               children: [
                 {
                   type: "link",
-                  url: `${pathPrefix ? join("/", pathPrefix, "blog", entry.data.slug) : join("/blog", entry.data.slug)}`,
+                  url: pathPrefix
+                    ? join("/", pathPrefix, "blog", entry.data.slug)
+                    : join("/blog", entry.data.slug),
                   children: richTextToMarkdownNodes(
                     getPageTitleComponents(entry.data.page),
                   ),

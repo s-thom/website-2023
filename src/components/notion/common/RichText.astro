@@ -17,6 +17,7 @@ const { components } = Astro.props;
 const pageEntries = await getCollection("pages");
 
 const componentsWithResolvedLinks = await Promise.all(
+  // eslint-disable-next-line @typescript-eslint/require-await
   components.map<Promise<RichTextItemResponse>>(async (component) => {
     if (component.type !== "text") {
       return component;
@@ -47,6 +48,7 @@ const componentsWithResolvedLinks = await Promise.all(
     if (blockId) {
       const blockIdUuid = toProperUuid(blockId);
       const block = page.data.blockMap[blockIdUuid];
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (!block || block.block.object === "page") {
         throw new Error(
           `Unable to resolve internal link to block ${blockIdUuid} in page ${pageIdUuid}`,
@@ -111,6 +113,7 @@ function isLinkExternal(url: string): boolean {
       classes.push("text-code");
     }
     if (
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       component.annotations.color &&
       component.annotations.color !== "default"
     ) {
