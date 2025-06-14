@@ -1,13 +1,14 @@
 import type { AstroIntegration } from "astro";
 
-export default function sthomClientStickers(): AstroIntegration {
+export default function sthomStickersClientDirective(): AstroIntegration {
   return {
-    name: "sthom-client-stickers",
+    name: "sthom-stickers-client-directive",
     hooks: {
       "astro:config:setup": ({ addClientDirective }) => {
         addClientDirective({
           name: "stickers",
-          entrypoint: "./src/integrations/clientStickersEntrypoint.ts",
+          entrypoint:
+            "./src/integrations/stickers-client-directive/integration.ts",
         });
       },
     },

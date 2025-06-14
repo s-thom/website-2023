@@ -1,8 +1,11 @@
 import type { AstroIntegration } from "astro";
 import { cp, mkdir } from "node:fs/promises";
-import { DEV_IMAGE_DIR, DIST_IMAGE_DIR } from "../components/Images/constants";
+import {
+  DEV_IMAGE_DIR,
+  DIST_IMAGE_DIR,
+} from "../../components/Images/constants";
 
-export default function sthomImages(): AstroIntegration {
+export default function sthomImagesOld(): AstroIntegration {
   return {
     name: "sthom-images-old",
     hooks: {

@@ -1,17 +1,13 @@
-/* eslint-disable import/no-extraneous-dependencies */
-// eslint-disable-next-line import/no-unresolved
 import react from "@astrojs/react";
-// eslint-disable-next-line import/no-unresolved
 import sitemap from "@astrojs/sitemap";
-// eslint-disable-next-line import/no-unresolved
 import { defineConfig } from "astro/config";
 import glsl from "vite-plugin-glsl";
-import sthomClientStickers from "./src/integrations/clientStickers";
-import sthomFavicon from "./src/integrations/favicon";
-import sthomImages from "./src/integrations/images-old";
+import sthomFavicon from "./src/integrations/favicon/integration";
+import sthomImagesOld from "./src/integrations/images-old/integration";
 import sthomNotionLoader from "./src/integrations/notion-loader/integration";
 import sthomRelatedPosts from "./src/integrations/related-posts/integration";
-import sthomSliders from "./src/integrations/sliders";
+import sthomSliders from "./src/integrations/sliders-dev-tools/integration";
+import sthomStickersClientDirective from "./src/integrations/stickers-client-directive/integration";
 import { IMAGE_OPTIMISATION_ALLOWED_DOMAINS } from "./src/lib/constants";
 
 function getSiteUrl() {
@@ -31,8 +27,8 @@ function getSiteUrl() {
 export default defineConfig({
   site: getSiteUrl(),
   integrations: [
-    sthomClientStickers(),
-    sthomImages(),
+    sthomStickersClientDirective(),
+    sthomImagesOld(),
     sthomFavicon({ src: "./src/resources/profile-2023.jpg" }),
     sthomNotionLoader(),
     sthomSliders(),

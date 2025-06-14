@@ -1,11 +1,11 @@
 import { type DevToolbarApp } from "astro";
 import { Pane } from "tweakpane";
-import { tweakpaneCSS } from "../css/misc/tweakpane";
-import { h } from "../lib/h";
+import { tweakpaneCSS } from "../../css/misc/tweakpane";
+import { h } from "../../lib/h";
 import {
   addOptionsToPanel,
   type SlidersInitialisedEventData,
-} from "../lib/shaders/sliders";
+} from "../../lib/shaders/sliders";
 
 const notionCacheDevTools: DevToolbarApp = {
   init(canvas, app) {

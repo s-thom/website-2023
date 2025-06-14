@@ -9,10 +9,10 @@ export default function sthomSliders(): AstroIntegration {
     hooks: {
       "astro:config:setup": ({ addDevToolbarApp }) => {
         addDevToolbarApp({
-          id: "sthom-sliders-dev-tools",
+          id: "sthom-sliders",
           name: "Sliders",
           icon: ICON_SVG,
-          entrypoint: new URL("./slidersDevTools.ts", import.meta.url),
+          entrypoint: new URL("./dev-tools.ts", import.meta.url),
         });
       },
     },
