@@ -25,6 +25,13 @@ jobs:
         run: |
           npm ci
 
+      # This is needed for to generate the types, now that we're using the typesafe ESLint configs
+      - name: Astro sync
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+        run: |
+          npm run astro-check
+
       - name: ESLint
         run: |
           npm run lint
