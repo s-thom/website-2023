@@ -1,6 +1,5 @@
 User-agent: 360Monitoring
 User-agent: AI2Bot
-User-agent: Acquia optimize (Monsido)
 User-agent: ActiveComply Bot
 User-agent: AdsTxtCrawler
 User-agent: Alertsite by Smartbear
@@ -9,19 +8,22 @@ User-agent: Amazonbot
 User-agent: Applebot
 User-agent: Applebot-Extended
 User-agent: Audisto Crawler
-User-agent: Awario
+User-agent: AwarioSmartBot
 User-agent: BestChange Bot
 User-agent: Better Uptime
 User-agent: BinaryCanary
 User-agent: Bing Ads
 User-agent: BlogVault
+User-agent: Bravebot
 User-agent: BrightEdge Bot
 User-agent: BugsNag
 User-agent: Bytespider
 User-agent: CCBot
-User-agent: Channable
+User-agent: ChatGPT Operator
 User-agent: ChatGPT-User
 User-agent: Checkly Bot
+User-agent: Claude-SearchBot
+User-agent: Claude-User
 User-agent: ClaudeBot
 User-agent: Clickagy
 User-agent: Cludo
@@ -31,7 +33,6 @@ User-agent: Crazy Egg Bot
 User-agent: CriteoBot
 User-agent: Datenbank Crawler
 User-agent: Deepcrawl
-User-agent: Determ
 User-agent: Devin
 User-agent: Diffbot
 User-agent: Doctom Monitor
@@ -44,6 +45,7 @@ User-agent: Foregenix ThreatView/WebScan
 User-agent: FullStory
 User-agent: GPTBot
 User-agent: GTmetrix
+User-agent: Gemini-Deep-Research
 User-agent: Ghost Inspector
 User-agent: Google AdSense
 User-agent: Google AdsBot
@@ -62,17 +64,20 @@ User-agent: InternetArchiveBot
 User-agent: Jagged Pixel UptimeBot
 User-agent: Jetpack
 User-agent: Kangaroo Bot
+User-agent: KargoBot-Artemis
 User-agent: Kinsta
 User-agent: LeikiBot
 User-agent: MagnetmeBot
 User-agent: MediaMonitoringBot
 User-agent: Medialogia Bot
+User-agent: Mediatoolkitbot
 User-agent: Mediavine Medatada Parser
 User-agent: Meta-ExternalAgent
 User-agent: Meta-ExternalFetcher
 User-agent: MirrorWebCrawler
 User-agent: MistralAI-User
 User-agent: MonSpark
+User-agent: Monsidobot
 User-agent: MontasticMonitor
 User-agent: NETVIGIE
 User-agent: Netumo
@@ -88,7 +93,6 @@ User-agent: Panopta
 User-agent: Parse.ly
 User-agent: Perplexity-User
 User-agent: PerplexityBot
-User-agent: Perplexity‑User
 User-agent: PetalBot
 User-agent: PingPing Bot
 User-agent: Pingdom
@@ -96,7 +100,6 @@ User-agent: PinterestBot
 User-agent: Proximic
 User-agent: Pulsetic
 User-agent: QualifiedBot
-User-agent: Qualys SSL Scanner
 User-agent: Quantcastbot
 User-agent: Rackspace
 User-agent: Reelevant
@@ -123,10 +126,8 @@ User-agent: UpDownBot
 User-agent: Uptime LLC
 User-agent: UptimeBot
 User-agent: UptimeRobot
-User-agent: UptimeStatistics
 User-agent: Uptimia
 User-agent: UptrendsBot
-User-agent: WARDBot
 User-agent: WPMU DEV Broken Link Checker
 User-agent: WPMUDEV Uptime Monitor 5.0
 User-agent: Watchbot
@@ -145,9 +146,10 @@ User-agent: eMoney Advisor
 User-agent: elmah.io Uptime Monitoring
 User-agent: klaviyo
 User-agent: logicmonitor
+User-agent: netEstate Imprint Crawler
 User-agent: omgili
 User-agent: upday
-User-agent: webpagetest
+User-agent: uptimedoctor
 Disallow: /
 
 User-agent: *
