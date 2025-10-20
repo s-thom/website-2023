@@ -9,6 +9,7 @@ User-agent: Amazonbot
 User-agent: Applebot
 User-agent: Applebot-Extended
 User-agent: Audisto Crawler
+User-agent: Automaton
 User-agent: AwarioSmartBot
 User-agent: BestChange Bot
 User-agent: Better Uptime
@@ -52,11 +53,13 @@ User-agent: Gemini-Deep-Research
 User-agent: Ghost Inspector
 User-agent: Google AdsBot
 User-agent: Google Adsense: Mediapartners-Google
+User-agent: Google Firebase
 User-agent: Google NotebookLM
 User-agent: Google Schema Markup Testing Tool
 User-agent: Google-CloudVertexBot
 User-agent: Google-Display-Ads-Bot
 User-agent: Google-Extended
+User-agent: Google-NotebookLM
 User-agent: GoogleOther
 User-agent: Grafana's Synthetic Monitoring
 User-agent: HetrixTools
@@ -70,6 +73,7 @@ User-agent: InternetArchiveBot
 User-agent: Jagged Pixel UptimeBot
 User-agent: Jetpack
 User-agent: Kangaroo Bot
+User-agent: KargoBot-Artemis
 User-agent: Kinsta
 User-agent: LeikiBot
 User-agent: LinerBot
@@ -112,14 +116,14 @@ User-agent: Rackspace
 User-agent: Reelevant
 User-agent: SE Ranking Bot
 User-agent: Sentry Uptime Monitoring
+User-agent: ShapBot
 User-agent: Site24x7
 User-agent: SiteUpTimeBot
-User-agent: Slickstream
 User-agent: SmartologyBot
 User-agent: SolarWinds Observability
-User-agent: Spectate
 User-agent: Splunk
 User-agent: Splunk Synthetics
+User-agent: StatsDroneBot
 User-agent: StatusCake
 User-agent: Synthetic Bot
 User-agent: TTD Content
