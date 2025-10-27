@@ -49,7 +49,7 @@ const componentsWithResolvedLinks = await Promise.all(
 
     // We have a UUID-like URL it seems, so let's grab the page and the block (if there's a fragment)
     const pageId = pathMatch[1];
-    const blockId = url.hash;
+    const blockId = url.hash.replace(/^#/, "");
 
     const pageIdUuid = toProperUuid(pageId);
     const page = pageEntries.find((entry) => entry.id === pageIdUuid);
