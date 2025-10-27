@@ -26,17 +26,30 @@ const componentsWithResolvedLinks = await Promise.all(
       return component;
     }
 
-    // Links to other pages/blocks in Notion are always of the form `/<pageid>[#<blockid>]`, where
-    // the IDs are lower dase without hyphens
-    const notionIdsMatch = component.text.link.url.match(
-      /^\/([0-9a-f]{32})(?:#([0-9a-f]{32}))?$/,
-    );
-    if (!notionIdsMatch) {
+    // Links to other pages/blocks in Notion are always of the form `/<pageid>[?v=<id>&<other params>][#<blockid>]`, where
+    // the IDs are lower case without hyphens
+    let url: URL;
+    try {
+      let base = component.text.link.url.startsWith("/")
+        ? "https://www.notion.so"
+        : undefined;
+      url = new URL(component.text.link.url, base);
+    } catch (err) {
+      return component;
+    }
+
+    if (url.hostname !== "www.notion.so") {
+      return component;
+    }
+
+    const pathMatch = url.pathname.match(/^\/([0-9a-f]{32})$/);
+    if (!pathMatch) {
       return component;
     }
 
     // We have a UUID-like URL it seems, so let's grab the page and the block (if there's a fragment)
-    const [, pageId, blockId] = notionIdsMatch;
+    const pageId = pathMatch[1];
+    const blockId = url.hash;
 
     const pageIdUuid = toProperUuid(pageId);
     const page = pageEntries.find((entry) => entry.id === pageIdUuid);
