@@ -1,8 +1,8 @@
 User-agent: 360Monitoring
-User-agent: AI2Bot
 User-agent: ActiveComply Bot
 User-agent: AddSearchBot
 User-agent: AdsTxtCrawler
+User-agent: Ai2Bot
 User-agent: Alertsite by Smartbear
 User-agent: Amazon AdBot
 User-agent: Amazonbot
@@ -115,8 +115,8 @@ User-agent: Quantcastbot
 User-agent: Rackspace
 User-agent: Reelevant
 User-agent: SE Ranking Bot
+User-agent: SalesViewerBot
 User-agent: Sentry Uptime Monitoring
-User-agent: ShapBot
 User-agent: Site24x7
 User-agent: SiteUpTimeBot
 User-agent: SmartologyBot
@@ -141,12 +141,12 @@ User-agent: WPMU DEV Broken Link Checker
 User-agent: WPMUDEV Uptime Monitor 5.0
 User-agent: Watchbot
 User-agent: WebsitePulseBot
-User-agent: Webzio-Extended
 User-agent: WormlyBot
 User-agent: Yahoo Ad Monitoring
 User-agent: Yahoo Japan
 User-agent: Yext Inc
 User-agent: YouBot
+User-agent: atlassian-bot
 User-agent: bigsur.ai
 User-agent: catchpoint
 User-agent: cohere-training-data-crawler
@@ -156,9 +156,11 @@ User-agent: elmah.io Uptime Monitoring
 User-agent: klaviyo
 User-agent: logicmonitor
 User-agent: meta-externalagent
+User-agent: meta-webindexer
 User-agent: netEstate Imprint Crawler
 User-agent: omgili
 User-agent: uptimedoctor
+User-agent: webzio-extended
 Disallow: /
 
 User-agent: *
