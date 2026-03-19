@@ -24,7 +24,7 @@ function removeRecursive(element: Element) {
     currentElement = parent;
   } while (
     // Continue loop while element has no text or children remaining
-    !currentElement.textContent?.trim() &&
+    !currentElement.textContent.trim() &&
     currentElement.children.length === 0
   );
 }

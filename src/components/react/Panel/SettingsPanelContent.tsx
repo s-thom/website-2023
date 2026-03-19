@@ -64,6 +64,7 @@ export function SettingsPanelContent() {
     value: OptionsWithAuto[K],
   ) => {
     setOptionValue(key, value);
+    // eslint-disable-next-line react-hooks/immutability
     document.documentElement.dataset[key] = value;
   };
 

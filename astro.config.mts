@@ -42,12 +42,7 @@ export default defineConfig({
     react(),
     sitemap({ filter: (page) => !page.includes("/flummoxed/") }),
   ],
-  experimental: {
-    csp: false,
-    // csp: {
-    //   directives: ["default-src 'self'", "frame-ancestors 'none'"],
-    // },
-  },
+  security: { csp: false },
   scopedStyleStrategy: "class",
   build: {
     assets: "static/build",

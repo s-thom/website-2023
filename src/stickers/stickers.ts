@@ -697,18 +697,18 @@ export function createStickerElement(
   }
 
   if (options.draggable) {
-    void import(
-      "@atlaskit/pragmatic-drag-and-drop/dist/cjs/entry-point/element/adapter"
-    ).then(({ draggable }) => {
-      if (isDestroyed) {
-        return;
-      }
+    void import("@atlaskit/pragmatic-drag-and-drop/dist/cjs/entry-point/element/adapter").then(
+      ({ draggable }) => {
+        if (isDestroyed) {
+          return;
+        }
 
-      cleanupDraggable = draggable({
-        element: container,
-        getInitialData: () => options.draggableData ?? {},
-      });
-    });
+        cleanupDraggable = draggable({
+          element: container,
+          getInitialData: () => options.draggableData ?? {},
+        });
+      },
+    );
   }
 
   return {

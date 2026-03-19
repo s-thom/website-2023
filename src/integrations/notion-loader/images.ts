@@ -143,5 +143,5 @@ export async function getSavedImage(id: string): Promise<ImageData> {
   const filePath = join(CACHE_DIR, entry.path);
   const buffer = await readFile(filePath);
 
-  return { id, buffer: buffer.buffer as ArrayBuffer, mimeType: entry.mimeType };
+  return { id, buffer: buffer.buffer, mimeType: entry.mimeType };
 }

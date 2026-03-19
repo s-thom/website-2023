@@ -44,8 +44,9 @@ export interface ColorRgbOption extends BaseOption<[number, number, number]> {
   type: "rgb";
 }
 
-export interface ColorRgbAOption
-  extends BaseOption<[number, number, number, number]> {
+export interface ColorRgbAOption extends BaseOption<
+  [number, number, number, number]
+> {
   type: "rgba";
 }
 

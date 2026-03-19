@@ -11,6 +11,7 @@ import type {
 } from "@notionhq/client/build/src/api-endpoints";
 import type { Loader } from "astro/loaders";
 import { z } from "astro/zod";
+import { compile } from "json-schema-to-typescript";
 import PQueue from "p-queue";
 import {
   runCustomIntegrationHook,
@@ -34,8 +35,9 @@ export interface Page<Properties extends object> {
   data: PageInfo<Properties>;
 }
 
-export interface NotionLoaderLoadedHookPayload<Properties extends object>
-  extends BaseCustomHookPayload {
+export interface NotionLoaderLoadedHookPayload<
+  Properties extends object,
+> extends BaseCustomHookPayload {
   collection: string;
   pages: Page<Properties>[];
 }
@@ -198,89 +200,97 @@ export function notionLoader(options: NotionLoaderOptions): Loader {
         },
       );
     },
-    schema: async () => {
+    createSchema: async () => {
       const database = await client.databases.retrieve({
         database_id: options.databaseId,
       });
 
-      const properties = Object.fromEntries(
-        Object.entries(database.properties).map(([key, property]) => {
-          let schema: z.ZodType;
-          switch (property.type) {
-            case "number":
-              schema = propertySchemas.number();
-              break;
-            case "formula":
-              schema = propertySchemas.formula();
-              break;
-            case "select":
-              schema = propertySchemas.select();
-              break;
-            case "multi_select":
-              schema = propertySchemas.multiSelect();
-              break;
-            case "status":
-              schema = propertySchemas.status();
-              break;
-            case "relation":
-              schema = propertySchemas.relation();
-              break;
-            case "rollup":
-              schema = propertySchemas.rollup();
-              break;
-            case "unique_id":
-              schema = propertySchemas.uniqueId();
-              break;
-            case "title":
-              schema = propertySchemas.title();
-              break;
-            case "rich_text":
-              schema = propertySchemas.richText();
-              break;
-            case "url":
-              schema = propertySchemas.url();
-              break;
-            case "people":
-              schema = propertySchemas.people();
-              break;
-            case "files":
-              schema = propertySchemas.files();
-              break;
-            case "email":
-              schema = propertySchemas.email();
-              break;
-            case "phone_number":
-              schema = propertySchemas.phoneNumber();
-              break;
-            case "date":
-              schema = propertySchemas.date();
-              break;
-            case "checkbox":
-              schema = propertySchemas.checkbox();
-              break;
-            case "created_by":
-              schema = propertySchemas.createdBy();
-              break;
-            case "created_time":
-              schema = propertySchemas.createdTime();
-              break;
-            case "last_edited_by":
-              schema = propertySchemas.lastEditedBy();
-              break;
-            case "last_edited_time":
-              schema = propertySchemas.lastEditedTime();
-              break;
-            default:
-              throw new Error(
-                `Unknown property type ${(property as DatabaseObjectResponse["properties"][""]).type}`,
-              );
-          }
+      const properties: Record<string, z.ZodType> = {};
+      for (const [key, property] of Object.entries(database.properties)) {
+        let schema: z.ZodType;
+        switch (property.type) {
+          case "number":
+            schema = propertySchemas.number();
+            break;
+          case "formula":
+            schema = propertySchemas.formula();
+            break;
+          case "select":
+            schema = propertySchemas.select();
+            break;
+          case "multi_select":
+            schema = propertySchemas.multiSelect();
+            break;
+          case "status":
+            schema = propertySchemas.status();
+            break;
+          case "relation":
+            schema = propertySchemas.relation();
+            break;
+          case "rollup":
+            schema = propertySchemas.rollup();
+            break;
+          case "unique_id":
+            schema = propertySchemas.uniqueId();
+            break;
+          case "title":
+            schema = propertySchemas.title();
+            break;
+          case "rich_text":
+            schema = propertySchemas.richText();
+            break;
+          case "url":
+            schema = propertySchemas.url();
+            break;
+          case "people":
+            schema = propertySchemas.people();
+            break;
+          case "files":
+            schema = propertySchemas.files();
+            break;
+          case "email":
+            schema = propertySchemas.email();
+            break;
+          case "phone_number":
+            schema = propertySchemas.phoneNumber();
+            break;
+          case "date":
+            schema = propertySchemas.date();
+            break;
+          case "checkbox":
+            schema = propertySchemas.checkbox();
+            break;
+          case "created_by":
+            schema = propertySchemas.createdBy();
+            break;
+          case "created_time":
+            schema = propertySchemas.createdTime();
+            break;
+          case "last_edited_by":
+            schema = propertySchemas.lastEditedBy();
+            break;
+          case "last_edited_time":
+            schema = propertySchemas.lastEditedTime();
+            break;
+          default:
+            throw new Error(
+              `Unknown property type ${(property as DatabaseObjectResponse["properties"][""]).type}`,
+            );
+        }
 
-          return [key, schema];
-        }),
-      ) as z.ZodRawShape;
+        properties[key] = schema;
+      }
 
-      return notionLoaderSchema.extend({ properties: z.object(properties) });
+      const finalSchema = notionLoaderSchema.extend({
+        properties: z.object(properties),
+      });
+      const jsonSchema = finalSchema.toJSONSchema();
+      const typeString = await compile(jsonSchema as never, "Entry");
+
+      return {
+        schema: notionLoaderSchema.extend({ properties: z.object(properties) }),
+        types: typeString,
+      };
     },
   };
 }

@@ -16,9 +16,9 @@ import {
 } from "./constants";
 import { addToManifest, getManifest, removeFromManifest } from "./manifest";
 
-const fetchQueue = new PQueue({ concurrency: 3, throwOnTimeout: true });
-const convertQueue = new PQueue({ concurrency: 3, throwOnTimeout: true });
-const writeQueue = new PQueue({ concurrency: 3, throwOnTimeout: true });
+const fetchQueue = new PQueue({ concurrency: 3 });
+const convertQueue = new PQueue({ concurrency: 3 });
+const writeQueue = new PQueue({ concurrency: 3 });
 
 const RAW_IMAGE_CACHE = new Map<string, Promise<ImageSourceData>>();
 
@@ -179,9 +179,6 @@ async function convertImageForWidth(
       const pathForBrowser = `/${path.split(sep).join(posix.sep)}`;
 
       const nodeBuffer = await convertQueue.add(() => clone.toBuffer());
-      if (!nodeBuffer) {
-        throw new Error("Conversion exceeded timeout");
-      }
       await writeQueue.add(async () => {
         await writeFile(publicFilePath, nodeBuffer);
         await copyFile(publicFilePath, cacheFilePath);
@@ -289,7 +286,7 @@ export async function getImageInfo(
     if (!RAW_IMAGE_CACHE.has(id)) {
       RAW_IMAGE_CACHE.set(
         id,
-        fetchQueue.add(() => getImage(), { throwOnTimeout: true }),
+        fetchQueue.add(() => getImage()),
       );
     }
     return RAW_IMAGE_CACHE.get(id)!;

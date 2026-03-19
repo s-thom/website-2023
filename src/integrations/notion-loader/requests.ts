@@ -22,7 +22,6 @@ const NOISY_LOGS = import.meta.env.NOISY_LOGS === "true";
 
 const requestQueue = new PQueue({
   concurrency: 4,
-  throwOnTimeout: true,
   interval: 1000,
   intervalCap: 3,
 });
@@ -31,7 +30,7 @@ function withQueue<Params extends unknown[], Return>(
   fn: (...args: Params) => Promise<Return>,
 ): (...args: Params) => Promise<Return> {
   function wrapper(...args: Params) {
-    return requestQueue.add(() => fn(...args), { throwOnTimeout: true });
+    return requestQueue.add(() => fn(...args));
   }
 
   Object.defineProperty(wrapper, "name", { value: `withQueue(${fn.name})` });

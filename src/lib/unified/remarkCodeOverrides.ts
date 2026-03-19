@@ -33,7 +33,7 @@ export interface RemarkCodeOverridesOptions {
    *
    * `default` is a special case.
    */
-  mappers: Record<string, (node: Code) => RootContent[]>;
+  mappers?: Record<string, (node: Code) => RootContent[]>;
 }
 
 export function remarkCodeOverrides({

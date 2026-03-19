@@ -4,7 +4,7 @@ import { join } from "node:path";
 import PQueue from "p-queue";
 import sharp, { type Sharp } from "sharp";
 
-const convertQueue = new PQueue({ concurrency: 3, throwOnTimeout: true });
+const convertQueue = new PQueue({ concurrency: 3 });
 
 const MASK_SIZE = 512;
 

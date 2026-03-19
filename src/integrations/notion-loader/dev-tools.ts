@@ -89,7 +89,7 @@ const notionCacheDevTools: DevToolbarApp = {
           noNotion.style.display = "none";
           yesNotion.style.display = "block";
 
-          const pageId = pageIdElement.textContent ?? "";
+          const pageId = pageIdElement.textContent || "";
 
           idParagraphId.textContent = pageId;
           actionsLink.href = `https://notion.so/${pageId.replace(/-/g, "")}`;

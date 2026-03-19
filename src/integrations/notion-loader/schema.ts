@@ -25,14 +25,14 @@ const externalSchema = z.object({
 });
 const userPartialSchema = z.object({
   object: z.literal("user"),
-  id: z.string().uuid(),
+  id: z.uuid(),
 });
 
 const parentSchema = z.discriminatedUnion("type", [
-  z.object({ type: z.literal("database_id"), database_id: z.string().uuid() }),
-  z.object({ type: z.literal("page_id"), page_id: z.string().uuid() }),
+  z.object({ type: z.literal("database_id"), database_id: z.uuid() }),
+  z.object({ type: z.literal("page_id"), page_id: z.uuid() }),
   z.object({ type: z.literal("workspace"), workspace: z.literal(true) }),
-  z.object({ type: z.literal("block_id"), block_id: z.string().uuid() }),
+  z.object({ type: z.literal("block_id"), block_id: z.uuid() }),
 ]);
 
 const textColorsSchema = z.union([
@@ -294,9 +294,9 @@ const propertiesSchema: z.ZodType<PageObjectResponse["properties"][string]> =
 
 const pageSchema: z.ZodType<PageObjectResponse> = z.object({
   object: z.literal("page"),
-  id: z.string().uuid(),
-  created_time: z.string().datetime(),
-  last_edited_time: z.string().datetime(),
+  id: z.uuid(),
+  created_time: z.iso.datetime(),
+  last_edited_time: z.iso.datetime(),
   created_by: userPartialSchema,
   last_edited_by: userPartialSchema,
   cover: z.discriminatedUnion("type", [externalSchema, fileSchema]).nullable(),
@@ -314,10 +314,10 @@ const pageSchema: z.ZodType<PageObjectResponse> = z.object({
 // #region Blocks
 const baseBlockExtends = {
   object: z.literal("block"),
-  id: z.string().uuid(),
+  id: z.uuid(),
   parent: parentSchema,
-  created_time: z.string().datetime(),
-  last_edited_time: z.string().datetime(),
+  created_time: z.iso.datetime(),
+  last_edited_time: z.iso.datetime(),
   created_by: userPartialSchema,
   last_edited_by: userPartialSchema,
   has_children: z.boolean(),

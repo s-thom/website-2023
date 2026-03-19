@@ -17,7 +17,7 @@ const getRobotoBuffer = pMemoize(() =>
   ),
 );
 
-const writeQueue = new PQueue({ concurrency: 3, throwOnTimeout: true });
+const writeQueue = new PQueue({ concurrency: 3 });
 
 export interface GenerateOgImageOptions {
   id: string;

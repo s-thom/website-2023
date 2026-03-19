@@ -1,10 +1,11 @@
-import { defineCollection, z } from "astro:content";
+import { z } from "astro/zod";
+import { defineCollection } from "astro:content";
 import {
   notionLoader,
   notionLoaderSchema,
   propertySchemas,
-} from "../integrations/notion-loader";
-import { PAGES_COLLECTION_ID, PROJECTS_COLLECTION_ID } from "../lib/constants";
+} from "./integrations/notion-loader";
+import { PAGES_COLLECTION_ID, PROJECTS_COLLECTION_ID } from "./lib/constants";
 
 const pagesLoader = notionLoader({
   token: import.meta.env.NOTION_TOKEN,
