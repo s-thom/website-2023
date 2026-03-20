@@ -1,10 +1,10 @@
 ---
 import { type DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
-import { getCollection } from "astro:content";
+import { getRelatedPosts } from "../../../integrations/related-posts";
 import { BLOG_PAGE_ID } from "../../../lib/constants";
+import { getPagesCollection } from "../../../lib/notion/collections";
 import StickerUnlock from "../../stickers/StickerUnlock.astro";
 import BlogListPageItem from "./BlogListPageItem.astro";
-import { getRelatedPosts } from "../../../integrations/related-posts";
 
 export interface Props {
   page: DatabaseObjectResponse;
@@ -12,12 +12,10 @@ export interface Props {
 
 const { page } = Astro.props;
 
-const blogIndexEntries = await getCollection(
-  "pages",
+const blogIndexEntries = await getPagesCollection(
   (entry) => entry.id === BLOG_PAGE_ID,
 );
-const blogEntries = await getCollection(
-  "pages",
+const blogEntries = await getPagesCollection(
   (entry) => entry.data.properties.Type?.name === "blog",
 );
 

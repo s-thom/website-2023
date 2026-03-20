@@ -1,13 +1,12 @@
 import rss from "@astrojs/rss";
 import type { APIContext } from "astro";
-import { getCollection } from "astro:content";
 import { join } from "node:path/posix";
+import { getPagesCollection } from "../../lib/notion/collections";
 import { getPageTitleComponents } from "../../lib/notion/titles";
 import { richTextToUnformattedString } from "../../lib/notion/util";
 
 export async function GET(context: APIContext) {
-  const listedBlogPosts = await getCollection(
-    "pages",
+  const listedBlogPosts = await getPagesCollection(
     (entry) =>
       entry.data.properties.Type?.name === "blog" &&
       entry.data.properties.Status?.name === "Listed",

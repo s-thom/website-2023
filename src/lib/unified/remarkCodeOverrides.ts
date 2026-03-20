@@ -1,7 +1,7 @@
-import type { getCollection } from "astro:content";
 import type { Code, Nodes, Root, RootContent } from "mdast";
 import { join } from "node:path/posix";
 import type { Transformer } from "unified";
+import type { getPagesCollection } from "../notion/collections";
 import { getPageTitleComponents } from "../notion/titles";
 import { getCodeBlockContentInfo } from "../shiki";
 import { richTextToMarkdownNodes } from "./notionToRemark";
@@ -63,7 +63,7 @@ export function remarkCodeOverrides({
 }
 
 export function getMapBlogCollection(
-  blogEntries: Awaited<ReturnType<typeof getCollection<"pages">>>,
+  blogEntries: Awaited<ReturnType<typeof getPagesCollection>>,
   pathPrefix?: string,
 ) {
   return function mapBlogCollection(): RootContent[] {

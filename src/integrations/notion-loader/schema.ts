@@ -142,8 +142,8 @@ const richTextSchema: z.ZodType<RichTextItemResponse> = z.discriminatedUnion(
 // #region Database properties
 export const propertySchemas = {
   checkbox: () => z.boolean(),
-  createdBy: () => userPartialSchema,
-  createdTime: () => z.string(),
+  created_by: () => userPartialSchema,
+  created_time: () => z.string(),
   date: () => datePropertyValueSchema.nullable(),
   email: () => z.string().nullable(),
   files: () =>
@@ -160,19 +160,19 @@ export const propertySchemas = {
       z.object({ type: z.literal("boolean"), boolean: z.boolean() }),
       z.object({ type: z.literal("date"), date: datePropertyValueSchema }),
     ]),
-  lastEditedBy: () => userPartialSchema,
-  lastEditedTime: () => z.string(),
-  multiSelect: () => z.array(selectPropertyValueSchema),
+  last_edited_by: () => userPartialSchema,
+  last_edited_time: () => z.string(),
+  multi_select: () => z.array(selectPropertyValueSchema),
   number: () => z.number().nullable(),
   people: () => z.array(userPartialSchema),
-  phoneNumber: () => z.string().nullable(),
+  phone_number: () => z.string().nullable(),
   relation: () => z.array(z.object({ id: z.string() })),
-  richText: () => z.array(richTextSchema),
+  rich_text: () => z.array(richTextSchema),
   rollup: () => z.never({ message: "Rollup schema not implemented" }),
   select: () => selectPropertyValueSchema.nullable(),
   status: () => selectPropertyValueSchema.nullable(),
   title: () => z.array(richTextSchema),
-  uniqueId: () =>
+  unique_id: () =>
     z.object({ prefix: z.string().nullable(), number: z.number().nullable() }),
   url: () => z.string().nullable(),
 };
@@ -186,7 +186,7 @@ const titlePropertySchema = basePropertySchema.extend({
 });
 const richTextPropertySchema = basePropertySchema.extend({
   type: z.literal("rich_text"),
-  rich_text: propertySchemas.richText(),
+  rich_text: propertySchemas.rich_text(),
 });
 const numberPropertySchema = basePropertySchema.extend({
   type: z.literal("number"),
@@ -202,7 +202,7 @@ const statusPropertySchema = basePropertySchema.extend({
 });
 const multiSelectPropertySchema = basePropertySchema.extend({
   type: z.literal("multi_select"),
-  multi_select: propertySchemas.multiSelect(),
+  multi_select: propertySchemas.multi_select(),
 });
 const datePropertySchema = basePropertySchema.extend({
   type: z.literal("date"),
@@ -242,28 +242,28 @@ const emailPropertySchema = basePropertySchema.extend({
 });
 const phoneNumberPropertySchema = basePropertySchema.extend({
   type: z.literal("phone_number"),
-  phone_number: propertySchemas.phoneNumber(),
+  phone_number: propertySchemas.phone_number(),
 });
 const createdTimePropertySchema = basePropertySchema.extend({
   type: z.literal("created_time"),
-  created_time: propertySchemas.createdTime(),
+  created_time: propertySchemas.created_time(),
 });
 const createdByPropertySchema = basePropertySchema.extend({
   type: z.literal("created_by"),
-  created_by: propertySchemas.createdBy(),
+  created_by: propertySchemas.created_by(),
   userPartialSchema,
 });
 const lastEditedTimePropertySchema = basePropertySchema.extend({
   type: z.literal("last_edited_time"),
-  last_edited_time: propertySchemas.lastEditedTime(),
+  last_edited_time: propertySchemas.last_edited_time(),
 });
 const lastEditedByPropertySchema = basePropertySchema.extend({
   type: z.literal("last_edited_by"),
-  last_edited_by: propertySchemas.lastEditedBy(),
+  last_edited_by: propertySchemas.last_edited_by(),
 });
 const uniqueIdPropertySchema = basePropertySchema.extend({
   type: z.literal("unique_id"),
-  unique_id: propertySchemas.uniqueId(),
+  unique_id: propertySchemas.unique_id(),
 });
 
 const propertiesSchema: z.ZodType<PageObjectResponse["properties"][string]> =

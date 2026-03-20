@@ -25,7 +25,6 @@ const INTERNAL_LOADER_VERSION = "2";
 export interface NotionLoaderOptions {
   token: string;
   databaseId: string;
-  sorts?: QueryDatabaseParameters["sorts"];
   filter?: QueryDatabaseParameters["filter"];
   verboseLogs?: boolean;
 }
@@ -106,7 +105,6 @@ export function notionLoader(options: NotionLoaderOptions): Loader {
       const pagesIterable = iteratePaginatedAPI(client.databases.query, {
         database_id: options.databaseId,
         filter: options.filter,
-        sorts: options.sorts,
       });
 
       // Pages that get found will be removed from this set, leaving only deleted ones by the end.
@@ -219,7 +217,7 @@ export function notionLoader(options: NotionLoaderOptions): Loader {
             schema = propertySchemas.select();
             break;
           case "multi_select":
-            schema = propertySchemas.multiSelect();
+            schema = propertySchemas.multi_select();
             break;
           case "status":
             schema = propertySchemas.status();
@@ -231,13 +229,13 @@ export function notionLoader(options: NotionLoaderOptions): Loader {
             schema = propertySchemas.rollup();
             break;
           case "unique_id":
-            schema = propertySchemas.uniqueId();
+            schema = propertySchemas.unique_id();
             break;
           case "title":
             schema = propertySchemas.title();
             break;
           case "rich_text":
-            schema = propertySchemas.richText();
+            schema = propertySchemas.rich_text();
             break;
           case "url":
             schema = propertySchemas.url();
@@ -252,7 +250,7 @@ export function notionLoader(options: NotionLoaderOptions): Loader {
             schema = propertySchemas.email();
             break;
           case "phone_number":
-            schema = propertySchemas.phoneNumber();
+            schema = propertySchemas.phone_number();
             break;
           case "date":
             schema = propertySchemas.date();
@@ -261,16 +259,16 @@ export function notionLoader(options: NotionLoaderOptions): Loader {
             schema = propertySchemas.checkbox();
             break;
           case "created_by":
-            schema = propertySchemas.createdBy();
+            schema = propertySchemas.created_by();
             break;
           case "created_time":
-            schema = propertySchemas.createdTime();
+            schema = propertySchemas.created_time();
             break;
           case "last_edited_by":
-            schema = propertySchemas.lastEditedBy();
+            schema = propertySchemas.last_edited_by();
             break;
           case "last_edited_time":
-            schema = propertySchemas.lastEditedTime();
+            schema = propertySchemas.last_edited_time();
             break;
           default:
             throw new Error(

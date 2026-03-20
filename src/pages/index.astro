@@ -1,5 +1,4 @@
 ---
-import { getCollection } from "astro:content";
 import LocalImage from "../components/Images/LocalImage.astro";
 import BlogListPageItem from "../components/notion/blog/BlogListPageItem.astro";
 import AboutLinks from "../components/notion/overrides/code-blocks/AboutLinks.astro";
@@ -7,6 +6,10 @@ import ProjectsItem from "../components/notion/overrides/projects/ProjectsItem.a
 import OffsetBox from "../components/site/OffsetBox.astro";
 import ShaderBackdrop from "../components/site/ShaderBackdrop.astro";
 import StandalonePageLayout from "../layouts/StandalonePageLayout.astro";
+import {
+  getPagesCollection,
+  getProjectsCollection,
+} from "../lib/notion/collections";
 import { generateOgImage } from "../lib/og-images";
 
 const NUM_PROJECTS_TO_SHOW = 3;
@@ -19,14 +22,12 @@ const ogImage = await generateOgImage({
 });
 
 const projects = (
-  await getCollection(
-    "projects",
+  await getProjectsCollection(
     (entry) => entry.data.properties.Status?.name === "Complete",
   )
 ).slice(0, NUM_PROJECTS_TO_SHOW);
 const blogPosts = (
-  await getCollection(
-    "pages",
+  await getPagesCollection(
     (entry) => entry.data.properties.Type?.name === "blog",
   )
 ).slice(0, NUM_BLOG_POSTS_TO_SHOW);

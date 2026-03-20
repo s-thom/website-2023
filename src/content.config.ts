@@ -24,12 +24,6 @@ const pagesLoader = notionLoader({
           },
     ],
   },
-  sorts: [
-    { property: "Status", direction: "descending" },
-    { property: "Published", direction: "descending" },
-    { property: "Last edited time", direction: "descending" },
-    { property: "Created", direction: "descending" },
-  ],
 });
 
 const projectsLoader = notionLoader({
@@ -39,10 +33,6 @@ const projectsLoader = notionLoader({
   filter: {
     and: [{ property: "Visibility", checkbox: { equals: true } }],
   },
-  sorts: [
-    { property: "Status", direction: "ascending" },
-    { property: "Sorting", direction: "descending" },
-  ],
 });
 
 export const collections = {
@@ -50,11 +40,11 @@ export const collections = {
     loader: pagesLoader,
     schema: notionLoaderSchema.extend({
       properties: z.object({
-        Slug: propertySchemas.richText(),
+        Slug: propertySchemas.rich_text(),
         Published: propertySchemas.date(),
         Edited: propertySchemas.date(),
-        "Cover Source": propertySchemas.richText(),
-        Tags: propertySchemas.multiSelect(),
+        "Cover Source": propertySchemas.rich_text(),
+        Tags: propertySchemas.multi_select(),
         "Page View Stickers": propertySchemas.select(),
         Type: propertySchemas.select(),
         Theme: propertySchemas.select(),
@@ -67,7 +57,7 @@ export const collections = {
     schema: notionLoaderSchema.extend({
       properties: z.object({
         Status: propertySchemas.status(),
-        GitHub: propertySchemas.richText(),
+        GitHub: propertySchemas.rich_text(),
         URL: propertySchemas.url(),
       }),
     }),

@@ -1,5 +1,5 @@
 ---
-import { getCollection } from "astro:content";
+import { getProjectsCollection } from "../../../../lib/notion/collections";
 import type { BaseBlockComponentProps } from "../../blocks/types";
 import ProjectsItem from "./ProjectsItem.astro";
 
@@ -9,8 +9,7 @@ export interface Props extends BaseBlockComponentProps {
 
 const { block, status } = Astro.props;
 
-const entries = await getCollection(
-  "projects",
+const entries = await getProjectsCollection(
   (entry) => entry.data.properties.Status?.name === status,
 );
 ---
