@@ -21,7 +21,9 @@ const titleComponents = getPageTitleComponents(page);
     <NotionBackdrop
       page={page}
       widths={[360]}
-      sizes="(min-width: 900) 540px, 100vw"
+      densities={[1]}
+      sizes="100vw"
+      noIntrinsicWidth
     />
   </div>
   <div class="info flow small-box">
@@ -55,6 +57,6 @@ const titleComponents = getPageTitleComponents(page);
     margin: 0;
     color: var(--color-text-header);
     word-break: break-word;
-    font-weight: 800;
+    font-weight: 700;
   }
 </style>

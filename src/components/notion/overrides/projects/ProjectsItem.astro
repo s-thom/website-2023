@@ -7,6 +7,7 @@ import { richTextToUnformattedString } from "../../../../lib/notion/util";
 import NotionRenderer from "../../blocks/NotionRenderer.astro";
 import NotionBackdrop from "../../common/NotionBackdrop.astro";
 import RichText from "../../common/RichText.astro";
+import { DEFAULT_IMAGE_DENSITIES } from "../../../Images/constants";
 
 export interface Props {
   data: PageInfo<{ URL: string | null; GitHub: RichTextItemResponse[] }>;
@@ -54,7 +55,12 @@ const githubFragment =
   {
     showImage && (
       <div class="projects-item-image">
-        <NotionBackdrop page={page} widths={widths} sizes={sizes} />
+        <NotionBackdrop
+          page={page}
+          widths={widths}
+          densities={DEFAULT_IMAGE_DENSITIES}
+          sizes={sizes}
+        />
       </div>
     )
   }
@@ -138,6 +144,6 @@ const githubFragment =
   }
 
   .projects-item-title {
-    font-weight: 800;
+    font-weight: 700;
   }
 </style>

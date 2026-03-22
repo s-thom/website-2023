@@ -86,7 +86,8 @@ const colorAngle = `${Math.round(random() * 360)}deg`;
     class="notion-page-backdrop"
     page={page}
     slot="page-backdrop"
-    widths={[360, 1280, 1920]}
+    widths={[360]}
+    densities={[1]}
     noIntrinsicWidth
     sizes="100vw"
     shader={{ enabled: true }}
@@ -95,13 +96,6 @@ const colorAngle = `${Math.round(random() * 360)}deg`;
   <DevOnly>
     <div id="DEV-notion-page-id" style={{ display: "none" }}>{page.id}</div>
   </DevOnly>
-
-  <article
-    class:list={["content flow", border && "big-box-border"]}
-    id="content"
-  >
-    <slot />
-  </article>
 
   {
     showTableOfContents && (
@@ -113,6 +107,13 @@ const colorAngle = `${Math.round(random() * 360)}deg`;
       </aside>
     )
   }
+
+  <article
+    class:list={["content flow", border && "big-box-border"]}
+    id="content"
+  >
+    <slot />
+  </article>
 
   <slot name="page-footer" slot="page-footer" />
 </PageWithHeaderLayout>
@@ -127,6 +128,7 @@ const colorAngle = `${Math.round(random() * 360)}deg`;
 <style>
   .content {
     padding: var(--big-box-spacing-small);
+    padding-inline: 0;
   }
 
   @media (min-width: 600px) {
