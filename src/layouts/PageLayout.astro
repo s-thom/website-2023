@@ -1,4 +1,5 @@
 ---
+import { Font } from "astro:assets";
 import PageMeta from "../components/PageMeta.astro";
 import StickersHead from "../components/StickersHead.astro";
 import { Panel } from "../components/react/Panel/index.tsx";
@@ -27,6 +28,9 @@ const { id, meta, stickers } = Astro.props;
 <MinimalLayout>
   <Fragment slot="head">
     <PageMeta meta={meta} />
+    <Font cssVariable="--font-parclo-serif" />
+    <Font cssVariable="--font-source-code" />
+    <Font cssVariable="--font-trunic" />
     <StickersHead
       pageId={id}
       enabled={stickers.enabled}

@@ -1,14 +1,3 @@
-@import "./fonts/source-sans.css";
-@import "./fonts/source-serif.css";
-@import "./fonts/source-code.css";
-@import "./fonts/comic-sans.css";
-@import "./fonts/comic-code.css";
-@import "./fonts/quadraat-offc.css";
-@import "./fonts/macsminecraft.css";
-@import "./fonts/monocraft.css";
-@import "./fonts/parclo-serif.css";
-@import "./fonts/trunic-variable.css";
-
 :root {
   --size-base: 1.2rem;
 
@@ -48,69 +37,15 @@
     calc(3.55 * var(--size-base))
   );
 
-  --font-family-body:
-    "Parclo Serif Trial", "Adjusted Parclo Serif Fallback", "Source Serif 4",
-    "Adjusted Source Serif Fallback", serif;
-  --font-family-mono:
-    "Source Code Pro", "Cascadia Code", Menlo, Consolas, "DejaVu Sans Mono",
-    ui-monospace, monospace;
-  font-family: var(--font-family-body);
-}
-
-[data-font="auto"] {
-  --font-family-body:
-    "Parclo Serif Trial", "Adjusted Parclo Serif Fallback", "Source Serif 4",
-    "Adjusted Source Serif Fallback", serif;
-  font-family: var(--font-family-body);
-}
-
-[data-font="serif"] {
-  --font-family-body:
-    "Parclo Serif Trial", "Adjusted Parclo Serif Fallback", "Source Serif 4",
-    "Adjusted Source Serif Fallback", serif;
-  font-family: var(--font-family-body);
-}
-
-[data-font="sans-serif"] {
-  --font-family-body:
-    "Source Sans 3", "Adjusted Source Sans Fallback", system-ui, sans-serif;
-  font-family: var(--font-family-body);
-}
-
-[data-font="comic-sans"] {
-  --font-family-body:
-    "Comic Sans MS", "Brush Script MT", "Comic Sans MS Remote", cursive;
-  --font-family-mono: "Comic Code", ui-monospace, monospace;
-  font-family: var(--font-family-body);
+  font-family: var(--font-parclo-serif);
 }
 
 [data-font="trunic"] {
-  --font-family-body: "Trunic", sans-serif;
-  font-family: var(--font-family-body);
-}
-
-[data-theme="bg3"]:not([data-font]),
-[data-theme="bg3"][data-font="auto"],
-[data-theme="bg3"] [data-font="auto"],
-[data-font="bg3"] {
-  --font-family-body:
-    "Quadraat Offc Pro", "Adjusted BG3 Fallback", Charter, "Bitstream Charter",
-    "Sitka Text", Cambria, serif;
-  font-family: var(--font-family-body);
-}
-
-[data-theme="minecraft"]:not([data-font]),
-[data-theme="minecraft"][data-font="auto"],
-[data-theme="minecraft"] [data-font="auto"],
-[data-font="minecraft"] {
-  --font-family-body:
-    "macsMinecraft", "Adjusted macsMinecraft Fallback", sans-serif;
-  --font-family-mono: "Monocraft", ui-monospace, monospace;
-  font-family: var(--font-family-body);
+  font-family: var(--font-trunic);
 }
 
 body {
-  font-family: var(--font-family-body);
+  font-family: var(--font-parclo-serif);
   font-size: var(--size-step-0);
 }
 
@@ -149,7 +84,7 @@ blockquote {
 
 .text-code,
 code {
-  font-family: var(--font-family-mono);
+  font-family: var(--font-source-code);
   font-weight: 400;
 }
 
