@@ -13,18 +13,13 @@ import "./panel.css";
 const useIdempotentLayoutEffect =
   "window" in globalThis ? useLayoutEffect : useEffect;
 
-const SettingsPanelContent = lazy(() =>
-  import("./SettingsPanelContent.tsx").then((module) => ({
-    default: module.SettingsPanelContent,
-  })),
-);
 const StickersPanelContent = lazy(() =>
   import("./StickersPanelContent.tsx").then((module) => ({
     default: module.StickersPanelContent,
   })),
 );
 
-type PanelTypes = "settings" | "stickers" | "none";
+type PanelTypes = "stickers" | "none";
 
 export function Panel() {
   const [isClient, setIsClient] = useState(false);
@@ -67,7 +62,7 @@ export function Panel() {
         aria-label="Toggle preferences"
         style={{ "--handle-index": 0 } as never}
         onClick={() => {
-          togglePanel("settings");
+          togglePanel("stickers");
         }}
       >
         <svg
@@ -113,7 +108,6 @@ export function Panel() {
       </button>
       <div className={clsx("side-panel-content")}>
         <Suspense fallback={<LoadingPanelContent />}>
-          {selectedPanel === "settings" && <SettingsPanelContent />}
           {selectedPanel === "stickers" && <StickersPanelContent />}
         </Suspense>
       </div>
