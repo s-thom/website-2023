@@ -2,7 +2,6 @@
 import { Font } from "astro:assets";
 import PageMeta from "../components/PageMeta.astro";
 import StickersHead from "../components/StickersHead.astro";
-import { Panel } from "../components/react/Panel/index.tsx";
 import { StickerAnimator } from "../components/react/StickerAnimator/index.tsx";
 import { StickerPageDropZone } from "../components/react/StickerPageDropZone/index.tsx";
 import SettingsInitialLoader from "../components/site/SettingsInitialLoader.astro";
@@ -54,6 +53,4 @@ const { id, meta, stickers } = Astro.props;
 
   {stickers.enabled && <StickerPageDropZone pageId={id} client:stickers={id} />}
   {stickers.enabled && <StickerAnimator client:stickers={id} />}
-
-  <Panel client:idle />
 </MinimalLayout>
