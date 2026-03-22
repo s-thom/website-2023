@@ -17,6 +17,7 @@ export interface Props {
   noIntrinsicWidth?: boolean;
   sizes?: string;
   class?: string;
+  shouldBlur?: boolean;
 }
 
 const {
@@ -27,6 +28,7 @@ const {
   noIntrinsicWidth,
   sizes = "100vw",
   class: className,
+  shouldBlur,
 } = Astro.props;
 
 const imageClasses = clsx(className, "notion-backdrop-image");
@@ -36,7 +38,13 @@ const imageInfo = page.cover
   : undefined;
 ---
 
-<div class="notion-backdrop">
+<div
+  class:list={[
+    "notion-backdrop",
+    shouldBlur &&
+      (imageInfo ? "dark-blur" : shader?.enabled ? "blur-only" : undefined),
+  ]}
+>
   {
     imageInfo ? (
       <Picture
@@ -60,3 +68,14 @@ const imageInfo = page.cover
     )
   }
 </div>
+
+<style>
+  .dark-blur {
+    filter: brightness(40%) saturate(80%) blur(10px);
+    scale: 1.1;
+  }
+  .blur-only {
+    filter: blur(10px);
+    scale: 1.1;
+  }
+</style>

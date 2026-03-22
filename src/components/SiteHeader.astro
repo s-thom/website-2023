@@ -7,16 +7,13 @@ import DefaultPageHeader from "./site/DefaultPageHeader.astro";
 export interface Props {
   navItems?: LinkInfo[];
   breadcrumbs?: LinkInfo[];
-  shouldBlur?: boolean;
 }
 
-const { navItems /* breadcrumbs, */, shouldBlur } = Astro.props;
+const { navItems /* breadcrumbs, */ } = Astro.props;
 ---
 
 <div class="header-area">
-  <div
-    class:list={["flow", "header-content", shouldBlur && "header-content-blur"]}
-  >
+  <div class:list={["flow", "header-content"]}>
     <header>
       <a href="/" class="site-name">
         <LocalImage
@@ -92,8 +89,5 @@ const { navItems /* breadcrumbs, */, shouldBlur } = Astro.props;
     word-break: break-word;
     font-weight: 975;
     font-style: italic;
-  }
-  .header-content-blur {
-    backdrop-filter: brightness(40%) saturate(80%) blur(10px);
   }
 </style>
