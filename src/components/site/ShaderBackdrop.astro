@@ -47,7 +47,6 @@ if (imageUrl) {
     convertLrgbToRgb,
     convertOklabToLrgb,
   } from "culori";
-  import { getOptionValue, subscribeToOption } from "../../lib/options";
   import fragment from "../../lib/shaders/backdrop.frag";
   import vertex from "../../lib/shaders/backdrop.vert";
   import { Interpolate, easeInOutCubic } from "../../lib/shaders/interpolate";
@@ -139,19 +138,17 @@ if (imageUrl) {
       }
       setUniformColors();
 
-      let prefersReducedMotion = getOptionValue("motion") === "reduced";
-      const interpolator = new Interpolate(
+      let motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+      const motionInterpolator = new Interpolate(
         easeInOutCubic,
-        hasBackground || prefersReducedMotion ? 0 : 1,
+        hasBackground || motionQuery.matches ? 0 : 1,
       );
-      subscribeToOption("motion", (value) => {
-        prefersReducedMotion = value === "reduced";
-        interpolator.setTarget(prefersReducedMotion ? 0 : 1, 1000);
+      motionQuery.addEventListener("change", (event) => {
+        motionInterpolator.setTarget(event.matches ? 0 : 1, 1000);
       });
 
-      let theme = getOptionValue("theme");
-      subscribeToOption("theme", (value) => {
-        theme = value;
+      let themeQuery = window.matchMedia("(prefers-color-scheme: dark)");
+      themeQuery.addEventListener("change", () => {
         requestAnimationFrame(() => {
           setUniformColors();
         });
@@ -183,22 +180,22 @@ if (imageUrl) {
             ((1 - canvasIntersectionRatio) *
               (MAX_PAINT_FACTOR - MIN_PAINT_FACTOR) +
               MIN_PAINT_FACTOR) *
-            interpolator.getValue();
-          uniforms.uPixelated = theme === "minecraft";
+            motionInterpolator.getValue();
+          uniforms.uPixelated = false; // Used to be true for the Minecraft theme
         },
         textures: hasBackground ? [{ src: backgroundUrl }] : undefined,
         onTexturesReady: () => {
-          interpolator.setTarget(prefersReducedMotion ? 0 : 1, 10_000);
+          motionInterpolator.setTarget(motionQuery.matches ? 0 : 1, 10_000);
           start();
         },
       });
 
-      interpolator.on("start", ({ current }) => {
+      motionInterpolator.on("start", ({ current }) => {
         if (current === 0) {
           start();
         }
       });
-      interpolator.on("end", ({ current }) => {
+      motionInterpolator.on("end", ({ current }) => {
         if (current === 0) {
           stop();
         }

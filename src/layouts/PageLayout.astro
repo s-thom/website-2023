@@ -1,27 +1,18 @@
 ---
 import { Font } from "astro:assets";
 import PageMeta from "../components/PageMeta.astro";
-import StickersHead from "../components/StickersHead.astro";
-import { StickerAnimator } from "../components/react/StickerAnimator/index.tsx";
-import { StickerPageDropZone } from "../components/react/StickerPageDropZone/index.tsx";
 import SettingsInitialLoader from "../components/site/SettingsInitialLoader.astro";
 import Web3IsAScam from "../components/site/Web3IsAScam.astro";
 import "../css/index.css";
 import type { PageMetaType } from "../lib/site/PageMeta";
-import type { StickerTypes } from "../stickers/stickers";
 import MinimalLayout from "./MinimalLayout.astro";
 
 export interface Props {
   id: string;
   meta: PageMetaType;
-  stickers: {
-    enabled: boolean;
-    unlockOnScroll?: boolean;
-    special?: StickerTypes;
-  };
 }
 
-const { id, meta, stickers } = Astro.props;
+const { meta } = Astro.props;
 ---
 
 <MinimalLayout>
@@ -30,12 +21,6 @@ const { id, meta, stickers } = Astro.props;
     <Font cssVariable="--font-parclo-serif" />
     <Font cssVariable="--font-source-code" />
     <Font cssVariable="--font-trunic" />
-    <StickersHead
-      pageId={id}
-      enabled={stickers.enabled}
-      unlockOnScroll={stickers.unlockOnScroll}
-      special={stickers.special}
-    />
     <slot name="head" />
     <Web3IsAScam />
     <SettingsInitialLoader />
@@ -50,7 +35,4 @@ const { id, meta, stickers } = Astro.props;
 
   <slot name="page-footer" />
   <slot name="site-footer" />
-
-  {stickers.enabled && <StickerPageDropZone pageId={id} client:stickers={id} />}
-  {stickers.enabled && <StickerAnimator client:stickers={id} />}
 </MinimalLayout>

@@ -7,7 +7,6 @@ import sthomImagesOld from "./src/integrations/images-old/integration";
 import sthomNotionLoader from "./src/integrations/notion-loader/integration";
 import sthomRelatedPosts from "./src/integrations/related-posts/integration";
 import sthomSliders from "./src/integrations/sliders-dev-tools/integration";
-import sthomStickersClientDirective from "./src/integrations/stickers-client-directive/integration";
 import { IMAGE_OPTIMISATION_ALLOWED_DOMAINS } from "./src/lib/constants";
 
 function getSiteUrl() {
@@ -27,7 +26,6 @@ function getSiteUrl() {
 export default defineConfig({
   site: getSiteUrl(),
   integrations: [
-    sthomStickersClientDirective(),
     sthomImagesOld(),
     sthomFavicon({ src: "./src/resources/profile-2023.jpg" }),
     sthomNotionLoader(),

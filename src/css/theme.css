@@ -44,18 +44,6 @@
   --color-notion-red: oklch(45% 0.08 23);
   --color-notion-red-background: oklch(92% 0.03 23);
 
-  --color-sticker-common: oklch(80% 0 0);
-  --color-sticker-common-background: oklch(92% 0 0);
-  --color-sticker-uncommon: oklch(60% 0.15 153);
-  --color-sticker-uncommon-background: oklch(92% 0.03 153);
-  --color-sticker-rare: oklch(63.68% 0.175 250);
-  --color-sticker-rare-background: oklch(92% 0.03 250);
-  --color-sticker-legendary: oklch(60% 0.25 340);
-  --color-sticker-legendary-background: oklch(92% 0.03 340);
-  --color-sticker-unique: oklch(82% 0.175 99);
-  --color-sticker-unique-background: oklch(92% 0.03 99);
-  --color-sticker-frame-shiny: #ffffff66;
-
   --header-backdrop-mask-opacity: 0.5;
 
   --border-radius: 4px;
@@ -64,8 +52,6 @@
 
   --spacing: 16px;
   --spacing-half: calc(var(--spacing) / 2);
-
-  --sticker-size: calc(var(--spacing) * 3);
 
   --big-box-color: var(--color-text);
   --big-box-spacing: calc(max(var(--spacing), 7vw));
@@ -124,31 +110,7 @@
     --color-notion-red: oklch(38% 0.08 23);
     --color-notion-red-background: oklch(30% 0.03 23);
 
-    --color-sticker-common: oklch(60% 0 0);
-    --color-sticker-common-background: oklch(30% 0 0);
-    --color-sticker-uncommon: oklch(50% 0.15 153);
-    --color-sticker-uncommon-background: oklch(30% 0.03 153);
-    --color-sticker-rare: oklch(63.68% 0.175 250);
-    --color-sticker-rare-background: oklch(30% 0.03 250);
-    --color-sticker-legendary: oklch(50% 0.25 340);
-    --color-sticker-legendary-background: oklch(30% 0.03 340);
-    --color-sticker-unique: oklch(70% 0.175 99);
-    --color-sticker-unique-background: oklch(30% 0.03 99);
-    --color-sticker-frame-shiny: #ffffff11;
-
     color-scheme: dark;
-  }
-}
-
-@media (min-width: 900px) {
-  :root {
-    --sticker-size: calc(var(--spacing) * 4);
-  }
-}
-
-@media (min-width: 1200px) {
-  :root {
-    --sticker-size: calc(var(--spacing) * 5);
   }
 }
 
