@@ -3,17 +3,18 @@ import seedrandom from "seedrandom";
 
 export interface Props {
   id: string;
+  resolutionScale?: number;
   imageUrl?: string;
 }
 
-const { id, imageUrl } = Astro.props;
+const { id, resolutionScale: resolutionScale = 1, imageUrl } = Astro.props;
 
 let offset = [0, 0];
-let scale = 1;
+let warpScale = 1;
 if (imageUrl) {
   const random = seedrandom(id);
   offset = [Math.floor(random() * 21) - 10, Math.floor(random() * 21) - 10];
-  scale = random() * 2 + 1;
+  warpScale = random() * 2 + 1;
 }
 ---
 
@@ -22,7 +23,9 @@ if (imageUrl) {
   id={`backdrop-${id}`}
   data-image-url={imageUrl}
   data-offset={JSON.stringify(offset)}
-  data-warp-scale={JSON.stringify(scale)}
+  data-resolution-scale={JSON.stringify(resolutionScale)}
+  data-warp-scale={JSON.stringify(warpScale)}
+  style={{ "--resolution-scale": resolutionScale }}
 >
   <canvas class="shader-backdrop-canvas"></canvas>
 </div>
@@ -35,8 +38,10 @@ if (imageUrl) {
     left: 0;
     bottom: 0;
     right: 0;
-    height: 100%;
-    width: 100%;
+    height: calc(100% * var(--resolution-scale, 1));
+    width: calc(100% * var(--resolution-scale, 1));
+    transform-origin: top left;
+    scale: calc(1 / var(--resolution-scale, 1));
     background-color: var(--color-background-primary);
   }
 </style>

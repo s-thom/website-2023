@@ -1,7 +1,6 @@
 ---
 import { Font } from "astro:assets";
 import PageMeta from "../components/PageMeta.astro";
-import SettingsInitialLoader from "../components/site/SettingsInitialLoader.astro";
 import Web3IsAScam from "../components/site/Web3IsAScam.astro";
 import "../css/index.css";
 import type { PageMetaType } from "../lib/site/PageMeta";
@@ -23,7 +22,6 @@ const { meta } = Astro.props;
     <Font cssVariable="--font-trunic" />
     <slot name="head" />
     <Web3IsAScam />
-    <SettingsInitialLoader />
   </Fragment>
 
   <slot name="top" />
