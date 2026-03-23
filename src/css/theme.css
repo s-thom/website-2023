@@ -1,6 +1,6 @@
 :root {
   --color-dynamic-angle: 267.79deg;
-  --color-dynamic-lightness: 0.62;
+  --color-dynamic-lightness: 0.52;
   --color-dynamic-chroma: 0.1032;
   --color-background-primary: #6b83c4;
   --color-background-primary: oklch(
@@ -12,11 +12,13 @@
   --color-text-secondary: #606060;
   --color-text-header: #ffffff;
   --color-text-header-negative: #111111;
+  --color-text-big-box: #f8f8f8;
   --color-background: #f8f8f8;
   --color-background-secondary: #dddddd;
   --color-background-error: #5f2526;
   --color-background-delete: oklch(95% 0.013 18);
   --color-border: #aaaaaa;
+  --color-border-big-box: #bbbbbb;
   --color-link: oklch(60% 0.185 258);
   --color-link-hover: oklch(65% 0.14 258);
   --color-link-active: oklch(60% 0.185 20);
@@ -53,7 +55,6 @@
   --spacing: 16px;
   --spacing-half: calc(var(--spacing) / 2);
 
-  --big-box-color: var(--color-text);
   --big-box-spacing: calc(max(var(--spacing), 7vw));
   --big-box-spacing-small: calc(
     clamp(var(--spacing), 5vw, calc(var(--spacing) * 3))
@@ -78,11 +79,13 @@
     --color-text-secondary: #808080;
     --color-text-header: #ffffff;
     --color-text-header-negative: #181818;
+    --color-text-big-box: #ffffff;
     --color-background: #181818;
     --color-background-secondary: #3a3a3a;
     --color-background-error: #5f2526;
     --color-background-delete: oklch(30% 0.03 18);
     --color-border: #555555;
+    --color-border-big-box: #ffffff;
     --color-link: oklch(50% 0.185 258);
     --color-link-hover: oklch(55% 0.14 258);
     --color-link-active: oklch(50% 0.185 20);
@@ -192,11 +195,11 @@ a {
 .big-box {
   position: relative;
   padding: var(--big-box-spacing-small) var(--big-box-spacing);
-  border: var(--big-box-border-width) solid var(--big-box-color);
+  border: var(--big-box-border-width) solid var(--color-border-big-box);
 }
 
 .big-box-border {
-  border: var(--big-box-border-width) solid var(--big-box-color);
+  border: var(--big-box-border-width) solid var(--color-border-big-box);
 }
 
 .big-box-padding {

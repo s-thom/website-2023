@@ -3,7 +3,6 @@ import LocalImage from "../components/Images/LocalImage.astro";
 import BlogListPageItem from "../components/notion/blog/BlogListPageItem.astro";
 import AboutLinks from "../components/notion/overrides/code-blocks/AboutLinks.astro";
 import ProjectsItem from "../components/notion/overrides/projects/ProjectsItem.astro";
-import OffsetBox from "../components/site/OffsetBox.astro";
 import ShaderBackdrop from "../components/site/ShaderBackdrop.astro";
 import StandalonePageLayout from "../layouts/StandalonePageLayout.astro";
 import {
@@ -50,32 +49,25 @@ const blogPosts = (
     ],
   }}
 >
-  <div class="container">
-    <OffsetBox class="big-corners">
-      <ShaderBackdrop id="home" slot="background" />
-      <div class="big-box-border big-box-padding big-corners header">
-        <LocalImage
-          id="profile2023"
-          resourcePath="profile-2023.jpg"
-          class="profile-photo"
-          alt="Stuart Thomson"
-          widths={[96]}
-          sizes="96px"
-          loading="eager"
-        />
-        <div>
-          <p>The website of the person known as</p>
-          <h1 class="site-name-heading">Stuart Thomson</h1>
-          <p class="tagline">
-            who is both a{" "}
-            <a href="/software-developer">Software Developer</a>{" and "}<a
-              href="/human-being">Human Being</a
-            >
-          </p>
-        </div>
+  <div class="header-container" slot="top">
+    <ShaderBackdrop id="home" slot="background" />
+    <header class="big-box-margin big-box-padding header-content">
+      <LocalImage
+        id="profile2023"
+        resourcePath="profile-2023.jpg"
+        class="profile-photo"
+        alt="Stuart Thomson"
+        widths={[96]}
+        sizes="96px"
+        loading="eager"
+      />
+      <div>
+        <p>The website of the person known as</p>
+        <h1 class="site-name-heading">Stuart Thomson</h1>
       </div>
-    </OffsetBox>
-
+    </header>
+  </div>
+  <div class="container">
     <div class="flow">
       <p>Hi, it's me.</p>
       <p>
@@ -85,24 +77,6 @@ const blogPosts = (
         thinking about. Maybe some of those will be useful to you.
       </p>
     </div>
-
-    <OffsetBox class="big-corners">
-      <div class="links big-box-border big-box-padding big-corners">
-        <ul class="nav-list">
-          <li>
-            <a href="/projects">Projects</a>
-          </li>
-          <li>
-            <a href="/blog">Blog</a>
-          </li>
-          <li>
-            <a href="/about">About</a>
-          </li>
-        </ul>
-
-        <AboutLinks />
-      </div>
-    </OffsetBox>
 
     <div class="flow">
       <h3><a href="/projects">Recent projects</a></h3>
@@ -123,13 +97,32 @@ const blogPosts = (
               sizes="(min-width: 600px) 360px, 240px"
               showImage
               showTitle
+              showGitHub
             />
           ))
         }
-        <div class="small-box small-box-border big-corners see-more">
+        <div class="small-box big-box-border big-corners see-more">
           <a href="/projects">See more...</a>
         </div>
       </div>
+    </div>
+
+    <div class="flow">
+      <h3>About me</h3>
+      <p>
+        I expect that most people will stop at the things I have made, which is
+        why I put that at the top. If you decided to scroll down to here, then
+        hi! I've split my about section into two pages, since there are likely
+        two reasons you'd want to read about me.
+      </p>
+      <p>
+        If you're here because you want know more about me as a human, then <a
+          href="/human-being">Human Being</a
+        > is probably where you want to go. If you're here because I applied for a
+        job or you want me to work for you, then you probably want to look at the
+        <a href="/software-developer">Software Developer</a> page (and then go look
+        at the other one).
+      </p>
     </div>
 
     <div class="flow">
@@ -138,7 +131,8 @@ const blogPosts = (
         I quite enjoy the act of writing. Writing is one of the ways I organise
         information in my head, while also providing a way for others to learn
         what I've picked up over the years. And if my writing encourages someone
-        else to start? Even better.
+        else to start? Even better. (That's me telling you that you should be
+        writing too.)
       </p>
       <div class="projects-list">
         {
@@ -150,15 +144,35 @@ const blogPosts = (
             />
           ))
         }
-        <div class="small-box see-more">
+        <div class="small-box big-box-border big-corners see-more">
           <a href="/blog">Read more...</a>
         </div>
       </div>
     </div>
+
+    <AboutLinks />
   </div>
 </StandalonePageLayout>
 
 <style>
+  .header-container {
+    position: relative;
+    border-block-end: var(--big-box-border-width) solid
+      var(--color-border-big-box);
+  }
+
+  .header-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    gap: var(--spacing);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: var(--color-text-header);
+  }
+
   .container {
     flex-grow: 1;
     display: flex;
@@ -172,23 +186,13 @@ const blogPosts = (
     }
   }
 
-  .header {
-    width: 100%;
-    display: flex;
-    gap: var(--spacing);
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-  }
-
   .profile-photo {
     width: 96px;
     height: 96px;
   }
 
   @media (min-width: 900px) {
-    .header {
+    .header-content {
       flex-direction: row;
       text-align: start;
     }
@@ -198,10 +202,6 @@ const blogPosts = (
       font-weight: 975;
       font-style: italic;
     }
-  }
-
-  .tagline {
-    font-size: var(--size-step-0) !important;
   }
 
   .links {
@@ -214,27 +214,24 @@ const blogPosts = (
   }
 
   .projects-list {
-    margin-inline: auto;
-    width: fit-content;
     display: grid;
     gap: var(--spacing);
     grid-template-columns: 1fr;
 
     & > :global(.project-card) {
       width: 100%;
-      max-width: 240px;
     }
   }
 
-  @media (min-width: 500px) {
-    .projects-list > :global(.project-card) {
-      max-width: 360px;
-    }
-  }
-
-  @media (min-width: 900px) {
+  @media (min-width: 800px) {
     .projects-list {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .projects-list {
+      grid-template-columns: repeat(3, 1fr);
     }
   }
 

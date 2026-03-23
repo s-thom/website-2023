@@ -124,7 +124,7 @@ if (imageUrl) {
       const hasBackground = backgroundUrl !== undefined;
 
       uniforms.uUseColors = !hasBackground;
-      uniforms.uWarpIterations = hasBackground ? 4 : 9;
+      uniforms.uWarpIterations = hasBackground ? 5 : 9;
       uniforms.uOffset = backdropArea.dataset.offset
         ? JSON.parse(backdropArea.dataset.offset)
         : [0, 0];

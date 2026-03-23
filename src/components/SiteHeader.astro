@@ -61,13 +61,13 @@ const { navItems /* breadcrumbs, */ } = Astro.props;
 
 <style>
   .header-area {
-    color: var(--color-text-header);
-    --big-box-color: var(--color-text-header);
+    color: var(--color-text-big-box);
     position: relative;
     display: flex;
     /* border-end-start-radius: 50px;
     border-end-end-radius: 50px; */
-    border-block-end: var(--big-box-border-width) solid var(--big-box-color);
+    border-block-end: var(--big-box-border-width) solid
+      var(--color-border-big-box);
     overflow: hidden;
 
     > :global(*) {

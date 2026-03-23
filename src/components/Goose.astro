@@ -2,24 +2,30 @@
 import LocalImage from "./Images/LocalImage.astro";
 ---
 
-<button
-  id="the-goose-button"
-  class="goose-button"
-  aria-label="Goose"
-  data-umami-event="goose"
->
-  <LocalImage
-    id="footer-goose"
-    resourcePath="goose.png"
-    class="goose-image"
-    alt="Goose"
-    widths={[48]}
-    sizes="48px"
-    loading="lazy"
-  />
-</button>
+<div class="goose-container">
+  <button
+    id="the-goose-button"
+    class="goose-button"
+    aria-label="Goose"
+    data-umami-event="goose"
+  >
+    <LocalImage
+      id="footer-goose"
+      resourcePath="goose.png"
+      class="goose-image"
+      alt="Goose"
+      widths={[48]}
+      sizes="48px"
+      loading="lazy"
+    />
+  </button>
+</div>
 
 <style>
+  .goose-container {
+    position: relative;
+  }
+
   .goose-button {
     position: relative;
     height: 48px;
@@ -35,11 +41,17 @@ import LocalImage from "./Images/LocalImage.astro";
     height: 48px;
   }
 
-  .goose-button :global(.goose-heart) {
+  .goose-button:is(:hover, :focus-within) .goose-image {
+    scale: 1.1;
+    rotate: var(--goose-hover-rotate, 0deg);
+  }
+
+  .goose-container :global(.goose-heart) {
     position: absolute;
     top: -4em;
     padding: 0.2em;
     border-radius: 0.2em;
+    overflow: hidden;
 
     animation-duration: 2s;
     animation-name: GooseHeartIn;
@@ -47,7 +59,7 @@ import LocalImage from "./Images/LocalImage.astro";
     animation-fill-mode: backwards;
     animation-timing-function: ease-out;
   }
-  .goose-button :global(.goose-heart.goose-heart-exit) {
+  .goose-container :global(.goose-heart.goose-heart-exit) {
     animation-duration: 0.2s;
     animation-name: GooseHeartOut;
   }
@@ -81,6 +93,7 @@ import LocalImage from "./Images/LocalImage.astro";
   const SCALE_SCALE = 100;
   const HEARTS = ["❤️", "🧡", "💛", "💚", "💙", "💜"];
   const NOTES = ["🎵", "🎶", "🎼"];
+  const GOOSE_CRAZINESS = 15;
 
   const counter = { current: 0, count: 0 };
 
@@ -124,7 +137,7 @@ import LocalImage from "./Images/LocalImage.astro";
     return heart;
   }
 
-  async function addHeart(button: HTMLButtonElement) {
+  async function addHeart(container: HTMLElement) {
     // The hearts are looped over backwards. Why didn't I just reverse the array?
     // ¯\_(ツ)_/¯
     counter.current = (counter.current - 1 + HEARTS.length) % HEARTS.length;
@@ -138,20 +151,37 @@ import LocalImage from "./Images/LocalImage.astro";
       child = createHeart(counter.current, counter.count);
     }
 
-    button.appendChild(child);
+    container.appendChild(child);
 
     await delay(TOOLTIP_TIMEOUT);
     child.classList.add("goose-heart-exit");
 
     await delay(TRANSITION_DURATION);
-    button.removeChild(child);
+    container.removeChild(child);
   }
 
   document
-    .querySelectorAll<HTMLButtonElement>("button#the-goose-button")
-    .forEach((button) =>
+    .querySelectorAll<HTMLDivElement>(".goose-container")
+    .forEach((container) => {
+      const button = container.querySelector<HTMLButtonElement>(
+        "button.goose-button",
+      )!;
+      function setGooseRotation() {
+        const numDegrees =
+          Math.floor((Math.random() - 0.5) * 2 * GOOSE_CRAZINESS * 100) / 100;
+        button.style.setProperty(
+          "--goose-hover-rotate",
+          `${numDegrees.toString(10)}deg`,
+        );
+      }
+
       button.addEventListener("click", () => {
-        addHeart(button);
-      }),
-    );
+        setGooseRotation();
+        addHeart(container);
+      });
+
+      button.addEventListener("hover", setGooseRotation);
+      button.addEventListener("pointerenter", setGooseRotation);
+      button.addEventListener("focusin", setGooseRotation);
+    });
 </script>

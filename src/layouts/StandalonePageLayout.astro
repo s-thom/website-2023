@@ -12,6 +12,7 @@ const { id, meta, border } = Astro.props;
 ---
 
 <PageLayout id={id} meta={meta}>
+  <slot name="top" />
   <div class:list={["standalone-page", border && "big-box-border"]}>
     <slot />
   </div>

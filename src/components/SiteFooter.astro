@@ -1,16 +1,32 @@
 ---
 import Goose from "./Goose.astro";
+import AboutLinks from "./notion/overrides/code-blocks/AboutLinks.astro";
+import DefaultPageBackdrop from "./site/DefaultPageBackdrop.astro";
 
-const THE_YEAR_I_LAST_UPDATED_THIS_FILE = 2024;
+const THE_YEAR_I_LAST_UPDATED_THIS_FILE = 2026;
 ---
 
-<footer class="site-footer">
-  <span>&copy; Stuart Thomson {THE_YEAR_I_LAST_UPDATED_THIS_FILE}</span>
-  <Goose />
+<footer class="site-footer flow">
+  <div class="backdrop-container">
+    <DefaultPageBackdrop />
+  </div>
+
+  <div class="bottom-line">
+    <span>&copy; Stuart Thomson {THE_YEAR_I_LAST_UPDATED_THIS_FILE}</span>
+    <AboutLinks />
+    <Goose />
+  </div>
 </footer>
 
 <style>
   .site-footer {
+    position: relative;
+    color: var(--color-text-header);
+    border-block-start: var(--big-box-border-width) solid
+      var(--color-border-big-box);
+  }
+
+  .bottom-line {
     margin: 0 var(--big-box-spacing);
     display: flex;
     align-items: center;
