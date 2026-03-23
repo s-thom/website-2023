@@ -20,9 +20,11 @@ const blogEntries = await getPagesCollection(
     entry.data.properties.Status?.name === "Listed",
 );
 
+type EntryType = (typeof blogEntries)[number];
+
 // Get next/previous entries
-let next: (typeof blogEntries)[number] | undefined;
-let prev: (typeof blogEntries)[number] | undefined;
+let next: EntryType | undefined;
+let prev: EntryType | undefined;
 const index = blogEntries.findIndex((curr) => curr.id === page.id);
 if (index !== -1) {
   if (index !== 0) {
@@ -36,25 +38,40 @@ if (index !== -1) {
 const relatedLinks = await getRelatedPosts("blog-posts", page.id);
 const relatedPages = relatedLinks
   .map((related) => blogEntries.find((entry) => entry.id === related.id))
-  .filter((entry) => entry !== undefined);
+  .filter((entry) => entry !== undefined)
+  .reduce<Record<string, EntryType>>((obj, curr) => {
+    obj[curr.id] = curr;
+    return obj;
+  }, {});
 ---
 
 <div class="blog-footer big-box-margin">
   {
-    relatedPages.length > 0 && (
+    relatedLinks.length > 0 && (
       <div class="links">
-        {relatedPages.map((entry) => (
+        {relatedLinks.map((rel) => (
           <BlogListPageItem
-            page={entry.data.page}
-            slug={entry.data.slug}
+            page={relatedPages[rel.id].data.page}
+            slug={relatedPages[rel.id].data.slug}
             showTitle
-          />
+          >
+            <Fragment slot="info-top">
+              <span
+                class="pre-title"
+                data-similarity={Math.floor(rel.similarity * 100)}
+              >
+                Related
+              </span>
+            </Fragment>
+          </BlogListPageItem>
         ))}
       </div>
     )
   }
   <div class="links static-links">
-    <div class="links-box next">
+    <div
+      class:list={["links-box next", !next && "big-corners big-box-border "]}
+    >
       {
         next ? (
           <BlogListPageItem
@@ -71,7 +88,9 @@ const relatedPages = relatedLinks
         )
       }
     </div>
-    <div class="links-box prev">
+    <div
+      class:list={["links-box prev", !prev && "big-corners big-box-border "]}
+    >
       {
         prev ? (
           <BlogListPageItem
@@ -122,6 +141,13 @@ const relatedPages = relatedLinks
 
   .links-box {
     position: relative;
+  }
+
+  .next,
+  .prev {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .next {

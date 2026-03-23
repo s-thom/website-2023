@@ -46,6 +46,12 @@ const titleComponents = getPageTitleComponents(page);
     min-height: 50px;
     height: 100%;
     overflow: hidden;
+    transition: scale 0.1s ease-out;
+
+    &:hover,
+    &:focus-within {
+      scale: 1.01;
+    }
   }
 
   .info {

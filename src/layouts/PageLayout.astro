@@ -17,7 +17,14 @@ const { meta } = Astro.props;
 <MinimalLayout>
   <Fragment slot="head">
     <PageMeta meta={meta} />
-    <Font cssVariable="--font-parclo-serif" />
+    <Font
+      cssVariable="--font-parclo-serif"
+      preload={[
+        { style: "italic", weight: 975 },
+        { style: "normal", weight: 400 },
+        { style: "normal", weight: 700 },
+      ]}
+    />
     <Font cssVariable="--font-source-code" />
     <Font cssVariable="--font-trunic" />
     <slot name="head" />
