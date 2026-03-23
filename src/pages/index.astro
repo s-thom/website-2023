@@ -27,7 +27,9 @@ const projects = (
 ).slice(0, NUM_PROJECTS_TO_SHOW);
 const blogPosts = (
   await getPagesCollection(
-    (entry) => entry.data.properties.Type?.name === "blog",
+    (entry) =>
+      entry.data.properties.Type?.name === "blog" &&
+      entry.data.properties.Status?.name === "Listed",
   )
 ).slice(0, NUM_BLOG_POSTS_TO_SHOW);
 ---

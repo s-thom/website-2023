@@ -15,7 +15,9 @@ const blogIndexEntries = await getPagesCollection(
   (entry) => entry.id === BLOG_PAGE_ID,
 );
 const blogEntries = await getPagesCollection(
-  (entry) => entry.data.properties.Type?.name === "blog",
+  (entry) =>
+    entry.data.properties.Type?.name === "blog" &&
+    entry.data.properties.Status?.name === "Listed",
 );
 
 // Get next/previous entries
