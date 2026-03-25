@@ -12,6 +12,12 @@ export interface Props {
 }
 
 const { id, meta, breadcrumbs } = Astro.props;
+
+const navItems: LinkInfo[] = [
+  { name: "Projects", url: "/projects" },
+  { name: "Blog", url: "/blog" },
+  { name: "About me", url: "/about" },
+];
 ---
 
 <PageLayout id={id} meta={meta}>
@@ -20,15 +26,7 @@ const { id, meta, breadcrumbs } = Astro.props;
   <slot name="skip-links" slot="skip-links" />
   <slot name="site-sidebar" slot="site-sidebar" />
 
-  <SiteHeader
-    slot="site-header"
-    navItems={[
-      { name: "Projects", url: "/projects" },
-      { name: "Blog", url: "/blog" },
-      { name: "About me", url: "/about" },
-    ]}
-    breadcrumbs={breadcrumbs}
-  >
+  <SiteHeader slot="site-header" navItems={navItems} breadcrumbs={breadcrumbs}>
     <slot name="page-header" slot="page-header" />
     <slot name="page-backdrop" slot="page-backdrop" />
   </SiteHeader>

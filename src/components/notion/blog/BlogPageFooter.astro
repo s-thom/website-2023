@@ -45,25 +45,27 @@ const relatedPages = relatedLinks
   }, {});
 ---
 
-<div class="blog-footer big-box-margin">
+<div class="blog-footer big-box-margin flow">
   {
     relatedLinks.length > 0 && (
       <div class="links">
         {relatedLinks.map((rel) => (
-          <BlogListPageItem
-            page={relatedPages[rel.id].data.page}
-            slug={relatedPages[rel.id].data.slug}
-            showTitle
-          >
-            <Fragment slot="info-top">
-              <span
-                class="pre-title"
-                data-similarity={Math.floor(rel.similarity * 100)}
-              >
-                Related
-              </span>
-            </Fragment>
-          </BlogListPageItem>
+          <div class="links-box">
+            <BlogListPageItem
+              page={relatedPages[rel.id].data.page}
+              slug={relatedPages[rel.id].data.slug}
+              showTitle
+            >
+              <Fragment slot="info-top">
+                <span
+                  class="pre-title"
+                  data-similarity={Math.floor(rel.similarity * 100)}
+                >
+                  Related
+                </span>
+              </Fragment>
+            </BlogListPageItem>
+          </div>
         ))}
       </div>
     )

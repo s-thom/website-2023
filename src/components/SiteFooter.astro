@@ -1,19 +1,39 @@
 ---
 import Goose from "./Goose.astro";
+import LocalImage from "./Images/LocalImage.astro";
 import AboutLinks from "./notion/overrides/code-blocks/AboutLinks.astro";
 import DefaultPageBackdrop from "./site/DefaultPageBackdrop.astro";
 
 const THE_YEAR_I_LAST_UPDATED_THIS_FILE = 2026;
 ---
 
-<footer class="site-footer flow">
+<footer class="site-footer flow" id="footer">
   <div class="backdrop-container">
     <DefaultPageBackdrop />
   </div>
 
-  <div class="bottom-line">
-    <span>&copy; Stuart Thomson {THE_YEAR_I_LAST_UPDATED_THIS_FILE}</span>
+  <div class="line">
+    <div class="self">
+      <LocalImage
+        id="profile2023"
+        resourcePath="profile-2023.jpg"
+        class="profile-photo"
+        alt="Stuart Thomson"
+        widths={[96]}
+        sizes="96px"
+        loading="eager"
+      />
+      <div>
+        <p>Written by</p>
+        <h1 class="site-name-heading">Stuart Thomson</h1>
+      </div>
+    </div>
+
     <AboutLinks />
+  </div>
+
+  <div class="line">
+    <span>&copy; Stuart Thomson {THE_YEAR_I_LAST_UPDATED_THIS_FILE}</span>
     <Goose />
   </div>
 </footer>
@@ -26,11 +46,39 @@ const THE_YEAR_I_LAST_UPDATED_THIS_FILE = 2026;
       var(--color-border-big-box);
   }
 
-  .bottom-line {
-    margin: 0 var(--big-box-spacing);
+  .line {
+    margin-inline: var(--big-box-spacing);
     display: flex;
+    gap: var(--spacing);
+    flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    margin-top: var(--spacing);
+  }
+
+  .self {
+    display: flex;
+    gap: var(--spacing);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  @media (min-width: 900px) {
+    .line,
+    .self {
+      flex-direction: row;
+      text-align: start;
+    }
+
+    .site-name-heading {
+      font-size: var(--size-step-4) !important;
+      font-weight: 975;
+      font-style: italic;
+    }
+
+    .align-end {
+      text-align: end;
+    }
   }
 </style>

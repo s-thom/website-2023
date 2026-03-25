@@ -86,6 +86,11 @@ const hierarchical = headings.reduce<HeadingData[]>((acc, heading) => {
     {
       hierarchical.length > 0 ? (
         <ul class="toc-list flow">
+          <li data-hash="top">
+            <a class="toc-static" href="#top">
+              Back to top
+            </a>
+          </li>
           {hierarchical.map((h1) => (
             <li data-hash={h1.hash}>
               <a href={`#${h1.hash}`}>{h1.title}</a>
@@ -105,10 +110,14 @@ const hierarchical = headings.reduce<HeadingData[]>((acc, heading) => {
               </ul>
             </li>
           ))}
+          <li data-hash="footer">
+            <a class="toc-static" href="#footer">
+              Jump to end
+            </a>
+          </li>
         </ul>
       ) : null
     }
-    <a class="visually-hidden" href="#top">Back to top</a>
   </nav>
 </div>
 
@@ -169,6 +178,10 @@ const hierarchical = headings.reduce<HeadingData[]>((acc, heading) => {
       }
     }
   }
+
+  .toc-static {
+    font-style: italic;
+  }
 </style>
 
 <script>
@@ -177,6 +190,12 @@ const hierarchical = headings.reduce<HeadingData[]>((acc, heading) => {
   const tocContainer = document.getElementById("table-of-contents");
   if (tocContainer) {
     const headings: HeadingData[] = JSON.parse(tocContainer.dataset.headings!);
+    headings.unshift({
+      type: "heading_1",
+      title: "Top",
+      hash: "top",
+      children: [],
+    });
     const navItems =
       tocContainer.querySelectorAll<HTMLLIElement>("li[data-hash]");
 
