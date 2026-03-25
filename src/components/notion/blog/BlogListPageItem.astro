@@ -4,6 +4,7 @@ import { join } from "node:path/posix";
 import { getPageTitleComponents } from "../../../lib/notion/titles";
 import NotionBackdrop from "../common/NotionBackdrop.astro";
 import RichText from "../common/RichText.astro";
+import seedrandom from "seedrandom";
 
 export interface Props {
   page: PageObjectResponse;
@@ -14,9 +15,16 @@ export interface Props {
 const { page, slug, showTitle } = Astro.props;
 
 const titleComponents = getPageTitleComponents(page);
+
+const random = seedrandom(page.id);
+const colorAngle = `${Math.round(random() * 360)}deg`;
 ---
 
-<a href={join("/blog", slug)} class="page-item big-box-border big-corners">
+<a
+  href={join("/blog", slug)}
+  class="page-item big-box-border big-corners recalc-background-color"
+  style={{ "--color-dynamic-angle": colorAngle }}
+>
   <div class="backdrop-container">
     <NotionBackdrop
       page={page}

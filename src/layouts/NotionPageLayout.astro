@@ -47,7 +47,12 @@ const random = seedrandom(page.id);
 const colorAngle = `${Math.round(random() * 360)}deg`;
 ---
 
-<PageWithHeaderLayout id={page.id} meta={meta} breadcrumbs={breadcrumbs}>
+<PageWithHeaderLayout
+  id={page.id}
+  meta={meta}
+  breadcrumbs={breadcrumbs}
+  htmlStyle={{ "--color-dynamic-angle": colorAngle }}
+>
   <slot name="head" slot="head" />
   <slot name="top" slot="top" />
 
@@ -97,13 +102,6 @@ const colorAngle = `${Math.round(random() * 360)}deg`;
 
   <slot name="page-footer" slot="page-footer" />
 </PageWithHeaderLayout>
-
-<script is:inline define:vars={{ colorAngle }}>
-  document.documentElement.style.setProperty(
-    "--color-dynamic-angle",
-    colorAngle,
-  );
-</script>
 
 <style>
   .content {

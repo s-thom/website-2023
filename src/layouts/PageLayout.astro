@@ -5,16 +5,18 @@ import Web3IsAScam from "../components/site/Web3IsAScam.astro";
 import "../css/index.css";
 import type { PageMetaType } from "../lib/site/PageMeta";
 import MinimalLayout from "./MinimalLayout.astro";
+import type { JSX } from "astro/jsx-runtime";
 
 export interface Props {
   id: string;
   meta: PageMetaType;
+  htmlStyle?: JSX.HtmlHTMLAttributes["style"];
 }
 
-const { meta } = Astro.props;
+const { meta, htmlStyle } = Astro.props;
 ---
 
-<MinimalLayout>
+<MinimalLayout htmlStyle={htmlStyle}>
   <Fragment slot="head">
     <PageMeta meta={meta} />
     <Font

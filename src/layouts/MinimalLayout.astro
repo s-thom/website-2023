@@ -1,9 +1,15 @@
 ---
+import type { JSX } from "astro/jsx-runtime";
 
+export interface Props {
+  htmlStyle?: JSX.HtmlHTMLAttributes["style"];
+}
+
+const { htmlStyle } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en" prefix="og: https://ogp.me/ns#">
+<html lang="en" prefix="og: https://ogp.me/ns#" style={htmlStyle}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />

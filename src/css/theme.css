@@ -1,3 +1,9 @@
+@property --color-dynamic-angle {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0deg;
+}
+
 :root {
   --color-dynamic-angle: 267.79deg;
   --color-dynamic-lightness: 0.52;
@@ -344,6 +350,13 @@ h1.site-name-heading {
 }
 
 /* #endregion */
+
+.recalc-background-color {
+  --color-background-primary: oklch(
+    var(--color-dynamic-lightness) var(--color-dynamic-chroma)
+      var(--color-dynamic-angle)
+  ) !important;
+}
 
 @media (min-width: 1200px) {
   .sidebar-layout {

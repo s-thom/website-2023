@@ -1,4 +1,5 @@
 ---
+import type { JSX } from "astro/jsx-runtime";
 import SiteFooter from "../components/SiteFooter.astro";
 import SiteHeader from "../components/SiteHeader.astro";
 import type { LinkInfo } from "../lib/site/LinkInfo";
@@ -9,9 +10,10 @@ export interface Props {
   id: string;
   meta: PageMetaType;
   breadcrumbs?: LinkInfo[];
+  htmlStyle?: JSX.HtmlHTMLAttributes["style"];
 }
 
-const { id, meta, breadcrumbs } = Astro.props;
+const { id, meta, breadcrumbs, htmlStyle } = Astro.props;
 
 const navItems: LinkInfo[] = [
   { name: "Projects", url: "/projects" },
@@ -20,7 +22,7 @@ const navItems: LinkInfo[] = [
 ];
 ---
 
-<PageLayout id={id} meta={meta}>
+<PageLayout id={id} meta={meta} htmlStyle={htmlStyle}>
   <slot name="head" slot="head" />
   <slot name="top" slot="top" />
   <slot name="skip-links" slot="skip-links" />
@@ -40,7 +42,7 @@ const navItems: LinkInfo[] = [
   </div>
 
   <slot name="page-footer" slot="page-footer" />
-  <SiteFooter slot="site-footer" />
+  <SiteFooter id={id} slot="site-footer" />
 </PageLayout>
 
 <style>

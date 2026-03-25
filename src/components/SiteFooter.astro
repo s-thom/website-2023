@@ -2,14 +2,20 @@
 import Goose from "./Goose.astro";
 import LocalImage from "./Images/LocalImage.astro";
 import AboutLinks from "./notion/overrides/code-blocks/AboutLinks.astro";
-import DefaultPageBackdrop from "./site/DefaultPageBackdrop.astro";
+import ShaderBackdrop from "./site/ShaderBackdrop.astro";
 
 const THE_YEAR_I_LAST_UPDATED_THIS_FILE = 2026;
+
+export interface Props {
+  id: string;
+}
+
+const { id } = Astro.props;
 ---
 
 <footer class="site-footer flow" id="footer">
   <div class="backdrop-container">
-    <DefaultPageBackdrop />
+    <ShaderBackdrop id={id} />
   </div>
 
   <div class="line">
