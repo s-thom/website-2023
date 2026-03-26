@@ -1,6 +1,6 @@
 import type {
   PageObjectResponse,
-  QueryDatabaseParameters,
+  QueryDataSourceParameters,
 } from "@notionhq/client/build/src/api-endpoints";
 import type { infer as zInfer } from "astro/zod";
 import type { CollectionEntry, CollectionKey } from "astro:content";
@@ -194,7 +194,7 @@ function combineComparators<T>(comparators: Comparator<T>[]): Comparator<T> {
 }
 
 export function createComparator<C extends CollectionKey>(
-  sorts: NonNullable<QueryDatabaseParameters["sorts"]>,
+  sorts: NonNullable<QueryDataSourceParameters["sorts"]>,
 ): Comparator<CollectionEntry<C>> {
   const comparators = sorts.map<Comparator<CollectionEntry<C>>>((sort) => {
     const baseComparator =

@@ -1,4 +1,4 @@
-import { isFullBlock, isFullPageOrDatabase } from "@notionhq/client";
+import { isFullBlock, isFullPageOrDataSource } from "@notionhq/client";
 import type {
   BlockObjectResponse,
   PageObjectResponse,
@@ -186,7 +186,7 @@ export async function collectPageInfo(
   const requester = getRequester(logger);
 
   const page = await requester.getPage(pageId);
-  if (!isFullPageOrDatabase(page)) {
+  if (!isFullPageOrDataSource(page)) {
     throw new Error(`Could not get full page for ${pageId}`);
   }
 

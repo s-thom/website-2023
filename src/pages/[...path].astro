@@ -1,6 +1,6 @@
 ---
 import type {
-  DatabaseObjectResponse,
+  DataSourceObjectResponse,
   PageObjectResponse,
 } from "@notionhq/client/build/src/api-endpoints";
 import { type DataEntryMap } from "astro:content";
@@ -87,7 +87,7 @@ const ogImage = await generateOgImage(ogImageOptions);
     isBlog ? { name: "Blog", url: "/blog" } : null,
     { name: pageTitle, url: path },
   ].filter<LinkInfo>((c) => c !== null)}
-  page={page as unknown as DatabaseObjectResponse}
+  page={page as unknown as DataSourceObjectResponse}
   showCoverSource
   showReadingTime={isBlog}
   showPublishEditDates={isBlog}
@@ -118,7 +118,7 @@ const ogImage = await generateOgImage(ogImageOptions);
   {
     isBlog && (
       <BlogPageFooter
-        page={page as unknown as DatabaseObjectResponse}
+        page={page as unknown as DataSourceObjectResponse}
         slot="page-footer"
       />
     )

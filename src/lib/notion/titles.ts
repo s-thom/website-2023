@@ -1,6 +1,6 @@
-import { isFullPageOrDatabase } from "@notionhq/client";
+import { isFullPageOrDataSource } from "@notionhq/client";
 import type {
-  DatabaseObjectResponse,
+  DataSourceObjectResponse,
   PageObjectResponse,
   RichTextItemResponse,
 } from "@notionhq/client/build/src/api-endpoints";
@@ -11,18 +11,18 @@ import {
 } from "./util";
 
 export function getPageTitleComponents(
-  page: DatabaseObjectResponse | PageObjectResponse,
+  page: DataSourceObjectResponse | PageObjectResponse,
 ): RichTextItemResponse[] {
-  if (!isFullPageOrDatabase(page)) {
+  if (!isFullPageOrDataSource(page)) {
     throw new Error(
       `Must be a full page/database to get title (${
-        (page as DatabaseObjectResponse).id
+        (page as DataSourceObjectResponse).id
       })`,
     );
   }
 
   // If a title property is on the object, we can return early
-  if (page.object === "database") {
+  if (page.object === "data_source") {
     return page.title;
   }
 
@@ -44,7 +44,7 @@ export function getPageTitleComponents(
 }
 
 export function getUrlSlugForPage(
-  page: DatabaseObjectResponse | PageObjectResponse,
+  page: DataSourceObjectResponse | PageObjectResponse,
 ) {
   if (
     page.object === "page" && // TODO: figure out what to do about database type pages

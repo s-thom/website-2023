@@ -29,6 +29,11 @@ const userPartialSchema = z.object({
 });
 
 const parentSchema = z.discriminatedUnion("type", [
+  z.object({
+    type: z.literal("data_source_id"),
+    data_source_id: z.uuid(),
+    database_id: z.uuid(),
+  }),
   z.object({ type: z.literal("database_id"), database_id: z.uuid() }),
   z.object({ type: z.literal("page_id"), page_id: z.uuid() }),
   z.object({ type: z.literal("workspace"), workspace: z.literal(true) }),
@@ -306,6 +311,8 @@ const pageSchema: z.ZodType<PageObjectResponse> = z.object({
   parent: parentSchema,
   archived: z.boolean(),
   in_trash: z.boolean(),
+  is_archived: z.boolean(),
+  is_locked: z.boolean(),
   properties: z.object({}).catchall(propertiesSchema),
   url: z.string(),
   public_url: z.string().nullable(),

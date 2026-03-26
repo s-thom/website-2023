@@ -1,5 +1,5 @@
 import type {
-  DatabaseObjectResponse,
+  DataSourceObjectResponse,
   PageObjectResponse,
 } from "@notionhq/client/build/src/api-endpoints";
 import type { BlockMap } from "../../integrations/notion-loader/api";
@@ -9,7 +9,7 @@ import { getBlockChildren } from "../../integrations/notion-loader/util";
 const WORDS_PER_MINUTE = 250;
 
 export function estimateReadingTime(
-  page: PageObjectResponse | DatabaseObjectResponse,
+  page: PageObjectResponse | DataSourceObjectResponse,
   blockMap: BlockMap,
 ): { words: number; minutes: number } {
   const children = getBlockChildren(page.id, blockMap);

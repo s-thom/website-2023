@@ -2,18 +2,20 @@ import {
   APIErrorCode,
   Client,
   collectPaginatedAPI,
+  isFullDatabase,
   isNotionClientError,
 } from "@notionhq/client";
 import type {
   BlockObjectResponse,
-  DatabaseObjectResponse,
+  DataSourceObjectResponse,
   GetBlockResponse,
+  GetDatabaseResponse,
   GetPageResponse,
   PageObjectResponse,
   PartialBlockObjectResponse,
-  PartialDatabaseObjectResponse,
+  PartialDataSourceObjectResponse,
   PartialPageObjectResponse,
-  QueryDatabaseParameters,
+  QueryDataSourceParameters,
 } from "@notionhq/client/build/src/api-endpoints";
 import type { AstroIntegrationLogger } from "astro";
 import PQueue from "p-queue";
@@ -55,14 +57,14 @@ export interface Requester {
   ) => Promise<(BlockObjectResponse | PartialBlockObjectResponse)[]>;
   queryDatabase: (
     id: string,
-    filter: QueryDatabaseParameters["filter"],
-    sorts: QueryDatabaseParameters["sorts"],
+    filter: QueryDataSourceParameters["filter"],
+    sorts: QueryDataSourceParameters["sorts"],
   ) => Promise<
     (
       | PageObjectResponse
       | PartialPageObjectResponse
-      | DatabaseObjectResponse
-      | PartialDatabaseObjectResponse
+      | DataSourceObjectResponse
+      | PartialDataSourceObjectResponse
     )[]
   >;
 }
@@ -115,8 +117,8 @@ export function getRequester(logger: AstroIntegrationLogger): Requester {
 
     queryDatabase: withQueue(async function queryDatabase(
       id: string,
-      filter: QueryDatabaseParameters["filter"],
-      sorts: QueryDatabaseParameters["sorts"],
+      filter: QueryDataSourceParameters["filter"],
+      sorts: QueryDataSourceParameters["sorts"],
     ) {
       if (NOISY_LOGS) {
         logger.info(`Querying database ${id}`);
@@ -124,9 +126,34 @@ export function getRequester(logger: AstroIntegrationLogger): Requester {
 
       const client = getClient();
 
+      let database: GetDatabaseResponse;
       try {
-        const results = await collectPaginatedAPI(client.databases.query, {
-          database_id: id,
+        database = await client.databases.retrieve({ database_id: id });
+      } catch (err) {
+        if (
+          isNotionClientError(err) &&
+          err.code === APIErrorCode.ObjectNotFound
+        ) {
+          // This is likely a linked database problem, as the public API doesn't support linked databases
+          logger.error(
+            `Error retrieving database ${id}, it is likely a linked database`,
+          );
+          return [];
+        }
+
+        logger.error(`Error retrieving database ${id}, unknown cause`);
+        throw err;
+      }
+
+      if (!isFullDatabase(database)) {
+        // This is likely a linked database problem, as the public API doesn't support linked databases
+        logger.error(`Database ${id} was not a full database`);
+        return [];
+      }
+
+      try {
+        const results = await collectPaginatedAPI(client.dataSources.query, {
+          data_source_id: id,
           filter,
           sorts,
         });
@@ -150,8 +177,8 @@ export function getRequester(logger: AstroIntegrationLogger): Requester {
     }),
     // getPageProperties: withQueue(async function getPageProperties(
     //   id: string,
-    //   filter: QueryDatabaseParameters["filter"],
-    //   sorts: QueryDatabaseParameters["sorts"],
+    //   filter: QueryDataSourceParameters["filter"],
+    //   sorts: QueryDataSourceParameters["sorts"],
     // ) {
     //   if (NOISY_LOGS) {
     //     logger.info(`Ruerying database ${id}`);

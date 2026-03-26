@@ -1,6 +1,6 @@
 ---
 import type {
-  DatabaseObjectResponse,
+  DataSourceObjectResponse,
   PageObjectResponse,
 } from "@notionhq/client/build/src/api-endpoints";
 import clsx from "clsx";
@@ -10,7 +10,7 @@ import DefaultPageBackdrop from "../../site/DefaultPageBackdrop.astro";
 import ShaderBackdrop from "../../site/ShaderBackdrop.astro";
 
 export interface Props {
-  page: DatabaseObjectResponse | PageObjectResponse;
+  page: DataSourceObjectResponse | PageObjectResponse;
   shader?: { enabled: boolean };
   widths: number[];
   densities: number[];

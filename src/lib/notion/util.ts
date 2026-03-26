@@ -1,5 +1,5 @@
 import type {
-  DatabaseObjectResponse,
+  DataSourceObjectResponse,
   PageObjectResponse,
   PropertyItemObjectResponse,
   RichTextItemResponse,
@@ -88,7 +88,7 @@ export function normalizeTitle(title?: string | null): string {
 export function getPagePropertyByName<
   T extends PropertyItemObjectResponse["type"],
 >(
-  page: PageObjectResponse | DatabaseObjectResponse,
+  page: PageObjectResponse | DataSourceObjectResponse,
   name: string,
   type: T,
 ): Extract<PropertyItemObjectResponse, { type: T }> | undefined {

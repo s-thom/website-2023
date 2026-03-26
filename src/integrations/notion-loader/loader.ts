@@ -5,9 +5,9 @@ import {
   iteratePaginatedAPI,
 } from "@notionhq/client";
 import type {
-  DatabaseObjectResponse,
+  DataSourceObjectResponse,
   PageObjectResponse,
-  QueryDatabaseParameters,
+  QueryDataSourceParameters,
 } from "@notionhq/client/build/src/api-endpoints";
 import type { Loader } from "astro/loaders";
 import { z } from "astro/zod";
@@ -25,7 +25,7 @@ const INTERNAL_LOADER_VERSION = "2";
 export interface NotionLoaderOptions {
   token: string;
   databaseId: string;
-  filter?: QueryDatabaseParameters["filter"];
+  filter?: QueryDataSourceParameters["filter"];
   verboseLogs?: boolean;
 }
 
@@ -102,8 +102,14 @@ export function notionLoader(options: NotionLoaderOptions): Loader {
       //   return;
       // }
 
-      const pagesIterable = iteratePaginatedAPI(client.databases.query, {
-        database_id: options.databaseId,
+      if (database.data_sources.length > 1) {
+        throw new Error(
+          `Database ${options.databaseId} has multiple data sources, which this integration does not yet support`,
+        );
+      }
+
+      const pagesIterable = iteratePaginatedAPI(client.dataSources.query, {
+        data_source_id: database.data_sources[0].id,
         filter: options.filter,
       });
 
@@ -199,8 +205,8 @@ export function notionLoader(options: NotionLoaderOptions): Loader {
       );
     },
     createSchema: async () => {
-      const database = await client.databases.retrieve({
-        database_id: options.databaseId,
+      const database = await client.dataSources.retrieve({
+        data_source_id: options.databaseId,
       });
 
       const properties: Record<string, z.ZodType> = {};
@@ -272,7 +278,7 @@ export function notionLoader(options: NotionLoaderOptions): Loader {
             break;
           default:
             throw new Error(
-              `Unknown property type ${(property as DatabaseObjectResponse["properties"][""]).type}`,
+              `Unknown property type ${(property as DataSourceObjectResponse["properties"][""]).type}`,
             );
         }
 

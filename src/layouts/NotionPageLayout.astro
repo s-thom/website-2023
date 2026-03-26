@@ -1,6 +1,6 @@
 ---
 import type {
-  DatabaseObjectResponse,
+  DataSourceObjectResponse,
   PageObjectResponse,
 } from "@notionhq/client/build/src/api-endpoints";
 import seedrandom from "seedrandom";
@@ -15,7 +15,7 @@ import type { PageMetaType } from "../lib/site/PageMeta";
 import PageWithHeaderLayout from "./PageWithHeaderLayout.astro";
 
 export interface Props {
-  page: DatabaseObjectResponse | PageObjectResponse;
+  page: DataSourceObjectResponse | PageObjectResponse;
   blockMap: BlockMap;
   meta: PageMetaType;
   breadcrumbs?: LinkInfo[];
