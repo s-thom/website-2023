@@ -6,51 +6,117 @@
 
 :root {
   --color-dynamic-angle: 267.79deg;
-  --color-dynamic-lightness: 0.52;
+  --color-dynamic-lightness: 0.42;
   --color-dynamic-chroma: 0.1032;
-  --color-background-primary: #6b83c4;
+  --color-background-primary: #354985;
   --color-background-primary: oklch(
     var(--color-dynamic-lightness) var(--color-dynamic-chroma)
       var(--color-dynamic-angle)
-  ) !important;
+  );
 
   --color-text: #111111;
+  --color-text: light-dark(#111111, #f8f8f8);
   --color-text-secondary: #606060;
+  --color-text-secondary: light-dark(#606060, #808080);
   --color-text-header: #ffffff;
+  --color-text-header: light-dark(#ffffff, #ffffff);
   --color-text-header-negative: #111111;
+  --color-text-header-negative: light-dark(#111111, #181818);
   --color-text-big-box: #f8f8f8;
+  --color-text-big-box: light-dark(#f8f8f8, #ffffff);
   --color-background: #f8f8f8;
+  --color-background: light-dark(#f8f8f8, #181818);
   --color-background-secondary: #dddddd;
+  --color-background-secondary: light-dark(#dddddd, #3a3a3a);
   --color-background-error: #5f2526;
+  --color-background-error: light-dark(#5f2526, #5f2526);
   --color-background-delete: oklch(95% 0.013 18);
+  --color-background-delete: light-dark(
+    oklch(95% 0.013 18),
+    oklch(30% 0.03 18)
+  );
   --color-border: #aaaaaa;
+  --color-border: light-dark(#aaaaaa, #555555);
   --color-border-big-box: #bbbbbb;
+  --color-border-big-box: light-dark(#bbbbbb, #ffffff);
   --color-link: oklch(60% 0.185 258);
+  --color-link: light-dark(oklch(60% 0.185 258), oklch(50% 0.185 258));
   --color-link-hover: oklch(65% 0.14 258);
+  --color-link-hover: light-dark(oklch(65% 0.14 258), oklch(55% 0.14 258));
   --color-link-active: oklch(60% 0.185 20);
+  --color-link-active: light-dark(oklch(60% 0.185 20), oklch(50% 0.185 20));
   --color-link-visited: oklch(60% 0.185 304);
+  --color-link-visited: light-dark(oklch(60% 0.185 304), oklch(50% 0.185 304));
   --color-link-visited-hover: oklch(65% 0.185 304);
+  --color-link-visited-hover: light-dark(
+    oklch(65% 0.185 304),
+    oklch(55% 0.185 304)
+  );
 
   --color-notion-default: oklch(45% 0 0);
+  --color-notion-default: light-dark(oklch(45% 0 0), oklch(38% 0 0));
   --color-notion-default-background: oklch(92% 0 0);
+  --color-notion-default-background: light-dark(oklch(92% 0 0), oklch(30% 0 0));
   --color-notion-gray: oklch(45% 0 0);
+  --color-notion-gray: light-dark(oklch(45% 0 0), oklch(38% 0 0));
   --color-notion-gray-background: oklch(92% 0 0);
+  --color-notion-gray-background: light-dark(oklch(92% 0 0), oklch(30% 0 0));
   --color-notion-brown: oklch(45% 0.08 255);
+  --color-notion-brown: light-dark(oklch(45% 0.08 255), oklch(38% 0.08 255));
   --color-notion-brown-background: oklch(92% 0.03 255);
+  --color-notion-brown-background: light-dark(
+    oklch(92% 0.03 255),
+    oklch(30% 0.03 255)
+  );
   --color-notion-orange: oklch(45% 0.08 40);
+  --color-notion-orange: light-dark(oklch(45% 0.08 40), oklch(38% 0.08 40));
   --color-notion-orange-background: oklch(92% 0.03 40);
+  --color-notion-orange-background: light-dark(
+    oklch(92% 0.03 40),
+    oklch(30% 0.03 40)
+  );
   --color-notion-yellow: oklch(45% 0.08 95);
+  --color-notion-yellow: light-dark(oklch(45% 0.08 95), oklch(38% 0.08 95));
   --color-notion-yellow-background: oklch(92% 0.03 95);
+  --color-notion-yellow-background: light-dark(
+    oklch(92% 0.03 95),
+    oklch(30% 0.03 95)
+  );
   --color-notion-green: oklch(45% 0.08 155);
+  --color-notion-green: light-dark(oklch(45% 0.08 155), oklch(38% 0.08 155));
   --color-notion-green-background: oklch(92% 0.03 155);
+  --color-notion-green-background: light-dark(
+    oklch(92% 0.03 155),
+    oklch(30% 0.03 155)
+  );
   --color-notion-blue: oklch(45% 0.08 255);
+  --color-notion-blue: light-dark(oklch(45% 0.08 255), oklch(38% 0.08 255));
   --color-notion-blue-background: oklch(92% 0.03 255);
+  --color-notion-blue-background: light-dark(
+    oklch(92% 0.03 255),
+    oklch(30% 0.03 255)
+  );
   --color-notion-purple: oklch(45% 0.08 300);
+  --color-notion-purple: light-dark(oklch(45% 0.08 300), oklch(38% 0.08 300));
   --color-notion-purple-background: oklch(92% 0.03 300);
+  --color-notion-purple-background: light-dark(
+    oklch(92% 0.03 300),
+    oklch(30% 0.03 300)
+  );
   --color-notion-pink: oklch(45% 0.08 341);
+  --color-notion-pink: light-dark(oklch(45% 0.08 341), oklch(38% 0.08 341));
   --color-notion-pink-background: oklch(92% 0.03 341);
+  --color-notion-pink-background: light-dark(
+    oklch(92% 0.03 341),
+    oklch(30% 0.03 341)
+  );
   --color-notion-red: oklch(45% 0.08 23);
+  --color-notion-red: light-dark(oklch(45% 0.08 23), oklch(38% 0.08 23));
   --color-notion-red-background: oklch(92% 0.03 23);
+  --color-notion-red-background: light-dark(
+    oklch(92% 0.03 23),
+    oklch(30% 0.03 23)
+  );
 
   --header-backdrop-mask-opacity: 0.5;
 
@@ -72,55 +138,7 @@
 
   --sidebar-width: 350px;
 
-  color-scheme: light;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-dynamic-lightness: 0.35;
-    --color-dynamic-chroma: 0.0598;
-    --color-background-primary: #2d395a;
-
-    --color-text: #f8f8f8;
-    --color-text-secondary: #808080;
-    --color-text-header: #ffffff;
-    --color-text-header-negative: #181818;
-    --color-text-big-box: #ffffff;
-    --color-background: #181818;
-    --color-background-secondary: #3a3a3a;
-    --color-background-error: #5f2526;
-    --color-background-delete: oklch(30% 0.03 18);
-    --color-border: #555555;
-    --color-border-big-box: #ffffff;
-    --color-link: oklch(50% 0.185 258);
-    --color-link-hover: oklch(55% 0.14 258);
-    --color-link-active: oklch(50% 0.185 20);
-    --color-link-visited: oklch(50% 0.185 304);
-    --color-link-visited-hover: oklch(55% 0.185 304);
-
-    --color-notion-default: oklch(38% 0 0);
-    --color-notion-default-background: oklch(30% 0 0);
-    --color-notion-gray: oklch(38% 0 0);
-    --color-notion-gray-background: oklch(30% 0 0);
-    --color-notion-brown: oklch(38% 0.08 255);
-    --color-notion-brown-background: oklch(30% 0.03 255);
-    --color-notion-orange: oklch(38% 0.08 40);
-    --color-notion-orange-background: oklch(30% 0.03 40);
-    --color-notion-yellow: oklch(38% 0.08 95);
-    --color-notion-yellow-background: oklch(30% 0.03 95);
-    --color-notion-green: oklch(38% 0.08 155);
-    --color-notion-green-background: oklch(30% 0.03 155);
-    --color-notion-blue: oklch(38% 0.08 255);
-    --color-notion-blue-background: oklch(30% 0.03 255);
-    --color-notion-purple: oklch(38% 0.08 300);
-    --color-notion-purple-background: oklch(30% 0.03 300);
-    --color-notion-pink: oklch(38% 0.08 341);
-    --color-notion-pink-background: oklch(30% 0.03 341);
-    --color-notion-red: oklch(38% 0.08 23);
-    --color-notion-red-background: oklch(30% 0.03 23);
-
-    color-scheme: dark;
-  }
+  color-scheme: light dark;
 }
 
 @view-transition {
@@ -355,7 +373,7 @@ h1.site-name-heading {
   --color-background-primary: oklch(
     var(--color-dynamic-lightness) var(--color-dynamic-chroma)
       var(--color-dynamic-angle)
-  ) !important;
+  );
 }
 
 @media (min-width: 1200px) {
