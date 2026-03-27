@@ -14,7 +14,7 @@ export interface ShaderSetupOptions {
   shaders: { vertex: string; fragment: string };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   uniforms?: Record<string, any>;
-  onFrame?: (time: DOMHighResTimeStamp) => void;
+  onFrame?: (time: DOMHighResTimeStamp, elapsedTime: number) => void;
   textures?: TextureOptions[];
   onTexturesReady?: () => void;
 }
@@ -37,6 +37,7 @@ export function setupShader(options: ShaderSetupOptions) {
   const bufferInfo = createBufferInfoFromArrays(gl, arrays);
 
   let frameCount = 0;
+  let allTime = 0;
   let lastTime: DOMHighResTimeStamp | undefined;
   let animFrameHandle: number;
 
@@ -108,10 +109,11 @@ export function setupShader(options: ShaderSetupOptions) {
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
     if (options.onFrame) {
-      options.onFrame(time);
+      options.onFrame(time, allTime);
     }
 
     const lastFrameDelta = lastTime === undefined ? 0 : time - lastTime;
+    allTime += lastFrameDelta;
 
     const uniforms = {
       ...options.uniforms,
@@ -129,6 +131,7 @@ export function setupShader(options: ShaderSetupOptions) {
       // uniform samplerXX iChanneli;
       iResolution: [gl.canvas.width, gl.canvas.height, 1],
       iTime: time * 0.001,
+      iTimeElapsed: allTime * 0.001,
       iTimeDelta: lastFrameDelta,
       iFrame: frameCount,
       iDevicePixelRatio: window.devicePixelRatio,

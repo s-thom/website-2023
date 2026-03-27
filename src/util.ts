@@ -36,3 +36,7 @@ export function combine(...fns: (() => void)[]): () => void {
 }
 
 export const isBrowser = "window" in globalThis;
+
+export function delay(ms: number) {
+  return new Promise<void>((res) => setTimeout(res, ms));
+}

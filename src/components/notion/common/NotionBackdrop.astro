@@ -63,6 +63,7 @@ const imageInfo = page.cover
     shader?.enabled && (
       <ShaderBackdrop
         id={page.id}
+        type="backdrop"
         imageUrl={imageInfo?.formats[0]?.sizes[0]?.path}
         resolutionScale={0.7}
       />

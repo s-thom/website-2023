@@ -55,6 +55,7 @@ export default defineConfig({
       external: ["@resvg/resvg-js"],
     },
     optimizeDeps: {
+      include: ["astro/toolbar"],
       exclude: ["@resvg/resvg-js"],
     },
     plugins: [glsl()],

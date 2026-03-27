@@ -3,6 +3,11 @@
   inherits: true;
   initial-value: 0deg;
 }
+@property --color-background {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #ffffff;
+}
 
 :root {
   --color-dynamic-angle: 267.79deg;

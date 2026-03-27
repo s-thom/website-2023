@@ -14,8 +14,8 @@ const { id } = Astro.props;
 ---
 
 <footer class="site-footer flow" id="footer">
-  <div class="backdrop-container blur-only">
-    <ShaderBackdrop id={id} />
+  <div class="backdrop-container">
+    <ShaderBackdrop id={id} type="rainbow-bg" />
   </div>
 
   <div class="line">
@@ -47,13 +47,8 @@ const { id } = Astro.props;
 <style>
   .site-footer {
     position: relative;
-    color: var(--color-text-header);
     border-block-start: var(--big-box-border-width) solid
       var(--color-border-big-box);
-  }
-
-  .blur-only {
-    filter: blur(5px);
   }
 
   .line {

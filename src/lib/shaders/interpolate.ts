@@ -11,6 +11,13 @@ export function easeInOutCubic(x: number): number {
   return x < 0.5 ? 4 * x * x * x : 1 - (-2 * x + 2) ** 3 / 2;
 }
 
+/**
+ * https://easings.net/#easeOutCubic
+ */
+export function easeOutCubic(x: number): number {
+  return 1 - Math.pow(1 - x, 3);
+}
+
 type InterpolateEvents = {
   start: { current: number; target: number; durationMs: number };
   end: { current: number };

@@ -1,4 +1,5 @@
 import type { FolderApi, Pane } from "tweakpane";
+import { delay } from "../../util";
 
 export interface BaseOption<T> {
   type: unknown;
@@ -179,5 +180,33 @@ export function addOptionsToPanel(
       default:
         throw new Error(`Unsupported option type for ${key}`);
     }
+  }
+
+  container
+    .addButton({ title: "Copy settings object" })
+    .on("click", (event) => {
+      void navigator.clipboard
+        .writeText(JSON.stringify(options))
+        .then(
+          () => {
+            event.target.title = "Copied!";
+          },
+          () => {
+            event.target.title = "Copy failed";
+          },
+        )
+        .then(() => delay(1000))
+        .then(() => {
+          event.target.title = "Copy settings object";
+        });
+    });
+}
+
+export function applyOptionValues(
+  options: Record<string, unknown>,
+  optionsMap: SlidersOptionsMap,
+) {
+  for (const [key, option] of Object.entries(optionsMap)) {
+    options[key] = option.value;
   }
 }

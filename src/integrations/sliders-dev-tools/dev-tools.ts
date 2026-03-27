@@ -7,7 +7,7 @@ import {
   type SlidersInitialisedEventData,
 } from "../../lib/shaders/sliders";
 
-const notionCacheDevTools: DevToolbarApp = {
+const slidersDevTools: DevToolbarApp = {
   init(canvas, app) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const container = h(
@@ -48,4 +48,4 @@ const notionCacheDevTools: DevToolbarApp = {
   },
 };
 
-export default notionCacheDevTools;
+export default slidersDevTools;
