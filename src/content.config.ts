@@ -48,6 +48,7 @@ export const collections = {
         "Page View Stickers": propertySchemas.select(),
         Type: propertySchemas.select(),
         Theme: propertySchemas.select(),
+        "Theme Color": propertySchemas.rich_text(),
         Status: propertySchemas.status(),
       }),
     }),
