@@ -1,7 +1,7 @@
 import { range } from "../../util";
+import vertex from "./default.vert";
 import { Interpolate, easeOutCubic } from "./interpolate";
 import fragment from "./rainbow-bg.frag";
-import vertex from "./rainbow-bg.vert";
 import { setupShader } from "./setup";
 
 type Vec4 = [number, number, number, number];

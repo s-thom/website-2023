@@ -1,19 +1,19 @@
 ---
 export interface Props {
   id: string;
-  type: "backdrop" | "rainbow-bg";
+  shader: string;
   resolutionScale?: number;
   imageUrl?: string;
 }
 
 const {
   id,
-  type,
+  shader,
   resolutionScale: resolutionScale = 1,
   imageUrl,
 } = Astro.props;
 
-const usesPrimaryColourBackground = type === "backdrop";
+const usesPrimaryColourBackground = shader === "backdrop";
 ---
 
 <div
@@ -21,7 +21,7 @@ const usesPrimaryColourBackground = type === "backdrop";
   id={`backdrop-${id}`}
   data-id={id}
   data-image-url={imageUrl}
-  data-type={type}
+  data-shader={shader}
   data-resolution-scale={JSON.stringify(resolutionScale)}
   style={{ "--resolution-scale": resolutionScale }}
 >
@@ -68,18 +68,22 @@ const usesPrimaryColourBackground = type === "backdrop";
         resolutionScale: rawScale ? parseFloat(rawScale) : 1,
       };
 
-      switch (backdropArea.dataset.type) {
-        case "backdrop":
-          import("../../lib/shaders/backdrop").then(({ setupBackdropShader }) =>
-            setupBackdropShader(canvas, options),
-          );
-          break;
+      switch (backdropArea.dataset.shader) {
         case "rainbow-bg":
           import("../../lib/shaders/rainbow-bg").then(
             ({ setupRainbowBgShader }) => setupRainbowBgShader(canvas),
           );
           break;
+        case "tunic":
+          import("../../lib/shaders/tunic").then(({ setupTunicShader }) =>
+            setupTunicShader(canvas),
+          );
+          break;
         default:
+          import("../../lib/shaders/backdrop").then(({ setupBackdropShader }) =>
+            setupBackdropShader(canvas, options),
+          );
+          break;
       }
     });
 </script>

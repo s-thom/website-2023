@@ -11,9 +11,10 @@ export interface Props {
   meta: PageMetaType;
   breadcrumbs?: LinkInfo[];
   htmlStyle?: JSX.HtmlHTMLAttributes["style"];
+  footerShader?: string;
 }
 
-const { id, meta, breadcrumbs, htmlStyle } = Astro.props;
+const { id, meta, breadcrumbs, htmlStyle, footerShader } = Astro.props;
 
 const navItems: LinkInfo[] = [
   { name: "Projects", url: "/projects" },
@@ -42,7 +43,7 @@ const navItems: LinkInfo[] = [
   </div>
 
   <slot name="page-footer" slot="page-footer" />
-  <SiteFooter id={id} slot="site-footer" />
+  <SiteFooter id={id} shader={footerShader} slot="site-footer" />
 </PageLayout>
 
 <style>

@@ -3,6 +3,7 @@ import type {
   DataSourceObjectResponse,
   PageObjectResponse,
 } from "@notionhq/client/build/src/api-endpoints";
+import { converter } from "culori";
 import seedrandom from "seedrandom";
 import DevOnly from "../components/DevOnly.astro";
 import SkipLinks from "../components/SkipLinks.astro";
@@ -10,6 +11,10 @@ import NotionPageHeader from "../components/notion/NotionPageHeader.astro";
 import NotionBackdrop from "../components/notion/common/NotionBackdrop.astro";
 import NotionTableOfContents from "../components/notion/common/NotionTableOfContents.astro";
 import type { BlockMap } from "../integrations/notion-loader/api";
+import {
+  getPagePropertyByName,
+  richTextToUnformattedString,
+} from "../lib/notion/util";
 import type { LinkInfo } from "../lib/site/LinkInfo";
 import type { PageMetaType } from "../lib/site/PageMeta";
 import PageWithHeaderLayout from "./PageWithHeaderLayout.astro";
@@ -44,14 +49,39 @@ if (showTableOfContents) {
 }
 
 const random = seedrandom(page.id);
-const colorAngle = `${Math.round(random() * 360)}deg`;
+let colorAngle = `${Math.round(random() * 360)}deg`;
+
+const themeProperty = getPagePropertyByName(page, "Theme", "select");
+const themeColorProperty = getPagePropertyByName(
+  page,
+  "Theme Color",
+  "rich_text",
+);
+
+let primaryColorOverride: string | undefined;
+if (themeColorProperty) {
+  const plain = richTextToUnformattedString(themeColorProperty.rich_text);
+  const hexMatch = plain.match(/^(#[0-9a-fA-F]{6})$/);
+  if (hexMatch) {
+    const oklch = converter("oklch")(hexMatch[1]);
+    colorAngle = `${oklch?.h ?? 0}deg`;
+    primaryColorOverride = hexMatch[1];
+  }
+}
+
+const shader = themeProperty?.select?.name ?? "backdrop";
+const footerShader = shader === "tunic" ? "tunic" : undefined;
 ---
 
 <PageWithHeaderLayout
   id={page.id}
   meta={meta}
   breadcrumbs={breadcrumbs}
-  htmlStyle={{ "--color-dynamic-angle": colorAngle }}
+  footerShader={footerShader}
+  htmlStyle={{
+    "--color-dynamic-angle": colorAngle,
+    "--color-background-primary": primaryColorOverride,
+  }}
 >
   <slot name="head" slot="head" />
   <slot name="top" slot="top" />
@@ -74,7 +104,7 @@ const colorAngle = `${Math.round(random() * 360)}deg`;
     densities={[1]}
     noIntrinsicWidth
     sizes="100vw"
-    shader={{ enabled: true }}
+    shader={{ shader: "backdrop", enabled: true }}
     shouldBlur
   />
 

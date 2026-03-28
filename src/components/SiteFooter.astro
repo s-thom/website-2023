@@ -8,14 +8,18 @@ const THE_YEAR_I_LAST_UPDATED_THIS_FILE = 2026;
 
 export interface Props {
   id: string;
+  shader?: string;
 }
 
-const { id } = Astro.props;
+const { id, shader = "rainbow-bg" } = Astro.props;
 ---
 
-<footer class="site-footer flow" id="footer">
+<footer
+  class:list={["site-footer flow", shader === "tunic" && "tunic"]}
+  id="footer"
+>
   <div class="backdrop-container">
-    <ShaderBackdrop id={id} type="rainbow-bg" />
+    <ShaderBackdrop id={id} shader={shader} />
   </div>
 
   <div class="line">
@@ -85,5 +89,9 @@ const { id } = Astro.props;
     .align-end {
       text-align: end;
     }
+  }
+
+  .tunic {
+    color: #ecbf62;
   }
 </style>

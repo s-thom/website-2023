@@ -11,7 +11,7 @@ import ShaderBackdrop from "../../site/ShaderBackdrop.astro";
 
 export interface Props {
   page: DataSourceObjectResponse | PageObjectResponse;
-  shader?: { enabled: boolean };
+  shader?: { shader: string; enabled: boolean };
   widths: number[];
   densities: number[];
   noIntrinsicWidth?: boolean;
@@ -63,7 +63,7 @@ const imageInfo = page.cover
     shader?.enabled && (
       <ShaderBackdrop
         id={page.id}
-        type="backdrop"
+        shader={shader.shader}
         imageUrl={imageInfo?.formats[0]?.sizes[0]?.path}
         resolutionScale={0.7}
       />

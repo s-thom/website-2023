@@ -6,7 +6,7 @@ import type {
 } from "../../lib/shaders/sliders";
 import { range } from "../../util";
 import fragment from "./backdrop.frag";
-import vertex from "./backdrop.vert";
+import vertex from "./default.vert";
 import { Interpolate, easeInOutCubic } from "./interpolate";
 import { setupShader } from "./setup";
 import type { ShaderOptions } from "./types";
