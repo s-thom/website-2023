@@ -48,15 +48,14 @@ export function getUrlSlugForPage(
 ) {
   if (
     page.object === "page" && // TODO: figure out what to do about database type pages
-    page.parent.type === "database_id"
+    (page.parent.type === "data_source_id" ||
+      page.parent.type === "database_id")
   ) {
     const slugProperty =
       getPagePropertyByName(page, "Slug", "rich_text") ??
       getPagePropertyByName(page, "slug", "rich_text");
     if (slugProperty) {
-      const slug = richTextToUnformattedString(
-        slugProperty.rich_text as unknown as RichTextItemResponse[],
-      );
+      const slug = richTextToUnformattedString(slugProperty.rich_text);
       if (slug) {
         return slug;
       }
