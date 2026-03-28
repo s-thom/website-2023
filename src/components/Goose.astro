@@ -39,6 +39,9 @@ import LocalImage from "./Images/LocalImage.astro";
   .goose-image {
     width: 48px;
     height: 48px;
+    transition:
+      scale 100ms ease-out,
+      rotate 100ms ease-out;
   }
 
   .goose-button:is(:hover, :focus-within) .goose-image {
@@ -179,9 +182,5 @@ import LocalImage from "./Images/LocalImage.astro";
         setGooseRotation();
         addHeart(container);
       });
-
-      button.addEventListener("hover", setGooseRotation);
-      button.addEventListener("pointerenter", setGooseRotation);
-      button.addEventListener("focusin", setGooseRotation);
     });
 </script>
