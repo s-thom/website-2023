@@ -3,18 +3,14 @@ import type {
   DataSourceObjectResponse,
   PageObjectResponse,
 } from "@notionhq/client/build/src/api-endpoints";
-import { converter } from "culori";
-import seedrandom from "seedrandom";
 import DevOnly from "../components/DevOnly.astro";
 import SkipLinks from "../components/SkipLinks.astro";
 import NotionPageHeader from "../components/notion/NotionPageHeader.astro";
 import NotionBackdrop from "../components/notion/common/NotionBackdrop.astro";
 import NotionTableOfContents from "../components/notion/common/NotionTableOfContents.astro";
 import type { BlockMap } from "../integrations/notion-loader/api";
-import {
-  getPagePropertyByName,
-  richTextToUnformattedString,
-} from "../lib/notion/util";
+import { getPageColorInfo } from "../lib/notion/pages";
+import { getPagePropertyByName } from "../lib/notion/util";
 import type { LinkInfo } from "../lib/site/LinkInfo";
 import type { PageMetaType } from "../lib/site/PageMeta";
 import PageWithHeaderLayout from "./PageWithHeaderLayout.astro";
@@ -48,27 +44,9 @@ if (showTableOfContents) {
   skipLinks.unshift({ name: "Table of Contents", url: "#table-of-contents" });
 }
 
-const random = seedrandom(page.id);
-let colorAngle = `${Math.round(random() * 360)}deg`;
+const { angle, overrideColor } = getPageColorInfo(page);
 
 const themeProperty = getPagePropertyByName(page, "Theme", "select");
-const themeColorProperty = getPagePropertyByName(
-  page,
-  "Theme Color",
-  "rich_text",
-);
-
-let primaryColorOverride: string | undefined;
-if (themeColorProperty) {
-  const plain = richTextToUnformattedString(themeColorProperty.rich_text);
-  const hexMatch = plain.match(/^(#[0-9a-fA-F]{6})$/);
-  if (hexMatch) {
-    const oklch = converter("oklch")(hexMatch[1]);
-    colorAngle = `${oklch?.h ?? 0}deg`;
-    primaryColorOverride = hexMatch[1];
-  }
-}
-
 const shader = themeProperty?.select?.name ?? "backdrop";
 const footerShader = shader === "tunic" ? "tunic" : undefined;
 ---
@@ -79,8 +57,7 @@ const footerShader = shader === "tunic" ? "tunic" : undefined;
   breadcrumbs={breadcrumbs}
   footerShader={footerShader}
   htmlStyle={{
-    "--color-dynamic-angle": colorAngle,
-    "--color-background-primary": primaryColorOverride,
+    "--color-dynamic-angle": `${angle}deg`,
   }}
 >
   <slot name="head" slot="head" />
