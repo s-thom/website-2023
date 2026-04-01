@@ -63,6 +63,7 @@
     "@types/friendly-words": "^1.2.2",
     "@types/mdast": "^4.0.4",
     "@types/mime-types": "^3.0.1",
+    "@types/node": "^24.12.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@types/seedrandom": "^3.0.8",
