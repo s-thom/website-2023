@@ -19,6 +19,7 @@ jobs:
       - name: Create robots.txt
         uses: s-thom/create-robots-txt-action@v1
         with:
+          input-file: src/resources/robots.txt
           output-file: public/robots.txt
           append-allow-rule: true
           allowed-bot-names: |
@@ -26,8 +27,6 @@ jobs:
           cloudflare-api-token: ${{ secrets.CLOUDFLARE_RADAR_API_TOKEN }}
           cloudflare-categories: |
             AI Crawler
-            AI Search
-            AI Assistant
             Search Engine Optinization
             Advertising & Marketing
             Monitoring & Analytics
@@ -35,9 +34,7 @@ jobs:
             Social Media Marketing
           dark-visitors-api-token: ${{ secrets.DARK_VISITORS_API_TOKEN }}
           dark-visitors-categories: |
-            AI Assistant
             AI Data Scraper
-            AI Search Crawler
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
@@ -47,8 +44,10 @@ jobs:
           commit-message: "Update robots.txt"
           branch: robots-txt
           delete-branch: true
-          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
-          committer: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          author: github-actions[bot]
+            <41898282+github-actions[bot]@users.noreply.github.com>
+          committer: github-actions[bot]
+            <41898282+github-actions[bot]@users.noreply.github.com>
           title: "Update robots.txt"
           body: |
             # Automated update of robots.txt
