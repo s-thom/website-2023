@@ -11,7 +11,6 @@ User-agent: Amazonbot
 User-agent: Amzn-SearchBot
 User-agent: Amzn-User
 User-agent: Anomura
-User-agent: ApifyWebsiteContentCrawler
 User-agent: Applebot
 User-agent: Applebot-Extended
 User-agent: Audisto Crawler
@@ -51,17 +50,13 @@ User-agent: Crazy Egg Bot
 User-agent: CriteoBot
 User-agent: Datenbank Crawler
 User-agent: Deepcrawl
-User-agent: Devin
-User-agent: Diffbot
 User-agent: Doctom Monitor
 User-agent: DuckAssistBot
 User-agent: DuckAssistbot
 User-agent: Echobot Bot
-User-agent: ExaBot
 User-agent: FacebookBot
 User-agent: Factset_spyderbot
 User-agent: Fedicabot
-User-agent: FirecrawlAgent
 User-agent: Foregenix ThreatView/WebScan
 User-agent: FullStory
 User-agent: GPTBot
@@ -76,6 +71,7 @@ User-agent: Google Schema Markup Testing Tool
 User-agent: Google-CloudVertexBot
 User-agent: Google-Extended
 User-agent: Google-NotebookLM
+User-agent: Google-TravelAds-Live
 User-agent: GoogleOther
 User-agent: Grafana's Synthetic Monitoring
 User-agent: HetrixTools
@@ -96,7 +92,6 @@ User-agent: LinerBot
 User-agent: LinkupBot
 User-agent: MagnetmeBot
 User-agent: Manus Bot
-User-agent: MediaMonitoringBot
 User-agent: Medialogia Bot
 User-agent: Mediatoolkitbot
 User-agent: Mediavine Medatada Parser
@@ -107,6 +102,7 @@ User-agent: MirrorWebCrawler
 User-agent: MistralAI-User
 User-agent: MonSpark
 User-agent: Monitage
+User-agent: MontasticMonitor
 User-agent: NETVIGIE
 User-agent: New Relic
 User-agent: Nodeping
@@ -126,7 +122,6 @@ User-agent: PingPing Bot
 User-agent: Pingdom
 User-agent: PinterestBot
 User-agent: Poggio-Citations
-User-agent: Productsup Crawler
 User-agent: Proximic
 User-agent: Pulsetic
 User-agent: QualifiedBot
@@ -144,7 +139,6 @@ User-agent: Slickstream
 User-agent: SolarWinds Observability
 User-agent: Spider
 User-agent: Splunk Synthetics
-User-agent: StatsDroneBot
 User-agent: StatusCake
 User-agent: Synthetic Bot
 User-agent: TTD Content
@@ -167,7 +161,6 @@ User-agent: Webstatus247
 User-agent: WormlyBot
 User-agent: Yahoo Japan
 User-agent: Yext Inc
-User-agent: YouBot
 User-agent: ZanistaBot
 User-agent: Zvelo
 User-agent: atlassian-bot
