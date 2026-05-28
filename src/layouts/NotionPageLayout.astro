@@ -44,7 +44,7 @@ if (showTableOfContents) {
   skipLinks.unshift({ name: "Table of Contents", url: "#table-of-contents" });
 }
 
-const { angle, overrideColor } = getPageColorInfo(page);
+const { angle } = getPageColorInfo(page);
 
 const themeProperty = getPagePropertyByName(page, "Theme", "select");
 const shader = themeProperty?.select?.name ?? "backdrop";

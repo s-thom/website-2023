@@ -18,14 +18,17 @@ document.body.appendChild(container);
 
 const pane = new Pane({ container, title: "Sliders" });
 
-window.addEventListener('load', ()=>{
-const event = new CustomEvent<SlidersInitialisedEventData>("slidersinitialised", {
-  detail: {
-    registerSliders(id, options) {
-      const folder = pane.addFolder({ title: id });
-      addOptionsToPanel(folder, options);
+window.addEventListener("load", () => {
+  const event = new CustomEvent<SlidersInitialisedEventData>(
+    "slidersinitialised",
+    {
+      detail: {
+        registerSliders(id, options) {
+          const folder = pane.addFolder({ title: id });
+          addOptionsToPanel(folder, options);
+        },
+      },
     },
-  },
+  );
+  window.dispatchEvent(event);
 });
-window.dispatchEvent(event);
-})

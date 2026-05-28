@@ -27,9 +27,7 @@ export function getPageTitleComponents(
   }
 
   // Find the title property of the page
-  const properties = Object.values(
-    page.properties,
-  ) as unknown as (typeof page.properties)[""][];
+  const properties = Object.values(page.properties);
   const titleProperty = properties.find(
     (property) => property.type === "title",
   );

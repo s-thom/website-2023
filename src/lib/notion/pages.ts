@@ -8,7 +8,10 @@ import { getPagePropertyByName, richTextToUnformattedString } from "./util";
 
 export function getPageColorInfo(
   page: DataSourceObjectResponse | PageObjectResponse,
-): { angle: number; overrideColor?: string } {
+): {
+  angle: number;
+  // overrideColor?: string;
+} {
   const random = seedrandom(page.id);
   let angle = Math.round(random() * 360);
 
@@ -18,16 +21,19 @@ export function getPageColorInfo(
     "rich_text",
   );
 
-  let overrideColor: string | undefined;
+  // let overrideColor: string | undefined;
   if (themeColorProperty) {
     const plain = richTextToUnformattedString(themeColorProperty.rich_text);
     const hexMatch = plain.match(/^(#[0-9a-fA-F]{6})$/);
     if (hexMatch) {
       const oklch = converter("oklch")(hexMatch[1]);
       angle = oklch?.h ?? 0;
-      overrideColor = hexMatch[1];
+      // overrideColor = hexMatch[1];
     }
   }
 
-  return { angle, overrideColor };
+  return {
+    angle,
+    // overrideColor,
+  };
 }
