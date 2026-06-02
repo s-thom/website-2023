@@ -1,49 +1,38 @@
+User-agent: *
+Disallow: /flummoxed
+
+
 User-agent: 360Monitoring
-User-agent: AI Search
-User-agent: AI2Bot-DeepResearchEval
 User-agent: ActiveComply Bot
-User-agent: AddSearchBot
 User-agent: AdsTxtCrawler
 User-agent: Ai2Bot-Dolma
 User-agent: Alertsite by Smartbear
 User-agent: Amazon AdBot
 User-agent: Amazonbot
-User-agent: Amzn-SearchBot
-User-agent: Amzn-User
-User-agent: Anomura
-User-agent: Applebot
 User-agent: Applebot-Extended
 User-agent: Audisto Crawler
 User-agent: Automaton
 User-agent: AwarioSmartBot
-User-agent: AzureAI-SearchBot
 User-agent: BestChange Bot
 User-agent: Better Uptime
 User-agent: BigScootsMonitor
 User-agent: BinaryCanary
 User-agent: Bing Ads
 User-agent: BlogVault
-User-agent: Bravebot
 User-agent: BrightEdge Bot
-User-agent: Browserbase
 User-agent: BugsNag
 User-agent: Bytespider
 User-agent: CCBot
 User-agent: Channel3Bot
 User-agent: ChatGLM-Spider
-User-agent: ChatGPT agent
-User-agent: ChatGPT-User
 User-agent: Checkly Bot
-User-agent: Claude-SearchBot
-User-agent: Claude-User
 User-agent: ClaudeBot
 User-agent: CloudVertexBot
-User-agent: Cloudflare Browser Rendering
-User-agent: Cloudflare Crawler
+User-agent: Cloudflare CustomerSLO Prober
 User-agent: Cloudflare Observatory Curly
-User-agent: Cloudflare-AutoRAG
 User-agent: Cludo
 User-agent: ContentKing
+User-agent: ContentSquare Static Resource Scraper
 User-agent: ContextualBot
 User-agent: Cotoyogi
 User-agent: Crazy Egg Bot
@@ -51,28 +40,22 @@ User-agent: CriteoBot
 User-agent: Datenbank Crawler
 User-agent: Deepcrawl
 User-agent: Doctom Monitor
-User-agent: DuckAssistBot
-User-agent: DuckAssistbot
-User-agent: Echobot Bot
 User-agent: FacebookBot
 User-agent: Factset_spyderbot
-User-agent: Fedicabot
 User-agent: Foregenix ThreatView/WebScan
 User-agent: FullStory
 User-agent: GPTBot
 User-agent: GTmetrix
-User-agent: Gemini-Deep-Research
 User-agent: Ghost Inspector
 User-agent: Google AdsBot
 User-agent: Google Adsense: Mediapartners-Google
 User-agent: Google Firebase
-User-agent: Google NotebookLM
 User-agent: Google Schema Markup Testing Tool
 User-agent: Google-CloudVertexBot
 User-agent: Google-Extended
-User-agent: Google-NotebookLM
 User-agent: Google-TravelAds-Live
 User-agent: GoogleOther
+User-agent: Grafana Synthetic Monitoring
 User-agent: Grafana's Synthetic Monitoring
 User-agent: HetrixTools
 User-agent: HostTracker
@@ -80,26 +63,20 @@ User-agent: Hotjar
 User-agent: IAS crawler
 User-agent: ICC Crawler
 User-agent: ICC-Crawler
+User-agent: Idealo
 User-agent: IndeedJobBot
 User-agent: InternetArchiveBot
 User-agent: Jagged Pixel UptimeBot
 User-agent: Kangaroo Bot
-User-agent: Kinsta
-User-agent: KlaviyoAIBot
 User-agent: LCC
 User-agent: LeikiBot
-User-agent: LinerBot
-User-agent: LinkupBot
 User-agent: MagnetmeBot
-User-agent: Manus Bot
-User-agent: Medialogia Bot
+User-agent: MediaMonitoringBot
 User-agent: Mediatoolkitbot
 User-agent: Mediavine Medatada Parser
 User-agent: Meta-ExternalAds
 User-agent: Meta-ExternalAgent
-User-agent: Meta-ExternalFetcher
 User-agent: MirrorWebCrawler
-User-agent: MistralAI-User
 User-agent: MonSpark
 User-agent: Monitage
 User-agent: MontasticMonitor
@@ -107,21 +84,16 @@ User-agent: NETVIGIE
 User-agent: New Relic
 User-agent: Nodeping
 User-agent: NostoCrawlerBot
-User-agent: OAI-SearchBot
 User-agent: Oh Dear
 User-agent: Onetrust CMP Scanner
 User-agent: Outbrain
 User-agent: PanguBot
 User-agent: Panopta
 User-agent: Parse.ly
-User-agent: Perplexity-User
-User-agent: PerplexityBot
 User-agent: PetalBot
-User-agent: PhindBot
 User-agent: PingPing Bot
 User-agent: Pingdom
 User-agent: PinterestBot
-User-agent: Poggio-Citations
 User-agent: Proximic
 User-agent: Pulsetic
 User-agent: QualifiedBot
@@ -161,10 +133,8 @@ User-agent: Webstatus247
 User-agent: WormlyBot
 User-agent: Yahoo Japan
 User-agent: Yext Inc
-User-agent: ZanistaBot
 User-agent: Zvelo
 User-agent: atlassian-bot
-User-agent: bigsur.ai
 User-agent: catchpoint
 User-agent: cohere-training-data-crawler
 User-agent: deadlinkchecker
@@ -172,14 +142,11 @@ User-agent: eMoney Advisor
 User-agent: elmah.io Uptime Monitoring
 User-agent: honeybadgerbot
 User-agent: imageSpider
-User-agent: kagi-fetcher
 User-agent: klaviyo
 User-agent: laion-huggingface-processor
 User-agent: logicmonitor
 User-agent: mediaboardbot
 User-agent: meta-externalagent
-User-agent: meta-externalfetcher
-User-agent: meta-webindexer
 User-agent: netEstate Imprint Crawler
 User-agent: omgili
 User-agent: webzio-extended
