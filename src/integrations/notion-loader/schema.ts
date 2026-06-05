@@ -487,6 +487,9 @@ const paragraphBlockSchema = z
     paragraph: z.object({
       rich_text: z.array(richTextSchema),
       color: z.union([textColorsSchema, backgroundColorsSchema]),
+      icon: z
+        .discriminatedUnion("type", [externalSchema, fileSchema, emojiSchema])
+        .nullable(),
       children: z.array(z.any()).optional(),
     }),
   })
