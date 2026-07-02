@@ -3,15 +3,16 @@ Disallow: /flummoxed
 
 
 User-agent: 360Monitoring
+User-agent: AI2Bot
 User-agent: ActiveComply Bot
 User-agent: AdsTxtCrawler
 User-agent: Ai2Bot-Dolma
 User-agent: Alertsite by Smartbear
 User-agent: Amazon AdBot
 User-agent: Amazonbot
+User-agent: Apple App Site Association
 User-agent: Applebot-Extended
 User-agent: Audisto Crawler
-User-agent: Automaton
 User-agent: AwarioSmartBot
 User-agent: BestChange Bot
 User-agent: Better Uptime
@@ -20,7 +21,6 @@ User-agent: BinaryCanary
 User-agent: Bing Ads
 User-agent: BlogVault
 User-agent: BrightEdge Bot
-User-agent: BugsNag
 User-agent: Bytespider
 User-agent: CCBot
 User-agent: Channel3Bot
@@ -29,8 +29,10 @@ User-agent: Checkly Bot
 User-agent: ClaudeBot
 User-agent: CloudVertexBot
 User-agent: Cloudflare CustomerSLO Prober
+User-agent: Cloudflare CustomerSLO Prober (Staging)
 User-agent: Cloudflare Observatory Curly
 User-agent: Cludo
+User-agent: CohereBot
 User-agent: ContentKing
 User-agent: ContentSquare Static Resource Scraper
 User-agent: ContextualBot
@@ -60,37 +62,42 @@ User-agent: Grafana's Synthetic Monitoring
 User-agent: HetrixTools
 User-agent: HostTracker
 User-agent: Hotjar
+User-agent: HubSpot Crawler
 User-agent: IAS crawler
 User-agent: ICC Crawler
 User-agent: ICC-Crawler
 User-agent: Idealo
 User-agent: IndeedJobBot
+User-agent: InstatusBot
 User-agent: InternetArchiveBot
-User-agent: Jagged Pixel UptimeBot
 User-agent: Kangaroo Bot
+User-agent: KimiBot
 User-agent: LCC
 User-agent: LeikiBot
 User-agent: MagnetmeBot
-User-agent: MediaMonitoringBot
+User-agent: Marfeel
 User-agent: Mediatoolkitbot
-User-agent: Mediavine Medatada Parser
 User-agent: Meta-ExternalAds
 User-agent: Meta-ExternalAgent
 User-agent: MirrorWebCrawler
+User-agent: MistralBot
 User-agent: MonSpark
-User-agent: Monitage
 User-agent: MontasticMonitor
 User-agent: NETVIGIE
+User-agent: Navu
 User-agent: New Relic
 User-agent: Nodeping
 User-agent: NostoCrawlerBot
+User-agent: OAI-AdsBot
 User-agent: Oh Dear
 User-agent: Onetrust CMP Scanner
 User-agent: Outbrain
 User-agent: PanguBot
 User-agent: Panopta
 User-agent: Parse.ly
+User-agent: PerformlineCrawler
 User-agent: PetalBot
+User-agent: Ping-Admin
 User-agent: PingPing Bot
 User-agent: Pingdom
 User-agent: PinterestBot
@@ -103,14 +110,19 @@ User-agent: Reelevant
 User-agent: SBIntuitionsBot
 User-agent: SE Ranking Bot
 User-agent: SalesViewerBot
+User-agent: Selectika AI
 User-agent: SemrushBot-OCOB
+User-agent: SentiBot
 User-agent: Sentry Uptime Monitoring
+User-agent: SirdataBot
 User-agent: Site24x7
 User-agent: SiteUpTimeBot
+User-agent: Skroutz ImageBot
 User-agent: Slickstream
 User-agent: SolarWinds Observability
 User-agent: Spider
 User-agent: Splunk Synthetics
+User-agent: Stape Scanner
 User-agent: StatusCake
 User-agent: Synthetic Bot
 User-agent: TTD Content
@@ -126,8 +138,6 @@ User-agent: UptimeRobot
 User-agent: Uptimia
 User-agent: UptrendsBot
 User-agent: VelenPublicWebCrawler
-User-agent: WPMUDEV Uptime Monitor 5.0
-User-agent: Watchbot
 User-agent: WebsitePulseBot
 User-agent: Webstatus247
 User-agent: WormlyBot
@@ -149,6 +159,7 @@ User-agent: mediaboardbot
 User-agent: meta-externalagent
 User-agent: netEstate Imprint Crawler
 User-agent: omgili
+User-agent: qcbot
 User-agent: webzio-extended
 Disallow: /
 
