@@ -1,5 +1,5 @@
 ---
-
+import { fullUrlEncode } from "../../../../util";
 ---
 
 <ul class="links-list">
@@ -30,7 +30,7 @@
   <li class="link-item">
     <a
       class="link"
-      href="mailto:me@sthom.kiwi"
+      href={`mailto:${fullUrlEncode("me@sthom.kiwi")}`}
       aria-label="Email"
       rel="nofollow noopener noreferrer"
       target="_blank"

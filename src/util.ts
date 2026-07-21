@@ -40,3 +40,9 @@ export const isBrowser = "window" in globalThis;
 export function delay(ms: number) {
   return new Promise<void>((res) => setTimeout(res, ms));
 }
+
+export function fullUrlEncode(str: string): string {
+  return Array.from(str)
+    .map((c) => `%${c.charCodeAt(0).toString(16).padStart(2, "0")}`)
+    .join("");
+}
