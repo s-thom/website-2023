@@ -59,6 +59,7 @@ export default defineConfig(
       ],
       "no-continue": "off",
       "no-plusplus": "off",
+      "no-undef": "off", // We have Typescript
       "prettier/prettier": "warn",
       "no-console": "warn",
       "@typescript-eslint/no-unused-vars": [
