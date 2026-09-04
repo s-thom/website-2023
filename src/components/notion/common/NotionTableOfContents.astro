@@ -28,7 +28,7 @@ const { page, blockMap } = Astro.props;
 const children = getBlockChildren(page.id, blockMap);
 
 const headings = children.reduce<HeadingData[]>((array, block) => {
-  let title = "";
+  let title: string;
 
   switch (block.type) {
     case "heading_1":
