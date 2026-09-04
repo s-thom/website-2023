@@ -24,7 +24,7 @@ const NOISY_LOGS = import.meta.env.NOISY_LOGS === "true";
 
 const requestQueue = new PQueue({
   concurrency: 4,
-  interval: 1000,
+  interval: 1200,
   intervalCap: 3,
 });
 
