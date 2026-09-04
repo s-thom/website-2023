@@ -335,6 +335,7 @@ export async function getImageInfo(
       }
       throw new Error(
         `Error when loading ${sourceData.mimeType} image ${id}: ${err.message}`,
+        { cause: err },
       );
     }
 

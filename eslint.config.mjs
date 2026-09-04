@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
 import eslint from "@eslint/js";
 import eslintPluginAstro from "eslint-plugin-astro";
-import importPlugin from "eslint-plugin-import";
-import jsxA11y from "eslint-plugin-jsx-a11y";
+import importPlugin from "eslint-plugin-import-x";
 import eslintPluginPrettier from "eslint-plugin-prettier/recommended";
-import reactPlugin from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
+import reactPlugin from "eslint-plugin-react-x";
 import { defineConfig } from "eslint/config";
 import tseslint from "typescript-eslint";
 
@@ -17,20 +16,15 @@ export default defineConfig(
   {
     files: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
     extends: [
-      reactPlugin.configs.flat.recommended,
-      reactPlugin.configs.flat["jsx-runtime"],
+      reactPlugin.configs.recommended,
+      // reactPlugin.configs["jsx-runtime"],
       reactHooks.configs.flat["recommended-latest"],
     ],
   },
-  {
-    plugins: { "jsx-a11y": jsxA11y },
-    rules: jsxA11y.configs.recommended.rules,
-  },
   ...eslintPluginAstro.configs.recommended,
-  ...eslintPluginAstro.configs["jsx-a11y-recommended"],
   {
     settings: {
-      "import/resolver": {
+      "import-x/resolver": {
         typescript: {
           project: "./tsconfig.json",
         },
@@ -56,8 +50,8 @@ export default defineConfig(
       },
     },
     rules: {
-      "import/prefer-default-export": "off",
-      "import/no-unresolved": [
+      "import-x/prefer-default-export": "off",
+      "import-x/no-unresolved": [
         "error",
         {
           ignore: ["astro:*"],

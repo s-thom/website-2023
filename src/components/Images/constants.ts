@@ -15,12 +15,7 @@ export interface ImageSizeInfo {
 }
 
 export type ImageTypeIdentifier =
-  | "png"
-  | "jpeg"
-  | "webp"
-  | "avif"
-  | "jxl"
-  | "webp-lossless";
+  "png" | "jpeg" | "webp" | "avif" | "jxl" | "webp-lossless";
 
 export const IMAGE_FORMAT_PRIORITIES: Record<ImageTypeIdentifier, number> = {
   jpeg: 0,
